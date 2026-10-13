@@ -1,0 +1,364 @@
+/* ==========================================================================
+   University Contact & Helpdesk Page Styles
+   ========================================================================== */
+
+.contact-page-wrapper {
+  min-height: 100vh;
+  background-color: #090a12;
+  color: #ffffff;
+  padding-top: var(--navbar-height);
+  padding-bottom: 5rem;
+  font-family: var(--font-body), sans-serif;
+}
+
+.contact-hero {
+  padding: 4.5rem 1.5rem 3.5rem;
+  background: radial-gradient(circle at 50% 15%, rgba(139, 92, 246, 0.16) 0%, rgba(9, 10, 18, 0.95) 70%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.contact-badge-top {
+  display: inline-block;
+  background: rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  color: #c084fc;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  padding: 5px 16px;
+  border-radius: 50px;
+  margin-bottom: 1rem;
+}
+
+.contact-hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.contact-hero-sub {
+  font-size: 1.05rem;
+  color: #94a3b8;
+  max-width: 680px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Quick Bar */
+.contact-quick-bar-section {
+  padding: 3rem 1rem 1rem;
+}
+
+.quick-bar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .quick-bar-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.quick-item-card {
+  background: rgba(18, 20, 32, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.q-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.quick-item-card h4 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.35rem;
+}
+
+.quick-item-card p {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Main Grid */
+.contact-main-section {
+  padding: 4rem 1rem;
+}
+
+.contact-two-col-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 3.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 960px) {
+  .contact-two-col-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+.directory-heading {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0.4rem 0 0.5rem;
+}
+
+.directory-sub {
+  color: #94a3b8;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.committee-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.committee-card {
+  background: rgba(18, 20, 32, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.committee-card:hover {
+  border-color: rgba(255, 31, 120, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.comm-domain-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ff1f78;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.comm-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 0.75rem;
+}
+
+.comm-contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.comm-phone,
+.comm-email {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.comm-phone:hover,
+.comm-email:hover {
+  color: #ff1f78;
+}
+
+.comm-office {
+  font-size: 0.82rem;
+  color: #64748b;
+  display: block;
+}
+
+/* Query Form Card */
+.query-form-card {
+  background: rgba(18, 20, 32, 0.85);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+}
+
+.query-form-card h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0.4rem 0 0.5rem;
+}
+
+.query-form-card p {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.query-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.q-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.q-field label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.q-field input,
+.q-field select,
+.q-field textarea {
+  background: rgba(10, 11, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.q-field input:focus,
+.q-field select:focus,
+.q-field textarea:focus {
+  border-color: #ff1f78;
+  box-shadow: 0 0 15px rgba(255, 31, 120, 0.3);
+}
+
+.q-field select option {
+  background: #121420;
+  color: #ffffff;
+}
+
+.q-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .q-row-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btn-contact-submit {
+  background: linear-gradient(135deg, #ff1f78, #8b2fc9);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(255, 31, 120, 0.4);
+  margin-top: 0.5rem;
+}
+
+.btn-contact-submit:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.query-success-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 12px;
+}
+
+.query-success-state span {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.query-success-state h4 {
+  font-size: 1.4rem;
+  color: #34d399;
+  margin-bottom: 0.5rem;
+}
+
+/* Transit Section */
+.transit-guide-section {
+  padding: 2rem 1rem 4rem;
+}
+
+.transit-box {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(18, 20, 32, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 3rem;
+}
+
+.transit-box h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 2rem;
+}
+
+.transit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 900px) {
+  .transit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.transit-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.transit-card h4 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffd700;
+  margin-bottom: 0.75rem;
+}
+
+.transit-card p {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
