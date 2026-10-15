@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
+  EVENT_TYPE,
   fetchCategoriesWithSubCategories,
   fetchEventsInSubCategory,
   fetchEventDetails,
@@ -19,9 +20,9 @@ export default function Events() {
 
   // ─────────────────────────────────────────────────────────────
   // RENDER BASED ON URL PARAMS:
-  // 1. If eventName is set -> View 3: Event Detail (Screenshot 5)
-  // 2. Else if eventSubCategory is set -> View 2: Subcategory Events (Screenshot 4)
-  // 3. Else -> View 1: All Categories & Subcategories (Screenshots 1, 2, 3)
+  // 1. If eventName is set -> View 3: Event Detail
+  // 2. Else if eventSubCategory is set -> View 2: Subcategory Events
+  // 3. Else -> View 1: All Categories & Subcategories
   // ─────────────────────────────────────────────────────────────
 
   if (eventCategory && eventSubCategory && eventName) {
@@ -58,7 +59,7 @@ export default function Events() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// VIEW 1: All Categories & Subcategories (Screenshots 1, 2, 3)
+// VIEW 1: All Categories & Subcategories
 // ─────────────────────────────────────────────────────────────
 function AllCategoriesView({ onSelectSubCategory }) {
   const [categories, setCategories] = useState([]);
@@ -67,27 +68,23 @@ function AllCategoriesView({ onSelectSubCategory }) {
   const [activeTab, setActiveTab] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    let isMounted = true;
+  const loadData = () => {
     setLoading(true);
+    setError(null);
 
     fetchCategoriesWithSubCategories()
       .then((data) => {
-        if (isMounted) {
-          setCategories(data);
-          setLoading(false);
-        }
+        setCategories(data);
+        setLoading(false);
       })
       .catch((err) => {
-        if (isMounted) {
-          setError(err.message || 'Failed to load events');
-          setLoading(false);
-        }
+        setError(err.message || 'Failed to load events');
+        setLoading(false);
       });
+  };
 
-    return () => {
-      isMounted = false;
-    };
+  useEffect(() => {
+    loadData();
   }, []);
 
   // Filtered categories based on selected tab and search query
@@ -95,25 +92,57 @@ function AllCategoriesView({ onSelectSubCategory }) {
     return categories
       .filter((cat) => {
         if (activeTab === 'ALL') return true;
-        return cat._id.toLowerCase().includes(activeTab.toLowerCase());
+        const catCode = (cat.code || cat._id || '').toUpperCase();
+        const catName = (cat.name || '').toUpperCase();
+        const tab = activeTab.toUpperCase();
+
+        return (
+          catCode === tab ||
+          catName === tab ||
+          catCode.includes(tab) ||
+          tab.includes(catCode) ||
+          catName.includes(tab) ||
+          tab.includes(catName)
+        );
       })
       .map((cat) => {
         if (!searchQuery.trim()) return cat;
         const q = searchQuery.toLowerCase();
         const filteredItems = (cat.data || []).filter((item) =>
-          (item.SubCatogory || item.name || '').toLowerCase().includes(q)
+          (item.SubCatogory || item.name || item.code || '').toLowerCase().includes(q)
         );
         return { ...cat, data: filteredItems };
       })
       .filter((cat) => (cat.data || []).length > 0);
   }, [categories, activeTab, searchQuery]);
 
+  // Derived tabs from loaded categories
+  const categoryTabs = useMemo(() => {
+    if (!categories || categories.length === 0) {
+      return [
+        { id: 'SPORTS', label: 'Sports & Games' },
+        { id: 'CULTURALS', label: 'Culturals' },
+        { id: 'CREO', label: 'Creo Arts' }
+      ];
+    }
+    return categories.map((cat) => {
+      const id = cat.code || cat._id;
+      let label = cat.name || cat.code;
+      if (id === 'CREO' && !label.toLowerCase().includes('arts')) {
+        label = 'Creo Arts';
+      }
+      return { id, label };
+    });
+  }, [categories]);
+
   return (
     <div className="events-page-wrapper">
       {/* University Portal Header Banner */}
       <div className="events-hero-header">
         <div className="container text-center">
-          <div className="events-badge-top">ADITYA UNIVERSITY • COLOURS 2027</div>
+          <div className="events-badge-top">
+            ADITYA UNIVERSITY • {EVENT_TYPE || 'COLORS'} 2027
+          </div>
           <h1 className="events-hero-title">Official Events & Competitions</h1>
           <p className="events-hero-subtitle">
             Compete across Sports, Culturals, Music, Theatre, and Creative Arts. All events are evaluated by
@@ -150,27 +179,16 @@ function AllCategoriesView({ onSelectSubCategory }) {
               >
                 All Events
               </button>
-              <button
-                type="button"
-                className={`tab-btn ${activeTab === 'SPORTS' ? 'active' : ''}`}
-                onClick={() => setActiveTab('SPORTS')}
-              >
-                Sports & Games
-              </button>
-              <button
-                type="button"
-                className={`tab-btn ${activeTab === 'CULTURALS' ? 'active' : ''}`}
-                onClick={() => setActiveTab('CULTURALS')}
-              >
-                Culturals
-              </button>
-              <button
-                type="button"
-                className={`tab-btn ${activeTab === 'CREO' ? 'active' : ''}`}
-                onClick={() => setActiveTab('CREO')}
-              >
-                Creo Arts
-              </button>
+              {categoryTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  className={`tab-btn ${activeTab === tab.id ? 'active' : ''}`}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
@@ -180,7 +198,7 @@ function AllCategoriesView({ onSelectSubCategory }) {
         {loading && (
           <div className="events-loading">
             <div className="events-spinner" />
-            <p>Loading database events...</p>
+            <p>Loading database events for {EVENT_TYPE || 'COLORS'}...</p>
           </div>
         )}
 
@@ -189,7 +207,7 @@ function AllCategoriesView({ onSelectSubCategory }) {
             <h3>Unable to load events</h3>
             <p>{error}</p>
             <button
-              onClick={() => window.location.reload()}
+              onClick={loadData}
               className="btn-checkout-primary"
               style={{ marginTop: '1rem' }}
             >
@@ -214,9 +232,11 @@ function AllCategoriesView({ onSelectSubCategory }) {
         )}
 
         {!loading && !error && filteredCategories.map((cat) => (
-          <section key={cat._id} className="category-section">
+          <section key={cat._id || cat.code} className="category-section">
             <div className="category-header-row">
-              <h2 className="category-heading">{cat._id} Events</h2>
+              <h2 className="category-heading">
+                {cat.name || `${cat.code || cat._id} Events`}
+              </h2>
               <span className="category-count-badge">
                 {cat.data.length} {cat.data.length === 1 ? 'Event' : 'Events'}
               </span>
@@ -225,14 +245,15 @@ function AllCategoriesView({ onSelectSubCategory }) {
             <div className="subcat-grid">
               {Array.isArray(cat.data) && cat.data.map((item, idx) => {
                 const subCatTitle = item.SubCatogory || item.name;
-                const imageSrc = getSubCatImageUrl(item.Image || item.image, subCatTitle);
-                const localFallback = getLocalFallbackSubCatImageUrl(item.Image || item.image);
+                const bannerVal = item.banner || item.Image || item.image;
+                const imageSrc = getSubCatImageUrl(bannerVal, subCatTitle);
+                const localFallback = getLocalFallbackSubCatImageUrl(bannerVal, subCatTitle);
 
                 return (
                   <div
-                    key={idx}
+                    key={item._id || idx}
                     className="subcat-card"
-                    onClick={() => onSelectSubCategory(cat._id, subCatTitle)}
+                    onClick={() => onSelectSubCategory(cat.code || cat.name || cat._id, subCatTitle)}
                   >
                     <img
                       src={imageSrc}
@@ -246,7 +267,7 @@ function AllCategoriesView({ onSelectSubCategory }) {
                     />
 
                     {/* Category Badge (Top Right) */}
-                    <div className="subcat-badge">{cat._id}</div>
+                    <div className="subcat-badge">{cat.name || cat.code || cat._id}</div>
 
                     {/* Gradient Overlay with Title and Hover Action */}
                     <div className="subcat-overlay">
@@ -257,7 +278,7 @@ function AllCategoriesView({ onSelectSubCategory }) {
                           className="btn-checkout-subcat"
                           onClick={(e) => {
                             e.stopPropagation();
-                            onSelectSubCategory(cat._id, subCatTitle);
+                            onSelectSubCategory(cat.code || cat.name || cat._id, subCatTitle);
                           }}
                         >
                           Check Out →
@@ -276,7 +297,7 @@ function AllCategoriesView({ onSelectSubCategory }) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// VIEW 2: Subcategory Events View (Screenshot 4)
+// VIEW 2: Subcategory Events View
 // ─────────────────────────────────────────────────────────────
 function SubCategoryEventsView({ category, subCategory, onBack, onSelectEvent }) {
   const [events, setEvents] = useState([]);
@@ -316,9 +337,9 @@ function SubCategoryEventsView({ category, subCategory, onBack, onSelectEvent })
               ← Back to All Events
             </button>
             <div className="breadcrumb-info">
-              <span className="breadcrumb-subtitle">Aditya University Fest</span>
+              <span className="breadcrumb-subtitle">Aditya University Fest • {EVENT_TYPE || 'COLORS'}</span>
               <h1 className="breadcrumb-heading">
-                Events / {category}
+                Events / {category} / {subCategory}
               </h1>
             </div>
           </div>
@@ -355,7 +376,7 @@ function SubCategoryEventsView({ category, subCategory, onBack, onSelectEvent })
                 const eventImg = getEventImageUrl(ev.eventImage, ev.eventName);
 
                 return (
-                  <div key={idx} className="event-sub-card">
+                  <div key={ev._id || idx} className="event-sub-card">
                     {/* Title Bar */}
                     <div className="event-sub-title-bar">{ev.eventName}</div>
 
@@ -371,19 +392,21 @@ function SubCategoryEventsView({ category, subCategory, onBack, onSelectEvent })
                           <div className="table-pill-value">₹ {ev.price ?? 'Free'}</div>
                         </div>
                         <div className="event-table-row">
-                          <div className="table-pill-label">Enrolled</div>
-                          <div className="table-pill-value">100+</div>
+                          <div className="table-pill-label">Venue</div>
+                          <div className="table-pill-value" style={{ fontSize: '0.82rem', whiteSpace: 'normal' }}>
+                            {ev.venue || 'Aditya Campus'}
+                          </div>
                         </div>
                       </div>
 
                       <div className="event-sub-image-col">
                         <img
-                          src="/img/party_mode.jpg"
+                          src={eventImg}
                           alt={ev.eventName}
                           className="event-sub-img"
                           onError={(e) => {
                             e.currentTarget.onerror = null;
-                            e.currentTarget.src = eventImg;
+                            e.currentTarget.src = '/hero_bg.png';
                           }}
                         />
                       </div>
@@ -395,7 +418,7 @@ function SubCategoryEventsView({ category, subCategory, onBack, onSelectEvent })
                         className="btn-checkout-primary"
                         onClick={() => onSelectEvent(ev.eventName)}
                       >
-                        Check Out
+                        Check Out →
                       </button>
                     </div>
                   </div>
@@ -410,7 +433,7 @@ function SubCategoryEventsView({ category, subCategory, onBack, onSelectEvent })
 }
 
 // ─────────────────────────────────────────────────────────────
-// VIEW 3: Event Detail View (Screenshot 5)
+// VIEW 3: Event Detail View
 // ─────────────────────────────────────────────────────────────
 function EventDetailView({ category, subCategory, eventName, onBack }) {
   const [eventData, setEventData] = useState(null);
@@ -488,7 +511,7 @@ function EventDetailView({ category, subCategory, eventName, onBack }) {
               <div className="detail-section">
                 <div className="detail-pill-badge">Overview</div>
                 <p className="detail-overview-text">
-                  {eventData.overview || 'No overview provided.'}
+                  {eventData.overview || 'Official competitive event at Aditya University fest.'}
                 </p>
               </div>
 
@@ -515,7 +538,7 @@ function EventDetailView({ category, subCategory, eventName, onBack }) {
               {/* Event Fee Section */}
               <div className="detail-section">
                 <div className="detail-pill-badge">
-                  Event Fee {eventData.price ? `- Rs ${eventData.price}/-` : '- Free'}
+                  Event Fee {eventData.price ? `- ₹ ${eventData.price}/-` : '- Free'}
                 </div>
               </div>
 
@@ -542,7 +565,7 @@ function EventDetailView({ category, subCategory, eventName, onBack }) {
                           </div>
                           <div className="coordinator-name">{fc.cordinatorName}</div>
                           <div className="coordinator-dept">
-                            {fc.departmentName || fc.cordinatorCollege || ''}
+                            {fc.cordinatorDesignation || fc.departmentName || fc.cordinatorCollege || 'Coordinator'}
                           </div>
                           {fc.cordinatorPhone && (
                             <a href={`tel:${fc.cordinatorPhone}`} className="coordinator-phone">
@@ -581,7 +604,7 @@ function EventDetailView({ category, subCategory, eventName, onBack }) {
                           </div>
                           <div className="coordinator-name">{sc.studentCordinatorName}</div>
                           <div className="coordinator-dept">
-                            {sc.studentCordinatorCollege || sc.departmentName || ''}
+                            {sc.studentCordinatorCollege || sc.departmentName || 'Student Coordinator'}
                           </div>
                           {sc.studentCordinatorPhone && (
                             <a href={`tel:${sc.studentCordinatorPhone}`} className="coordinator-phone">

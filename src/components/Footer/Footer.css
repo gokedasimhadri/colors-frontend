@@ -1,11 +1,11 @@
 /* ==========================================================================
-   University Footer Styles
+   University Footer Styles (White / Light Theme)
    ========================================================================== */
 
 .uni-footer {
-  background: #080910;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  color: #a0aec0;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  color: #475569;
   font-family: var(--font-body), sans-serif;
   margin-top: auto;
   position: relative;
@@ -47,7 +47,7 @@
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #ff1f78, #8b2fc9);
+  background: linear-gradient(135deg, #e11d48, #7c3aed);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -55,13 +55,13 @@
   font-weight: 900;
   font-size: 1.2rem;
   letter-spacing: 0.05em;
-  box-shadow: 0 4px 15px rgba(255, 31, 120, 0.4);
+  box-shadow: 0 4px 15px rgba(225, 29, 72, 0.25);
 }
 
 .uni-footer-title {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
   letter-spacing: 0.04em;
   margin: 0;
 }
@@ -69,7 +69,7 @@
 .uni-footer-subtitle {
   font-size: 0.75rem;
   font-weight: 700;
-  color: #ff1f78;
+  color: #e11d48;
   letter-spacing: 0.1em;
   display: block;
 }
@@ -77,7 +77,7 @@
 .uni-footer-desc {
   font-size: 0.95rem;
   line-height: 1.7;
-  color: #94a3b8;
+  color: #475569;
   margin-bottom: 1.5rem;
   max-width: 420px;
 }
@@ -89,21 +89,22 @@
 }
 
 .uni-tag-pill {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #e2e8f0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
   font-size: 0.72rem;
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 50px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .uni-col-heading {
   font-size: 1.05rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
   margin-bottom: 1.5rem;
   letter-spacing: 0.02em;
   position: relative;
@@ -117,7 +118,7 @@
   bottom: -6px;
   width: 24px;
   height: 2px;
-  background: #ff1f78;
+  background: #e11d48;
   border-radius: 2px;
 }
 
@@ -131,7 +132,7 @@
 }
 
 .uni-footer-links li a {
-  color: #94a3b8;
+  color: #64748b;
   text-decoration: none;
   font-size: 0.92rem;
   font-weight: 500;
@@ -140,7 +141,7 @@
 }
 
 .uni-footer-links li a:hover {
-  color: #ffffff;
+  color: #e11d48;
   transform: translateX(4px);
 }
 
@@ -150,18 +151,18 @@
   gap: 0.75rem;
   font-size: 0.92rem;
   line-height: 1.6;
-  color: #94a3b8;
+  color: #475569;
   margin-bottom: 1rem;
 }
 
 .uni-contact-item a {
-  color: #94a3b8;
+  color: #475569;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .uni-contact-item a:hover {
-  color: #ff1f78;
+  color: #e11d48;
 }
 
 .uni-social-links {
@@ -174,9 +175,9 @@
   width: 38px;
   height: 38px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -184,19 +185,21 @@
   font-weight: 800;
   text-decoration: none;
   transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .uni-social-links a:hover {
-  background: #ff1f78;
-  border-color: #ff1f78;
+  background: #e11d48;
+  border-color: #e11d48;
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 31, 120, 0.4);
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
 }
 
 .uni-footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid #e2e8f0;
   padding: 1.5rem 0;
-  background: #05060a;
+  background: #f1f5f9;
 }
 
 .uni-bottom-row {
@@ -222,5 +225,5 @@
 }
 
 .uni-bottom-links a:hover {
-  color: #cbd5e1;
+  color: #0f172a;
 }

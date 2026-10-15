@@ -1,10 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  EVENT_START_DATE,
+  EVENT_DATE_RAW,
+  EVENT_DAYS,
+  EVENT_DATE_FORMAL,
+  EVENT_DATE_RANGE_SHORT,
+  getDayShortDate,
+} from '../../utils/eventDate';
 import './Home.css';
 
 // ─── Countdown Timer ─────────────────────────────────────────────────────────
-// 3-day fest: Feb 15–17, 2027
-const EVENT_DATE = new Date('2027-02-15T09:00:00');
+const EVENT_DATE = EVENT_START_DATE;
 
 function useCountdown() {
   const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -65,7 +72,7 @@ const FEATURED_EVENTS = [
     badge: 'cultural', badgeText: 'Cultural',
     title: 'Grand Drama Night',
     desc: 'Witness breath-taking theatrical performances by the most talented student actors.',
-    date: 'Feb 15', venue: 'Main Auditorium',
+    date: getDayShortDate(1), venue: 'Main Auditorium',
   },
   {
     id: 2, emoji: '🎵',
@@ -73,7 +80,7 @@ const FEATURED_EVENTS = [
     badge: 'music', badgeText: 'Music',
     title: 'Battle of Bands',
     desc: 'Electrifying bands compete live on stage – rock, fusion, jazz and more.',
-    date: 'Feb 16', venue: 'Open Air Stage',
+    date: getDayShortDate(2), venue: 'Open Air Stage',
   },
   {
     id: 3, emoji: '💃',
@@ -81,7 +88,7 @@ const FEATURED_EVENTS = [
     badge: 'dance', badgeText: 'Dance',
     title: 'Rhythms of India',
     desc: 'Classical to contemporary – dance forms from across the nation come alive.',
-    date: 'Feb 17', venue: 'Dance Arena',
+    date: getDayShortDate(3), venue: 'Dance Arena',
   },
   {
     id: 4, emoji: '⚽',
@@ -89,7 +96,7 @@ const FEATURED_EVENTS = [
     badge: 'sports', badgeText: 'Sports',
     title: 'Inter-University Sports',
     desc: 'Championships across cricket, football, basketball, athletics and more.',
-    date: 'Feb 15–17', venue: 'Sports Complex',
+    date: EVENT_DATE_RANGE_SHORT, venue: 'Sports Complex',
   },
   {
     id: 5, emoji: '🎨',
@@ -97,7 +104,7 @@ const FEATURED_EVENTS = [
     badge: 'art', badgeText: 'Art',
     title: 'Canvas Carnival',
     desc: 'Paintings, sculptures, digital art – a visual feast celebrating student creativity.',
-    date: 'Feb 16', venue: 'Art Gallery',
+    date: getDayShortDate(2), venue: 'Art Gallery',
   },
   {
     id: 6, emoji: '💻',
@@ -105,7 +112,7 @@ const FEATURED_EVENTS = [
     badge: 'tech', badgeText: 'Tech',
     title: '48hr Hackathon',
     desc: 'Code, collaborate and create. The ultimate technology challenge awaits.',
-    date: 'Feb 17', venue: 'Tech Hub',
+    date: getDayShortDate(3), venue: 'Tech Hub',
   },
 ];
 
@@ -120,7 +127,7 @@ const PERFORMERS = [
 ];
 
 // ─── Schedule (3 days) ────────────────────────────────────────────────────────
-const SCHEDULE_DAYS = ['Day 1 – Feb 15', 'Day 2 – Feb 16', 'Day 3 – Feb 17'];
+const SCHEDULE_DAYS = EVENT_DAYS.map((d) => d.dayScheduleTitle);
 
 const SCHEDULE_DATA = {
   0: [
@@ -253,7 +260,7 @@ export default function Home() {
                 <div className="info-row">
                   <span className="info-icon">📅</span>
                   <span className="info-label">Date</span>
-                  <span className="info-value">Feb 15 – 17, 2027</span>
+                  <span className="info-value">{EVENT_DATE_RAW}</span>
                 </div>
                 <div className="info-row">
                   <span className="info-icon">📍</span>
@@ -302,7 +309,7 @@ export default function Home() {
               <div className="description-body">
                 <p className="description-para">
                   Mark your calendars for Colours 2027, an international youth festival happening from{' '}
-                  <span className="text-accent">15th to 17th February 2027</span>! Get ready for{' '}
+                  <span className="text-accent">{EVENT_DATE_FORMAL}</span>! Get ready for{' '}
                   <span className="text-accent">three days</span> of pure excitement at Colours 2027.
                   This vibrant celebration will be packed with non-stop entertainment, featuring{' '}
                   <span className="text-accent-purple">electrifying dance performances</span>,

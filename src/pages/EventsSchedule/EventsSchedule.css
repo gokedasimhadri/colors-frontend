@@ -1,27 +1,27 @@
 /* ==========================================================================
-   University Events Schedule Styles
+   University Events Schedule Styles (White / Light Theme)
    ========================================================================== */
 
 .schedule-page-wrapper {
   min-height: 100vh;
-  background-color: #0a0b14;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #0f172a;
   padding-top: var(--navbar-height);
   padding-bottom: 5rem;
   font-family: var(--font-body), sans-serif;
 }
 
 .schedule-hero {
-  padding: 4rem 1.5rem 3rem;
-  background: radial-gradient(circle at 50% 15%, rgba(99, 102, 241, 0.15) 0%, rgba(10, 11, 20, 0.95) 70%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 4.5rem 1.5rem 3.5rem;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .schedule-badge-top {
   display: inline-block;
-  background: rgba(99, 102, 241, 0.12);
-  border: 1px solid rgba(99, 102, 241, 0.35);
-  color: #818cf8;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  color: #7c3aed;
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.15em;
@@ -31,16 +31,17 @@
 }
 
 .schedule-hero-title {
-  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #ffffff;
+  letter-spacing: 0.02em;
+  color: #0f172a;
   margin-bottom: 1rem;
 }
 
 .schedule-hero-sub {
-  font-size: 1.05rem;
-  color: #94a3b8;
+  font-size: 1.1rem;
+  color: #475569;
   max-width: 650px;
   margin: 0 auto 2.5rem;
   line-height: 1.7;
@@ -63,9 +64,9 @@
 }
 
 .day-tab-card {
-  background: rgba(18, 20, 32, 0.85);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
   padding: 1.5rem;
   text-align: center;
   cursor: pointer;
@@ -73,42 +74,44 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
 }
 
 .day-tab-card:hover {
   transform: translateY(-3px);
-  border-color: rgba(99, 102, 241, 0.6);
-  background: rgba(24, 26, 42, 0.95);
+  border-color: #fda4af;
+  box-shadow: 0 8px 24px rgba(225, 29, 72, 0.08);
 }
 
 .day-tab-card.active {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(255, 31, 120, 0.2));
-  border-color: #6366f1;
-  box-shadow: 0 0 25px rgba(99, 102, 241, 0.35);
+  background: #ffffff;
+  border-color: #e11d48;
+  box-shadow: 0 8px 25px rgba(225, 29, 72, 0.15);
 }
 
 .day-number {
   font-size: 0.8rem;
   font-weight: 800;
   letter-spacing: 0.15em;
-  color: #ff1f78;
+  color: #e11d48;
 }
 
 .day-date {
   font-size: 1.35rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .day-title {
   font-size: 0.9rem;
-  color: #94a3b8;
+  color: #64748b;
   margin-top: 0.25rem;
 }
 
 /* Filter Bar */
 .schedule-list-section {
   padding: 3.5rem 1rem 5rem;
+  background: #ffffff;
 }
 
 .schedule-filter-bar {
@@ -128,32 +131,34 @@
 }
 
 .f-pill {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94a3b8;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #475569;
   font-size: 0.85rem;
   font-weight: 700;
   padding: 8px 18px;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .f-pill:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
+  color: #e11d48;
+  background: #fff1f2;
+  border-color: #fecdd3;
 }
 
 .f-pill.active {
-  background: linear-gradient(135deg, #6366f1, #a855f7);
+  background: linear-gradient(135deg, #e11d48, #be185d);
   color: #ffffff;
-  border-color: transparent;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  border-color: #e11d48;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25);
 }
 
 .schedule-meta-badge {
   font-size: 0.9rem;
-  color: #94a3b8;
+  color: #64748b;
 }
 
 /* Timeline Cards */
@@ -166,9 +171,8 @@
 }
 
 .timeline-item-card {
-  background: rgba(18, 20, 32, 0.75);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   border-radius: 14px;
   padding: 1.5rem 2rem;
   display: grid;
@@ -176,6 +180,7 @@
   align-items: center;
   gap: 2rem;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
 }
 
 @media (max-width: 900px) {
@@ -187,9 +192,9 @@
 }
 
 .timeline-item-card:hover {
-  border-color: rgba(139, 92, 246, 0.5);
+  border-color: #fda4af;
   transform: translateX(4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 24px rgba(225, 29, 72, 0.08);
 }
 
 .timeline-time-col {
@@ -201,7 +206,7 @@
 .time-badge {
   font-size: 0.95rem;
   font-weight: 800;
-  color: #ffd700;
+  color: #b45309;
   display: block;
 }
 
@@ -217,27 +222,27 @@
 }
 
 .cat-sportsgames {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
 }
 
 .cat-culturals {
-  background: rgba(255, 31, 120, 0.15);
-  color: #ff5fa0;
-  border: 1px solid rgba(255, 31, 120, 0.3);
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
 }
 
 .cat-creo {
-  background: rgba(168, 85, 247, 0.15);
-  color: #c084fc;
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: #f5f3ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
 }
 
 .cat-general {
-  background: rgba(56, 189, 248, 0.15);
-  color: #38bdf8;
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  background: #f0f9ff;
+  color: #0284c7;
+  border: 1px solid #bae6fd;
 }
 
 .timeline-content-col {
@@ -249,7 +254,7 @@
 .timeline-event-name {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0;
 }
 
@@ -258,48 +263,49 @@
   flex-wrap: wrap;
   gap: 1.5rem;
   font-size: 0.9rem;
-  color: #cbd5e1;
+  color: #475569;
 }
 
 .detail-item strong {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .btn-timeline-action {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #ffffff;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #1e293b;
   padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 50px;
   font-size: 0.85rem;
   font-weight: 700;
   text-decoration: none;
   white-space: nowrap;
   transition: all 0.2s ease;
   display: inline-block;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .btn-timeline-action:hover {
-  background: linear-gradient(135deg, #ff1f78, #8b2fc9);
-  border-color: transparent;
+  background: linear-gradient(135deg, #e11d48, #be185d);
+  border-color: #e11d48;
   color: #ffffff;
-  box-shadow: 0 4px 15px rgba(255, 31, 120, 0.4);
+  box-shadow: 0 4px 15px rgba(225, 29, 72, 0.25);
 }
 
 /* Notice Box */
 .schedule-notice-box {
   max-width: 1100px;
   margin: 3.5rem auto 0;
-  background: rgba(255, 215, 0, 0.05);
-  border: 1px solid rgba(255, 215, 0, 0.25);
-  border-radius: 12px;
+  background: #fefce8;
+  border: 1.5px solid #fef08a;
+  border-radius: 14px;
   padding: 2rem;
 }
 
 .schedule-notice-box h4 {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #ffd700;
+  color: #854d0e;
   margin-bottom: 0.75rem;
 }
 
@@ -307,7 +313,7 @@
   list-style: disc;
   padding-left: 1.5rem;
   margin: 0;
-  color: #cbd5e1;
+  color: #713f12;
   font-size: 0.95rem;
   line-height: 1.7;
 }

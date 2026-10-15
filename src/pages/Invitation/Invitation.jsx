@@ -1,4 +1,9 @@
 import { Link } from 'react-router-dom';
+import {
+  EVENT_BADGE_TEXT,
+  EVENT_DATE_FORMAL,
+  getDayFullDate,
+} from '../../utils/eventDate';
 import './Invitation.css';
 
 export default function Invitation() {
@@ -31,21 +36,21 @@ export default function Invitation() {
       title: 'Chief Guest – Inaugural',
       name: 'Padma Shri Awardee',
       field: 'Eminent Performing Artist & Cultural Icon',
-      date: 'Feb 15, 2027 • 09:30 AM',
+      date: getDayFullDate(1, '09:30 AM'),
       venue: 'University Grand Amphitheatre'
     },
     {
       title: 'Celebrity Guest – Pro Night',
       name: 'National Playback Singer',
       field: 'Music Director & Live Concert Performer',
-      date: 'Feb 16, 2027 • 07:00 PM',
+      date: getDayFullDate(2, '07:00 PM'),
       venue: 'Central Open Air Stage'
     },
     {
       title: 'Valedictory Guest',
       name: 'Olympic Medalist Athlete',
       field: 'Indian Sports Personality',
-      date: 'Feb 17, 2027 • 05:00 PM',
+      date: getDayFullDate(3, '05:00 PM'),
       venue: 'Main Indoor Stadium'
     }
   ];
@@ -67,7 +72,7 @@ export default function Invitation() {
           </p>
 
           <div className="invitation-dates-badge">
-            <span>📅 FEBRUARY 15 – 17, 2027</span>
+            <span>📅 {EVENT_BADGE_TEXT}</span>
             <span>•</span>
             <span>📍 ADITYA UNIVERSITY, SURAMPALEM</span>
           </div>
@@ -91,7 +96,7 @@ export default function Invitation() {
               <p>
                 It gives us immense pride and honor to invite your esteemed institution to participate in
                 <strong> Colours 2027</strong>, the annual mega-celebration of talent, athletics, theatrical arts,
-                and creative ingenuity hosted by Aditya University from <strong>February 15 to 17, 2027</strong>.
+                and creative ingenuity hosted by Aditya University from <strong>{EVENT_DATE_FORMAL}</strong>.
               </p>
               <p>
                 Colours has grown into one of South India's largest and most eagerly anticipated collegiate fests,

@@ -1,39 +1,41 @@
 /* =============================================
-   COLOURS 2027 – Global Design System (Dark Theme)
+   COLOURS 2027 – Global Design System (White / Light Theme)
    University Cultural & Sports Festival
    ============================================= */
 
 :root {
-  --clr-bg-dark:       #0a0a0f;
-  --clr-bg-card:       #12121a;
-  --clr-bg-card2:      #1a1a28;
-  --clr-primary:       #ff1f78;
-  --clr-primary-glow:  rgba(255, 31, 120, 0.35);
-  --clr-primary-light: #ff5fa0;
-  --clr-accent:        #ffd700;
-  --clr-accent-glow:   rgba(255, 215, 0, 0.25);
-  --clr-purple:        #8b2fc9;
-  --clr-purple-light:  #c471ed;
-  --clr-teal:          #0891b2;
-  --clr-text-primary:  #ffffff;
-  --clr-text-secondary:#c0bcd4;
-  --clr-text-muted:    #7a7590;
-  --clr-border:        rgba(255, 31, 120, 0.2);
-  --clr-border-light:  rgba(255, 255, 255, 0.08);
-  --clr-border-card:   rgba(255, 255, 255, 0.06);
+  --clr-bg-dark:       #ffffff;
+  --clr-bg-page:       #ffffff;
+  --clr-bg-subtle:     #f8fafc;
+  --clr-bg-card:       #ffffff;
+  --clr-bg-card2:      #f1f5f9;
+  --clr-primary:       #e11d48;
+  --clr-primary-glow:  rgba(225, 29, 72, 0.15);
+  --clr-primary-light: #f43f5e;
+  --clr-accent:        #d97706;
+  --clr-accent-glow:   rgba(217, 119, 6, 0.2);
+  --clr-purple:        #7c3aed;
+  --clr-purple-light:  #9333ea;
+  --clr-teal:          #0d9488;
+  --clr-text-primary:  #0f172a;
+  --clr-text-secondary:#334155;
+  --clr-text-muted:    #64748b;
+  --clr-border:        rgba(225, 29, 72, 0.2);
+  --clr-border-light:  rgba(226, 232, 240, 0.9);
+  --clr-border-card:   #e2e8f0;
 
   --font-heading: 'Bebas Neue', sans-serif;
   --font-body:    'Outfit', sans-serif;
 
-  --radius-sm: 6px;
-  --radius-md: 12px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
   --radius-lg: 20px;
   --radius-xl: 32px;
 
-  --shadow-glow-pink:   0 0 30px rgba(255, 31, 120, 0.4);
-  --shadow-glow-gold:   0 0 30px rgba(255, 215, 0, 0.3);
-  --shadow-card:        0 8px 32px rgba(0, 0, 0, 0.5);
-  --shadow-card-hover:  0 20px 50px rgba(0, 0, 0, 0.6);
+  --shadow-glow-pink:   0 0 24px rgba(225, 29, 72, 0.2);
+  --shadow-glow-gold:   0 0 24px rgba(217, 119, 6, 0.2);
+  --shadow-card:        0 4px 20px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03);
+  --shadow-card-hover:  0 12px 32px rgba(15, 23, 42, 0.09), 0 2px 6px rgba(15, 23, 42, 0.04);
 
   --transition-fast:   0.2s ease;
   --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -53,7 +55,7 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--font-body);
-  background-color: var(--clr-bg-dark);
+  background-color: #ffffff;
   color: var(--clr-text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -63,14 +65,15 @@ body {
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--clr-bg-dark); }
-::-webkit-scrollbar-thumb { background: var(--clr-primary); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--clr-primary-light); }
+::-webkit-scrollbar-track { background: #f8fafc; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--clr-primary); }
 
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #ffffff;
 }
 
 /* ── Utilities ── */
@@ -85,12 +88,12 @@ body {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--clr-primary);
-  background: rgba(255, 31, 120, 0.1);
-  border: 1px solid rgba(255, 31, 120, 0.3);
+  background: rgba(225, 29, 72, 0.08);
+  border: 1px solid rgba(225, 29, 72, 0.2);
   padding: 0.35rem 1rem;
   border-radius: 50px;
   margin-bottom: 1rem;
@@ -115,7 +118,7 @@ body {
 
 .gradient-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--clr-primary), transparent);
+  background: linear-gradient(90deg, transparent, rgba(225, 29, 72, 0.3), transparent);
   margin: 0;
 }
 
@@ -123,7 +126,7 @@ body {
   width: 8px; height: 8px;
   background: var(--clr-primary);
   border-radius: 50%;
-  box-shadow: 0 0 12px var(--clr-primary);
+  box-shadow: 0 0 10px var(--clr-primary);
   display: inline-block;
 }
 
@@ -136,6 +139,7 @@ body {
   gap: 1rem;
   padding: 4rem 2rem;
   text-align: center;
+  background: #ffffff;
 }
 
 .placeholder-page h1 {
@@ -162,8 +166,8 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(255, 31, 120, 0.4); }
-  50%       { box-shadow: 0 0 40px rgba(255, 31, 120, 0.8), 0 0 60px rgba(255, 31, 120, 0.3); }
+  0%, 100% { box-shadow: 0 0 15px rgba(225, 29, 72, 0.3); }
+  50%       { box-shadow: 0 0 25px rgba(225, 29, 72, 0.5); }
 }
 
 @keyframes float {

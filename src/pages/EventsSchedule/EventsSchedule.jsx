@@ -1,16 +1,24 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { EVENT_DAYS } from '../../utils/eventDate';
 import './EventsSchedule.css';
 
 export default function EventsSchedule() {
   const [selectedDay, setSelectedDay] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState('ALL');
 
-  const scheduleDays = [
-    { day: 1, date: 'Feb 15, 2027', title: 'Day 1: Inaugural & Prelims', highlight: 'Grand Torch Relay & Classical Arts' },
-    { day: 2, date: 'Feb 16, 2027', title: 'Day 2: Semi-Finals & Battles', highlight: 'Battle of Bands & Pro Celebrity Night' },
-    { day: 3, date: 'Feb 17, 2027', title: 'Day 3: Championship Finals', highlight: 'Valedictory & Mega Star Concert' },
+  const dayMeta = [
+    { title: 'Day 1: Inaugural & Prelims', highlight: 'Grand Torch Relay & Classical Arts' },
+    { title: 'Day 2: Semi-Finals & Battles', highlight: 'Battle of Bands & Pro Celebrity Night' },
+    { title: 'Day 3: Championship Finals', highlight: 'Valedictory & Mega Star Concert' },
   ];
+
+  const scheduleDays = EVENT_DAYS.map((d, idx) => ({
+    day: d.dayNumber,
+    date: d.fullDate,
+    title: dayMeta[idx]?.title || `Day ${d.dayNumber}: Competitions & Finals`,
+    highlight: dayMeta[idx]?.highlight || 'Championships & Evening Concerts',
+  }));
 
   const scheduleItems = [
     // Day 1
