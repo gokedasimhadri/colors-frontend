@@ -80,7 +80,7 @@ export default function Footer() {
 
       <div className="uni-footer-bottom">
         <div className="container uni-bottom-row">
-          <p>© 2027 Aditya University. All rights reserved. Colours 2027 Youth Festival.</p>
+          <p>Designed & Developed by IT Applications.</p>
           <div className="uni-bottom-links">
             <Link to="/contact">Emergency Contact</Link>
             <span>•</span>

@@ -12,7 +12,14 @@ export const API_BASE =
 
 export const EMP_PHOTO_BASE =
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_EMP_URL) ||
-  'https://info.aec.edu.in/aec/employeephotos';
+  'https://info.aec.edu.in/aus/employeephotos';
+
+export const CAMPUS_PHOTO_BASES = [
+  'https://info.aec.edu.in/aus/employeephotos',
+  'https://info.aec.edu.in/aec/employeephotos',
+  'https://info.aec.edu.in/acet/employeephotos',
+  'https://info.aec.edu.in/acoe/employeephotos'
+];
 
 // Standard preferred ordering matching fest structure
 export const CATEGORY_ORDER = ['SPORTS', 'CULTURALS', 'CREO'];
@@ -131,17 +138,16 @@ export const PROFESSIONAL_EVENT_IMAGES = {
   'Rangoli': 'https://images.unsplash.com/photo-1605371924599-2d0365da1ae0?q=80&w=800&auto=format&fit=crop',
 };
 
-// Cached categories for subcategory/coordinator lookups
+// Cached categories and events for subcategory/coordinator lookups
 let cachedCategories = null;
+let cachedEventsByType = {};
 
 /**
- * Fetch all categories and their subcategories based on EVENT_TYPE (e.g. 'COLORS')
+ * Fetch all available fest themes / event types (e.g. COLORS, VEDA, ALA)
  */
-export async function fetchCategoriesWithSubCategories() {
+export async function fetchThemes() {
   try {
-    const typeCode = EVENT_TYPE || 'COLORS';
-    const endpoint = `/api/central-event-types/${typeCode}/categories`;
-
+    const endpoint = '/api/central-event-types';
     let res;
     try {
       res = await fetch(endpoint);
@@ -151,13 +157,84 @@ export async function fetchCategoriesWithSubCategories() {
     }
 
     if (!res.ok) {
-      throw new Error(`Failed to fetch categories: ${res.status}`);
+      throw new Error(`Failed to fetch themes: ${res.status}`);
     }
 
     const json = await res.json();
+    const types = Array.isArray(json) ? json : json.data || [];
+    return types.filter((t) => t.isActive !== false);
+  } catch (err) {
+    console.error('Error fetching themes:', err);
+    // Fallback default themes
+    return [
+      { code: 'COLORS', name: 'COLORS Youth Cultural Fest', isActive: true, sortOrder: 1 },
+      { code: 'VEDA', name: 'VEDA National Tech Fest', isActive: true, sortOrder: 2 },
+      { code: 'ALA', name: 'ALA Literary & Arts Festival', isActive: true, sortOrder: 3 }
+    ];
+  }
+}
+
+/**
+ * Fetch all events for a given fest theme / event type
+ */
+export async function fetchAllEvents(typeCode = EVENT_TYPE) {
+  const code = (typeCode || 'COLORS').toUpperCase();
+  try {
+    const endpoint = `/api/central-events?typeCode=${code}&limit=100`;
+    let res;
+    try {
+      res = await fetch(endpoint);
+      if (!res.ok) throw new Error(`Proxy error: ${res.status}`);
+    } catch {
+      res = await fetch(`${API_BASE}${endpoint}`);
+    }
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch events: ${res.status}`);
+    }
+
+    const json = await res.json();
+    const rawEvents = Array.isArray(json) ? json : json.data || [];
+    const mapped = rawEvents.map((ev) => mapBackendEvent(ev));
+    cachedEventsByType[code] = mapped;
+    return mapped;
+  } catch (err) {
+    console.warn(`Notice loading live events for ${code}:`, err.message);
+    return cachedEventsByType[code] || [];
+  }
+}
+
+/**
+ * Fetch all categories and their subcategories based on EVENT_TYPE (e.g. 'COLORS')
+ * Dynamically aggregates event counts and subcategories from backend
+ */
+export async function fetchCategoriesWithSubCategories(typeCode = EVENT_TYPE) {
+  try {
+    const code = (typeCode || 'COLORS').toUpperCase();
+    const endpoint = `/api/central-event-types/${code}/categories`;
+
+    // Concurrently fetch categories and live events for this theme
+    let [catRes, allEvents] = await Promise.all([
+      (async () => {
+        try {
+          const r = await fetch(endpoint);
+          if (r.ok) return r;
+        } catch {
+          // fallback to API_BASE
+        }
+        return fetch(`${API_BASE}${endpoint}`);
+      })(),
+      fetchAllEvents(code).catch(() => [])
+    ]);
+
+    if (!catRes.ok) {
+      throw new Error(`Failed to fetch categories: ${catRes.status}`);
+    }
+
+    const json = await catRes.json();
     const rawCategories = Array.isArray(json) ? json : json.data || [];
 
-    const normalized = normalizeCategories(rawCategories);
+    const normalized = normalizeCategories(rawCategories, allEvents, code);
     cachedCategories = normalized;
     return sortCategoriesAndSubCategories(normalized);
   } catch (err) {
@@ -168,19 +245,28 @@ export async function fetchCategoriesWithSubCategories() {
 
 /**
  * Normalize category objects from backend central_event_categories collection
+ * Links subcategories with actual event counts and coordinator details
  */
-function normalizeCategories(categories) {
+function normalizeCategories(categories, allEvents = [], typeCode = 'COLORS') {
   if (!Array.isArray(categories)) return [];
 
   return categories.map((cat) => {
     const catCode = (cat.code || cat._id || '').toUpperCase();
     const catName = cat.name || catCode;
 
+    // Filter events belonging to this category
+    const catEvents = (allEvents || []).filter(
+      (ev) =>
+        (cat._id && String(ev.categoryId) === String(cat._id)) ||
+        (ev.category && ev.category.toUpperCase() === catName.toUpperCase()) ||
+        (ev.typeCode && ev.typeCode.toUpperCase() === typeCode.toUpperCase() && ev.categoryName === catName)
+    );
+
     // Subcategories from backend
     let subList = Array.isArray(cat.subcategories) ? [...cat.subcategories] : [];
 
-    // If subcategories are empty in DB (e.g., CREO), provide standard fest subcategories
-    if (subList.length === 0) {
+    // If subcategories are empty in DB but fest catalog defines them, provide fallback
+    if (subList.length === 0 && cat.hasSubcategories !== false) {
       const fallbackList = SUBCATEGORY_ORDER[catName] || SUBCATEGORY_ORDER[catCode] || [];
       subList = fallbackList.map((subName, index) => ({
         _id: `fallback-${catCode.toLowerCase()}-${index}`,
@@ -199,6 +285,16 @@ function normalizeCategories(categories) {
       const subName = sub.name || sub.SubCatogory || sub.code;
       const bannerUrl = sub.banner?.url || sub.Image || sub.image || null;
 
+      // Find events belonging to this subcategory
+      const subEvents = catEvents.filter((ev) => {
+        if (sub._id && ev.subcategoryId && String(ev.subcategoryId) === String(sub._id)) {
+          return true;
+        }
+        const evSub = (ev.subCategory || ev.subcategoryName || '').toLowerCase().trim();
+        const curSub = (subName || '').toLowerCase().trim();
+        return evSub === curSub || evSub.includes(curSub) || curSub.includes(evSub);
+      });
+
       return {
         _id: sub._id,
         code: sub.code,
@@ -208,8 +304,10 @@ function normalizeCategories(categories) {
         Image: bannerUrl,
         image: bannerUrl,
         coordinator: sub.coordinator,
-        coordinators: sub.coordinators || [],
-        sortOrder: sub.sortOrder ?? 0
+        coordinators: sub.coordinators || (sub.coordinator ? [sub.coordinator] : []),
+        sortOrder: sub.sortOrder ?? 0,
+        eventCount: subEvents.length,
+        events: subEvents
       };
     });
 
@@ -218,11 +316,14 @@ function normalizeCategories(categories) {
       rawId: cat._id,
       code: catCode,
       name: catName,
+      typeCode: typeCode,
       sortOrder: cat.sortOrder ?? 99,
       coordinator: cat.coordinator,
-      coordinators: cat.coordinators || [],
+      coordinators: cat.coordinators || (cat.coordinator ? [cat.coordinator] : []),
       hasSubcategories: cat.hasSubcategories,
-      data: formattedData
+      data: formattedData,
+      totalEventsCount: catEvents.length,
+      events: catEvents
     };
   });
 }
@@ -274,34 +375,74 @@ function sortCategoriesAndSubCategories(categories) {
  * Fetch events within a subcategory
  * Checks live backend central-events collection; falls back gracefully to fest events catalog
  */
-export async function fetchEventsInSubCategory(category, subCategory) {
+export async function fetchEventsInSubCategory(category, subCategory, subcategoryId = null, typeCode = EVENT_TYPE) {
   try {
-    const typeCode = EVENT_TYPE || 'COLORS';
+    const code = (typeCode || 'COLORS').toUpperCase();
 
-    // 1. Attempt to fetch from backend central-events API
-    try {
-      const encSub = encodeURIComponent(subCategory);
-      let res;
-      try {
-        res = await fetch(`/api/central-events?typeCode=${typeCode}&search=${encSub}`);
-      } catch {
-        res = await fetch(`${API_BASE}/api/central-events?typeCode=${typeCode}&search=${encSub}`);
-      }
-
-      if (res && res.ok) {
-        const json = await res.json();
-        const liveEvents = Array.isArray(json) ? json : json.data || [];
-
-        // If backend has events for this subcategory/category, map and return them
-        if (liveEvents.length > 0) {
-          return liveEvents.map((ev) => mapBackendEvent(ev, category, subCategory));
-        }
-      }
-    } catch (e) {
-      console.warn('Backend events query notice:', e.message);
+    // 1. If we have cached events or can fetch all events for this theme
+    let allEvents = cachedEventsByType[code];
+    if (!allEvents || allEvents.length === 0) {
+      allEvents = await fetchAllEvents(code);
     }
 
-    // 2. If no events are registered yet in the database for COLORS, generate standard fest competition events
+    if (Array.isArray(allEvents) && allEvents.length > 0) {
+      const normSub = (subCategory || '').toLowerCase().trim();
+      const normCat = (category || '').toLowerCase().trim();
+
+      const filtered = allEvents.filter((ev) => {
+        // Direct subcategoryId match
+        if (subcategoryId && ev.subcategoryId && String(ev.subcategoryId) === String(subcategoryId)) {
+          return true;
+        }
+
+        const evSub = (ev.subCategory || ev.subcategoryName || '').toLowerCase().trim();
+        const evCat = (ev.category || ev.categoryName || '').toLowerCase().trim();
+
+        const subMatches = evSub === normSub || (normSub && evSub.includes(normSub)) || (evSub && normSub.includes(evSub));
+        if (subMatches) {
+          // If category is provided, verify category matches too
+          if (normCat) {
+            const catMatches =
+              evCat === normCat ||
+              evCat.includes(normCat) ||
+              normCat.includes(evCat) ||
+              ev.category?.toLowerCase() === normCat;
+            return catMatches;
+          }
+          return true;
+        }
+
+        return false;
+      });
+
+      if (filtered.length > 0) {
+        return filtered;
+      }
+    }
+
+    // 2. Direct backend query by subcategoryId if provided
+    if (subcategoryId && !subcategoryId.startsWith('fallback-')) {
+      try {
+        let res;
+        const endpoint = `/api/central-events?typeCode=${code}&subcategoryId=${subcategoryId}`;
+        try {
+          res = await fetch(endpoint);
+        } catch {
+          res = await fetch(`${API_BASE}${endpoint}`);
+        }
+        if (res && res.ok) {
+          const json = await res.json();
+          const live = Array.isArray(json) ? json : json.data || [];
+          if (live.length > 0) {
+            return live.map((ev) => mapBackendEvent(ev, category, subCategory));
+          }
+        }
+      } catch (e) {
+        console.warn('SubcategoryId query notice:', e.message);
+      }
+    }
+
+    // 3. Fallback to catalog events if not registered yet
     return getCatalogEventsForSubCategory(category, subCategory);
   } catch (err) {
     console.error(`Error fetching events for ${category} / ${subCategory}:`, err);
@@ -312,28 +453,61 @@ export async function fetchEventsInSubCategory(category, subCategory) {
 /**
  * Map backend CentralEvent schema to frontend event card structure
  */
-function mapBackendEvent(ev, category, subCategory) {
+export function mapBackendEvent(ev, category = '', subCategory = '') {
   const isTeam = ev.participation?.type === 'TEAM';
+  const minSize = ev.participation?.minTeamSize ?? 1;
+  const maxSize = ev.participation?.maxTeamSize ?? 1;
   const teamLabel = isTeam
-    ? `Team (${ev.participation?.minTeamSize || 2}-${ev.participation?.maxTeamSize || 4})`
+    ? `Team (${minSize}${maxSize && maxSize !== minSize ? `-${maxSize}` : ''})`
     : 'Solo';
+
+  // In database, registration fee is stored in paise (amount * 100). Convert to Rupees for display.
+  const rawPrice = ev.fee?.amount ?? 0;
+  const rupeePrice = rawPrice >= 100 ? Math.round(rawPrice / 100) : rawPrice;
+
+  const venueName =
+    typeof ev.venue === 'object' && ev.venue !== null
+      ? ev.venue.name || ev.venue.address || 'Aditya University Campus'
+      : ev.venue || 'Aditya University Campus';
+
+  const resolvedCat = ev.categoryName || category || 'General';
+  const resolvedSub = ev.subcategoryName || subCategory || '';
 
   return {
     _id: ev._id,
+    rawId: ev._id,
     slug: ev.slug,
     eventName: ev.title,
+    title: ev.title,
     eventType: teamLabel,
-    price: ev.fee?.amount ?? 0,
+    participationType: ev.participation?.type || 'SINGLE',
+    minTeamSize: minSize,
+    maxTeamSize: maxSize,
+    price: rupeePrice,
+    rawPrice: rawPrice,
     currency: ev.fee?.currency || 'INR',
     eventImage: ev.banner?.url || null,
-    overview: ev.description,
-    regulations: ev.rules || [],
-    venue: ev.venue?.name || 'Aditya University Campus',
-    capacity: ev.capacity,
-    registrationCount: ev.registrationCount,
+    banner: ev.banner,
+    overview: ev.description || '',
+    description: ev.description || '',
+    regulations: Array.isArray(ev.rules) ? ev.rules : [],
+    rules: Array.isArray(ev.rules) ? ev.rules : [],
+    venue: venueName,
+    venueObj: ev.venue || {},
+    capacity: ev.capacity || 100,
+    rounds: ev.rounds || 1,
+    mode: ev.mode || 'OFFLINE',
+    status: ev.status || 'ACTIVE',
+    registrationCount: ev.registrationCount ?? 0,
+    schedule: ev.schedule || {},
     coordinators: ev.coordinators || {},
-    category: category,
-    subCategory: subCategory
+    category: resolvedCat,
+    subCategory: resolvedSub,
+    categoryName: resolvedCat,
+    subcategoryName: resolvedSub,
+    categoryId: ev.categoryId,
+    subcategoryId: ev.subcategoryId,
+    typeCode: ev.typeCode || 'COLORS'
   };
 }
 
@@ -589,55 +763,72 @@ function getCatalogEventsForSubCategory(category, subCategory) {
 
 /**
  * Fetch detailed event information (rules, venue, price, overview)
+ * Direct backend slug lookup or all-events match
  */
-export async function fetchEventDetails(category, subCategory, eventName) {
+export async function fetchEventDetails(category, subCategory, eventNameOrSlug, typeCode = EVENT_TYPE) {
   try {
-    const typeCode = EVENT_TYPE || 'COLORS';
-    const encName = encodeURIComponent(eventName);
+    const code = (typeCode || 'COLORS').toUpperCase();
+    const queryTerm = (eventNameOrSlug || '').trim();
 
-    // 1. Try to find in backend
+    // 1. Direct slug endpoint lookup (/api/central-events/:slug)
     try {
+      const enc = encodeURIComponent(queryTerm);
       let res;
       try {
-        res = await fetch(`/api/central-events?typeCode=${typeCode}&search=${encName}`);
+        res = await fetch(`/api/central-events/${enc}`);
       } catch {
-        res = await fetch(`${API_BASE}/api/central-events?typeCode=${typeCode}&search=${encName}`);
+        res = await fetch(`${API_BASE}/api/central-events/${enc}`);
       }
 
       if (res && res.ok) {
         const json = await res.json();
-        const liveEvents = Array.isArray(json) ? json : json.data || [];
-        const match = liveEvents.find(
-          (e) => e.title?.toLowerCase() === eventName.toLowerCase() || e.slug === eventName
-        );
-        if (match) {
-          return mapBackendEvent(match, category, subCategory);
+        if (json && json.data) {
+          return mapBackendEvent(json.data, category, subCategory);
         }
       }
     } catch (e) {
-      console.warn('Backend event details notice:', e.message);
+      console.warn('Direct slug query notice:', e.message);
     }
 
-    // 2. Fallback to catalog details
+    // 2. Check in all events for this theme
+    let allEvents = cachedEventsByType[code];
+    if (!allEvents || allEvents.length === 0) {
+      allEvents = await fetchAllEvents(code);
+    }
+
+    if (Array.isArray(allEvents) && allEvents.length > 0) {
+      const qLower = queryTerm.toLowerCase();
+      const match = allEvents.find((e) => {
+        const evSlug = (e.slug || '').toLowerCase();
+        const evTitle = (e.title || e.eventName || '').toLowerCase();
+        return evSlug === qLower || evTitle === qLower || evTitle.includes(qLower) || qLower.includes(evTitle);
+      });
+
+      if (match) {
+        return match;
+      }
+    }
+
+    // 3. Fallback to catalog details
     const events = getCatalogEventsForSubCategory(category, subCategory);
     const found = events.find(
-      (e) => e.eventName.toLowerCase() === eventName.toLowerCase()
+      (e) => e.eventName.toLowerCase() === queryTerm.toLowerCase()
     ) || events[0];
 
     return found || {
-      eventName,
+      eventName: queryTerm,
       eventType: 'Solo',
       price: 100,
-      overview: `Official event competition for ${eventName} at Aditya University Colours 2027.`,
+      overview: `Official event competition for ${queryTerm} at Aditya University Colours 2027.`,
       regulations: [
         'Participants must report to the venue 30 minutes before the start time.',
-        'Valid ID card is mandatory.',
-        'Judges decision will be final.'
+        'Valid university ID card is mandatory.',
+        'Judges decision will be final and binding.'
       ],
-      venue: 'University Central Grounds'
+      venue: 'Aditya University Central Campus'
     };
   } catch (err) {
-    console.error(`Error fetching event details for ${eventName}:`, err);
+    console.error(`Error fetching event details for ${eventNameOrSlug}:`, err);
     throw err;
   }
 }
@@ -646,75 +837,97 @@ export async function fetchEventDetails(category, subCategory, eventName) {
  * Fetch faculty coordinators for an event
  * Uses live coordinator data from central_event_categories or central-events
  */
-export async function fetchFacultyCoordinators(category, subCategory, eventName) {
+export async function fetchFacultyCoordinators(category, subCategory, eventName, typeCode = EVENT_TYPE) {
   try {
-    // 1. Check cached categories from backend
-    if (cachedCategories && Array.isArray(cachedCategories)) {
-      const cat = cachedCategories.find(
+    const code = (typeCode || 'COLORS').toUpperCase();
+
+    // Check cached categories from backend
+    let cats = cachedCategories;
+    if (!cats || cats.length === 0) {
+      cats = await fetchCategoriesWithSubCategories(code);
+    }
+
+    if (cats && Array.isArray(cats)) {
+      const normCat = (category || '').toLowerCase();
+      const cat = cats.find(
         (c) =>
-          c.code?.toLowerCase() === category.toLowerCase() ||
-          c.name?.toLowerCase() === category.toLowerCase() ||
-          c._id?.toLowerCase() === category.toLowerCase()
+          c.code?.toLowerCase() === normCat ||
+          c.name?.toLowerCase() === normCat ||
+          c._id?.toLowerCase() === normCat
       );
 
       if (cat) {
         // Check subcategory coordinator first
+        const normSub = (subCategory || '').toLowerCase();
         const sub = (cat.data || []).find(
-          (s) =>
-            (s.name || s.SubCatogory || '').toLowerCase() === subCategory.toLowerCase()
+          (s) => (s.name || s.SubCatogory || '').toLowerCase() === normSub
         );
 
         if (sub && Array.isArray(sub.coordinators) && sub.coordinators.length > 0) {
-          return sub.coordinators
-            .filter((c) => c.name)
-            .map((c) => ({
-              cordinatorName: c.name,
-              cordinatorDesignation: c.designation || 'Faculty Coordinator',
-              cordinatorPhone: c.phone || '',
-              cordinatorEmail: c.email || '',
-              empId: c.empId || '',
-              cordinatorImage: c.empId ? `${c.empId}.jpg` : ''
-            }));
+          const valid = sub.coordinators.filter((c) => c && (c.name || c.empId || c.institutionId));
+          if (valid.length > 0) {
+            return valid.map((c, idx) => {
+              const instId = c.institutionId || c.empId || c.employeeId || '';
+              return {
+                cordinatorName: c.name || 'Coordinator',
+                cordinatorDesignation: c.designation || 'Faculty Coordinator',
+                cordinatorPhone: c.phone || '',
+                cordinatorEmail: c.email || '',
+                empId: instId,
+                institutionId: instId,
+                cordinatorImage: instId ? `${instId}.jpg` : ''
+              };
+            });
+          }
         }
 
-        if (sub?.coordinator?.name) {
+        if (sub?.coordinator && (sub.coordinator.name || sub.coordinator.empId || sub.coordinator.institutionId)) {
           const c = sub.coordinator;
+          const instId = c.institutionId || c.empId || c.employeeId || '';
           return [
             {
-              cordinatorName: c.name,
+              cordinatorName: c.name || 'Coordinator',
               cordinatorDesignation: c.designation || 'Faculty Coordinator',
               cordinatorPhone: c.phone || '',
               cordinatorEmail: c.email || '',
-              empId: c.empId || '',
-              cordinatorImage: c.empId ? `${c.empId}.jpg` : ''
+              empId: instId,
+              institutionId: instId,
+              cordinatorImage: instId ? `${instId}.jpg` : ''
             }
           ];
         }
 
         // Fall back to category coordinators
         if (Array.isArray(cat.coordinators) && cat.coordinators.length > 0) {
-          return cat.coordinators
-            .filter((c) => c.name)
-            .map((c) => ({
-              cordinatorName: c.name,
-              cordinatorDesignation: c.designation || 'Festival Coordinator',
-              cordinatorPhone: c.phone || '',
-              cordinatorEmail: c.email || '',
-              empId: c.empId || '',
-              cordinatorImage: c.empId ? `${c.empId}.jpg` : ''
-            }));
+          const valid = cat.coordinators.filter((c) => c && (c.name || c.empId || c.institutionId));
+          if (valid.length > 0) {
+            return valid.map((c) => {
+              const instId = c.institutionId || c.empId || c.employeeId || '';
+              return {
+                cordinatorName: c.name || 'Coordinator',
+                cordinatorDesignation: c.designation || 'Festival Coordinator',
+                cordinatorPhone: c.phone || '',
+                cordinatorEmail: c.email || '',
+                empId: instId,
+                institutionId: instId,
+                cordinatorImage: instId ? `${instId}.jpg` : ''
+              };
+            });
+          }
         }
 
-        if (cat.coordinator?.name) {
+        if (cat.coordinator && (cat.coordinator.name || cat.coordinator.empId || cat.coordinator.institutionId)) {
           const c = cat.coordinator;
+          const instId = c.institutionId || c.empId || c.employeeId || '';
           return [
             {
-              cordinatorName: c.name,
+              cordinatorName: c.name || 'Coordinator',
               cordinatorDesignation: c.designation || 'Festival Coordinator',
               cordinatorPhone: c.phone || '',
               cordinatorEmail: c.email || '',
-              empId: c.empId || '',
-              cordinatorImage: c.empId ? `${c.empId}.jpg` : ''
+              empId: instId,
+              institutionId: instId,
+              cordinatorImage: instId ? `${instId}.jpg` : ''
             }
           ];
         }
@@ -729,6 +942,7 @@ export async function fetchFacultyCoordinators(category, subCategory, eventName)
         cordinatorPhone: '9553451345',
         cordinatorEmail: 'simhadri.g@adityauniversity.in',
         empId: '6981',
+        institutionId: '6981',
         cordinatorImage: '6981.jpg'
       },
       {
@@ -737,6 +951,7 @@ export async function fetchFacultyCoordinators(category, subCategory, eventName)
         cordinatorPhone: '8978868851',
         cordinatorEmail: 'srikar@gmail.com',
         empId: '6607',
+        institutionId: '6607',
         cordinatorImage: '6607.jpg'
       }
     ];
@@ -829,14 +1044,331 @@ export function getEventImageUrl(imageName, eventName = '') {
   return '/hero_bg.png';
 }
 
-export function getFacultyImageUrl(imageName, index = 0) {
-  if (!imageName) return `/img/person/${(index % 8) + 1}.jpg`;
-  if (imageName.startsWith('http://') || imageName.startsWith('https://')) return imageName;
-  if (imageName.endsWith('.jpg') || imageName.endsWith('.png')) {
-    const empId = imageName.replace(/\.[^/.]+$/, '');
-    if (/^\d+$/.test(empId)) {
-      return `${EMP_PHOTO_BASE}/${empId}.jpg`;
-    }
+/**
+ * Dynamic resolution of faculty photo across AU/AEC/ACET campus servers
+ * Matches reference URLs:
+ *   ausUrl: https://info.aec.edu.in/aus/employeephotos/${profile.institutionId}.jpg
+ *   aecUrl: https://info.aec.edu.in/aec/employeephotos/${profile.institutionId}.jpg
+ *   acetUrl: https://info.aec.edu.in/acet/employeephotos/${profile.institutionId}.jpg
+ */
+export function getFacultyCandidateUrls(profileOrImage) {
+  if (!profileOrImage) return [];
+
+  const profile = typeof profileOrImage === 'object' && profileOrImage !== null ? profileOrImage : null;
+  const rawId = profile
+    ? (profile.institutionId || profile.empId || profile.employeeId || profile.cordinatorImage || '')
+    : String(profileOrImage).trim();
+
+  if (!rawId) return [];
+
+  if (rawId.startsWith('http://') || rawId.startsWith('https://')) {
+    return [rawId];
   }
-  return `/Faculty_Images/${imageName}`;
+
+  const cleanId = rawId.replace(/\.[^/.]+$/, '').trim();
+  if (/^\d+$/.test(cleanId)) {
+    const ausUrl = `https://info.aec.edu.in/aus/employeephotos/${cleanId}.jpg`;
+    const aecUrl = `https://info.aec.edu.in/aec/employeephotos/${cleanId}.jpg`;
+    const acetUrl = `https://info.aec.edu.in/acet/employeephotos/${cleanId}.jpg`;
+    const acoeUrl = `https://info.aec.edu.in/acoe/employeephotos/${cleanId}.jpg`;
+    return [ausUrl, aecUrl, acetUrl, acoeUrl];
+  }
+
+  return [`/Faculty_Images/${rawId}`];
 }
+
+export function getFacultyImageUrl(profileOrImage, index = 0) {
+  if (!profileOrImage) return `/img/person/${(index % 8) + 1}.jpg`;
+
+  const candidates = getFacultyCandidateUrls(profileOrImage);
+  if (candidates.length > 0) {
+    return candidates[0];
+  }
+  return `/img/person/${(index % 8) + 1}.jpg`;
+}
+
+// ─────────────────────────────────────────────────────────────
+// STUDENT AUTH & EVENT REGISTRATION SERVICES
+// ─────────────────────────────────────────────────────────────
+
+export const STUDENT_STORAGE_KEY = 'fest_student_user';
+export const REGISTRATIONS_STORAGE_KEY = 'fest_student_registrations';
+
+/**
+ * Get current logged in student from localStorage
+ */
+export function getLoggedStudent() {
+  try {
+    const raw = localStorage.getItem(STUDENT_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Save logged in student session
+ */
+export function setLoggedStudent(student) {
+  try {
+    if (student) {
+      localStorage.setItem(STUDENT_STORAGE_KEY, JSON.stringify(student));
+      window.dispatchEvent(new Event('fest-student-auth-change'));
+    } else {
+      localStorage.removeItem(STUDENT_STORAGE_KEY);
+      window.dispatchEvent(new Event('fest-student-auth-change'));
+    }
+  } catch (err) {
+    console.error('Failed to save student session:', err);
+  }
+}
+
+/**
+ * Logout student
+ */
+export function logoutStudent() {
+  try {
+    localStorage.removeItem(STUDENT_STORAGE_KEY);
+    window.dispatchEvent(new Event('fest-student-auth-change'));
+  } catch (err) {
+    console.error('Failed to logout student:', err);
+  }
+}
+
+/**
+ * Check whether a student exists in central database or event registration records
+ */
+export async function checkStudentExists(rollOrEmail, eventData = null) {
+  if (!rollOrEmail || !rollOrEmail.trim()) {
+    return { exists: false, student: null, alreadyRegisteredForEvent: false };
+  }
+  const clean = rollOrEmail.trim();
+  const queryParams = new URLSearchParams();
+  if (eventData) {
+    if (eventData._id || eventData.rawId) queryParams.set('eventId', eventData._id || eventData.rawId);
+    if (eventData.slug || eventData.eventSlug) queryParams.set('eventSlug', eventData.slug || eventData.eventSlug);
+    if (eventData.eventName || eventData.title) queryParams.set('eventTitle', eventData.eventName || eventData.title);
+  }
+  const qs = queryParams.toString() ? `?${queryParams.toString()}` : '';
+
+  try {
+    const res = await fetch(`/api/central-events/check-student/${encodeURIComponent(clean)}${qs}`);
+    if (res.ok) {
+      const data = await res.json();
+      return data;
+    }
+  } catch {
+    try {
+      const res = await fetch(`${API_BASE}/api/central-events/check-student/${encodeURIComponent(clean)}${qs}`);
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch {}
+  }
+  return { exists: false, student: null, alreadyRegisteredForEvent: false };
+}
+
+/**
+ * Register a student account via /api/event-students/register
+ */
+export async function registerStudentAccount(studentData) {
+  const endpoint = '/api/event-students/register';
+  let res;
+  try {
+    res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(studentData)
+    });
+  } catch {
+    res = await fetch(`${API_BASE}${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(studentData)
+    });
+  }
+
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.error || json.message || 'Registration failed. Please verify your details.');
+  }
+
+  const student = json.student || json.data || studentData;
+  setLoggedStudent(student);
+  return student;
+}
+
+/**
+ * Login a student account via /api/event-students/login
+ */
+export async function loginStudentAccount(credentials) {
+  const endpoint = '/api/event-students/login';
+  let res;
+  try {
+    res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials)
+    });
+  } catch {
+    res = await fetch(`${API_BASE}${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials)
+    });
+  }
+
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.error || json.message || 'Login failed. Please check your credentials.');
+  }
+
+  const student = json.student || json.data;
+  setLoggedStudent(student);
+  return student;
+}
+
+/**
+ * Get all registrations made by a student
+ */
+export function getRegisteredEventsForStudent(studentRollOrId) {
+  try {
+    const raw = localStorage.getItem(REGISTRATIONS_STORAGE_KEY);
+    const all = raw ? JSON.parse(raw) : [];
+    if (!studentRollOrId) return all;
+    return all.filter(
+      (r) =>
+        r.studentId === studentRollOrId ||
+        r.studentRoll?.toLowerCase() === studentRollOrId.toString().toLowerCase() ||
+        r.roll?.toLowerCase() === studentRollOrId.toString().toLowerCase()
+    );
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Check if student is already registered for a specific event
+ */
+export function isStudentRegisteredForEvent(studentRollOrId, eventIdOrTitle) {
+  if (!studentRollOrId || !eventIdOrTitle) return null;
+  const list = getRegisteredEventsForStudent(studentRollOrId);
+  const target = eventIdOrTitle.toString().toLowerCase();
+  return (
+    list.find(
+      (r) =>
+        (r.eventId && r.eventId.toString().toLowerCase() === target) ||
+        (r.eventName && r.eventName.toString().toLowerCase() === target) ||
+        (r.title && r.title.toString().toLowerCase() === target)
+    ) || null
+  );
+}
+
+export async function submitEventRegistration(payload) {
+  const randomDigits = Math.floor(100000 + Math.random() * 900000);
+  const localRegId = `CLR27-COLORS-${randomDigits}`;
+
+  const feeAmount = Number(payload.amount !== undefined ? payload.amount : payload.price || 0);
+
+  const requestBody = {
+    eventId: payload.eventId || payload.rawId,
+    eventSlug: payload.eventSlug || payload.slug,
+    eventTitle: payload.eventName || payload.title,
+    typeCode: 'COLORS',
+    participant: {
+      name: payload.studentName,
+      rollNumber: payload.studentRoll,
+      email: payload.studentEmail,
+      phone: payload.studentMobile,
+      college: payload.studentCollege || 'Aditya University',
+      department: payload.studentDepartment || 'General',
+      year: payload.studentYear || '3rd Year'
+    },
+    teamName: payload.isTeam ? payload.teamName : null,
+    teamMembers: payload.isTeam && Array.isArray(payload.teamMembers) ? payload.teamMembers : [],
+    fee: {
+      amount: feeAmount,
+      currency: 'INR'
+    },
+    academicYear: '2026-27'
+  };
+
+  let backendData = null;
+  try {
+    const url = `${API_BASE}/api/central-event-registrations`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && json.data) {
+        backendData = json.data;
+      }
+    } else {
+      const errJson = await res.json().catch(() => ({}));
+      if (errJson.message && errJson.message.toLowerCase().includes('already registered')) {
+        // Return existing registration if duplicate
+        if (errJson.data?.registration) {
+          backendData = errJson.data;
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Backend central event registration sync note:', err.message);
+  }
+
+  const registrationNumber = backendData?.registrationNumber || backendData?.registration?.registrationNumber || localRegId;
+  const paymentReference = backendData?.paymentReference || backendData?.payment?.paymentReference || `PAY-${registrationNumber}`;
+  const razorpayOrderId = backendData?.orderId || backendData?.payment?.razorpay?.orderId || null;
+
+  const record = {
+    registrationId: registrationNumber,
+    registrationNumber,
+    paymentReference,
+    orderId: razorpayOrderId,
+    registeredAt: new Date().toISOString(),
+    status: 'CONFIRMED',
+    ...payload,
+    backendRegistration: backendData?.registration,
+    backendPayment: backendData?.payment
+  };
+
+  // Persist to local student registrations cache
+  try {
+    const raw = localStorage.getItem(REGISTRATIONS_STORAGE_KEY);
+    const all = raw ? JSON.parse(raw) : [];
+    // Only add if not already present
+    const exists = all.some(r => r.registrationNumber === registrationNumber || (r.eventId === payload.eventId && r.studentRoll === payload.studentRoll));
+    if (!exists) {
+      all.push(record);
+      localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(all));
+    }
+  } catch (err) {
+    console.error('Failed to save registration locally:', err);
+  }
+
+  return record;
+}
+
+/**
+ * Fetch registrations from backend central_event_student_registrations for a student
+ */
+export async function syncStudentRegistrations(studentRoll) {
+  if (!studentRoll) return [];
+  try {
+    const res = await fetch(`${API_BASE}/api/central-event-registrations/student/${studentRoll}`);
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data)) {
+        return json.data;
+      }
+    }
+  } catch {
+    // Graceful offline fallback
+  }
+  return [];
+}
+

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { getLoggedStudent, logoutStudent } from '../../services/api';
 import './Navbar.css';
 
 const navItems = [
@@ -48,11 +49,18 @@ function UniversityLogo() {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [student, setStudent] = useState(getLoggedStudent());
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleAuth = () => setStudent(getLoggedStudent());
+    window.addEventListener('fest-student-auth-change', handleAuth);
+    return () => window.removeEventListener('fest-student-auth-change', handleAuth);
   }, []);
 
   const closeMenu = () => setMenuOpen(false);
@@ -83,8 +91,23 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Register CTA */}
-          <div className="navbar-cta">
+          {/* Register CTA & Logged in Student Info */}
+          <div className="navbar-cta" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            {student ? (
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: '#f8fafc', padding: '4px 12px', borderRadius: '50px', border: '1px solid #e2e8f0' }}>
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>
+                  👤 {student.name ? student.name.split(' ')[0] : 'Student'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => logoutStudent()}
+                  style={{ background: 'transparent', border: 'none', color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer', padding: '0 2px' }}
+                  title="Log out student account"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : null}
             <Link to="/events" className="btn-register" id="navbar-register-btn">
               ✦ Register Now
             </Link>
@@ -104,6 +127,21 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`} role="menu">
+        {student ? (
+          <div style={{ padding: '0.75rem 1rem', background: '#f8fafc', borderRadius: '12px', margin: '0.5rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontWeight: 700, color: '#0f172a' }}>👤 {student.name}</span>
+            <button
+              type="button"
+              onClick={() => {
+                logoutStudent();
+                closeMenu();
+              }}
+              style={{ background: '#fee2e2', border: 'none', color: '#dc2626', padding: '4px 10px', borderRadius: '6px', fontWeight: 700, cursor: 'pointer' }}
+            >
+              Logout
+            </button>
+          </div>
+        ) : null}
         {navItems.map((item) => (
           <NavLink
             key={item.path}
