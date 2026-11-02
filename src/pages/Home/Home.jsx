@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { getLoggedStudent } from '../../services/api';
 import {
   EVENT_START_DATE,
   EVENT_DATE_RAW,
@@ -164,11 +165,24 @@ const GALLERY = [
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function Home() {
+  const navigate = useNavigate();
   const { time, pulse } = useCountdown();
   const [activeDay, setActiveDay] = useState(0);
   const [bgLoaded, setBgLoaded] = useState(false);
   const [activeYear, setActiveYear] = useState('Colours 2024');
   const heroRef = useRef(null);
+
+  const [student, setStudent] = useState(getLoggedStudent());
+
+  useEffect(() => {
+    const handleAuth = () => setStudent(getLoggedStudent());
+    window.addEventListener('fest-student-auth-change', handleAuth);
+    window.addEventListener('storage', handleAuth);
+    return () => {
+      window.removeEventListener('fest-student-auth-change', handleAuth);
+      window.removeEventListener('storage', handleAuth);
+    };
+  }, []);
 
   useEffect(() => {
     const img = new Image();
@@ -555,9 +569,22 @@ export default function Home() {
               university festival of 2027. Limited seats available!
             </p>
             <div className="cta-actions">
-              <Link to="/events" className="btn-primary" id="cta-register-btn">
-                ✦ Register Now
-              </Link>
+              {!student ? (
+                <button
+                  type="button"
+                  className="btn-primary"
+                  id="cta-login-btn"
+                  onClick={() => {
+                    window.dispatchEvent(new CustomEvent('fest-open-auth-modal', { detail: { mode: 'login' } }));
+                  }}
+                >
+                  ✦ Login
+                </button>
+              ) : (
+                <Link to="/events" className="btn-primary" id="cta-explore-btn">
+                  ✦ Explore Events
+                </Link>
+              )}
               <Link to="/contact" id="cta-contact-btn" style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
                 padding: '0.85rem 2rem',

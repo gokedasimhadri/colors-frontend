@@ -146,7 +146,8 @@
   flex-shrink: 0;
 }
 
-.btn-register {
+.btn-register,
+.btn-login {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -165,7 +166,8 @@
   box-shadow: 0 4px 15px rgba(225, 29, 72, 0.25);
 }
 
-.btn-register:hover {
+.btn-register:hover,
+.btn-login:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(225, 29, 72, 0.35);
   filter: brightness(1.05);

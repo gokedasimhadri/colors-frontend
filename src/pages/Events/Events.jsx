@@ -248,7 +248,7 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
         </div>
       </div>
 
-      <div className="categories-container">
+      <div className="categories-container" id="events-categories-list">
         {loading && (
           <div className="events-loading">
             <div className="events-spinner" />

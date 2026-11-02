@@ -6,6 +6,7 @@ import Invitation from './pages/Invitation/Invitation';
 import EventsSchedule from './pages/EventsSchedule/EventsSchedule';
 import Sponsors from './pages/Sponsors/Sponsors';
 import Contact from './pages/Contact/Contact';
+import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
 
 import Footer from './components/Footer/Footer';
 
@@ -23,6 +24,8 @@ function App() {
           <Route path="/events-schedule" element={<EventsSchedule />} />
           <Route path="/sponsors" element={<Sponsors />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/dashboard" element={<StudentDashboard />} />
+          <Route path="/account" element={<StudentDashboard />} />
         </Routes>
         <Footer />
       </div>

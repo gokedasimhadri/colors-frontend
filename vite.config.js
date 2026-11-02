@@ -4,7 +4,7 @@ import { defineConfig, loadEnv } from 'vite'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const target = env.VITE_API_URL || 'http://localhost:9022'
+  const target = env.VITE_API_URL
   const eventType = env.EVENT_TYPE || env.VITE_EVENT_TYPE || 'COLORS'
 
   return {
@@ -23,6 +23,11 @@ export default defineConfig(({ mode }) => {
         '/uploads': {
           target,
           changeOrigin: true
+        },
+        '/adityaapi': {
+          target: 'https://info.aec.edu.in',
+          changeOrigin: true,
+          secure: false
         }
       }
     }

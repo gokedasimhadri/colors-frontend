@@ -1163,9 +1163,245 @@ export async function checkStudentExists(rollOrEmail, eventData = null) {
       if (res.ok) {
         return await res.json();
       }
-    } catch {}
+    } catch { }
   }
   return { exists: false, student: null, alreadyRegisteredForEvent: false };
+}
+
+export const ECAP_API_KEY =
+  (typeof import.meta !== 'undefined' && (import.meta.env?.VITE_ECAP_API_KEY || import.meta.env?.ECAP_API_KEY));
+
+/**
+ * Fetch student data from ECAP / Aditya University API by roll number
+ * Auto-maps studentname, branch, college, mobile, email, semester, location
+ */
+export async function fetchStudentByRollNumber(rollNumber) {
+  if (!rollNumber || !rollNumber.trim()) return null;
+  const cleanRoll = rollNumber.trim().toUpperCase();
+
+  // 1. Try backend ecap-student endpoint first (handles proxy, API key, and fallback to central_event_student_account)
+  try {
+    let backendRes;
+    try {
+      backendRes = await fetch(`/api/event-students/ecap-student/${encodeURIComponent(cleanRoll)}`);
+    } catch {
+      backendRes = await fetch(`${API_BASE}/api/event-students/ecap-student/${encodeURIComponent(cleanRoll)}`);
+    }
+    if (backendRes && backendRes.ok) {
+      const json = await backendRes.json();
+      if (json && json.success && json.data) {
+        return normalizeEcapStudent(json.data, cleanRoll);
+      }
+    }
+  } catch (err) {
+    console.warn('Backend ecap-student fetch notice:', err.message);
+  }
+
+  // 2. Direct /adityaapi proxy call with x-api-key header
+  try {
+    const res = await fetch(`/adityaapi/api/studentdata/${encodeURIComponent(cleanRoll)}`, {
+      headers: {
+        'Accept': 'application/json',
+        'x-api-key': ECAP_API_KEY,
+        'X-API-Key': ECAP_API_KEY
+      }
+    });
+    if (res.ok) {
+      const json = await res.json();
+      const norm = Array.isArray(json) ? json[0] : json;
+      if (norm && !norm.error && (norm.studentname || norm.studentName || norm.rollno)) {
+        return normalizeEcapStudent(norm, cleanRoll);
+      }
+    }
+  } catch (err) {
+    console.warn('Direct adityaapi proxy notice:', err.message);
+  }
+
+  return null;
+}
+
+export const FALLBACK_EVENT_DEPARTMENTS = [
+  { name: 'CE', alternativeNames: 'CIV' },
+  { name: 'CSE', alternativeNames: 'CSE-SAP,CSE-GC,CSE-DS-GC' },
+  { name: 'ECE', alternativeNames: '' },
+  { name: 'EEE', alternativeNames: '' },
+  { name: 'ME', alternativeNames: 'MEC' },
+  { name: 'IT', alternativeNames: '' },
+  { name: 'AIML', alternativeNames: 'CSE-AI&ML,AIML-GC,AIML-MS' },
+  { name: 'DS', alternativeNames: 'CSE-DS' },
+  { name: 'IOT', alternativeNames: 'CSE-IOT' },
+  { name: 'Ag.E', alternativeNames: 'AG' },
+  { name: 'Min.E', alternativeNames: '' },
+  { name: 'PT', alternativeNames: '' },
+  { name: 'FS', alternativeNames: 'CS & DF,FIS,CFS,FS' },
+  { name: 'SOB', alternativeNames: 'BA,BBA,BBA(DM),IMB,MB,MBA,BBA-BA-KPM,BBA-GF-PWC,BBA-Deloit,BBA-HCM-RV,BBA-FT-EY' },
+  { name: 'SOP', alternativeNames: 'BP,PH,PQ,PC' },
+  { name: 'BCA', alternativeNames: '117' },
+  { name: 'MCA', alternativeNames: '' },
+  { name: 'MS', alternativeNames: 'BBA-FT-EY' }
+];
+
+let cachedEventDepartments = null;
+
+/**
+ * Fetch all active event departments from backend or fallback catalog
+ */
+export async function fetchEventDepartments() {
+  if (cachedEventDepartments && cachedEventDepartments.length > 0) {
+    return cachedEventDepartments;
+  }
+  try {
+    let res;
+    try {
+      res = await fetch('/api/event-departments');
+    } catch {
+      res = await fetch(`${API_BASE}/api/event-departments`);
+    }
+
+    if (res && res.ok) {
+      const json = await res.json();
+      const list = json.data || json.departments || [];
+      if (Array.isArray(list) && list.length > 0) {
+        const active = list.filter((d) => d.status !== 'Inactive');
+        if (active.length > 0) {
+          cachedEventDepartments = active;
+          return active;
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Notice loading event departments:', err.message);
+  }
+
+  cachedEventDepartments = FALLBACK_EVENT_DEPARTMENTS;
+  return FALLBACK_EVENT_DEPARTMENTS;
+}
+
+/**
+ * Match department dropdown value by checking branch against department name & alternative names
+ * e.g., branch "CIV" matches alternative name "CIV" of department "CE" -> returns "CE"
+ */
+export function matchDepartmentByBranch(branch, deptList = []) {
+  if (!branch || !branch.trim()) return '';
+  const cleanBranch = branch.trim().toUpperCase();
+  const list = Array.isArray(deptList) && deptList.length > 0 ? deptList : (cachedEventDepartments || FALLBACK_EVENT_DEPARTMENTS);
+
+  // 1. Direct match with department name
+  for (const d of list) {
+    const dName = (d.name || '').trim().toUpperCase();
+    if (dName === cleanBranch) return d.name;
+  }
+
+  // 2. Exact match inside alternativeNames (comma-separated aliases e.g. "CIV", "MEC", "CSE-AI&ML")
+  for (const d of list) {
+    if (!d.alternativeNames) continue;
+    const aliases = d.alternativeNames
+      .split(',')
+      .map((a) => a.trim().toUpperCase())
+      .filter(Boolean);
+
+    if (aliases.includes(cleanBranch)) {
+      return d.name;
+    }
+  }
+
+  // 3. Normalized alphanumeric match (stripping punctuation, spaces, dashes)
+  const normBranch = cleanBranch.replace(/[^A-Z0-9]/g, '');
+  for (const d of list) {
+    const dNorm = (d.name || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (normBranch === dNorm) return d.name;
+
+    if (d.alternativeNames) {
+      const aliases = d.alternativeNames
+        .split(',')
+        .map((a) => a.trim().toUpperCase().replace(/[^A-Z0-9]/g, ''))
+        .filter(Boolean);
+
+      if (aliases.includes(normBranch)) {
+        return d.name;
+      }
+    }
+  }
+
+  // 4. Substring / Prefix match fallback
+  for (const d of list) {
+    const dName = (d.name || '').trim().toUpperCase();
+    if (cleanBranch.startsWith(dName) || dName.startsWith(cleanBranch)) {
+      return d.name;
+    }
+    if (d.alternativeNames) {
+      const aliases = d.alternativeNames
+        .split(',')
+        .map((a) => a.trim().toUpperCase())
+        .filter(Boolean);
+
+      for (const a of aliases) {
+        if (cleanBranch === a || cleanBranch.includes(a) || a.includes(cleanBranch)) {
+          return d.name;
+        }
+      }
+    }
+  }
+
+  return cleanBranch;
+}
+
+export function normalizeEcapStudent(data, fallbackRoll = '', deptList = []) {
+  if (!data) return null;
+  const roll = (data.rollno || data.RollNo || data.roll || fallbackRoll).toUpperCase().trim();
+
+  // College detection
+  let college = data.college || 'Aditya University';
+  if (roll.includes('A9')) {
+    college = 'AEC';
+  } else if (roll.includes('P3')) {
+    college = 'ACET';
+  } else if (roll.includes('MH')) {
+    college = 'ACOE';
+  }
+
+  // Year detection
+  const sem = (data.semestername || data.semester || data.year || '').toLowerCase();
+  let yearOfStudy = 'Select';
+  if (sem.includes('1/4') || sem.includes('i semester') || sem.includes('ii semester') || sem.includes('1st')) {
+    yearOfStudy = '1st Year';
+  } else if (sem.includes('2/4') || sem.includes('iii semester') || sem.includes('iv semester') || sem.includes('2nd')) {
+    yearOfStudy = '2nd Year';
+  } else if (sem.includes('3/4') || sem.includes('v semester') || sem.includes('vi semester') || sem.includes('3rd')) {
+    yearOfStudy = '3rd Year';
+  } else if (sem.includes('4/4') || sem.includes('vii semester') || sem.includes('viii semester') || sem.includes('4th')) {
+    yearOfStudy = '4th Year';
+  } else if (data.joinedyear) {
+    const diff = new Date().getFullYear() - Number(data.joinedyear) + 1;
+    if (diff <= 1) yearOfStudy = '1st Year';
+    else if (diff === 2) yearOfStudy = '2nd Year';
+    else if (diff === 3) yearOfStudy = '3rd Year';
+    else if (diff >= 4) yearOfStudy = '4th Year';
+  }
+
+  // Location detection
+  const locParts = [data.village, data.mandal, data.district, data.statename].filter(Boolean);
+  const location = data.location || (locParts.length > 0 ? locParts.join(', ') : 'Surampalem');
+
+  // Match Department from Branch using alternativeNames
+  const rawBranch = (data.branch || data.department || '').trim();
+  const matchedDepartment = matchDepartmentByBranch(rawBranch, deptList) || 'Select';
+
+  return {
+    rollNumber: roll,
+    roll: roll,
+    name: data.studentname || data.studentName || data.name || '',
+    college: college,
+    gender: data.gender || 'Male',
+    mobile: data.mobilenumber || data.mobileNumber || data.mobile || data.fathermobilenumber || '',
+    email: (data.emailid || data.email || '').toLowerCase(),
+    yearOfStudy: yearOfStudy,
+    year: yearOfStudy,
+    department: matchedDepartment,
+    departments: matchedDepartment,
+    branch: rawBranch,
+    location: location
+  };
 }
 
 /**
@@ -1229,6 +1465,91 @@ export async function loginStudentAccount(credentials) {
 }
 
 /**
+ * Update student profile via /api/event-students/update
+ */
+export async function updateStudentProfile(profileData) {
+  const endpoint = '/api/event-students/update';
+  let res;
+  try {
+    res = await fetch(endpoint, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profileData)
+    });
+  } catch {
+    res = await fetch(`${API_BASE}${endpoint}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profileData)
+    });
+  }
+
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.error || json.message || 'Failed to update profile.');
+  }
+
+  const updated = json.student || json.data;
+  if (updated) {
+    // Preserve any existing fields if not returned
+    const current = getLoggedStudent() || {};
+    const merged = { ...current, ...updated };
+    setLoggedStudent(merged);
+  }
+  return updated;
+}
+
+/**
+ * Change student password via /api/event-students/change-password
+ */
+export async function changeStudentPassword(payload) {
+  const endpoint = '/api/event-students/change-password';
+  let res;
+  try {
+    res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch {
+    res = await fetch(`${API_BASE}${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  }
+
+  const json = await res.json();
+  if (!res.ok) {
+    throw new Error(json.error || json.message || 'Failed to change password.');
+  }
+  return json;
+}
+
+/**
+ * Fetch complete student dashboard (profile, registrations, payments)
+ */
+export async function fetchStudentDashboard(roll) {
+  if (!roll) throw new Error('Student roll number is required');
+  const cleanRoll = encodeURIComponent(roll.trim().toUpperCase());
+  const endpoint = `/api/event-students/dashboard/${cleanRoll}`;
+  let res;
+  try {
+    res = await fetch(endpoint);
+  } catch {
+    res = await fetch(`${API_BASE}${endpoint}`);
+  }
+
+  if (!res.ok) {
+    const json = await res.json().catch(() => ({}));
+    throw new Error(json.error || json.message || 'Failed to fetch dashboard data');
+  }
+
+  const json = await res.json();
+  return json.data || json;
+}
+
+/**
  * Get all registrations made by a student
  */
 export function getRegisteredEventsForStudent(studentRollOrId) {
@@ -1264,11 +1585,54 @@ export function isStudentRegisteredForEvent(studentRollOrId, eventIdOrTitle) {
   );
 }
 
-export async function submitEventRegistration(payload) {
+/**
+ * Dynamically load Razorpay Checkout script if not already present
+ */
+export function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    if (typeof window !== 'undefined' && window.Razorpay) {
+      return resolve(true);
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
+
+/**
+ * Save confirmed registration into localStorage
+ */
+export function saveLocalRegistration(record) {
+  try {
+    const raw = localStorage.getItem(REGISTRATIONS_STORAGE_KEY);
+    const all = raw ? JSON.parse(raw) : [];
+    const exists = all.some(
+      (r) =>
+        r.registrationNumber === record.registrationNumber ||
+        (r.eventId === record.eventId && r.studentRoll === record.studentRoll)
+    );
+    if (!exists) {
+      all.unshift(record);
+      localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(all));
+    }
+  } catch (err) {
+    console.error('Failed to save registration locally:', err);
+  }
+}
+
+/**
+ * Step 1: Initiate student event registration and get Razorpay Order.
+ * Note: Payment record is NOT stored into central_event_student_payments collection here.
+ */
+export async function initiateEventRegistration(payload) {
   const randomDigits = Math.floor(100000 + Math.random() * 900000);
   const localRegId = `CLR27-COLORS-${randomDigits}`;
 
   const feeAmount = Number(payload.amount !== undefined ? payload.amount : payload.price || 0);
+  const teamSize = payload.teamSize || (payload.isTeam && Array.isArray(payload.teamMembers) ? payload.teamMembers.length + 1 : 1);
 
   const requestBody = {
     eventId: payload.eventId || payload.rawId,
@@ -1285,6 +1649,8 @@ export async function submitEventRegistration(payload) {
       year: payload.studentYear || '3rd Year'
     },
     teamName: payload.isTeam ? payload.teamName : null,
+    teamSize,
+    participants: Array.isArray(payload.participants) && payload.participants.length > 0 ? payload.participants : [],
     teamMembers: payload.isTeam && Array.isArray(payload.teamMembers) ? payload.teamMembers : [],
     fee: {
       amount: feeAmount,
@@ -1293,61 +1659,80 @@ export async function submitEventRegistration(payload) {
     academicYear: '2026-27'
   };
 
-  let backendData = null;
-  try {
-    const url = `${API_BASE}/api/central-event-registrations`;
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody)
-    });
+  const url = `${API_BASE}/api/central-event-registrations`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(requestBody)
+  });
 
-    if (res.ok) {
-      const json = await res.json();
-      if (json.success && json.data) {
-        backendData = json.data;
-      }
-    } else {
-      const errJson = await res.json().catch(() => ({}));
-      if (errJson.message && errJson.message.toLowerCase().includes('already registered')) {
-        // Return existing registration if duplicate
-        if (errJson.data?.registration) {
-          backendData = errJson.data;
-        }
-      }
-    }
-  } catch (err) {
-    console.warn('Backend central event registration sync note:', err.message);
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(json.message || json.error || 'Failed to initiate event registration. Please try again.');
   }
 
-  const registrationNumber = backendData?.registrationNumber || backendData?.registration?.registrationNumber || localRegId;
-  const paymentReference = backendData?.paymentReference || backendData?.payment?.paymentReference || `PAY-${registrationNumber}`;
-  const razorpayOrderId = backendData?.orderId || backendData?.payment?.razorpay?.orderId || null;
+  const backendData = json.data || {};
+  const registrationNumber = backendData.registrationNumber || localRegId;
+  const paymentReference = backendData.paymentReference || `PAY-${registrationNumber}`;
+  const orderId = backendData.orderId || null;
+  const keyId = backendData.keyId || null;
+  const isFree = backendData.isFree || feeAmount === 0;
 
-  const record = {
-    registrationId: registrationNumber,
+  return {
+    success: true,
     registrationNumber,
     paymentReference,
-    orderId: razorpayOrderId,
+    orderId,
+    amount: feeAmount,
+    amountInPaise: backendData.amountInPaise || feeAmount * 100,
+    currency: backendData.currency || 'INR',
+    keyId,
+    isFree,
+    registration: backendData.registration
+  };
+}
+
+/**
+ * Step 2: Verify Razorpay payment signature after successful checkout.
+ * ONLY AT THIS STAGE: The payment record is inserted into central_event_student_payments collection!
+ */
+export async function verifyEventPaymentGateway(verifyPayload) {
+  const url = `${API_BASE}/api/central-event-payments/verify-gateway`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(verifyPayload)
+  });
+
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(json.message || 'Payment verification failed on server');
+  }
+
+  return json;
+}
+
+export async function submitEventRegistration(payload) {
+  const initData = await initiateEventRegistration(payload);
+  const feeAmount = Number(initData.amount);
+
+  const record = {
+    registrationId: initData.registrationNumber,
+    registrationNumber: initData.registrationNumber,
+    paymentReference: initData.paymentReference,
+    orderId: initData.orderId,
     registeredAt: new Date().toISOString(),
-    status: 'CONFIRMED',
+    status: feeAmount === 0 ? 'CONFIRMED' : 'PENDING',
+    paymentStatus: feeAmount === 0 ? 'FREE' : 'PENDING',
     ...payload,
-    backendRegistration: backendData?.registration,
-    backendPayment: backendData?.payment
+    participants: initData.registration?.participants || payload.participants,
+    teamSize: initData.registration?.teamSize || payload.teamSize,
+    backendRegistration: initData.registration,
+    backendPayment: null
   };
 
-  // Persist to local student registrations cache
-  try {
-    const raw = localStorage.getItem(REGISTRATIONS_STORAGE_KEY);
-    const all = raw ? JSON.parse(raw) : [];
-    // Only add if not already present
-    const exists = all.some(r => r.registrationNumber === registrationNumber || (r.eventId === payload.eventId && r.studentRoll === payload.studentRoll));
-    if (!exists) {
-      all.push(record);
-      localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(all));
-    }
-  } catch (err) {
-    console.error('Failed to save registration locally:', err);
+  if (feeAmount === 0) {
+    saveLocalRegistration(record);
   }
 
   return record;
@@ -1371,4 +1756,63 @@ export async function syncStudentRegistrations(studentRoll) {
   }
   return [];
 }
+
+/**
+ * Update squad participants for a registration (used by student leader in Dashboard)
+ */
+export async function updateEventParticipants(registrationNumber, participants, teamMembers = []) {
+  if (!registrationNumber) throw new Error('Registration Number is required');
+  const cleanRegNo = encodeURIComponent(registrationNumber.trim());
+  const endpoint = `/api/event-students/registrations/${cleanRegNo}/participants`;
+  let res;
+  const payload = { participants, teamMembers };
+
+  try {
+    res = await fetch(endpoint, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch {
+    res = await fetch(`${API_BASE}${endpoint}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  }
+
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(json.error || json.message || 'Failed to update participants');
+  }
+
+  // Also update local storage if present
+  try {
+    const raw = localStorage.getItem(REGISTRATIONS_STORAGE_KEY);
+    if (raw) {
+      const all = JSON.parse(raw);
+      const updated = all.map((r) => {
+        if (
+          r.registrationNumber === registrationNumber ||
+          r.registrationId === registrationNumber ||
+          r.paymentReference === registrationNumber
+        ) {
+          return {
+            ...r,
+            participants,
+            teamMembers,
+            teamSize: participants.length
+          };
+        }
+        return r;
+      });
+      localStorage.setItem(REGISTRATIONS_STORAGE_KEY, JSON.stringify(updated));
+    }
+  } catch (localErr) {
+    console.warn('Local registration update notice:', localErr.message);
+  }
+
+  return json;
+}
+
 

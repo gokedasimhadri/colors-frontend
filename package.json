@@ -3,11 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://colours.adityauniversity.in",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host --port 2001",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview --port 2001"
   },
   "dependencies": {
     "react": "^19.2.8",

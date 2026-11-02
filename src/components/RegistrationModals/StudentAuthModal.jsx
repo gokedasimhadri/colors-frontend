@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   registerStudentAccount,
   loginStudentAccount,
   checkStudentExists,
+  fetchStudentByRollNumber,
   submitEventRegistration
 } from '../../services/api';
 import './RegistrationModals.css';
@@ -20,11 +21,20 @@ export default function StudentAuthModal({
   onClose,
   onSuccess,
   eventTitle = '',
-  eventData = null
+  eventData = null,
+  initialMode = 'login'
 }) {
-  const [mode, setMode] = useState('register'); // 'register' | 'login'
+  const [mode, setMode] = useState(initialMode || 'login'); // 'login' | 'register'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      setError(null);
+      setConfirmedRecord(null);
+      if (initialMode) setMode(initialMode);
+    }
+  }, [isOpen, initialMode]);
 
   // Student existence checking states
   const [checkingRoll, setCheckingRoll] = useState(false);
@@ -49,8 +59,6 @@ export default function StudentAuthModal({
     password: ''
   });
 
-  if (!isOpen) return null;
-
   const handleRegisterChange = (e) => {
     const { name, value } = e.target;
     setRegForm((prev) => ({ ...prev, [name]: value }));
@@ -70,8 +78,8 @@ export default function StudentAuthModal({
     setCheckingRoll(true);
     try {
       const result = await checkStudentExists(roll, eventData);
-      setCheckingRoll(false);
       if (result && result.exists && result.student) {
+        setCheckingRoll(false);
         setStudentStatus(result);
         // Auto-fill existing student profile fields
         setRegForm((prev) => ({
@@ -83,9 +91,28 @@ export default function StudentAuthModal({
           mobile: prev.mobile || result.student.mobile || '',
           email: prev.email || result.student.email || ''
         }));
-      } else {
-        setStudentStatus({ exists: false, alreadyRegisteredForEvent: false });
+        return;
       }
+
+      // If not yet registered, check ECAP API to auto-fill details from university database
+      const ecapData = await fetchStudentByRollNumber(roll).catch(() => null);
+      setCheckingRoll(false);
+      if (ecapData) {
+        let collegeName = ecapData.college || 'Aditya University';
+        if (collegeName === 'AEC') collegeName = 'Aditya Engineering College (AEC)';
+        else if (collegeName === 'ACET') collegeName = 'Aditya College of Engineering & Technology (ACET)';
+        else if (collegeName === 'ACOE') collegeName = 'Aditya College of Engineering (ACOE)';
+
+        setRegForm((prev) => ({
+          ...prev,
+          name: prev.name || ecapData.name || '',
+          college: collegeName,
+          gender: ecapData.gender || prev.gender,
+          mobile: prev.mobile || ecapData.mobile || '',
+          email: prev.email || ecapData.email || ''
+        }));
+      }
+      setStudentStatus({ exists: false, alreadyRegisteredForEvent: false });
     } catch {
       setCheckingRoll(false);
     }
@@ -133,45 +160,12 @@ export default function StudentAuthModal({
         password: regForm.password.trim() || '123456'
       };
 
-      // 1. Register or update student account in eventstudents
+      // 1. Register student account into central_event_student_account collection
       const student = await registerStudentAccount(studentPayload);
-
-      // 2. If eventData is present, store student registration into central_event_student_registrations!
-      let regRecord = null;
-      if (eventData) {
-        const isTeamEvent = (eventData.participationType || '').toUpperCase() === 'TEAM' ||
-                            (eventData.eventType || '').toLowerCase().includes('team');
-
-        if (!isTeamEvent) {
-          // Solo event: save directly into central_event_student_registrations and central_event_student_payments!
-          const regPayload = {
-            eventId: eventData._id || eventData.rawId || eventData.id,
-            eventSlug: eventData.slug || eventData.eventSlug || '',
-            eventName: eventData.eventName || eventData.title || eventTitle,
-            category: eventData.category || eventData.categoryName || 'General',
-            subCategory: eventData.subCategory || eventData.subcategoryName || '',
-            price: eventData.price !== undefined ? eventData.price : (eventData.fee?.amount || 0),
-            amount: eventData.price !== undefined ? eventData.price : (eventData.fee?.amount || 0),
-            venue: eventData.venueObj?.name || eventData.venue || 'Aditya University Campus',
-            studentId: student._id || student.id,
-            studentName: student.name || regForm.name.trim(),
-            studentRoll: student.roll || regForm.roll.trim().toUpperCase(),
-            studentCollege: student.college || regForm.college,
-            studentEmail: student.email || regForm.email.trim().toLowerCase(),
-            studentMobile: student.mobile || regForm.mobile.trim(),
-            studentDepartment: student.department || 'General',
-            studentYear: student.year || '3rd Year',
-            isTeam: false
-          };
-
-          regRecord = await submitEventRegistration(regPayload);
-          setConfirmedRecord(regRecord);
-        }
-      }
 
       setLoading(false);
       if (onSuccess) {
-        onSuccess(student, regRecord);
+        onSuccess(student, null);
       }
     } catch (err) {
       setLoading(false);
@@ -193,41 +187,9 @@ export default function StudentAuthModal({
         password: loginForm.password
       });
 
-      // If eventData is present and solo event, register student into central_event_student_registrations
-      let regRecord = null;
-      if (eventData) {
-        const isTeamEvent = (eventData.participationType || '').toUpperCase() === 'TEAM' ||
-                            (eventData.eventType || '').toLowerCase().includes('team');
-
-        if (!isTeamEvent) {
-          const regPayload = {
-            eventId: eventData._id || eventData.rawId || eventData.id,
-            eventSlug: eventData.slug || eventData.eventSlug || '',
-            eventName: eventData.eventName || eventData.title || eventTitle,
-            category: eventData.category || eventData.categoryName || 'General',
-            subCategory: eventData.subCategory || eventData.subcategoryName || '',
-            price: eventData.price !== undefined ? eventData.price : (eventData.fee?.amount || 0),
-            amount: eventData.price !== undefined ? eventData.price : (eventData.fee?.amount || 0),
-            venue: eventData.venueObj?.name || eventData.venue || 'Aditya University Campus',
-            studentId: student._id || student.id,
-            studentName: student.name,
-            studentRoll: student.roll,
-            studentCollege: student.college,
-            studentEmail: student.email,
-            studentMobile: student.mobile,
-            studentDepartment: student.department || 'General',
-            studentYear: student.year || '3rd Year',
-            isTeam: false
-          };
-
-          regRecord = await submitEventRegistration(regPayload);
-          setConfirmedRecord(regRecord);
-        }
-      }
-
       setLoading(false);
       if (onSuccess) {
-        onSuccess(student, regRecord);
+        onSuccess(student, null);
       }
     } catch (err) {
       setLoading(false);
@@ -241,6 +203,33 @@ export default function StudentAuthModal({
 
   const displayEventTitle = eventData?.eventName || eventData?.title || eventTitle;
 
+  const confirmedParticipants = useMemo(() => {
+    if (!confirmedRecord) return [];
+    if (Array.isArray(confirmedRecord.participants) && confirmedRecord.participants.length > 0) {
+      return confirmedRecord.participants;
+    }
+    if (Array.isArray(confirmedRecord.backendRegistration?.participants) && confirmedRecord.backendRegistration.participants.length > 0) {
+      return confirmedRecord.backendRegistration.participants;
+    }
+    const name = confirmedRecord.student_name || confirmedRecord.studentName || regForm.name;
+    const roll = confirmedRecord.roll_number || confirmedRecord.studentRoll || regForm.roll;
+    const college = confirmedRecord.host_institution || confirmedRecord.studentCollege || regForm.college;
+    const phone = confirmedRecord.studentMobile || regForm.mobile || '';
+    return [
+      {
+        participantNumber: 1,
+        isLeader: true,
+        name,
+        rollNumber: roll,
+        roll,
+        college,
+        phone
+      }
+    ];
+  }, [confirmedRecord, regForm]);
+
+  if (!isOpen) return null;
+
   return (
     <div className="fest-modal-backdrop" onClick={onClose}>
       <div className="fest-modal-card" onClick={(e) => e.stopPropagation()}>
@@ -253,15 +242,15 @@ export default function StudentAuthModal({
                 {confirmedRecord
                   ? 'Event Registration Confirmation'
                   : mode === 'register'
-                  ? 'Register Student Account'
-                  : 'Student Account Login'}
+                    ? 'Register Student Account'
+                    : 'Student Account Login'}
               </h2>
               <p className="fest-modal-subtitle">
                 {confirmedRecord
                   ? `You are enrolled for ${displayEventTitle} at Colours 2027.`
                   : displayEventTitle
-                  ? `Please sign in or register to join the ${displayEventTitle} competition.`
-                  : 'Access official Colours 2027 event registrations, certificates & passes.'}
+                    ? `Please sign in or register to join the ${displayEventTitle} competition.`
+                    : 'Access official Colours 2027 event registrations, certificates & passes.'}
               </p>
             </div>
             <button className="fest-modal-close-btn" onClick={onClose} aria-label="Close modal">
@@ -365,6 +354,56 @@ export default function StudentAuthModal({
                     ● CONFIRMED
                   </span>
                 </div>
+
+                {/* Display Participants Data at UI (Step 3) */}
+                {confirmedParticipants.length > 0 && (
+                  <div className="reg-participants-section">
+                    <div className="reg-participants-head">
+                      <span className="reg-participants-title">
+                        👥 Event Participants ({confirmedParticipants.length} Total)
+                      </span>
+                      <span className="reg-participants-badge">
+                        {confirmedRecord.teamName ? `Team: ${confirmedRecord.teamName}` : 'Solo Participant'}
+                      </span>
+                    </div>
+
+                    <div className="reg-participants-table-wrap">
+                      <table className="reg-participants-table">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Participant Name</th>
+                            <th>Roll / Reg. No</th>
+                            <th>College / Institution</th>
+                            <th>Role</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {confirmedParticipants.map((p, idx) => (
+                            <tr key={idx} className={p.isLeader ? 'is-leader' : ''}>
+                              <td className="col-idx">{idx + 1}</td>
+                              <td className="col-name">
+                                <strong>{p.name || p.studentName}</strong>
+                                {p.phone && <span className="col-phone">{p.phone}</span>}
+                              </td>
+                              <td className="col-roll">
+                                <span className="roll-tag">{p.rollNumber || p.roll}</span>
+                              </td>
+                              <td className="col-college">{p.college || 'Aditya University'}</td>
+                              <td className="col-role">
+                                {p.isLeader ? (
+                                  <span className="role-badge leader">👑 Leader</span>
+                                ) : (
+                                  <span className="role-badge member">👤 Member</span>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', marginTop: '1.25rem' }}>
@@ -378,13 +417,7 @@ export default function StudentAuthModal({
             </div>
           ) : mode === 'register' ? (
             <form onSubmit={handleRegisterSubmit} id="student-register-form">
-              <div className="fest-alert-box info">
-                <span>ℹ️</span>
-                <div>
-                  Registration is required once. Your account allows you to participate across all Colours
-                  2027 technical, cultural, and sports championships.
-                </div>
-              </div>
+
 
               <div className="fest-form-grid">
                 {/* Roll Number (with existence check) */}
@@ -570,12 +603,6 @@ export default function StudentAuthModal({
             </form>
           ) : (
             <form onSubmit={handleLoginSubmit} id="student-login-form">
-              <div className="fest-alert-box info">
-                <span>🔑</span>
-                <div>
-                  Enter your registered Student Email Address or Roll Number and Password to sign in.
-                </div>
-              </div>
 
               <div className="fest-form-grid">
                 <div className="fest-form-group col-span-2">
@@ -628,8 +655,8 @@ export default function StudentAuthModal({
                 {loading
                   ? 'Processing Registration...'
                   : studentStatus?.alreadyRegisteredForEvent
-                  ? 'View Registration Slip'
-                  : 'Register & Continue →'}
+                    ? 'View Registration Slip'
+                    : 'Register & Continue →'}
               </button>
             ) : (
               <button
