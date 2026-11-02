@@ -5,7 +5,7 @@ import { defineConfig, loadEnv } from 'vite'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const target = env.VITE_API_URL
-  const eventType = env.EVENT_TYPE || env.VITE_EVENT_TYPE || 'COLORS'
+  const eventType = env.EVENT_TYPE || env.VITE_EVENT_TYPE
 
   return {
     plugins: [react()],
@@ -30,7 +30,13 @@ export default defineConfig(({ mode }) => {
           secure: false
         }
       }
-    }
+    },
+
+    preview: {
+      allowedHosts: [
+        'colours.adityauniversity.in/',
+      ],
+    },
   }
 })
 
