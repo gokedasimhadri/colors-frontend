@@ -5,12 +5,12 @@ import StudentAuthModal from '../RegistrationModals/StudentAuthModal';
 import './Navbar.css';
 
 const navItems = [
-  { label: 'Home',            path: '/' },
-  { label: 'Events',          path: '/events' },
-  { label: 'Invitation',      path: '/invitation' },
+  { label: 'Home', path: '/' },
+  { label: 'Events', path: '/events' },
+  { label: 'Invitation', path: '/invitation' },
   { label: 'Events Schedule', path: '/events-schedule' },
-  { label: 'Sponsors',        path: '/sponsors' },
-  { label: 'Contact',         path: '/contact' },
+  { label: 'Sponsors', path: '/sponsors' },
+  { label: 'Contact', path: '/contact' },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -232,6 +232,8 @@ export default function Navbar() {
           </button>
         )}
       </div>
+
+
 
       {/* Student Account Registration & Login Modal */}
       <StudentAuthModal
