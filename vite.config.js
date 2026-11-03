@@ -4,15 +4,17 @@ import { defineConfig, loadEnv } from 'vite'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const target = env.VITE_API_URL
-  const eventType = env.EVENT_TYPE || env.VITE_EVENT_TYPE
+  const target = env.VITE_API_URL;
+  const eventType = env.EVENT_TYPE || env.VITE_EVENT_TYPE || 'COLORS'
 
   return {
     plugins: [react()],
     define: {
+      'import.meta.env.VITE_API_URL': JSON.stringify(target),
       'import.meta.env.EVENT_TYPE': JSON.stringify(eventType),
       'import.meta.env.VITE_EVENT_TYPE': JSON.stringify(eventType),
-      'process.env.EVENT_TYPE': JSON.stringify(eventType)
+      'process.env.EVENT_TYPE': JSON.stringify(eventType),
+      'process.env.VITE_API_URL': JSON.stringify(target)
     },
     server: {
       proxy: {
@@ -39,5 +41,3 @@ export default defineConfig(({ mode }) => {
     },
   }
 })
-
-

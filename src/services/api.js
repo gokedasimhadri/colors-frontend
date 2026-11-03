@@ -6,9 +6,46 @@ export const EVENT_TYPE =
   (typeof process !== 'undefined' && (process.env?.EVENT_TYPE || process.env?.VITE_EVENT_TYPE)) ||
   'COLORS';
 
-export const API_BASE =
-  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
-  'http://localhost:9022';
+export const API_BASE = (
+  (typeof import.meta !== 'undefined' && (import.meta.env?.VITE_API_URL || import.meta.env?.API_URL)) ||
+  (typeof process !== 'undefined' && (process.env?.VITE_API_URL || process.env?.API_URL)) ||
+  'http://localhost:9022'
+).replace(/\/+$/, '');
+
+/**
+ * Build URL resolving against API_BASE (http://localhost:9022)
+ */
+export function buildApiUrl(path = '') {
+  if (!path) return API_BASE;
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return API_BASE ? `${API_BASE}${cleanPath}` : cleanPath;
+}
+
+/**
+ * Standard fetch connecting directly to backend API (API_BASE = http://localhost:9022)
+ * with automatic relative fallback if direct connection fails (e.g. CORS/proxy fallback)
+ */
+export async function apiFetch(endpoint, options = {}) {
+  const directUrl = buildApiUrl(endpoint);
+  try {
+    const res = await fetch(directUrl, options);
+    return res;
+  } catch (err) {
+    if (API_BASE && !endpoint.startsWith('http://') && !endpoint.startsWith('https://')) {
+      const fallbackUrl = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+      try {
+        const fallbackRes = await fetch(fallbackUrl, options);
+        return fallbackRes;
+      } catch {
+        // Fallback also failed
+      }
+    }
+    throw err;
+  }
+}
 
 export const EMP_PHOTO_BASE =
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_EMP_URL) ||
@@ -147,14 +184,7 @@ let cachedEventsByType = {};
  */
 export async function fetchThemes() {
   try {
-    const endpoint = '/api/central-event-types';
-    let res;
-    try {
-      res = await fetch(endpoint);
-      if (!res.ok) throw new Error(`Proxy error: ${res.status}`);
-    } catch {
-      res = await fetch(`${API_BASE}${endpoint}`);
-    }
+    const res = await apiFetch('/api/central-event-types');
 
     if (!res.ok) {
       throw new Error(`Failed to fetch themes: ${res.status}`);
@@ -181,13 +211,7 @@ export async function fetchAllEvents(typeCode = EVENT_TYPE) {
   const code = (typeCode || 'COLORS').toUpperCase();
   try {
     const endpoint = `/api/central-events?typeCode=${code}&limit=100`;
-    let res;
-    try {
-      res = await fetch(endpoint);
-      if (!res.ok) throw new Error(`Proxy error: ${res.status}`);
-    } catch {
-      res = await fetch(`${API_BASE}${endpoint}`);
-    }
+    const res = await apiFetch(endpoint);
 
     if (!res.ok) {
       throw new Error(`Failed to fetch events: ${res.status}`);
@@ -215,15 +239,7 @@ export async function fetchCategoriesWithSubCategories(typeCode = EVENT_TYPE) {
 
     // Concurrently fetch categories and live events for this theme
     let [catRes, allEvents] = await Promise.all([
-      (async () => {
-        try {
-          const r = await fetch(endpoint);
-          if (r.ok) return r;
-        } catch {
-          // fallback to API_BASE
-        }
-        return fetch(`${API_BASE}${endpoint}`);
-      })(),
+      apiFetch(endpoint),
       fetchAllEvents(code).catch(() => [])
     ]);
 
@@ -423,13 +439,8 @@ export async function fetchEventsInSubCategory(category, subCategory, subcategor
     // 2. Direct backend query by subcategoryId if provided
     if (subcategoryId && !subcategoryId.startsWith('fallback-')) {
       try {
-        let res;
         const endpoint = `/api/central-events?typeCode=${code}&subcategoryId=${subcategoryId}`;
-        try {
-          res = await fetch(endpoint);
-        } catch {
-          res = await fetch(`${API_BASE}${endpoint}`);
-        }
+        const res = await apiFetch(endpoint);
         if (res && res.ok) {
           const json = await res.json();
           const live = Array.isArray(json) ? json : json.data || [];
@@ -773,12 +784,7 @@ export async function fetchEventDetails(category, subCategory, eventNameOrSlug, 
     // 1. Direct slug endpoint lookup (/api/central-events/:slug)
     try {
       const enc = encodeURIComponent(queryTerm);
-      let res;
-      try {
-        res = await fetch(`/api/central-events/${enc}`);
-      } catch {
-        res = await fetch(`${API_BASE}/api/central-events/${enc}`);
-      }
+      const res = await apiFetch(`/api/central-events/${enc}`);
 
       if (res && res.ok) {
         const json = await res.json();
@@ -1152,18 +1158,13 @@ export async function checkStudentExists(rollOrEmail, eventData = null) {
   const qs = queryParams.toString() ? `?${queryParams.toString()}` : '';
 
   try {
-    const res = await fetch(`/api/central-events/check-student/${encodeURIComponent(clean)}${qs}`);
+    const res = await apiFetch(`/api/central-events/check-student/${encodeURIComponent(clean)}${qs}`);
     if (res.ok) {
       const data = await res.json();
       return data;
     }
-  } catch {
-    try {
-      const res = await fetch(`${API_BASE}/api/central-events/check-student/${encodeURIComponent(clean)}${qs}`);
-      if (res.ok) {
-        return await res.json();
-      }
-    } catch { }
+  } catch (err) {
+    console.warn('Check student exists notice:', err.message);
   }
   return { exists: false, student: null, alreadyRegisteredForEvent: false };
 }
@@ -1181,12 +1182,7 @@ export async function fetchStudentByRollNumber(rollNumber) {
 
   // 1. Try backend ecap-student endpoint first (handles proxy, API key, and fallback to central_event_student_account)
   try {
-    let backendRes;
-    try {
-      backendRes = await fetch(`/api/event-students/ecap-student/${encodeURIComponent(cleanRoll)}`);
-    } catch {
-      backendRes = await fetch(`${API_BASE}/api/event-students/ecap-student/${encodeURIComponent(cleanRoll)}`);
-    }
+    const backendRes = await apiFetch(`/api/event-students/ecap-student/${encodeURIComponent(cleanRoll)}`);
     if (backendRes && backendRes.ok) {
       const json = await backendRes.json();
       if (json && json.success && json.data) {
@@ -1251,12 +1247,7 @@ export async function fetchEventDepartments() {
     return cachedEventDepartments;
   }
   try {
-    let res;
-    try {
-      res = await fetch('/api/event-departments');
-    } catch {
-      res = await fetch(`${API_BASE}/api/event-departments`);
-    }
+    const res = await apiFetch('/api/event-departments');
 
     if (res && res.ok) {
       const json = await res.json();
@@ -1409,20 +1400,11 @@ export function normalizeEcapStudent(data, fallbackRoll = '', deptList = []) {
  */
 export async function registerStudentAccount(studentData) {
   const endpoint = '/api/event-students/register';
-  let res;
-  try {
-    res = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(studentData)
-    });
-  } catch {
-    res = await fetch(`${API_BASE}${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(studentData)
-    });
-  }
+  const res = await apiFetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(studentData)
+  });
 
   const json = await res.json();
   if (!res.ok) {
@@ -1439,20 +1421,11 @@ export async function registerStudentAccount(studentData) {
  */
 export async function loginStudentAccount(credentials) {
   const endpoint = '/api/event-students/login';
-  let res;
-  try {
-    res = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials)
-    });
-  } catch {
-    res = await fetch(`${API_BASE}${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials)
-    });
-  }
+  const res = await apiFetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(credentials)
+  });
 
   const json = await res.json();
   if (!res.ok) {
@@ -1469,20 +1442,11 @@ export async function loginStudentAccount(credentials) {
  */
 export async function updateStudentProfile(profileData) {
   const endpoint = '/api/event-students/update';
-  let res;
-  try {
-    res = await fetch(endpoint, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(profileData)
-    });
-  } catch {
-    res = await fetch(`${API_BASE}${endpoint}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(profileData)
-    });
-  }
+  const res = await apiFetch(endpoint, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(profileData)
+  });
 
   const json = await res.json();
   if (!res.ok) {
@@ -1504,20 +1468,11 @@ export async function updateStudentProfile(profileData) {
  */
 export async function changeStudentPassword(payload) {
   const endpoint = '/api/event-students/change-password';
-  let res;
-  try {
-    res = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  } catch {
-    res = await fetch(`${API_BASE}${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  }
+  const res = await apiFetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
 
   const json = await res.json();
   if (!res.ok) {
@@ -1533,12 +1488,7 @@ export async function fetchStudentDashboard(roll) {
   if (!roll) throw new Error('Student roll number is required');
   const cleanRoll = encodeURIComponent(roll.trim().toUpperCase());
   const endpoint = `/api/event-students/dashboard/${cleanRoll}`;
-  let res;
-  try {
-    res = await fetch(endpoint);
-  } catch {
-    res = await fetch(`${API_BASE}${endpoint}`);
-  }
+  const res = await apiFetch(endpoint);
 
   if (!res.ok) {
     const json = await res.json().catch(() => ({}));
@@ -1659,8 +1609,7 @@ export async function initiateEventRegistration(payload) {
     academicYear: '2026-27'
   };
 
-  const url = `${API_BASE}/api/central-event-registrations`;
-  const res = await fetch(url, {
+  const res = await apiFetch('/api/central-event-registrations', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(requestBody)
@@ -1697,8 +1646,7 @@ export async function initiateEventRegistration(payload) {
  * ONLY AT THIS STAGE: The payment record is inserted into central_event_student_payments collection!
  */
 export async function verifyEventPaymentGateway(verifyPayload) {
-  const url = `${API_BASE}/api/central-event-payments/verify-gateway`;
-  const res = await fetch(url, {
+  const res = await apiFetch('/api/central-event-payments/verify-gateway', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(verifyPayload)
@@ -1744,7 +1692,7 @@ export async function submitEventRegistration(payload) {
 export async function syncStudentRegistrations(studentRoll) {
   if (!studentRoll) return [];
   try {
-    const res = await fetch(`${API_BASE}/api/central-event-registrations/student/${studentRoll}`);
+    const res = await apiFetch(`/api/central-event-registrations/student/${studentRoll}`);
     if (res.ok) {
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
@@ -1764,22 +1712,13 @@ export async function updateEventParticipants(registrationNumber, participants, 
   if (!registrationNumber) throw new Error('Registration Number is required');
   const cleanRegNo = encodeURIComponent(registrationNumber.trim());
   const endpoint = `/api/event-students/registrations/${cleanRegNo}/participants`;
-  let res;
   const payload = { participants, teamMembers };
 
-  try {
-    res = await fetch(endpoint, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  } catch {
-    res = await fetch(`${API_BASE}${endpoint}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-  }
+  const res = await apiFetch(endpoint, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
 
   const json = await res.json().catch(() => ({}));
   if (!res.ok) {
