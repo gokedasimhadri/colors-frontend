@@ -26,7 +26,7 @@ function UniversityLogo() {
     <Link to="/" className="navbar-logo" aria-label="Aditya University – Colours 2027 Home">
       {!imgError ? (
         <img
-          src="/university-logo.png"
+          src="/ADITYA LOGO2.png"
           alt="Aditya University"
           className="navbar-logo-img"
           onError={() => setImgError(true)}

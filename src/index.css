@@ -41,7 +41,7 @@
   --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow:   0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
-  --navbar-height: 72px;
+  --navbar-height: 64px;
 }
 
 /* Reset & Base */

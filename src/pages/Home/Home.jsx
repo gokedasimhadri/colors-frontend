@@ -614,7 +614,7 @@ export default function Home() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
                 {/* Mini logo in footer */}
                 <img
-                  src="/university-logo.png"
+                  src="/ADITYA LOGO2.png"
                   alt="Aditya University"
                   style={{ height: 36, width: 'auto', objectFit: 'contain' }}
                   onError={(e) => {
