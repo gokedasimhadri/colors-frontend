@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getLoggedStudent } from '../../services/api';
 import {
   EVENT_START_DATE,
   EVENT_DATE_RAW,
   EVENT_DAYS,
   EVENT_DATE_FORMAL,
-  EVENT_DATE_RANGE_SHORT,
-  getDayShortDate,
 } from '../../utils/eventDate';
 import './Home.css';
 
@@ -65,68 +63,6 @@ const DESC_STATS = [
 
 const EDITION_YEARS = ['Colours 2019', 'Colours 2020', 'Colours 2021', 'Colours 2022', 'Colours 2023', 'Colours 2024'];
 
-// ─── Events ───────────────────────────────────────────────────────────────────
-const FEATURED_EVENTS = [
-  {
-    id: 1, emoji: '🎭',
-    bg: 'linear-gradient(135deg, #4a0030 0%, #9b1a6e 100%)',
-    badge: 'cultural', badgeText: 'Cultural',
-    title: 'Grand Drama Night',
-    desc: 'Witness breath-taking theatrical performances by the most talented student actors.',
-    date: getDayShortDate(1), venue: 'Main Auditorium',
-  },
-  {
-    id: 2, emoji: '🎵',
-    bg: 'linear-gradient(135deg, #1a0050 0%, #5a1ab0 100%)',
-    badge: 'music', badgeText: 'Music',
-    title: 'Battle of Bands',
-    desc: 'Electrifying bands compete live on stage – rock, fusion, jazz and more.',
-    date: getDayShortDate(2), venue: 'Open Air Stage',
-  },
-  {
-    id: 3, emoji: '💃',
-    bg: 'linear-gradient(135deg, #5a0025 0%, #c0305a 100%)',
-    badge: 'dance', badgeText: 'Dance',
-    title: 'Rhythms of India',
-    desc: 'Classical to contemporary – dance forms from across the nation come alive.',
-    date: getDayShortDate(3), venue: 'Dance Arena',
-  },
-  {
-    id: 4, emoji: '⚽',
-    bg: 'linear-gradient(135deg, #004030 0%, #007a50 100%)',
-    badge: 'sports', badgeText: 'Sports',
-    title: 'Inter-University Sports',
-    desc: 'Championships across cricket, football, basketball, athletics and more.',
-    date: EVENT_DATE_RANGE_SHORT, venue: 'Sports Complex',
-  },
-  {
-    id: 5, emoji: '🎨',
-    bg: 'linear-gradient(135deg, #503000 0%, #a06010 100%)',
-    badge: 'art', badgeText: 'Art',
-    title: 'Canvas Carnival',
-    desc: 'Paintings, sculptures, digital art – a visual feast celebrating student creativity.',
-    date: getDayShortDate(2), venue: 'Art Gallery',
-  },
-  {
-    id: 6, emoji: '💻',
-    bg: 'linear-gradient(135deg, #002050 0%, #0050a0 100%)',
-    badge: 'tech', badgeText: 'Tech',
-    title: '48hr Hackathon',
-    desc: 'Code, collaborate and create. The ultimate technology challenge awaits.',
-    date: getDayShortDate(3), venue: 'Tech Hub',
-  },
-];
-
-// ─── Performers ───────────────────────────────────────────────────────────────
-const PERFORMERS = [
-  { avatar: '🎤', bg: 'linear-gradient(135deg,#9b1a6e,#e8005a)', name: 'Aria Melodics', type: 'Vocalist' },
-  { avatar: '🥁', bg: 'linear-gradient(135deg,#2a0080,#7c3aed)', name: 'Beat Syndicate', type: 'Band' },
-  { avatar: '💃', bg: 'linear-gradient(135deg,#7a0035,#e8005a)', name: 'Zara Moves', type: 'Dancer' },
-  { avatar: '🎸', bg: 'linear-gradient(135deg,#004d33,#00a86b)', name: 'Riff Masters', type: 'Rock Band' },
-  { avatar: '🎭', bg: 'linear-gradient(135deg,#6b3000,#d97706)', name: 'Stage Craft', type: 'Drama' },
-  { avatar: '🎻', bg: 'linear-gradient(135deg,#003a6b,#0891b2)', name: 'Strings Alive', type: 'Classical' },
-];
-
 // ─── Schedule (3 days) ────────────────────────────────────────────────────────
 const SCHEDULE_DAYS = EVENT_DAYS.map((d) => d.dayScheduleTitle);
 
@@ -165,7 +101,6 @@ const GALLERY = [
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function Home() {
-  const navigate = useNavigate();
   const { time, pulse } = useCountdown();
   const [activeDay, setActiveDay] = useState(0);
   const [bgLoaded, setBgLoaded] = useState(false);
@@ -375,47 +310,6 @@ export default function Home() {
 
       <div className="gradient-divider" />
 
-      {/* ── FEATURED EVENTS ── */}
-      <section className="events-section" id="events" aria-label="Featured events">
-        <div className="container">
-          <div className="section-header">
-            <div className="section-header-left">
-              <span className="section-tag">✦ Featured Events</span>
-              <h2 className="section-title">
-                What's <span>Happening</span>
-              </h2>
-              <p className="section-desc">
-                From thrilling sports battles to mesmerising stage performances –
-                there's something for everyone at Colours 2027.
-              </p>
-            </div>
-            <Link to="/events" className="view-all-link" id="events-view-all-link">
-              View All Events →
-            </Link>
-          </div>
-
-          <div className="events-grid">
-            {FEATURED_EVENTS.map((ev) => (
-              <div key={ev.id} className="event-card" role="article">
-                <div className="event-card-visual">
-                  <div className="event-card-bg" style={{ background: ev.bg }} />
-                  <span className="event-card-emoji">{ev.emoji}</span>
-                  <span className={`event-card-badge badge-${ev.badge}`}>{ev.badgeText}</span>
-                </div>
-                <div className="event-card-body">
-                  <h3 className="event-card-title">{ev.title}</h3>
-                  <p className="event-card-desc">{ev.desc}</p>
-                  <div className="event-card-meta">
-                    <span className="event-meta-item">📅 {ev.date}</span>
-                    <span className="event-meta-item">📍 {ev.venue}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── STATS ── */}
       <section className="stats-section" aria-label="Festival statistics">
         <div className="container">
@@ -430,43 +324,6 @@ export default function Home() {
                 <div className="stat-label">{s.label}</div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PERFORMERS ── */}
-      <section className="performers-section" id="performers" aria-label="Featured performers">
-        <div className="container">
-          <div className="performers-grid">
-            <div className="performers-info">
-              <span className="section-tag">✦ Spotlight</span>
-              <h2 className="section-title">
-                Meet the <span>Performers</span>
-              </h2>
-              <p className="section-desc">
-                Extraordinary talent from across the country comes together
-                to create unforgettable performances on the grand stage.
-              </p>
-              <div className="performers-features">
-                {['50+ Solo Performances', 'Inter-Dept Band Battles', 'Classical & Contemporary', 'Pro-Am Competitions'].map((f) => (
-                  <div key={f} className="performers-feature">
-                    <span className="feature-dot" />
-                    <span>{f}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="performers-cards">
-              {PERFORMERS.map((p) => (
-                <div key={p.name} className="performer-card">
-                  <div className="performer-avatar" style={{ background: p.bg }}>
-                    {p.avatar}
-                  </div>
-                  <div className="performer-name">{p.name}</div>
-                  <div className="performer-type">{p.type}</div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -541,20 +398,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── SPONSORS ── */}
-      <section className="sponsors-section" aria-label="Our sponsors">
-        <div className="container">
-          <p className="sponsors-title">Proudly Supported By</p>
-          <div className="sponsors-logos">
-            {['NEXUS CORP', 'EDTECH PRO', 'STARLINK', 'CAMPUS CONNECT', 'INNOVATE HUB', 'FUTURA'].map((name) => (
-              <div key={name} className="sponsor-logo" aria-label={name}>
-                ◆ {name}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── CTA ── */}
       <section className="cta-section" id="register" aria-label="Register call to action">
         <div className="cta-bg" />
@@ -605,79 +448,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* ── FOOTER ── */}
-      <footer className="footer" role="contentinfo">
-        <div className="container">
-          <div className="footer-inner">
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
-                {/* Mini logo in footer */}
-                <img
-                  src="/ADITYA LOGO2.png"
-                  alt="Aditya University"
-                  style={{ height: 36, width: 'auto', objectFit: 'contain' }}
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div style={{
-                  display: 'none', width: 32, height: 32,
-                  background: 'linear-gradient(135deg, #e8005a, #7c3aed)',
-                  borderRadius: 8, alignItems: 'center', justifyContent: 'center',
-                  fontFamily: 'Bebas Neue, sans-serif', fontSize: '0.9rem', color: 'white',
-                }}>AU</div>
-                <span style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.15rem', letterSpacing: '0.1em', color: '#0f0f1a' }}>
-                  COLOURS <span style={{ color: '#e8005a' }}>2027</span>
-                </span>
-              </div>
-              <p className="footer-brand-desc">
-                The grand annual cultural and sports festival of Aditya University.
-                Three days. Infinite memories. One stage.
-              </p>
-            </div>
-
-            <div>
-              <p className="footer-col-title">Navigate</p>
-              <ul className="footer-links">
-                {[['Home', '/'], ['Events', '/events'], ['Invitation', '/invitation'], ['Schedule', '/events-schedule']].map(([label, path]) => (
-                  <li key={path}><Link to={path}>{label}</Link></li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <p className="footer-col-title">Events</p>
-              <ul className="footer-links">
-                {['Cultural Shows', 'Sports Meets', 'Music Nights', 'Art & Drama', 'Tech Events'].map((item) => (
-                  <li key={item}><Link to="/events">{item}</Link></li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <p className="footer-col-title">Connect</p>
-              <ul className="footer-links">
-                {[['Sponsors', '/sponsors'], ['Contact Us', '/contact']].map(([label, path]) => (
-                  <li key={path}><Link to={path}>{label}</Link></li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          <div className="footer-bottom">
-            <p className="footer-copy">
-              © 2027 <span>Colours 2027</span> · Aditya University. All rights reserved.
-            </p>
-            <div className="footer-social" aria-label="Social media links">
-              {['📘', '📸', '🐦', '▶️'].map((icon, i) => (
-                <a key={i} href="#" className="social-btn" aria-label={`Social ${i + 1}`}>{icon}</a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }
