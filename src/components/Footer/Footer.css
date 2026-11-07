@@ -165,65 +165,80 @@
   color: #e11d48;
 }
 
-.uni-social-links {
-  display: flex;
-  gap: 0.75rem;
+.uni-social-wrapper {
   margin-top: 1.5rem;
 }
 
-.uni-social-links a {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
+.uni-social-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.uni-social-links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.uni-social-links a.social-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  color: #334155;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 800;
   text-decoration: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.uni-social-links a:hover {
-  background: #e11d48;
-  border-color: #e11d48;
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
+.uni-social-links a.social-btn.facebook {
+  color: #1877f2;
 }
 
-.uni-footer-bottom {
-  border-top: 1px solid #e2e8f0;
-  padding: 1.5rem 0;
-  background: #f1f5f9;
-}
-
-.uni-bottom-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-  font-size: 0.85rem;
-  color: #64748b;
-}
-
-.uni-bottom-links {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.uni-bottom-links a {
-  color: #64748b;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.uni-bottom-links a:hover {
+.uni-social-links a.social-btn.twitter {
   color: #0f172a;
+}
+
+.uni-social-links a.social-btn.linkedin {
+  color: #0a66c2;
+}
+
+.uni-social-links a.social-btn.youtube {
+  color: #ff0000;
+}
+
+.uni-social-links a.social-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.uni-social-links a.social-btn.facebook:hover {
+  background: #1877f2;
+  border-color: #1877f2;
+  color: #ffffff;
+}
+
+.uni-social-links a.social-btn.twitter:hover {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+}
+
+.uni-social-links a.social-btn.linkedin:hover {
+  background: #0a66c2;
+  border-color: #0a66c2;
+  color: #ffffff;
+}
+
+.uni-social-links a.social-btn.youtube:hover {
+  background: #ff0000;
+  border-color: #ff0000;
+  color: #ffffff;
 }
