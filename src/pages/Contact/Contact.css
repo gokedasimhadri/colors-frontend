@@ -1,12 +1,12 @@
 /* ==========================================================================
-   COLOURS 2027 – Contact & Domain In-Charges (Official Festival Theme)
-   Obsidian Midnight, Metallic Gold Accents & 4 Domain Poster Cards
+   COLOURS 2027 – Contact & Domain In-Charges (Light Theme)
+   Clean White/Slate Canvases, Metallic Gold Accents & Domain Poster Cards
    ========================================================================== */
 
 .contact-page-wrapper {
   min-height: 100vh;
-  background-color: var(--clr-bg-black);
-  color: var(--clr-text-white);
+  background-color: #f8fafc;
+  color: #0f172a;
   padding-top: var(--navbar-height);
   padding-bottom: 5rem;
   font-family: var(--font-body), sans-serif;
@@ -15,22 +15,22 @@
 
 .contact-hero {
   padding: 4.5rem 1.5rem 3.5rem;
-  background: radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.12) 0%, rgba(10, 11, 18, 0.98) 75%);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .contact-badge-top {
   display: inline-block;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(212, 175, 55, 0.5);
-  color: #fde68a;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #b45309;
   font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.18em;
   padding: 6px 18px;
   border-radius: var(--radius-pill);
   margin-bottom: 1.25rem;
-  box-shadow: 0 0 16px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 2px 10px rgba(217, 119, 6, 0.1);
 }
 
 .contact-hero-title {
@@ -38,22 +38,22 @@
   font-size: clamp(2.5rem, 5.5vw, 4.5rem);
   font-weight: 900;
   letter-spacing: 0.03em;
-  color: #ffffff;
+  color: #0f172a;
   margin-bottom: 0.75rem;
 }
 
 .contact-hero-sub {
   font-size: 1.1rem;
-  color: #cbd5e1;
+  color: #475569;
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.7;
 }
 
-/* 4 Domain Chairs from Poster */
+/* 3 Domain Chairs from Poster */
 .contact-poster-chairs-section {
   padding: 4rem 1rem 2rem;
-  background: var(--clr-bg-black);
+  background: #f8fafc;
 }
 
 .section-title-wrap {
@@ -65,7 +65,7 @@
   font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.2em;
-  color: #d4af37;
+  color: #b45309;
   text-transform: uppercase;
   margin-bottom: 0.4rem;
 }
@@ -74,19 +74,19 @@
   font-family: var(--font-heading);
   font-size: clamp(2rem, 4vw, 2.8rem);
   font-weight: 900;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0;
 }
 
 .chairs-poster-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  max-width: 1200px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  max-width: 1120px;
   margin: 0 auto;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 960px) {
   .chairs-poster-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -99,8 +99,8 @@
 }
 
 .chair-poster-card {
-  background: rgba(14, 16, 26, 0.95);
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   border-radius: 18px;
   padding: 2rem 1.5rem;
   display: flex;
@@ -108,7 +108,7 @@
   align-items: center;
   text-align: center;
   transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 22px rgba(15, 23, 42, 0.05);
   position: relative;
   overflow: hidden;
 }
@@ -120,36 +120,35 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: var(--card-accent, #d4af37);
-  box-shadow: 0 0 12px var(--card-accent, #d4af37);
+  background: var(--card-accent, #d97706);
 }
 
 .chair-poster-card:hover {
   transform: translateY(-5px);
-  border-color: var(--card-accent, #d4af37);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 175, 55, 0.2);
+  border-color: var(--card-accent, #d97706);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.1);
 }
 
 .chair-top-badge {
   font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.14em;
-  color: var(--card-accent, #d4af37);
+  color: var(--card-accent, #b45309);
   text-transform: uppercase;
   margin-bottom: 0.6rem;
 }
 
-.chair-name {
+.contact-poster-chairs-section .chair-name {
   font-size: 1.4rem;
   font-weight: 900;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0 0 0.5rem;
   font-family: var(--font-heading);
 }
 
 .chair-tag {
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: #64748b;
   line-height: 1.5;
   margin: 0 0 1.5rem;
   flex: 1;
@@ -163,26 +162,26 @@
 }
 
 .btn-chair-call {
-  background: linear-gradient(135deg, #d4af37, #b8860b);
-  color: #06070a;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
   font-weight: 800;
   font-size: 0.88rem;
   padding: 10px 16px;
   border-radius: 50px;
   text-decoration: none;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
 }
 
 .btn-chair-call:hover {
-  background: linear-gradient(135deg, #fde68a, #d4af37);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+  background: linear-gradient(135deg, #d97706, #b45309);
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35);
 }
 
 .btn-chair-email {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #cbd5e1;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #334155;
   font-weight: 700;
   font-size: 0.82rem;
   padding: 8px 14px;
@@ -192,15 +191,175 @@
 }
 
 .btn-chair-email:hover {
-  border-color: #d4af37;
-  color: #fde68a;
-  background: rgba(212, 175, 55, 0.12);
+  border-color: #d97706;
+  color: #b45309;
+  background: #fffbeb;
+}
+
+/* Organizing Committee Directory */
+.contact-organizing-section {
+  padding: 3.5rem 1rem 2.5rem;
+  background: #f8fafc;
+}
+
+.organizing-committee-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 2.25rem;
+}
+
+.organizing-committee-sub {
+  font-size: 0.98rem;
+  color: #475569;
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+
+.organizing-table-card {
+  max-width: 1120px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+}
+
+.organizing-table-head {
+  display: grid;
+  grid-template-columns: 1.3fr 1.2fr 200px;
+  gap: 1.25rem;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(90deg, #fffbeb 0%, #f8fafc 100%);
+  border-bottom: 1.5px solid #e2e8f0;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #b45309;
+}
+
+.organizing-table-head span:last-child {
+  text-align: right;
+}
+
+.organizing-rows-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.organizing-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1.2fr 200px;
+  gap: 1.25rem;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.2s ease;
+}
+
+.organizing-row:last-child {
+  border-bottom: none;
+}
+
+.organizing-row:hover {
+  background: #fffbeb;
+}
+
+.org-cell-name {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.org-index {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.org-member-name {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.org-cell-role {
+  display: flex;
+  align-items: center;
+}
+
+.org-role-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.org-cell-phone {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.org-phone-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 155px;
+  padding: 0.42rem 1rem;
+  border-radius: 999px;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.org-phone-pill:hover {
+  background: #f59e0b;
+  border-color: #f59e0b;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.22);
+}
+
+@media (max-width: 768px) {
+  .organizing-table-head {
+    display: none;
+  }
+
+  .organizing-row {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    padding: 1.15rem 1.25rem;
+  }
+
+  .org-cell-phone {
+    justify-content: flex-start;
+  }
 }
 
 /* Quick Bar */
 .contact-quick-bar-section {
   padding: 3rem 1rem 1.5rem;
-  background: var(--clr-bg-black);
+  background: #f8fafc;
 }
 
 .quick-bar-grid {
@@ -218,27 +377,27 @@
 }
 
 .quick-item-card {
-  background: rgba(14, 16, 26, 0.85);
-  border: 1.5px solid rgba(212, 175, 55, 0.3);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   border-radius: 16px;
   padding: 1.8rem;
   display: flex;
   align-items: flex-start;
   gap: 1.25rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
   transition: all 0.3s ease;
 }
 
 .quick-item-card:hover {
-  border-color: #d4af37;
+  border-color: #d97706;
   transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 12px 28px rgba(217, 119, 6, 0.14);
 }
 
 .quick-item-card .q-icon {
   font-size: 1.8rem;
-  background: rgba(212, 175, 55, 0.12);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: #fffbeb;
+  border: 1px solid #fde68a;
   width: 52px;
   height: 52px;
   border-radius: 14px;
@@ -251,13 +410,13 @@
 .quick-item-card h4 {
   font-size: 1.05rem;
   font-weight: 800;
-  color: #fde68a;
+  color: #0f172a;
   margin-bottom: 0.35rem;
 }
 
 .quick-item-card p {
   font-size: 0.9rem;
-  color: #cbd5e1;
+  color: #475569;
   line-height: 1.6;
   margin: 0;
 }
@@ -265,7 +424,7 @@
 /* Main Grid: Directory & Form */
 .contact-main-section {
   padding: 3rem 1rem 5rem;
-  background: var(--clr-bg-black);
+  background: #f8fafc;
 }
 
 .contact-two-col-grid {
@@ -288,7 +447,7 @@
   font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.16em;
-  color: #d4af37;
+  color: #b45309;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
 }
@@ -297,13 +456,13 @@
   font-family: var(--font-heading);
   font-size: 2.2rem;
   font-weight: 900;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0 0 0.5rem;
 }
 
 .directory-sub {
   font-size: 1rem;
-  color: #94a3b8;
+  color: #475569;
   margin-bottom: 2rem;
 }
 
@@ -314,25 +473,25 @@
 }
 
 .committee-card {
-  background: rgba(14, 16, 26, 0.9);
-  border: 1.5px solid rgba(212, 175, 55, 0.28);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   border-radius: 16px;
   padding: 1.5rem 1.8rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
   transition: all 0.3s ease;
 }
 
 .committee-card:hover {
-  border-color: #d4af37;
+  border-color: #d97706;
   transform: translateX(4px);
-  box-shadow: 0 10px 28px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 10px 26px rgba(217, 119, 6, 0.12);
 }
 
 .comm-domain-badge {
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.1em;
-  color: #d4af37;
+  color: #b45309;
   text-transform: uppercase;
   margin-bottom: 0.4rem;
 }
@@ -340,7 +499,7 @@
 .comm-name {
   font-size: 1.2rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0 0 0.8rem;
 }
 
@@ -355,21 +514,21 @@
 .comm-email {
   font-size: 0.88rem;
   font-weight: 700;
-  color: #fde68a;
+  color: #e11d48;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .comm-phone:hover,
 .comm-email:hover {
-  color: #ffffff;
+  color: #9f1239;
   text-decoration: underline;
 }
 
 .comm-office {
   display: block;
   font-size: 0.82rem;
-  color: #94a3b8;
+  color: #64748b;
 }
 
 /* Poster Preview Banner in Contact */
@@ -378,11 +537,11 @@
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(14, 16, 26, 0.95) 100%);
-  border: 1.5px solid rgba(212, 175, 55, 0.4);
+  background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+  border: 1.5px solid #fcd34d;
   border-radius: 16px;
   padding: 1.5rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.1);
 }
 
 .poster-thumb {
@@ -390,7 +549,7 @@
   height: 110px;
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  border: 1px solid #fcd34d;
   flex-shrink: 0;
 }
 
@@ -403,54 +562,55 @@
 .poster-banner-info h4 {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0 0 0.3rem;
   font-family: var(--font-heading);
 }
 
 .poster-banner-info p {
   font-size: 0.85rem;
-  color: #cbd5e1;
+  color: #475569;
   margin: 0 0 0.8rem;
 }
 
 .btn-download-poster {
   display: inline-block;
-  background: linear-gradient(135deg, #d4af37, #b8860b);
-  color: #06070a;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
   font-weight: 800;
   font-size: 0.82rem;
   padding: 7px 18px;
   border-radius: 50px;
   text-decoration: none;
   transition: all 0.2s ease;
+  box-shadow: 0 3px 10px rgba(217, 119, 6, 0.25);
 }
 
 .btn-download-poster:hover {
-  background: linear-gradient(135deg, #fde68a, #d4af37);
-  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+  background: linear-gradient(135deg, #d97706, #b45309);
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
 }
 
 /* Query Form Card */
 .query-form-card {
-  background: rgba(14, 16, 26, 0.95);
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   border-radius: 20px;
   padding: 2.5rem;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
 }
 
 .query-form-card h3 {
   font-family: var(--font-heading);
   font-size: 1.8rem;
   font-weight: 900;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0 0 0.5rem;
 }
 
 .query-form-card p {
   font-size: 0.95rem;
-  color: #94a3b8;
+  color: #475569;
   margin-bottom: 2rem;
 }
 
@@ -481,7 +641,7 @@
 .q-field label {
   font-size: 0.82rem;
   font-weight: 800;
-  color: #d4af37;
+  color: #b45309;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -489,48 +649,53 @@
 .q-field input,
 .q-field select,
 .q-field textarea {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 0.95rem;
-  color: #ffffff;
+  color: #0f172a;
   outline: none;
   transition: all 0.25s ease;
   font-family: inherit;
 }
 
+.q-field input::placeholder,
+.q-field textarea::placeholder {
+  color: #94a3b8;
+}
+
 .q-field select option {
-  background: #0f121d;
-  color: #ffffff;
+  background: #ffffff;
+  color: #0f172a;
 }
 
 .q-field input:focus,
 .q-field select:focus,
 .q-field textarea:focus {
-  border-color: #d4af37;
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
+  border-color: #d97706;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16);
 }
 
 .btn-contact-submit {
-  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
-  color: #06070a;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
   border: none;
   font-size: 1rem;
-  font-weight: 900;
+  font-weight: 800;
   padding: 14px 28px;
   border-radius: 50px;
   cursor: pointer;
   letter-spacing: 0.04em;
   transition: all 0.25s ease;
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.25);
 }
 
 .btn-contact-submit:hover {
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #fde68a 0%, #d4af37 100%);
-  box-shadow: 0 10px 28px rgba(212, 175, 55, 0.5);
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  box-shadow: 0 10px 28px rgba(217, 119, 6, 0.35);
 }
 
 .query-success-state {
@@ -546,36 +711,36 @@
 
 .query-success-state h4 {
   font-size: 1.5rem;
-  color: #6ee7b7;
+  color: #059669;
   font-weight: 800;
   margin-bottom: 0.5rem;
 }
 
 .query-success-state p {
-  color: #cbd5e1;
+  color: #475569;
 }
 
 /* Transit Guide */
 .transit-guide-section {
   padding: 3rem 1rem 6rem;
-  background: var(--clr-bg-black);
+  background: #f8fafc;
 }
 
 .transit-box {
   max-width: 1200px;
   margin: 0 auto;
-  background: rgba(14, 16, 26, 0.85);
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   border-radius: 20px;
   padding: 2.5rem;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 26px rgba(15, 23, 42, 0.05);
 }
 
 .transit-box h3 {
   font-family: var(--font-heading);
   font-size: 1.6rem;
   font-weight: 900;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0 0 2rem;
 }
 
@@ -594,17 +759,17 @@
 .transit-card h4 {
   font-size: 1.05rem;
   font-weight: 800;
-  color: #fde68a;
+  color: #b45309;
   margin-bottom: 0.75rem;
 }
 
 .transit-card p {
   font-size: 0.9rem;
-  color: #cbd5e1;
+  color: #475569;
   line-height: 1.6;
   margin-bottom: 0.5rem;
 }
 
 .transit-card p strong {
-  color: #ffffff;
+  color: #0f172a;
 }

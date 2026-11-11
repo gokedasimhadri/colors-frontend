@@ -1,12 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { getLoggedStudent } from '../../services/api';
-import {
-  EVENT_START_DATE,
-  EVENT_DAYS,
-  EVENT_DATE_FORMAL,
-  getDayShortDate,
-} from '../../utils/eventDate';
+import { EVENT_START_DATE } from '../../utils/eventDate';
 import './Home.css';
 
 // ─── Countdown Timer Hook ───────────────────────────────────────────────────
@@ -43,14 +38,13 @@ const TICKER_ITEMS = [
   'Culturals: Singing, Dance, Mime & Theatre',
   'Sports: Athletics, Volleyball, Basketball & Cricket',
   'Creo: Fashion Show, Spot Painting & Film Making',
-  'Fete: Carnival Games, Food Fiesta & E-Sports',
   '7 • 8 • 9 January 2027',
   'Aditya University Surampalem',
   '50+ Universities & Colleges',
   '25,000+ Student Delegates',
 ];
 
-// ─── The 4 Pillars from the Official Poster ─────────────────────────────────
+// ─── The 3 Pillars from the Official Poster ─────────────────────────────────
 const FEST_PILLARS = [
   {
     code: 'CULTURALS',
@@ -58,7 +52,7 @@ const FEST_PILLARS = [
     tagline: 'Music, Dance, Theatre & Expressions',
     coordinator: 'Mr. P. Raju',
     phone: '8374245400',
-    color: '#ff007f',
+    color: '#e11d48',
     icon: '🎭',
     events: ['Dance Solo & Group', 'Classical & Western Singing', 'Mime Championship', 'Mono Action', 'Battle of Bands'],
     bgImage: '/culturals_bg.png'
@@ -69,7 +63,7 @@ const FEST_PILLARS = [
     tagline: 'Athletics, Team Championships & Glory',
     coordinator: 'Dr. N. Ravi',
     phone: '9912393905',
-    color: '#00d2ff',
+    color: '#0284c7',
     icon: '🏆',
     events: ['100m / 200m Sprint', 'Volleyball Tournament', 'Basketball League', 'Relay 4x100m', 'Badminton Singles'],
     bgImage: '/sports_bg.png'
@@ -80,66 +74,62 @@ const FEST_PILLARS = [
     tagline: 'Fine Arts, Media, Fashion & Innovation',
     coordinator: 'Dr. B. Srinivas',
     phone: '9866732745',
-    color: '#ffe600',
+    color: '#d97706',
     icon: '🎨',
     events: ['Ethnic & Modern Runway', 'Spot Painting Contest', 'Treasure Quest', 'Short Film Making', 'Mobile Photography'],
     bgImage: '/creo_bg.png'
-  },
-  {
-    code: 'FETE',
-    name: 'Fete',
-    tagline: 'Carnival, Food Fiesta, Stalls & Games',
-    coordinator: 'Mr. J. D. Venkatesh',
-    phone: '7036266661',
-    color: '#10b981',
-    icon: '🎪',
-    events: ['Carnival Fun Stalls', 'Food Truck Arena', 'E-Sports Showdown', 'Open Mic Jamming', 'Cosplay Gala'],
-    bgImage: '/hero_bg.png'
   }
-];
-
-// ─── Schedule (3 Days) ──────────────────────────────────────────────────────
-const SCHEDULE_DAYS = EVENT_DAYS.map((d) => d.dayScheduleTitle);
-
-const SCHEDULE_DATA = {
-  0: [
-    { time: '09:00 AM', name: 'Grand Inaugural Ceremony & Lamp Lighting', venue: 'Main University Amphitheatre', tag: 'Ceremony', track: 'CULTURALS' },
-    { time: '11:00 AM', name: 'Inter-College Athletics Prelims & Field Events', venue: 'Olympic Athletic Stadium', tag: 'Sports', track: 'SPORTS' },
-    { time: '02:00 PM', name: 'Spot Painting & Fine Arts Canvas Carnival', venue: 'Fine Arts Studio Block', tag: 'Creo', track: 'CREO' },
-    { time: '04:30 PM', name: 'Carnival Fiesta & Open Mic Acoustic Jam', venue: 'Campus Central Quad', tag: 'Fete', track: 'FETE' },
-    { time: '07:00 PM', name: 'Opening Pro-Night Musical Concert', venue: 'Grand Open Air Stage', tag: 'Music', track: 'CULTURALS' },
-  ],
-  1: [
-    { time: '09:30 AM', name: 'Volleyball & Basketball Championship Knockouts', venue: 'Outdoor Sports Complex', tag: 'Sports', track: 'SPORTS' },
-    { time: '11:30 AM', name: 'Classical & Western Solo Singing Showdown', venue: 'University Auditorium Stage A', tag: 'Cultural', track: 'CULTURALS' },
-    { time: '02:00 PM', name: 'Campus Treasure Hunt Quest', venue: 'University Landmark Zones', tag: 'Creo', track: 'CREO' },
-    { time: '05:00 PM', name: 'Group Dance & Folk Fusion Battles', venue: 'Open Air Amphitheatre', tag: 'Dance', track: 'CULTURALS' },
-    { time: '08:00 PM', name: 'Stand-Up Comedy & Mime Gala Night', venue: 'Central Auditorium', tag: 'Comedy', track: 'CULTURALS' },
-  ],
-  2: [
-    { time: '09:30 AM', name: '4x100m Sprint Relay & Sports Final Showdowns', venue: 'Olympic Athletic Stadium', tag: 'Sports', track: 'SPORTS' },
-    { time: '11:30 AM', name: 'E-Sports Gaming Finals & Short Film Screening', venue: 'Multimedia Tech Hub', tag: 'Fete', track: 'FETE' },
-    { time: '02:30 PM', name: 'Ethnic & Modern Runway Fashion Show', venue: 'Grand Ramp Auditorium', tag: 'Fashion', track: 'CREO' },
-    { time: '06:00 PM', name: 'Grand Valedictory & ₹10 Lakhs Prize Distribution', venue: 'Main Auditorium', tag: 'Awards', track: 'ALL' },
-    { time: '08:30 PM', name: 'Celebrity DJ Blast & Colours 2027 Farewell', venue: 'Open Air Grounds', tag: 'Pro Night', track: 'ALL' },
-  ],
-};
-
-// ─── Memories Gallery ───────────────────────────────────────────────────────
-const GALLERY = [
-  { emoji: '🎭', bg: 'linear-gradient(135deg, #4a0030, #9b1a6e)', label: 'Drama & Mime Nights' },
-  { emoji: '🎵', bg: 'linear-gradient(135deg, #1a0050, #5a1ab0)', label: 'Battle of Bands Live' },
-  { emoji: '⚽', bg: 'linear-gradient(135deg, #004030, #007a50)', label: 'Inter-College Athletics' },
-  { emoji: '💃', bg: 'linear-gradient(135deg, #5a0025, #c0305a)', label: 'Dance Mega Championship' },
-  { emoji: '🎨', bg: 'linear-gradient(135deg, #503000, #a06010)', label: 'Creative Runway & Arts' },
 ];
 
 export default function Home() {
   const { time, pulse } = useCountdown();
-  const [activeDay, setActiveDay] = useState(0);
   const heroRef = useRef(null);
 
   const [student, setStudent] = useState(getLoggedStudent());
+  const [posterOffsetX, setPosterOffsetX] = useState(0);
+  const [isDraggingPoster, setIsDraggingPoster] = useState(false);
+  const posterDragRef = useRef({
+    active: false,
+    startX: 0,
+    startOffset: 0,
+    maxOffset: 380,
+  });
+
+  const clampPosterOffset = (value, max) => Math.max(-max, Math.min(max, value));
+
+  const handlePosterPointerDown = (e) => {
+    if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
+    e.preventDefault();
+    const heroWidth = heroRef.current?.clientWidth || window.innerWidth;
+    const cardWidth = e.currentTarget.offsetWidth || 420;
+    const maxOffset = Math.max(180, Math.round((heroWidth - cardWidth) / 2) - 24);
+
+    posterDragRef.current = {
+      active: true,
+      startX: e.clientX,
+      startOffset: posterOffsetX,
+      maxOffset,
+    };
+    setIsDraggingPoster(true);
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+
+  const handlePosterPointerMove = (e) => {
+    if (!posterDragRef.current.active) return;
+    const deltaX = e.clientX - posterDragRef.current.startX;
+    setPosterOffsetX(
+      clampPosterOffset(posterDragRef.current.startOffset + deltaX, posterDragRef.current.maxOffset)
+    );
+  };
+
+  const handlePosterPointerEnd = (e) => {
+    if (!posterDragRef.current.active) return;
+    posterDragRef.current.active = false;
+    setIsDraggingPoster(false);
+    if (e.currentTarget.hasPointerCapture?.(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  };
 
   useEffect(() => {
     const handleAuth = () => setStudent(getLoggedStudent());
@@ -207,14 +197,38 @@ export default function Home() {
             </div>
           </div>
 
-          {/* CENTER SPLATTER: 3D Color Burst Graphic */}
-          <div className="hero-center-splatter-wrapper" aria-hidden="true">
+          {/* CENTER SPLATTER: Interactive Horizontal Draggable Poster Card */}
+          <div
+            className={`hero-center-splatter-wrapper ${isDraggingPoster ? 'dragging' : ''}`}
+            style={{ transform: `translate(calc(-50% + ${posterOffsetX}px), -50%)` }}
+            onPointerDown={handlePosterPointerDown}
+            onPointerMove={handlePosterPointerMove}
+            onPointerUp={handlePosterPointerEnd}
+            onPointerCancel={handlePosterPointerEnd}
+            onDoubleClick={() => setPosterOffsetX(0)}
+            role="slider"
+            aria-label="Drag poster card left or right"
+            aria-valuemin={-400}
+            aria-valuemax={400}
+            aria-valuenow={Math.round(posterOffsetX)}
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowLeft') setPosterOffsetX((prev) => Math.max(-380, prev - 40));
+              if (e.key === 'ArrowRight') setPosterOffsetX((prev) => Math.min(380, prev + 40));
+              if (e.key === 'Home' || e.key === '0') setPosterOffsetX(0);
+            }}
+            title="Drag left or right with mouse • Double-click to recenter"
+          >
             <div className="splatter-glow-halo" />
             <img
               src="/colours_poster_theme.png"
               alt="Colours 2027 Official Theme Splatter"
               className="hero-center-poster-img"
+              draggable={false}
             />
+            <div className="hero-poster-drag-hint">
+              <span>⇄ Drag Left or Right</span>
+            </div>
           </div>
 
           {/* RIGHT HALF: Deep Midnight Black Canvas */}
@@ -237,7 +251,7 @@ export default function Home() {
               </div>
               <div className="prize-caption">IN CASH PRIZES</div>
               <p className="prize-sub">
-                Massive cash awards, national merit trophies & university honors across Culturals, Sports, Creo & Fete!
+                Massive cash awards, national merit trophies & university honors across Culturals, Sports & Creo!
               </p>
             </div>
 
@@ -296,9 +310,14 @@ export default function Home() {
                   ✦ Open Student Dashboard
                 </Link>
               )}
-              <Link to="/events-schedule" className="btn-hero-dark-outline">
+              <a
+                href="/Schedule_of_Events.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-hero-dark-outline"
+              >
                 📅 3-Day Schedule
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -320,18 +339,18 @@ export default function Home() {
       </div>
 
       {/* ─────────────────────────────────────────────────────────────
-          FOUR MAIN FESTIVAL DOMAINS (FROM OFFICIAL POSTER)
-          CULTURALS • SPORTS • CREO • FETE
+          THREE MAIN FESTIVAL DOMAINS (FROM OFFICIAL POSTER)
+          CULTURALS • SPORTS • CREO
           ───────────────────────────────────────────────────────────── */}
       <section className="fest-pillars-section" id="pillars">
         <div className="container">
           <div className="section-head text-center">
             <span className="section-tag">OFFICIAL FESTIVAL DOMAINS</span>
             <h2 className="section-title">
-              Four Arenas of <span>Glory</span>
+              Three Arenas of <span>Glory</span>
             </h2>
             <p className="section-desc" style={{ margin: '0 auto' }}>
-              Competitions span 4 major tracks, supervised by dedicated university chairpersons with a total cash pool of ₹10,00,000.
+              Competitions span 3 major tracks, supervised by dedicated university chairpersons with a total cash pool of ₹10,00,000.
             </p>
           </div>
 
@@ -379,141 +398,6 @@ export default function Home() {
                   >
                     Check Out {pillar.name} Events →
                   </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────
-          ₹10 LAKHS MEGA CASH PRIZES SHOWCASE
-          ───────────────────────────────────────────────────────────── */}
-      <section className="fest-cash-showcase">
-        <div className="container">
-          <div className="cash-showcase-card">
-            <div className="cash-glow-orb" />
-            <div className="cash-showcase-content">
-              <span className="cash-pill-tag">🏆 OFFICIAL PRIZE POOL</span>
-              <h2 className="cash-grand-title">
-                ₹10,00,000+ <span>in Cash Rewards</span>
-              </h2>
-              <p className="cash-lead-text">
-                Compete against South India’s finest talent. Aditya University awards direct cash rewards,
-                championship trophies, and national certificates across every single event category.
-              </p>
-
-              <div className="cash-perks-row">
-                <div className="cash-perk">
-                  <span className="perk-icon">💰</span>
-                  <span className="perk-title">Instant Cash Awards</span>
-                  <span className="perk-desc">Presented at the Grand Valedictory ceremony on 9th Jan</span>
-                </div>
-                <div className="cash-perk">
-                  <span className="perk-icon">🥇</span>
-                  <span className="perk-title">National Merit Cups</span>
-                  <span className="perk-desc">Prestigious rolling trophies for champion college delegations</span>
-                </div>
-                <div className="cash-perk">
-                  <span className="perk-icon">📜</span>
-                  <span className="perk-title">Authenticated Certificates</span>
-                  <span className="perk-desc">University-sealed participation & merit credentials</span>
-                </div>
-              </div>
-
-              <div className="cash-actions-row">
-                <Link to="/events" className="btn-hero-primary">
-                  ✦ Register Your Contingent Now
-                </Link>
-                <Link to="/invitation" className="btn-hero-secondary">
-                  📄 Read Official Invitation Letter
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────
-          FESTIVAL 3-DAY SCHEDULE
-          ───────────────────────────────────────────────────────────── */}
-      <section className="fest-schedule-section" id="schedule">
-        <div className="container">
-          <div className="section-head text-center">
-            <span className="section-tag">3-DAY FESTIVAL ITINERARY</span>
-            <h2 className="section-title">
-              The <span>Lineup</span>
-            </h2>
-            <p className="section-desc" style={{ margin: '0 auto' }}>
-              Mark your schedule for three action-packed days on Aditya University’s state-of-the-art campus.
-            </p>
-          </div>
-
-          <div className="schedule-day-tabs">
-            {SCHEDULE_DAYS.map((dayTitle, i) => (
-              <button
-                key={i}
-                type="button"
-                className={`schedule-tab-btn ${activeDay === i ? 'active' : ''}`}
-                onClick={() => setActiveDay(i)}
-              >
-                <span className="tab-circle">{i + 1}</span>
-                <span>{dayTitle}</span>
-              </button>
-            ))}
-          </div>
-
-          <div className="schedule-timeline-grid">
-            {SCHEDULE_DATA[activeDay].map((item, idx) => (
-              <div key={idx} className="timeline-card">
-                <div className="timeline-time-col">
-                  <span className="timeline-clock">⏰ {item.time}</span>
-                  <span className={`timeline-track-pill ${item.track.toLowerCase()}`}>
-                    {item.track}
-                  </span>
-                </div>
-                <div className="timeline-info-col">
-                  <h4 className="timeline-event-name">{item.name}</h4>
-                  <p className="timeline-venue">📍 {item.venue}</p>
-                </div>
-                <div className="timeline-tag-col">
-                  <span className="event-type-chip">{item.tag}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center" style={{ marginTop: '2.5rem' }}>
-            <Link to="/events-schedule" className="btn-hero-secondary">
-              View Complete Detailed Schedule →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────
-          MEMORIES & GALLERY
-          ───────────────────────────────────────────────────────────── */}
-      <section className="fest-memories-section" id="gallery">
-        <div className="container">
-          <div className="section-head text-center">
-            <span className="section-tag">FESTIVAL LEGACY</span>
-            <h2 className="section-title">
-              Moments That <span>Inspire</span>
-            </h2>
-            <p className="section-desc" style={{ margin: '0 auto' }}>
-              From legendary pro-nights to breathless track sprint finishes, celebrate the unforgettable energy of Colours.
-            </p>
-          </div>
-
-          <div className="memories-grid">
-            {GALLERY.map((g, i) => (
-              <div key={i} className="memory-card">
-                <div className="memory-card-inner" style={{ background: g.bg }}>
-                  <span className="memory-emoji">{g.emoji}</span>
-                  <div className="memory-overlay">
-                    <span className="memory-label">{g.label}</span>
-                  </div>
                 </div>
               </div>
             ))}

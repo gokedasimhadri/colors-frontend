@@ -1,20 +1,25 @@
 /* ==========================================================================
-   INVITATION PAGE – Official Colours 2027 Theme
-   Gold Metallic, Split Poster Showcase, Deep Midnight Luxury
+   INVITATION PAGE – Official Colours 2027 Light Theme
+   Clean White/Slate Canvases, Dignitary Portrait Provisions & Messages
    ========================================================================== */
 
 .invitation-page-wrapper {
-  background-color: var(--clr-bg-black);
-  color: var(--clr-text-white);
+  background-color: #f8fafc;
+  color: #0f172a;
   padding-top: var(--navbar-height);
   min-height: 100vh;
 }
 
 /* ── Hero Banner ── */
 .invitation-hero {
-  padding: 5rem 0 3.5rem;
-  background: radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
+  padding: 4.5rem 0 3.25rem;
+  background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+  border-bottom: 1px solid #e2e8f0;
   position: relative;
+}
+
+.invitation-hero-inner {
+  text-align: center;
 }
 
 .invitation-crest-row {
@@ -29,7 +34,7 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 2px solid #d4af37;
+  border: 2px solid #d97706;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +43,7 @@
   font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 900;
-  box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2);
 }
 
 .invitation-uni-label {
@@ -46,7 +51,7 @@
   font-size: 0.88rem;
   font-weight: 800;
   letter-spacing: 0.18em;
-  color: #e5c07b;
+  color: #b45309;
   text-transform: uppercase;
 }
 
@@ -54,7 +59,7 @@
   font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0.25em;
-  color: #fde68a;
+  color: #d97706;
   text-transform: uppercase;
   display: block;
   margin-bottom: 0.6rem;
@@ -62,7 +67,7 @@
 
 .invitation-title {
   font-family: var(--font-heading);
-  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  font-size: clamp(3.5rem, 8vw, 6.2rem);
   line-height: 0.95;
   letter-spacing: 0.05em;
   background: var(--clr-gold-gradient);
@@ -70,12 +75,11 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 0.75rem;
-  filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.35));
 }
 
 .invitation-sub {
   font-size: 1.15rem;
-  color: #cbd5e1;
+  color: #475569;
   max-width: 680px;
   margin: 0 auto 2rem;
   font-weight: 500;
@@ -86,10 +90,10 @@
   align-items: center;
   gap: 1rem;
   padding: 0.65rem 1.8rem;
-  background: rgba(212, 175, 55, 0.12);
-  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  background: #ffffff;
+  border: 1.5px solid #fcd34d;
   border-radius: var(--radius-pill);
-  box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.12);
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -98,453 +102,164 @@
   font-family: var(--font-brand);
   font-size: 0.88rem;
   font-weight: 800;
-  color: #fef08a;
+  color: #92400e;
   letter-spacing: 0.06em;
 }
 
 .badge-sep {
-  color: rgba(212, 175, 55, 0.5);
+  color: #d97706;
 }
 
-/* ── Poster Showcase & Letter Section ── */
-.invitation-poster-showcase-section {
-  padding: 3rem 0 6rem;
+/* ── Alternating Dignitary Message & Portrait Cards ── */
+.invitation-messages-section {
+  padding: 4rem 0 6rem;
+  background: #f8fafc;
 }
 
-.poster-showcase-grid {
-  display: grid;
-  grid-template-columns: 420px 1fr;
-  gap: 3.5rem;
-  align-items: start;
-}
-
-/* Poster Frame Card */
-.poster-frame-card {
-  background: #000000;
-  border: 2px solid rgba(212, 175, 55, 0.5);
-  border-radius: var(--radius-md);
-  padding: 1rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.25);
-  position: sticky;
-  top: calc(var(--navbar-height) + 2rem);
-}
-
-.official-poster-img {
-  width: 100%;
-  height: auto;
-  border-radius: var(--radius-sm);
-  display: block;
-}
-
-.poster-actions-row {
+.invitation-messages-stack {
   display: flex;
-  gap: 0.75rem;
-  margin-top: 1rem;
+  flex-direction: column;
+  gap: 2.5rem;
+  max-width: 1180px;
 }
 
-.btn-poster-action {
-  flex: 1;
-  text-align: center;
-  padding: 0.65rem 0.5rem;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(212, 175, 55, 0.45);
-  border-radius: var(--radius-sm);
-  color: #fde68a;
-  font-size: 0.82rem;
-  font-weight: 800;
-  text-decoration: none;
-  cursor: pointer;
-  transition: var(--transition-fast);
-}
-
-.btn-poster-action:hover {
-  background: rgba(212, 175, 55, 0.35);
-  color: #ffffff;
-}
-
-/* Formal Royal Letter Card */
-.royal-letter-card {
-  background: rgba(14, 16, 26, 0.9);
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
-  border-radius: var(--radius-md);
-  padding: 3rem 2.8rem;
-  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6);
+.dignitary-invite-card {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  align-items: center;
+  gap: 3rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 24px;
+  padding: 2.8rem 3rem;
+  box-shadow: 0 10px 32px rgba(15, 23, 42, 0.06);
   position: relative;
   overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-.royal-letter-card::before {
+.dignitary-invite-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 4px;
-  background: var(--clr-gold-gradient);
+  background: var(--clr-spectrum-gradient);
 }
 
-.letter-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 1.5rem;
-  margin-bottom: 1.8rem;
+.dignitary-invite-card:hover {
+  border-color: #fcd34d;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.1);
 }
 
-.letter-salutation {
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: #d4af37;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  display: block;
-  margin-bottom: 0.4rem;
+.dignitary-invite-card.reverse {
+  grid-template-columns: 0.65fr 1.35fr;
 }
 
-.letter-recipient {
-  font-family: var(--font-brand);
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #ffffff;
-  line-height: 1.3;
+.dignitary-invite-card.reverse .dignitary-photo-col {
+  order: -1;
 }
 
-.letter-colleges {
-  font-size: 0.95rem;
-  color: #94a3b8;
-  margin-top: 0.35rem;
-}
-
-.letter-body {
-  font-size: 1.05rem;
-  color: #cbd5e1;
-  line-height: 1.85;
+.dignitary-message-col {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  margin-bottom: 2.5rem;
 }
 
-.letter-body strong {
-  color: #ffffff;
-}
-
-.letter-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.letter-signature-block {
-  display: flex;
-  flex-direction: column;
-}
-
-.sign-title {
+.dignitary-role-badge {
+  align-self: flex-start;
   font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.15em;
-  color: #d4af37;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-}
-
-.sign-name {
-  font-size: 1.05rem;
-  font-weight: 900;
-  color: #ffffff;
-}
-
-.sign-uni {
-  font-size: 0.82rem;
-  color: #94a3b8;
-}
-
-.btn-royal-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.85rem 2rem;
-  background: var(--clr-gold-gradient);
-  color: #000000;
-  font-family: var(--font-body);
-  font-weight: 900;
-  font-size: 0.92rem;
-  letter-spacing: 0.04em;
-  border-radius: var(--radius-pill);
-  text-decoration: none;
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
-  transition: var(--transition-normal);
-}
-
-.btn-royal-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(212, 175, 55, 0.5);
-}
-
-/* ── Domain Chairpersons from Poster ── */
-.invitation-chairs-section {
-  padding: 6rem 0;
-  background: #08090f;
-}
-
-.chairs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.6rem;
-  margin-top: 3.5rem;
-}
-
-.chair-contact-card {
-  background: rgba(14, 16, 26, 0.9);
-  border: 1.5px solid rgba(255, 255, 255, 0.08);
-  border-top: 4px solid var(--chair-accent);
-  border-radius: var(--radius-md);
-  padding: 1.8rem 1.6rem;
-  display: flex;
-  flex-direction: column;
-  transition: var(--transition-fast);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-}
-
-.chair-contact-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--chair-accent);
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
-}
-
-.chair-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.chair-icon {
-  font-size: 2rem;
-}
-
-.chair-cat-pill {
-  font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0.15em;
-  color: var(--chair-accent);
-  text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 4px 10px;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  padding: 0.35rem 1rem;
   border-radius: var(--radius-pill);
 }
 
-.chair-name {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 0.25rem;
-}
-
-.chair-role {
-  font-size: 0.85rem;
-  color: #94a3b8;
-  margin-bottom: 1.4rem;
-}
-
-.chair-contact-box {
+.dignitary-paragraphs {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-top: auto;
+  gap: 1rem;
 }
 
-.chair-phone-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.65rem 1rem;
-  background: rgba(212, 175, 55, 0.12);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  border-radius: var(--radius-sm);
-  color: #fde68a;
-  text-decoration: none;
-  font-weight: 800;
-  font-size: 0.88rem;
-  transition: var(--transition-fast);
+.dignitary-paragraphs p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #334155;
+  margin: 0;
 }
 
-.chair-phone-btn:hover {
-  background: rgba(212, 175, 55, 0.3);
-  color: #ffffff;
-}
-
-.chair-email-link {
-  font-size: 0.78rem;
-  color: #64748b;
-  text-decoration: none;
-  text-align: center;
-  transition: var(--transition-fast);
-}
-
-.chair-email-link:hover {
-  color: #94a3b8;
-}
-
-/* ── Patrons & Dignitaries ── */
-.invitation-patrons-section,
-.invitation-dignitaries-section {
-  padding: 5.5rem 0;
-}
-
-.patrons-grid,
-.dignitaries-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.8rem;
-  margin-top: 3.5rem;
-}
-
-.patron-card,
-.dignitary-card {
-  background: rgba(14, 16, 26, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-md);
-  padding: 2rem 1.6rem;
-  text-align: center;
-}
-
-.patron-avatar {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.patron-name {
-  font-size: 1.25rem;
-  color: #ffffff;
-  margin-bottom: 0.3rem;
-}
-
-.patron-role {
-  font-size: 0.82rem;
-  color: #d4af37;
-  font-weight: 800;
-  text-transform: uppercase;
-  display: block;
-}
-
-.patron-inst {
-  font-size: 0.8rem;
-  color: #64748b;
-  display: block;
-  margin-bottom: 1rem;
-}
-
-.patron-quote {
-  font-size: 0.95rem;
-  font-style: italic;
-  color: #cbd5e1;
-  line-height: 1.6;
-}
-
-.dignitary-card {
-  text-align: left;
-}
-
-.dignitary-tag {
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: #e11d48;
-  text-transform: uppercase;
-  margin-bottom: 0.6rem;
+.dignitary-signature {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  margin-top: 0.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #e2e8f0;
 }
 
 .dignitary-name {
+  font-family: var(--font-brand);
   font-size: 1.35rem;
-  color: #ffffff;
-  margin-bottom: 0.4rem;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.25;
 }
 
-.dignitary-field {
-  font-size: 0.9rem;
-  color: #94a3b8;
-  margin-bottom: 1.25rem;
-}
-
-.dignitary-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  font-size: 0.82rem;
-  color: #cbd5e1;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 0.85rem;
-}
-
-/* ── Hospitality Card ── */
-.invitation-hospitality-section {
-  padding: 2rem 0 7rem;
-}
-
-.hospitality-card {
-  background: linear-gradient(135deg, rgba(20, 23, 38, 0.95), rgba(10, 12, 20, 0.98));
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
-  border-radius: var(--radius-lg);
-  padding: 3rem 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2.5rem;
-  flex-wrap: wrap;
-}
-
-.hosp-text {
-  max-width: 680px;
-}
-
-.hosp-text h3 {
-  font-family: var(--font-heading);
-  font-size: 2.2rem;
-  color: #ffffff;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.75rem;
-}
-
-.hosp-text p {
-  font-size: 1.05rem;
-  color: #cbd5e1;
-  line-height: 1.7;
-}
-
-.hosp-buttons {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.btn-royal-outline {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.82rem 1.6rem;
-  background: transparent;
-  color: #fde68a;
-  border: 1.5px solid rgba(212, 175, 55, 0.4);
-  border-radius: var(--radius-pill);
+.dignitary-designation {
+  font-size: 0.95rem;
   font-weight: 700;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: var(--transition-fast);
+  color: #b45309;
+  margin-top: 0.2rem;
 }
 
-.btn-royal-outline:hover {
-  background: rgba(212, 175, 55, 0.15);
-  border-color: #d4af37;
-  color: #ffffff;
+.dignitary-photo-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@media (max-width: 1024px) {
-  .poster-showcase-grid {
+.dignitary-photo-frame {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 4 / 5;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid #e2e8f0;
+  background: #f8fafc;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+}
+
+.dignitary-portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+@media (max-width: 960px) {
+  .dignitary-invite-card,
+  .dignitary-invite-card.reverse {
     grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 1.6rem;
   }
-  .poster-frame-card {
-    position: static;
-    max-width: 440px;
-    margin: 0 auto;
+
+  .dignitary-invite-card .dignitary-photo-col,
+  .dignitary-invite-card.reverse .dignitary-photo-col {
+    order: -1;
+  }
+
+  .dignitary-photo-frame {
+    max-width: 280px;
+  }
+
+  .dignitary-signature {
+    align-items: flex-start;
+    text-align: left;
   }
 }

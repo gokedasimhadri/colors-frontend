@@ -59,7 +59,7 @@ export const CAMPUS_PHOTO_BASES = [
 ];
 
 // Standard preferred ordering matching fest structure
-export const CATEGORY_ORDER = ['CULTURALS', 'SPORTS', 'CREO', 'FETE'];
+export const CATEGORY_ORDER = ['CULTURALS', 'SPORTS', 'CREO'];
 
 // Official Festival Coordinators as announced on poster
 export const OFFICIAL_POSTER_COORDINATORS = {
@@ -80,12 +80,6 @@ export const OFFICIAL_POSTER_COORDINATORS = {
     designation: 'Creo Chair',
     phone: '9866732745',
     email: 'srinivas.b@adityauniversity.in'
-  },
-  'FETE': {
-    name: 'Mr. J. D. Venkatesh',
-    designation: 'Fete Chair',
-    phone: '7036266661',
-    email: 'venkatesh.jd@adityauniversity.in'
   }
 };
 
@@ -161,22 +155,6 @@ export const SUBCATEGORY_ORDER = {
     'Sahityam',
     'Dumb Charades',
     'Rangoli'
-  ],
-  'Fete Events': [
-    'Carnival Stalls',
-    'Food Fiesta',
-    'Gaming & E-Sports',
-    'Open Mic & Jamming',
-    'Campus Quest',
-    'Cosplay & Anime'
-  ],
-  'FETE': [
-    'Carnival Stalls',
-    'Food Fiesta',
-    'Gaming & E-Sports',
-    'Open Mic & Jamming',
-    'Campus Quest',
-    'Cosplay & Anime'
   ]
 };
 
@@ -263,7 +241,12 @@ export async function fetchAllEvents(typeCode = EVENT_TYPE) {
 
     const json = await res.json();
     const rawEvents = Array.isArray(json) ? json : json.data || [];
-    const mapped = rawEvents.map((ev) => mapBackendEvent(ev));
+    const mapped = rawEvents
+      .map((ev) => mapBackendEvent(ev))
+      .filter((ev) => {
+        const cat = (ev.category || ev.categoryName || ev.categoryCode || '').toUpperCase();
+        return !cat.includes('FETE');
+      });
     cachedEventsByType[code] = mapped;
     return mapped;
   } catch (err) {
@@ -310,7 +293,13 @@ export async function fetchCategoriesWithSubCategories(typeCode = EVENT_TYPE) {
 function normalizeCategories(categories, allEvents = [], typeCode = 'COLORS') {
   if (!Array.isArray(categories)) return [];
 
-  return categories.map((cat) => {
+  return categories
+    .filter((cat) => {
+      const cCode = (cat.code || cat._id || '').toUpperCase();
+      const cName = (cat.name || '').toUpperCase();
+      return !cCode.includes('FETE') && !cName.includes('FETE');
+    })
+    .map((cat) => {
     const catCode = (cat.code || cat._id || '').toUpperCase();
     const catName = cat.name || catCode;
 
@@ -1010,14 +999,6 @@ export async function fetchFacultyCoordinators(category, subCategory, eventName,
         cordinatorEmail: 'srinivas.b@adityauniversity.in'
       }];
     }
-    if (catUpper.includes('FETE')) {
-      return [{
-        cordinatorName: 'Mr. J. D. Venkatesh',
-        cordinatorDesignation: 'Fete Fest Incharge',
-        cordinatorPhone: '7036266661',
-        cordinatorEmail: 'venkatesh.jd@adityauniversity.in'
-      }];
-    }
 
     return [
       {
@@ -1037,12 +1018,6 @@ export async function fetchFacultyCoordinators(category, subCategory, eventName,
         cordinatorDesignation: 'Creo Chair',
         cordinatorPhone: '9866732745',
         cordinatorEmail: 'srinivas.b@adityauniversity.in'
-      },
-      {
-        cordinatorName: 'Mr. J. D. Venkatesh',
-        cordinatorDesignation: 'Fete Chair',
-        cordinatorPhone: '7036266661',
-        cordinatorEmail: 'venkatesh.jd@adityauniversity.in'
       }
     ];
   } catch (err) {

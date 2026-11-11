@@ -1,12 +1,12 @@
 /* ==========================================================================
-   COLOURS 2027 – Sponsors & Corporate Partners (Official Festival Theme)
-   Obsidian Midnight, Metallic Gold Glow & Tiered Partner Cards
+   COLOURS 2027 – Sponsors & Corporate Partners (Light Theme)
+   Clean White/Slate Canvases, Gold Glow & Tiered Partner Cards
    ========================================================================== */
 
 .sponsors-page-wrapper {
   min-height: 100vh;
-  background-color: var(--clr-bg-black);
-  color: var(--clr-text-white);
+  background-color: #f8fafc;
+  color: #0f172a;
   padding-top: var(--navbar-height);
   padding-bottom: 5rem;
   font-family: var(--font-body), sans-serif;
@@ -15,22 +15,22 @@
 
 .sponsors-hero {
   padding: 4.5rem 1.5rem 3.5rem;
-  background: radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.12) 0%, rgba(10, 11, 18, 0.98) 75%);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .sponsors-badge-top {
   display: inline-block;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(212, 175, 55, 0.5);
-  color: #fde68a;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  color: #b45309;
   font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.18em;
   padding: 6px 18px;
   border-radius: var(--radius-pill);
   margin-bottom: 1.25rem;
-  box-shadow: 0 0 16px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 2px 10px rgba(217, 119, 6, 0.1);
 }
 
 .sponsors-hero-title {
@@ -38,13 +38,13 @@
   font-size: clamp(2.5rem, 5.5vw, 4.5rem);
   font-weight: 900;
   letter-spacing: 0.03em;
-  color: #ffffff;
+  color: #0f172a;
   margin-bottom: 0.75rem;
 }
 
 .sponsors-hero-sub {
   font-size: 1.1rem;
-  color: #cbd5e1;
+  color: #475569;
   max-width: 700px;
   margin: 0 auto 2.5rem;
   line-height: 1.7;
@@ -58,46 +58,51 @@
 }
 
 .btn-sponsors-primary {
-  background: linear-gradient(135deg, #d4af37, #b8860b);
-  color: #06070a;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
   padding: 12px 30px;
   border-radius: 50px;
-  font-weight: 900;
+  font-weight: 800;
   font-size: 0.95rem;
   text-decoration: none;
+  border: none;
+  cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+  box-shadow: 0 6px 18px rgba(217, 119, 6, 0.25);
   letter-spacing: 0.02em;
 }
 
+.w-100 {
+  width: 100%;
+}
+
 .btn-sponsors-primary:hover {
-  background: linear-gradient(135deg, #fde68a, #d4af37);
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(212, 175, 55, 0.5);
+  box-shadow: 0 10px 26px rgba(217, 119, 6, 0.35);
 }
 
 .btn-sponsors-outline {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1.5px solid rgba(212, 175, 55, 0.45);
-  color: #fde68a;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  color: #0f172a;
   padding: 12px 28px;
   border-radius: 50px;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 0.95rem;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .btn-sponsors-outline:hover {
-  background: rgba(212, 175, 55, 0.12);
-  border-color: #d4af37;
-  color: #ffffff;
+  background: #fffbeb;
+  border-color: #d97706;
+  color: #b45309;
 }
 
 /* Tiered Sections */
 .sponsors-grid-section {
   padding: 4.5rem 1rem 5rem;
-  background: var(--clr-bg-black);
+  background: #f8fafc;
 }
 
 .tier-group-block {
@@ -121,14 +126,14 @@
   padding: 5px 16px;
   border-radius: 50px;
   border: 1.5px solid;
-  background: rgba(255, 255, 255, 0.03);
+  background: #ffffff;
 }
 
 .tier-heading {
   font-family: var(--font-heading);
   font-size: 1.6rem;
   font-weight: 900;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0;
   letter-spacing: 0.04em;
 }
@@ -140,21 +145,21 @@
 }
 
 .sponsor-card {
-  background: rgba(14, 16, 26, 0.9);
-  border: 1.5px solid rgba(212, 175, 55, 0.3);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   border-radius: 18px;
   padding: 2.2rem;
   display: flex;
   align-items: flex-start;
   gap: 1.5rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
   transition: all 0.3s ease;
 }
 
 .sponsor-card:hover {
-  border-color: #d4af37;
+  border-color: #d97706;
   transform: translateY(-4px);
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
 }
 
 .sponsor-logo-circle {
@@ -162,16 +167,16 @@
   height: 72px;
   border-radius: 50%;
   border: 2px solid;
-  background: rgba(255, 255, 255, 0.04);
+  background: #f8fafc;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
   font-weight: 900;
-  color: #ffffff;
+  color: #0f172a;
   flex-shrink: 0;
   font-family: var(--font-heading);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
 .sponsor-details {
@@ -183,7 +188,7 @@
   font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0 0 0.3rem;
   letter-spacing: 0.02em;
 }
@@ -191,13 +196,13 @@
 .sponsor-tagline {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #d4af37;
+  color: #b45309;
   margin-bottom: 0.6rem;
 }
 
 .sponsor-desc {
   font-size: 0.9rem;
-  color: #cbd5e1;
+  color: #475569;
   line-height: 1.6;
   margin: 0;
 }
@@ -205,18 +210,36 @@
 /* Benefits Section */
 .sponsors-benefits-section {
   padding: 4.5rem 1rem 5.5rem;
-  background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08) 0%, rgba(6, 7, 10, 0.98) 70%);
-  border-top: 1px solid rgba(212, 175, 55, 0.25);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .benefits-header {
   margin-bottom: 3.5rem;
 }
 
+.section-mini-tag {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #b45309;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.section-main-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+}
+
 .benefits-sub {
   font-size: 1.05rem;
-  color: #94a3b8;
+  color: #475569;
   max-width: 600px;
   margin: 0.5rem auto 0;
 }
@@ -242,19 +265,20 @@
 }
 
 .benefit-card {
-  background: rgba(14, 16, 26, 0.9);
-  border: 1.5px solid rgba(212, 175, 55, 0.3);
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
   border-radius: 18px;
   padding: 2.2rem 1.8rem;
   text-align: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
   transition: all 0.3s ease;
 }
 
 .benefit-card:hover {
-  border-color: #d4af37;
+  border-color: #d97706;
+  background: #ffffff;
   transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 10px 26px rgba(217, 119, 6, 0.14);
 }
 
 .benefit-icon {
@@ -267,13 +291,13 @@
   font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 800;
-  color: #fde68a;
+  color: #0f172a;
   margin-bottom: 0.75rem;
 }
 
 .benefit-card p {
   font-size: 0.9rem;
-  color: #cbd5e1;
+  color: #475569;
   line-height: 1.6;
   margin: 0;
 }
@@ -281,20 +305,20 @@
 /* Sponsor Form Card */
 .sponsors-form-section {
   padding: 4.5rem 1rem 6rem;
-  background: var(--clr-bg-black);
+  background: #f8fafc;
 }
 
 .sponsor-form-card {
   max-width: 1100px;
   margin: 0 auto;
-  background: rgba(14, 16, 26, 0.95);
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   border-radius: 24px;
   padding: 3rem;
   display: grid;
   grid-template-columns: 1fr 1.2fr;
   gap: 3rem;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.06);
 }
 
 @media (max-width: 860px) {
@@ -309,20 +333,20 @@
   font-family: var(--font-heading);
   font-size: 2rem;
   font-weight: 900;
-  color: #ffffff;
+  color: #0f172a;
   margin: 0.5rem 0 1rem;
 }
 
 .form-info-col p {
   font-size: 0.95rem;
-  color: #cbd5e1;
+  color: #475569;
   line-height: 1.7;
   margin-bottom: 2rem;
 }
 
 .sponsor-direct-contact {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 14px;
   padding: 1.25rem;
 }
@@ -330,79 +354,107 @@
 .sponsor-direct-contact p {
   margin: 0.3rem 0;
   font-size: 0.9rem;
-  color: #cbd5e1;
+  color: #334155;
 }
 
 .sponsor-direct-contact p strong {
-  color: #fde68a;
+  color: #b45309;
 }
 
-.form-input-col form {
+.form-input-col form,
+.sponsor-form {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
 
-.s-field {
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 600px) {
+  .form-row-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.s-field,
+.form-field {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
 
-.s-field label {
+.s-field label,
+.form-field label {
   font-size: 0.8rem;
   font-weight: 800;
-  color: #d4af37;
+  color: #b45309;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
 .s-field input,
 .s-field select,
-.s-field textarea {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1.5px solid rgba(212, 175, 55, 0.35);
+.s-field textarea,
+.form-field input,
+.form-field select,
+.form-field textarea {
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 0.95rem;
-  color: #ffffff;
+  color: #0f172a;
   outline: none;
   transition: all 0.25s ease;
   font-family: inherit;
 }
 
-.s-field select option {
-  background: #0f121d;
-  color: #ffffff;
+.s-field input::placeholder,
+.s-field textarea::placeholder,
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: #94a3b8;
+}
+
+.s-field select option,
+.form-field select option {
+  background: #ffffff;
+  color: #0f172a;
 }
 
 .s-field input:focus,
 .s-field select:focus,
-.s-field textarea:focus {
-  border-color: #d4af37;
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
+.s-field textarea:focus,
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: #d97706;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16);
 }
 
 .btn-sponsor-submit {
-  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
-  color: #06070a;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
   border: none;
   font-size: 1rem;
-  font-weight: 900;
+  font-weight: 800;
   padding: 14px 28px;
   border-radius: 50px;
   cursor: pointer;
   letter-spacing: 0.04em;
   transition: all 0.25s ease;
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+  box-shadow: 0 6px 18px rgba(217, 119, 6, 0.25);
   margin-top: 0.5rem;
 }
 
 .btn-sponsor-submit:hover {
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #fde68a 0%, #d4af37 100%);
-  box-shadow: 0 10px 28px rgba(212, 175, 55, 0.5);
+  box-shadow: 0 10px 26px rgba(217, 119, 6, 0.35);
 }
 
 .form-success-banner {
@@ -418,11 +470,11 @@
 
 .form-success-banner h4 {
   font-size: 1.5rem;
-  color: #6ee7b7;
+  color: #059669;
   font-weight: 800;
   margin-bottom: 0.5rem;
 }
 
 .form-success-banner p {
-  color: #cbd5e1;
+  color: #475569;
 }
