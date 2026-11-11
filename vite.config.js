@@ -36,8 +36,8 @@ export default defineConfig(({ mode }) => {
 
     preview: {
       allowedHosts: [
-        'colours.adityauniversity.in',
-      ],
+        'colours.adityauniversity.in', 'https://colours.adityauniversity.in', 'www.colours.adityauniversity.in'
+      ]
     },
   }
 })
