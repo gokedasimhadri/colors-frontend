@@ -59,7 +59,35 @@ export const CAMPUS_PHOTO_BASES = [
 ];
 
 // Standard preferred ordering matching fest structure
-export const CATEGORY_ORDER = ['SPORTS', 'CULTURALS', 'CREO'];
+export const CATEGORY_ORDER = ['CULTURALS', 'SPORTS', 'CREO', 'FETE'];
+
+// Official Festival Coordinators as announced on poster
+export const OFFICIAL_POSTER_COORDINATORS = {
+  'CULTURALS': {
+    name: 'Mr. P. Raju',
+    designation: 'Culturals Chair',
+    phone: '8374245400',
+    email: 'raju.p@adityauniversity.in'
+  },
+  'SPORTS': {
+    name: 'Dr. N. Ravi',
+    designation: 'Sports Chair',
+    phone: '9912393905',
+    email: 'ravi.n@adityauniversity.in'
+  },
+  'CREO': {
+    name: 'Dr. B. Srinivas',
+    designation: 'Creo Chair',
+    phone: '9866732745',
+    email: 'srinivas.b@adityauniversity.in'
+  },
+  'FETE': {
+    name: 'Mr. J. D. Venkatesh',
+    designation: 'Fete Chair',
+    phone: '7036266661',
+    email: 'venkatesh.jd@adityauniversity.in'
+  }
+};
 
 export const SUBCATEGORY_ORDER = {
   'Sports & Games': [
@@ -133,6 +161,22 @@ export const SUBCATEGORY_ORDER = {
     'Sahityam',
     'Dumb Charades',
     'Rangoli'
+  ],
+  'Fete Events': [
+    'Carnival Stalls',
+    'Food Fiesta',
+    'Gaming & E-Sports',
+    'Open Mic & Jamming',
+    'Campus Quest',
+    'Cosplay & Anime'
+  ],
+  'FETE': [
+    'Carnival Stalls',
+    'Food Fiesta',
+    'Gaming & E-Sports',
+    'Open Mic & Jamming',
+    'Campus Quest',
+    'Cosplay & Anime'
   ]
 };
 
@@ -940,25 +984,65 @@ export async function fetchFacultyCoordinators(category, subCategory, eventName,
       }
     }
 
-    // Default faculty coordinators
+    // Default faculty coordinators matching official poster
+    const catUpper = (category || '').toUpperCase();
+    if (catUpper.includes('CULTUR') || catUpper === 'CULTURALS') {
+      return [{
+        cordinatorName: 'Mr. P. Raju',
+        cordinatorDesignation: 'Culturals Fest Incharge',
+        cordinatorPhone: '8374245400',
+        cordinatorEmail: 'raju.p@adityauniversity.in'
+      }];
+    }
+    if (catUpper.includes('SPORT') || catUpper === 'SPORTS') {
+      return [{
+        cordinatorName: 'Dr. N. Ravi',
+        cordinatorDesignation: 'Sports Fest Incharge',
+        cordinatorPhone: '9912393905',
+        cordinatorEmail: 'ravi.n@adityauniversity.in'
+      }];
+    }
+    if (catUpper.includes('CREO')) {
+      return [{
+        cordinatorName: 'Dr. B. Srinivas',
+        cordinatorDesignation: 'Creo Fest Incharge',
+        cordinatorPhone: '9866732745',
+        cordinatorEmail: 'srinivas.b@adityauniversity.in'
+      }];
+    }
+    if (catUpper.includes('FETE')) {
+      return [{
+        cordinatorName: 'Mr. J. D. Venkatesh',
+        cordinatorDesignation: 'Fete Fest Incharge',
+        cordinatorPhone: '7036266661',
+        cordinatorEmail: 'venkatesh.jd@adityauniversity.in'
+      }];
+    }
+
     return [
       {
-        cordinatorName: 'GOKEDA SIMHADRI',
-        cordinatorDesignation: 'Web Developer / Coordinator',
-        cordinatorPhone: '9553451345',
-        cordinatorEmail: 'simhadri.g@adityauniversity.in',
-        empId: '6981',
-        institutionId: '6981',
-        cordinatorImage: '6981.jpg'
+        cordinatorName: 'Mr. P. Raju',
+        cordinatorDesignation: 'Culturals Chair',
+        cordinatorPhone: '8374245400',
+        cordinatorEmail: 'raju.p@adityauniversity.in'
       },
       {
-        cordinatorName: 'MORTHA SRIKAR',
-        cordinatorDesignation: 'Programmer / Fest Incharge',
-        cordinatorPhone: '8978868851',
-        cordinatorEmail: 'srikar@gmail.com',
-        empId: '6607',
-        institutionId: '6607',
-        cordinatorImage: '6607.jpg'
+        cordinatorName: 'Dr. N. Ravi',
+        cordinatorDesignation: 'Sports Chair',
+        cordinatorPhone: '9912393905',
+        cordinatorEmail: 'ravi.n@adityauniversity.in'
+      },
+      {
+        cordinatorName: 'Dr. B. Srinivas',
+        cordinatorDesignation: 'Creo Chair',
+        cordinatorPhone: '9866732745',
+        cordinatorEmail: 'srinivas.b@adityauniversity.in'
+      },
+      {
+        cordinatorName: 'Mr. J. D. Venkatesh',
+        cordinatorDesignation: 'Fete Chair',
+        cordinatorPhone: '7036266661',
+        cordinatorEmail: 'venkatesh.jd@adityauniversity.in'
       }
     ];
   } catch (err) {

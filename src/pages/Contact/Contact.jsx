@@ -12,7 +12,43 @@ export default function Contact() {
   });
   const [sent, setSent] = useState(false);
 
-  const committee = [
+  // 4 Official Domain Chairs from the official Colours poster + Central support
+  const officialDomainChairs = [
+    {
+      domain: 'CULTURALS IN-CHARGE',
+      name: 'Mr. P. Raju',
+      phone: '8374245400',
+      email: 'culturals.colours@adityauniversity.in',
+      tag: 'Dance • Music • Drama • Theatrics',
+      accent: 'var(--clr-fest-pink)'
+    },
+    {
+      domain: 'SPORTS IN-CHARGE',
+      name: 'Dr. N. Ravi',
+      phone: '9912393905',
+      email: 'sports.colours@adityauniversity.in',
+      tag: 'Athletics • Cricket • Basketball • Volleyball',
+      accent: 'var(--clr-fest-green)'
+    },
+    {
+      domain: 'CREO IN-CHARGE',
+      name: 'Dr. B. Srinivas',
+      phone: '9866732745',
+      email: 'creo.colours@adityauniversity.in',
+      tag: 'Fine Arts • Photography • Literary • Runway',
+      accent: 'var(--clr-fest-yellow)'
+    },
+    {
+      domain: 'FETE IN-CHARGE',
+      name: 'Mr. J. D. Venkatesh',
+      phone: '7036266661',
+      email: 'fete.colours@adityauniversity.in',
+      tag: 'Carnival • Stalls • DJ Beat • Food Fiesta',
+      accent: 'var(--clr-fest-cyan)'
+    }
+  ];
+
+  const supportCommittee = [
     {
       domain: 'Central Festival Convener',
       name: 'Dr. K. Kishore',
@@ -21,29 +57,8 @@ export default function Contact() {
       office: 'Senate Chamber, Ramanujan Bhavan'
     },
     {
-      domain: 'Sports & Games Directorate',
-      name: 'Dr. Ch. V. Ramana (Director of Physical Education)',
-      phone: '+91 94902 33445',
-      email: 'sports.colours@adityauniversity.in',
-      office: 'Sports Complex, Ground Floor'
-    },
-    {
-      domain: 'Cultural Affairs & Stage',
-      name: 'Prof. S. Ganapathi & Dr. P. Vijaya Kumar',
-      phone: '+91 90322 01091',
-      email: 'culturals.colours@adityauniversity.in',
-      office: 'Student Affairs Cell, Newton Bhavan'
-    },
-    {
-      domain: 'Creo & Fine Arts Directorate',
-      name: 'Prof. A.K. Chakravarthy',
-      phone: '+91 97034 64137',
-      email: 'creo.colours@adityauniversity.in',
-      office: 'Design & Media Lab, Ratan Tata Bhavan'
-    },
-    {
       domain: 'Accommodation & Contingent Hospitality',
-      name: 'Chief Warden & Hospitality Team',
+      name: 'Chief Warden & Hospitality Wing',
       phone: '+91 95534 51345',
       email: 'hospitality@adityauniversity.in',
       office: 'Hostel Administration Wing'
@@ -76,12 +91,40 @@ export default function Contact() {
       {/* Hero Banner */}
       <section className="contact-hero">
         <div className="container text-center">
-          <div className="contact-badge-top">ADITYA UNIVERSITY • HELPDESK & SUPPORT</div>
-          <h1 className="contact-hero-title">Contact & Help Desk</h1>
+          <div className="contact-badge-top">ADITYA UNIVERSITY • HELPDESK & SUPPORT • ₹10 LAKHS CASH PRIZES</div>
+          <h1 className="contact-hero-title">Contact & Domain In-Charges</h1>
           <p className="contact-hero-sub">
-            Need assistance with event registration, rulebook clarifications, or campus hospitality?
-            Reach out to our student affairs directorate and domain faculty coordinators.
+            Have queries regarding registrations, stage allotments, rulebooks, or accommodation?
+            Connect directly with the 4 Official Domain Chairs and festival conveners.
           </p>
+        </div>
+      </section>
+
+      {/* 4 Official Domain Chairs Highlight (from Poster) */}
+      <section className="contact-poster-chairs-section">
+        <div className="container">
+          <div className="section-title-wrap text-center">
+            <span className="gold-sub-title">OFFICIAL FESTIVAL DIRECTORS</span>
+            <h2 className="chairs-heading">The 4 Festival Domain In-Charges</h2>
+          </div>
+
+          <div className="chairs-poster-grid">
+            {officialDomainChairs.map((chair, idx) => (
+              <div key={idx} className="chair-poster-card" style={{ '--card-accent': chair.accent }}>
+                <div className="chair-top-badge">{chair.domain}</div>
+                <h3 className="chair-name">{chair.name}</h3>
+                <p className="chair-tag">{chair.tag}</p>
+                <div className="chair-contact-actions">
+                  <a href={`tel:${chair.phone}`} className="btn-chair-call">
+                    📞 Call {chair.phone}
+                  </a>
+                  <a href={`mailto:${chair.email}`} className="btn-chair-email" title={chair.email}>
+                    ✉️ Email
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -99,8 +142,8 @@ export default function Contact() {
             <div className="quick-item-card">
               <span className="q-icon">📞</span>
               <div>
-                <h4>General Helplines</h4>
-                <p>+91 99999 99999 / +91 99887 76655 (24/7 Helpline)</p>
+                <h4>Central Fest Helpline</h4>
+                <p>+91 94901 11222 / +91 95534 51345 (24/7 Desk)</p>
               </div>
             </div>
             <div className="quick-item-card">
@@ -114,17 +157,17 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* Main Grid: Directory & Query Form */}
+      {/* Main Grid: Additional Directory & Query Form */}
       <section className="contact-main-section">
         <div className="container contact-two-col-grid">
-          {/* Faculty & Domain Directory */}
+          {/* Support Directory */}
           <div className="directory-column">
-            <span className="section-mini-tag">ORGANIZING COMMITTEE</span>
-            <h2 className="directory-heading">Domain Coordinators</h2>
-            <p className="directory-sub">Contact respective heads for immediate assistance:</p>
+            <span className="section-mini-tag">CENTRAL SUPPORT DIRECTORY</span>
+            <h2 className="directory-heading">Hospitality & Conveners</h2>
+            <p className="directory-sub">For stay, campus arrival, and web registration assistance:</p>
 
             <div className="committee-cards-list">
-              {committee.map((c, idx) => (
+              {supportCommittee.map((c, idx) => (
                 <div key={idx} className="committee-card">
                   <div className="comm-domain-badge">{c.domain}</div>
                   <h4 className="comm-name">{c.name}</h4>
@@ -140,6 +183,20 @@ export default function Contact() {
                 </div>
               ))}
             </div>
+
+            {/* Official Poster Preview Snippet */}
+            <div className="contact-poster-banner">
+              <div className="poster-thumb">
+                <img src="/colours_poster_theme.png" alt="Colours 2027 Poster" />
+              </div>
+              <div className="poster-banner-info">
+                <h4>COLOURS 2027 Official Poster</h4>
+                <p>National Level Youth Festival • 7 • 8 • 9 January 2027</p>
+                <a href="/colours_poster_theme.png" download="Colours_2027_Poster.png" className="btn-download-poster">
+                  📥 Download Poster
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Inquiry Form */}
@@ -147,13 +204,13 @@ export default function Contact() {
             <div className="query-form-card">
               <span className="section-mini-tag">SEND US A MESSAGE</span>
               <h3>Student & College Help Desk</h3>
-              <p>Submit your query and our team will revert within a few hours.</p>
+              <p>Submit your query and our festival committee will revert within a few hours.</p>
 
               {sent ? (
                 <div className="query-success-state">
                   <span>✅</span>
                   <h4>Message Received!</h4>
-                  <p>Our festival help desk will respond to your email or mobile promptly.</p>
+                  <p>Our festival help desk will respond to your registered email or phone promptly.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="query-form">
@@ -209,10 +266,11 @@ export default function Contact() {
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                     >
                       <option>Event Registration Query</option>
-                      <option>Sports Fixtures Clarification</option>
-                      <option>Culturals / Music Rules Query</option>
-                      <option>Creo Arts Regulations</option>
-                      <option>Hostel Accommodation & Food</option>
+                      <option>Culturals (Mr. P. Raju - 8374245400)</option>
+                      <option>Sports (Dr. N. Ravi - 9912393905)</option>
+                      <option>Creo (Dr. B. Srinivas - 9866732745)</option>
+                      <option>Fete (Mr. J. D. Venkatesh - 7036266661)</option>
+                      <option>Hostel Accommodation & Hospitality</option>
                       <option>Other / General Enquiry</option>
                     </select>
                   </div>

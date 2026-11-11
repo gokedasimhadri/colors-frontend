@@ -1,14 +1,15 @@
 /* ─────────────────────────────────────────────────────────────
    Colours 2027 Event Registration & Student Auth Modals Styling
+   Deep Obsidian Midnight, Metallic Gold Borders & Festival Theme
    ───────────────────────────────────────────────────────────── */
 
 .fest-modal-backdrop {
   position: fixed;
   inset: 0;
   z-index: 99999;
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(6, 7, 10, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,9 +27,11 @@
   position: relative;
   width: 100%;
   max-width: 620px;
-  background: #ffffff;
+  background: rgba(14, 16, 26, 0.98);
+  border: 1.5px solid rgba(212, 175, 55, 0.4);
   border-radius: 24px;
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(226, 232, 240, 0.8);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(212, 175, 55, 0.15);
+  color: #ffffff;
   overflow: hidden;
   max-height: 90vh;
   display: flex;
@@ -54,10 +57,10 @@
 /* Modal Header */
 .fest-modal-header {
   position: relative;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background: linear-gradient(135deg, rgba(20, 24, 38, 0.98) 0%, rgba(10, 11, 18, 0.98) 100%);
   color: #ffffff;
   padding: 1.75rem 2rem 1.5rem 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1.5px solid rgba(212, 175, 55, 0.3);
 }
 
 .fest-modal-header-banner {
@@ -71,36 +74,39 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+  color: #06070a;
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 4px 12px;
+  letter-spacing: 0.1em;
+  padding: 4px 14px;
   border-radius: 50px;
   margin-bottom: 0.6rem;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
 }
 
 .fest-modal-title {
-  font-size: 1.45rem;
-  font-weight: 800;
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 900;
   color: #ffffff;
   margin: 0;
   line-height: 1.25;
+  letter-spacing: 0.02em;
 }
 
 .fest-modal-subtitle {
   font-size: 0.88rem;
-  color: #94a3b8;
+  color: #cbd5e1;
   margin: 0.35rem 0 0 0;
   line-height: 1.4;
 }
 
 .fest-modal-close-btn {
-  background: rgba(255, 255, 255, 0.12);
-  border: none;
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: #fde68a;
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -115,15 +121,17 @@
 
 .fest-modal-close-btn:hover {
   background: rgba(225, 29, 72, 0.9);
+  color: #ffffff;
+  border-color: #e11d48;
   transform: rotate(90deg);
 }
 
 /* Modal Tabs */
 .fest-modal-tabs {
   display: flex;
-  background: #f1f5f9;
-  border-bottom: 1px solid #e2e8f0;
-  padding: 4px 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+  padding: 6px;
 }
 
 .fest-tab-btn {
@@ -132,19 +140,24 @@
   border: none;
   background: transparent;
   font-size: 0.9rem;
-  font-weight: 600;
-  color: #64748b;
+  font-weight: 700;
+  color: #cbd5e1;
   cursor: pointer;
   border-radius: 12px;
   transition: all 0.2s ease;
   text-align: center;
 }
 
+.fest-tab-btn:hover {
+  color: #fde68a;
+  background: rgba(212, 175, 55, 0.08);
+}
+
 .fest-tab-btn.active {
-  background: #ffffff;
-  color: #0f172a;
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  color: #06070a;
+  font-weight: 900;
+  box-shadow: 0 2px 10px rgba(212, 175, 55, 0.35);
 }
 
 /* Modal Body */
@@ -152,6 +165,7 @@
   padding: 1.75rem 2rem;
   overflow-y: auto;
   flex: 1;
+  color: #ffffff;
 }
 
 /* Notice / Alert Box */
@@ -167,21 +181,21 @@
 }
 
 .fest-alert-box.info {
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  color: #1e40af;
+  background: rgba(0, 210, 255, 0.12);
+  border: 1px solid rgba(0, 210, 255, 0.35);
+  color: #7dd3fc;
 }
 
 .fest-alert-box.error {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
+  background: rgba(225, 29, 72, 0.15);
+  border: 1px solid rgba(225, 29, 72, 0.4);
+  color: #fda4af;
 }
 
 .fest-alert-box.success {
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #166534;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
 }
 
 /* Form Groups & Inputs */
@@ -202,15 +216,15 @@
 
 .fest-form-label {
   font-size: 0.82rem;
-  font-weight: 700;
-  color: #334155;
+  font-weight: 800;
+  color: #d4af37;
   margin-bottom: 0.35rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 .fest-form-label .required {
-  color: #e11d48;
+  color: #f43f5e;
   margin-left: 2px;
 }
 
@@ -219,42 +233,49 @@
   width: 100%;
   padding: 0.75rem 1rem;
   border-radius: 12px;
-  border: 1.5px solid #cbd5e1;
-  background: #ffffff;
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  background: rgba(255, 255, 255, 0.04);
   font-size: 0.95rem;
-  color: #0f172a;
+  color: #ffffff;
   outline: none;
   transition: all 0.2s ease;
   font-family: inherit;
   box-sizing: border-box;
 }
 
+.fest-form-select option {
+  background: #0f121d;
+  color: #ffffff;
+}
+
 .fest-form-input:focus,
 .fest-form-select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  border-color: #d4af37;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
 }
 
 .fest-form-input::placeholder {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .fest-form-input:disabled {
-  background: #f8fafc;
+  background: rgba(255, 255, 255, 0.02);
   color: #64748b;
   cursor: not-allowed;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .fest-form-hint {
   font-size: 0.75rem;
-  color: #64748b;
+  color: #94a3b8;
   margin-top: 0.25rem;
 }
 
 /* Event Summary Card inside Reg Modal */
 .event-reg-summary-box {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid rgba(212, 175, 55, 0.3);
   border-radius: 16px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
@@ -272,9 +293,10 @@
 }
 
 .event-reg-event-title {
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: #0f172a;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #ffffff;
 }
 
 .event-reg-meta-pills {
@@ -287,47 +309,49 @@
 
 .event-meta-pill-item {
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
   padding: 3px 10px;
   border-radius: 20px;
-  background: #e2e8f0;
-  color: #1e293b;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
 }
 
 .event-meta-pill-item.pill-category {
-  background: #ffe4e6;
-  color: #9f1239;
+  background: rgba(225, 29, 72, 0.15);
+  color: #fda4af;
+  border: 1px solid rgba(225, 29, 72, 0.4);
 }
 
 .event-meta-pill-item.pill-fee {
-  background: #dcfce7;
-  color: #166534;
-  font-weight: 800;
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.4);
 }
 
 .event-reg-fee-box {
   text-align: right;
   padding-left: 1rem;
-  border-left: 2px dashed #cbd5e1;
+  border-left: 2px dashed rgba(212, 175, 55, 0.35);
 }
 
 .event-reg-fee-label {
   font-size: 0.72rem;
-  font-weight: 700;
-  color: #64748b;
+  font-weight: 800;
+  color: #d4af37;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .event-reg-fee-amount {
   font-size: 1.45rem;
   font-weight: 900;
-  color: #0f172a;
+  color: #fde68a;
 }
 
 /* Student Profile Card in Modal */
 .student-profile-strip {
-  background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid rgba(212, 175, 55, 0.3);
   border-radius: 16px;
   padding: 1rem 1.25rem;
   display: flex;
@@ -347,15 +371,15 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+  color: #06070a;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
+  font-weight: 900;
   font-size: 1.1rem;
   flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
 }
 
 .student-strip-info {
@@ -365,43 +389,44 @@
 
 .student-strip-name {
   font-size: 0.98rem;
-  font-weight: 700;
-  color: #0f172a;
+  font-weight: 800;
+  color: #ffffff;
 }
 
 .student-strip-roll {
   font-size: 0.82rem;
-  color: #64748b;
-  font-weight: 600;
+  color: #fde68a;
+  font-weight: 700;
+  font-family: monospace;
 }
 
 .student-strip-college {
   font-size: 0.78rem;
-  color: #2563eb;
+  color: #94a3b8;
   font-weight: 600;
 }
 
 .btn-switch-account {
-  background: #f1f5f9;
-  border: none;
-  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  padding: 6px 14px;
   border-radius: 8px;
   font-size: 0.78rem;
-  font-weight: 600;
-  color: #475569;
+  font-weight: 800;
+  color: #fde68a;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .btn-switch-account:hover {
-  background: #e2e8f0;
-  color: #0f172a;
+  background: rgba(212, 175, 55, 0.15);
+  color: #ffffff;
 }
 
 /* Team Members Section */
 .team-section-box {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(212, 175, 55, 0.25);
   border-radius: 16px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
@@ -410,7 +435,9 @@
 .team-section-title {
   font-size: 0.95rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   margin-bottom: 0.85rem;
   display: flex;
   align-items: center;
@@ -426,9 +453,9 @@
 }
 
 .btn-remove-member {
-  background: #fee2e2;
-  border: none;
-  color: #dc2626;
+  background: rgba(225, 29, 72, 0.15);
+  border: 1px solid rgba(225, 29, 72, 0.4);
+  color: #fda4af;
   width: 34px;
   height: 34px;
   border-radius: 8px;
@@ -441,18 +468,18 @@
 }
 
 .btn-remove-member:hover {
-  background: #ef4444;
+  background: #e11d48;
   color: #ffffff;
 }
 
 .btn-add-member {
-  background: #eff6ff;
-  border: 1px dashed #3b82f6;
-  color: #2563eb;
-  padding: 8px 14px;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px dashed rgba(212, 175, 55, 0.5);
+  color: #fde68a;
+  padding: 8px 16px;
   border-radius: 10px;
   font-size: 0.85rem;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -462,7 +489,8 @@
 }
 
 .btn-add-member:hover {
-  background: #dbeafe;
+  background: rgba(212, 175, 55, 0.22);
+  color: #ffffff;
 }
 
 /* Agreement Checkbox */
@@ -471,7 +499,7 @@
   align-items: flex-start;
   gap: 0.65rem;
   font-size: 0.85rem;
-  color: #475569;
+  color: #cbd5e1;
   line-height: 1.4;
   cursor: pointer;
   margin-bottom: 1.25rem;
@@ -480,7 +508,7 @@
 .fest-checkbox-label input[type='checkbox'] {
   width: 18px;
   height: 18px;
-  accent-color: #e11d48;
+  accent-color: #d4af37;
   margin-top: 2px;
   cursor: pointer;
 }
@@ -488,8 +516,8 @@
 /* Modal Footer */
 .fest-modal-footer {
   padding: 1.25rem 2rem;
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
+  background: rgba(10, 11, 18, 0.98);
+  border-top: 1px solid rgba(212, 175, 55, 0.25);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -497,45 +525,47 @@
 }
 
 .btn-fest-secondary {
-  background: #ffffff;
-  border: 1.5px solid #cbd5e1;
-  color: #475569;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  color: #fde68a;
   padding: 0.75rem 1.4rem;
   border-radius: 12px;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 0.92rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .btn-fest-secondary:hover {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: rgba(212, 175, 55, 0.15);
+  color: #ffffff;
 }
 
 .btn-fest-primary {
-  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
   border: none;
-  color: #ffffff;
-  padding: 0.75rem 1.75rem;
+  color: #06070a;
+  padding: 0.75rem 1.85rem;
   border-radius: 12px;
-  font-weight: 700;
+  font-weight: 900;
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.35);
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  letter-spacing: 0.02em;
 }
 
 .btn-fest-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.45);
+  background: linear-gradient(135deg, #fde68a 0%, #d4af37 100%);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
 }
 
 .btn-fest-primary:disabled {
-  opacity: 0.65;
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
 }
@@ -550,14 +580,15 @@
   width: 76px;
   height: 76px;
   border-radius: 50%;
-  background: #dcfce7;
-  color: #16a34a;
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  border: 2px solid rgba(16, 185, 129, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.2rem;
   margin: 0 auto 1.25rem auto;
-  box-shadow: 0 8px 20px rgba(22, 163, 74, 0.2);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
   animation: bounceIn 0.5s ease forwards;
 }
 
@@ -568,21 +599,22 @@
 }
 
 .reg-success-title {
+  font-family: var(--font-heading);
   font-size: 1.6rem;
   font-weight: 900;
-  color: #0f172a;
+  color: #ffffff;
   margin-bottom: 0.35rem;
 }
 
 .reg-success-sub {
   font-size: 0.95rem;
-  color: #64748b;
+  color: #cbd5e1;
   margin-bottom: 1.5rem;
 }
 
 .reg-ticket-card {
-  background: #f8fafc;
-  border: 1.5px dashed #cbd5e1;
+  background: rgba(18, 20, 32, 0.95);
+  border: 1.5px dashed rgba(212, 175, 55, 0.4);
   border-radius: 18px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -592,8 +624,8 @@
 .reg-ticket-row {
   display: flex;
   justify-content: space-between;
-  padding: 0.45rem 0;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 0.9rem;
 }
 
@@ -602,18 +634,18 @@
 }
 
 .reg-ticket-label {
-  color: #64748b;
-  font-weight: 600;
+  color: #d4af37;
+  font-weight: 700;
 }
 
 .reg-ticket-val {
-  color: #0f172a;
-  font-weight: 700;
+  color: #ffffff;
+  font-weight: 800;
 }
 
 .reg-ticket-val.code {
   font-family: monospace;
-  color: #e11d48;
+  color: #fde68a;
   font-size: 1.05rem;
 }
 
@@ -627,10 +659,10 @@
   }
   .team-member-row {
     grid-template-columns: 1fr;
-    border: 1px solid #e2e8f0;
+    border: 1px solid rgba(212, 175, 55, 0.3);
     padding: 0.75rem;
     border-radius: 10px;
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.03);
   }
   .event-reg-summary-box {
     flex-direction: column;
@@ -638,7 +670,7 @@
   }
   .event-reg-fee-box {
     border-left: none;
-    border-top: 2px dashed #cbd5e1;
+    border-top: 2px dashed rgba(212, 175, 55, 0.3);
     padding-left: 0;
     padding-top: 0.75rem;
     width: 100%;
@@ -664,19 +696,19 @@
   line-height: 1.3;
 }
 .student-check-badge.found {
-  background: #ecfdf5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.4);
 }
 .student-check-badge.new {
-  background: #eff6ff;
-  color: #1e40af;
-  border: 1px solid #bfdbfe;
+  background: rgba(0, 210, 255, 0.15);
+  color: #7dd3fc;
+  border: 1px solid rgba(0, 210, 255, 0.4);
 }
 .student-check-badge.checking {
-  background: #f8fafc;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -684,11 +716,11 @@
    ───────────────────────────────────────────────────────────── */
 .reg-participants-section {
   margin-top: 1.25rem;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: rgba(14, 16, 26, 0.9);
+  border: 1px solid rgba(212, 175, 55, 0.3);
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
 .reg-participants-head {
@@ -696,23 +728,24 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1rem;
-  background: #f1f5f9;
-  border-bottom: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .reg-participants-title {
   font-size: 0.88rem;
-  font-weight: 700;
-  color: #1e293b;
+  font-weight: 800;
+  color: #ffffff;
 }
 
 .reg-participants-badge {
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
   padding: 3px 9px;
   border-radius: 50px;
-  background: #e2e8f0;
-  color: #334155;
+  background: rgba(212, 175, 55, 0.15);
+  color: #fde68a;
+  border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .reg-participants-table-wrap {
@@ -727,20 +760,20 @@
 }
 
 .reg-participants-table th {
-  background: #f8fafc;
-  color: #64748b;
-  font-weight: 700;
+  background: rgba(255, 255, 255, 0.03);
+  color: #d4af37;
+  font-weight: 800;
   text-transform: uppercase;
   font-size: 0.72rem;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   padding: 8px 12px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .reg-participants-table td {
   padding: 9px 12px;
-  border-bottom: 1px solid #f1f5f9;
-  color: #334155;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
   vertical-align: middle;
 }
 
@@ -749,40 +782,41 @@
 }
 
 .reg-participants-table tr.is-leader td {
-  background: #f0fdf4;
+  background: rgba(212, 175, 55, 0.08);
 }
 
 .col-idx {
-  font-weight: 700;
-  color: #94a3b8;
+  font-weight: 800;
+  color: #d4af37;
   width: 32px;
   text-align: center;
 }
 
 .col-name strong {
   display: block;
-  color: #0f172a;
+  color: #ffffff;
 }
 
 .col-phone {
   display: block;
   font-size: 0.74rem;
-  color: #64748b;
+  color: #94a3b8;
 }
 
 .col-roll .roll-tag {
   display: inline-block;
-  background: #e0f2fe;
-  color: #0369a1;
+  background: rgba(212, 175, 55, 0.15);
+  color: #fde68a;
   font-family: ui-monospace, SFMono-Regular, monospace;
-  font-weight: 700;
+  font-weight: 800;
   padding: 2px 7px;
   border-radius: 4px;
   font-size: 0.78rem;
+  border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .col-college {
-  color: #475569;
+  color: #cbd5e1;
   font-size: 0.8rem;
 }
 
@@ -793,38 +827,39 @@
   align-items: center;
   gap: 3px;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 800;
   padding: 2px 8px;
   border-radius: 50px;
 }
 
 .role-badge.leader,
 .badge-role-leader {
-  background: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
+  background: rgba(212, 175, 55, 0.2);
+  color: #fde68a;
+  border: 1px solid rgba(212, 175, 55, 0.5);
 }
 
 .role-badge.member,
 .badge-role-member {
-  background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* Roster live chips preview */
 .roster-preview-box {
   margin-top: 1rem;
   padding: 0.85rem 1rem;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 55, 0.25);
   border-radius: 12px;
 }
 
 .roster-preview-title {
   font-size: 0.8rem;
-  font-weight: 700;
-  color: #475569;
+  font-weight: 800;
+  color: #d4af37;
+  text-transform: uppercase;
   margin-bottom: 0.5rem;
 }
 
@@ -838,31 +873,32 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.3);
   border-radius: 8px;
   padding: 4px 10px;
   font-size: 0.78rem;
+  color: #ffffff;
 }
 
 .roster-chip.leader {
-  border-color: #f59e0b;
-  background: #fffbeb;
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.15);
 }
 
 .roster-chip-num {
   font-weight: 800;
-  color: #64748b;
+  color: #d4af37;
 }
 
 .roster-chip-name {
-  font-weight: 700;
-  color: #0f172a;
+  font-weight: 800;
+  color: #ffffff;
 }
 
 .roster-chip-roll {
   font-family: monospace;
-  color: #64748b;
+  color: #fde68a;
   font-size: 0.75rem;
 }
 
@@ -871,20 +907,20 @@
   font-weight: 800;
   padding: 1px 6px;
   border-radius: 4px;
-  background: #e2e8f0;
-  color: #475569;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
 }
 
 .roster-chip-role.leader {
-  background: #fef3c7;
-  color: #b45309;
+  background: rgba(212, 175, 55, 0.25);
+  color: #fde68a;
 }
 
 /* Solo participant preview card */
 .solo-participant-preview {
   margin-top: 0.75rem;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 55, 0.25);
   border-radius: 12px;
   padding: 0.85rem 1rem;
 }
@@ -898,17 +934,19 @@
 
 .solo-preview-title {
   font-size: 0.82rem;
-  font-weight: 700;
-  color: #475569;
+  font-weight: 800;
+  color: #d4af37;
+  text-transform: uppercase;
 }
 
 .solo-badge {
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 800;
   padding: 2px 8px;
   border-radius: 50px;
-  background: #e0f2fe;
-  color: #0284c7;
+  background: rgba(0, 210, 255, 0.15);
+  color: #7dd3fc;
+  border: 1px solid rgba(0, 210, 255, 0.4);
 }
 
 .solo-preview-body {
@@ -921,25 +959,25 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: #ffffff;
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  color: #06070a;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
+  font-weight: 900;
   font-size: 1rem;
   flex-shrink: 0;
 }
 
 .solo-preview-name {
   font-weight: 800;
-  color: #0f172a;
+  color: #ffffff;
   font-size: 0.92rem;
 }
 
 .solo-preview-meta {
   font-size: 0.78rem;
-  color: #64748b;
+  color: #cbd5e1;
   margin-top: 2px;
 }
 
@@ -953,22 +991,22 @@
   justify-content: center;
   text-align: center;
   padding: 3.5rem 2rem;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  background: rgba(14, 16, 26, 0.95);
   border-radius: 20px;
-  border: 1px dashed #cbd5e1;
+  border: 1.5px dashed rgba(212, 175, 55, 0.4);
   animation: festFadeIn 0.3s ease forwards;
 }
 
 .fest-loader-spinner {
   width: 54px;
   height: 54px;
-  border: 4px solid #f1f5f9;
-  border-top: 4px solid #e11d48;
-  border-right: 4px solid #2563eb;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top: 4px solid #d4af37;
+  border-right: 4px solid #e11d48;
   border-radius: 50%;
   animation: festSpin 0.9s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.15);
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25);
 }
 
 @keyframes festSpin {
@@ -977,15 +1015,16 @@
 }
 
 .fest-loader-title {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: #0f172a;
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #ffffff;
   margin: 0 0 0.5rem 0;
 }
 
 .fest-loader-sub {
   font-size: 0.92rem;
-  color: #64748b;
+  color: #cbd5e1;
   max-width: 440px;
   margin: 0 0 1.25rem 0;
   line-height: 1.5;
@@ -996,10 +1035,10 @@
   align-items: center;
   gap: 0.4rem;
   font-size: 0.78rem;
-  font-weight: 700;
-  color: #059669;
-  background: #ecfdf5;
-  border: 1px solid #a7f3d0;
+  font-weight: 800;
+  color: #6ee7b7;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
   padding: 6px 14px;
   border-radius: 9999px;
 }
@@ -1009,14 +1048,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background: #eff6ff;
-  border: 1px solid #93c5fd;
-  color: #1e40af;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #fde68a;
   padding: 0.85rem 1.15rem;
   border-radius: 12px;
   margin-bottom: 1.25rem;
   font-size: 0.88rem;
-  font-weight: 600;
+  font-weight: 700;
   animation: festFadeIn 0.25s ease;
 }
 
@@ -1024,16 +1063,16 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #2563eb;
+  background: #d4af37;
   display: inline-block;
   margin-right: 6px;
   animation: festPulse 1.5s infinite;
 }
 
 @keyframes festPulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
 }
 
 /* Print Styling */
@@ -1047,6 +1086,8 @@
     max-width: 100% !important;
     box-shadow: none !important;
     overflow: visible !important;
+    background: #ffffff !important;
+    color: #000000 !important;
   }
   .reg-ticket-card,
   .reg-ticket-card * {
@@ -1060,6 +1101,8 @@
     margin: 0;
     padding: 1.5rem;
     border: 2px solid #000000;
+    background: #ffffff !important;
+    color: #000000 !important;
   }
   .fest-modal-header,
   .fest-modal-footer,
@@ -1076,36 +1119,37 @@
    ───────────────────────────────────────────────────────────── */
 
 .participant-pattern-block {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: rgba(14, 16, 26, 0.95);
+  border: 1.5px solid rgba(212, 175, 55, 0.3);
   border-radius: 16px;
   padding: 1.5rem 1.75rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .participant-pattern-block:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+  border-color: #d4af37;
+  box-shadow: 0 10px 28px rgba(212, 175, 55, 0.15);
 }
 
 .participant-pattern-block.leader-block {
-  border-left: 4px solid #e11d48;
+  border-left: 4px solid #d4af37;
 }
 
 .participant-pattern-header {
   margin-bottom: 1.25rem;
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .participant-main-heading {
+  font-family: var(--font-heading);
   font-size: 1.35rem;
-  font-weight: 800;
-  color: #0f172a;
+  font-weight: 900;
+  color: #ffffff;
   margin: 0 0 0.4rem 0;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
 }
 
 .participant-sub-heading-row {
@@ -1119,7 +1163,7 @@
 .participant-sub-heading {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #334155;
+  color: #cbd5e1;
   margin: 0;
   display: flex;
   align-items: center;
@@ -1127,8 +1171,9 @@
 }
 
 .participant-badge-leader {
-  background: #ffe4e6;
-  color: #e11d48;
+  background: rgba(212, 175, 55, 0.2);
+  color: #fde68a;
+  border: 1px solid rgba(212, 175, 55, 0.5);
   font-size: 0.72rem;
   font-weight: 800;
   padding: 2px 8px;
@@ -1138,9 +1183,9 @@
 }
 
 .btn-remove-participant {
-  background: #fee2e2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
+  background: rgba(225, 29, 72, 0.15);
+  color: #fda4af;
+  border: 1px solid rgba(225, 29, 72, 0.4);
   padding: 0.35rem 0.85rem;
   border-radius: 8px;
   font-size: 0.8rem;
@@ -1150,8 +1195,8 @@
 }
 
 .btn-remove-participant:hover {
-  background: #fecaca;
-  color: #b91c1c;
+  background: #e11d48;
+  color: #ffffff;
 }
 
 .participant-pattern-grid {
@@ -1179,10 +1224,11 @@
 }
 
 .pattern-label {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.01em;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #d4af37;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .pattern-input-with-action {
@@ -1196,9 +1242,9 @@
   width: 100%;
   padding: 0.72rem 0.95rem;
   border-radius: 10px;
-  border: 1.5px solid #e2e8f0;
-  background: #ffffff;
-  color: #0f172a;
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
   font-size: 0.95rem;
   font-weight: 500;
   outline: none;
@@ -1207,21 +1253,25 @@
   box-sizing: border-box;
 }
 
+.pattern-select option {
+  background: #0f121d;
+  color: #ffffff;
+}
+
 .pattern-input:focus,
 .pattern-select:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
-  background: #ffffff;
+  border-color: #d4af37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .pattern-input::placeholder {
-  color: #94a3b8;
+  color: #64748b;
   font-weight: 400;
 }
 
 .pattern-select {
   cursor: pointer;
-  appearance: auto;
 }
 
 .pattern-fetch-spinner {
@@ -1239,20 +1289,20 @@
 }
 
 .pattern-verified-hint.success {
-  color: #15803d;
+  color: #6ee7b7;
 }
 
 .pattern-verified-hint.info {
-  color: #64748b;
+  color: #94a3b8;
 }
 
 .btn-add-team-participant {
   width: 100%;
   padding: 0.9rem 1.25rem;
-  background: #f8fafc;
-  border: 2px dashed #cbd5e1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px dashed rgba(212, 175, 55, 0.4);
   border-radius: 14px;
-  color: #0f172a;
+  color: #fde68a;
   font-weight: 800;
   font-size: 0.95rem;
   cursor: pointer;
@@ -1266,8 +1316,7 @@
 }
 
 .btn-add-team-participant:hover {
-  background: #f1f5f9;
-  border-color: #e11d48;
-  color: #e11d48;
+  background: rgba(212, 175, 55, 0.12);
+  border-color: #d4af37;
+  color: #ffffff;
 }
-

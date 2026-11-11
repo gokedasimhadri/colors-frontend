@@ -13,12 +13,6 @@ const navItems = [
   { label: 'Contact', path: '/contact' },
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
-// University Logo Component
-// To use your real logo: place your image file at  public/university-logo.png
-// The img tag below will display it. If the file is missing, the text fallback
-// is shown automatically.
-// ─────────────────────────────────────────────────────────────────────────────
 function UniversityLogo() {
   const [imgError, setImgError] = useState(false);
 
@@ -32,17 +26,17 @@ function UniversityLogo() {
           onError={() => setImgError(true)}
         />
       ) : (
-        /* Fallback when logo image is not yet provided */
         <div className="navbar-logo-fallback">
           <div className="logo-icon-circle">AU</div>
-          <div className="logo-text-group">
-            <span className="logo-main-text">
-              COLOURS <span>2027</span>
-            </span>
-            <span className="logo-sub-text">Aditya University Fest</span>
-          </div>
         </div>
       )}
+      <div className="navbar-brand-group">
+        <span className="navbar-brand-title">ADITYA UNIVERSITY</span>
+        <div className="navbar-fest-pill">
+          <span className="fest-name">COLOURS</span>
+          <span className="fest-year">2027</span>
+        </div>
+      </div>
     </Link>
   );
 }
@@ -106,7 +100,7 @@ export default function Navbar() {
         aria-label="Main navigation"
       >
         <div className="navbar-inner">
-          {/* University Logo */}
+          {/* University Logo & Branding */}
           <UniversityLogo />
 
           {/* Desktop Nav Links */}
@@ -124,52 +118,51 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Register CTA & Logged in Student Info */}
-          <div className="navbar-cta" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            {student ? (
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Link
-                  to="/dashboard"
-                  style={{
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.45rem',
-                    background: '#f8fafc',
-                    padding: '5px 12px',
-                    borderRadius: '50px',
-                    border: '1px solid #e2e8f0',
-                    transition: 'all 0.2s ease',
-                    boxShadow: '0 2px 6px rgba(15, 23, 42, 0.04)'
-                  }}
-                  title="Go to Student Dashboard & Account"
-                >
-                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>
-                    👤 {student.name ? student.name.split(' ')[0] : 'Student'}
-                  </span>
-                  <span style={{ fontSize: '0.7rem', background: '#ffe4e6', color: '#e11d48', padding: '2px 7px', borderRadius: '50px', fontWeight: 800 }}>
-                    Dashboard
-                  </span>
-                </Link>
+          {/* Prize Chip & Login/Dashboard CTA */}
+          <div className="navbar-right-cluster">
+            {/* Cash Prize Highlight Pill from Poster */}
+            <div className="navbar-prize-pill" title="₹10 Lakhs in Cash Prizes across all events!">
+              <span className="prize-icon">🏆</span>
+              <span className="prize-text">₹10 Lakhs</span>
+              <span className="prize-sub">Prizes</span>
+            </div>
+
+            <div className="navbar-cta">
+              {student ? (
+                <div className="student-logged-box">
+                  <Link
+                    to="/dashboard"
+                    className="student-pill-link"
+                    title="Go to Student Dashboard & Account"
+                  >
+                    <span className="student-name-text">
+                      👤 {student.name ? student.name.split(' ')[0] : 'Student'}
+                    </span>
+                    <span className="student-badge-dash">
+                      Dashboard
+                    </span>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => logoutStudent()}
+                    className="btn-logout"
+                    title="Log out student account"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
                 <button
                   type="button"
-                  onClick={() => logoutStudent()}
-                  style={{ background: 'transparent', border: 'none', color: '#dc2626', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', padding: '0 4px' }}
-                  title="Log out student account"
+                  onClick={handleLoginClick}
+                  className="btn-fest-login"
+                  id="navbar-login-btn"
                 >
-                  Logout
+                  <span className="btn-glow" />
+                  ✦ Login / Register
                 </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={handleLoginClick}
-                className="btn-register btn-login"
-                id="navbar-login-btn"
-              >
-                ✦ Login
-              </button>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Mobile Hamburger */}
@@ -184,17 +177,23 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Drawer Menu */}
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`} role="menu">
+        <div className="mobile-prize-banner">
+          <span>🏆 ₹10 Lakhs in Cash Prizes</span>
+          <span>•</span>
+          <span>7 • 8 • 9 January 2027</span>
+        </div>
+
         {student ? (
-          <div style={{ padding: '0.75rem 1rem', background: '#f8fafc', borderRadius: '12px', margin: '0.5rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="mobile-student-card">
             <Link
               to="/dashboard"
               onClick={closeMenu}
-              style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column' }}
+              className="mobile-student-link"
             >
-              <span style={{ fontWeight: 800, color: '#0f172a' }}>👤 {student.name}</span>
-              <span style={{ fontSize: '0.75rem', color: '#e11d48', fontWeight: 700 }}>Open Student Dashboard →</span>
+              <span className="mobile-student-name">👤 {student.name}</span>
+              <span className="mobile-student-action">Open Student Dashboard →</span>
             </Link>
             <button
               type="button"
@@ -202,12 +201,13 @@ export default function Navbar() {
                 logoutStudent();
                 closeMenu();
               }}
-              style={{ background: '#fee2e2', border: 'none', color: '#dc2626', padding: '4px 10px', borderRadius: '6px', fontWeight: 700, cursor: 'pointer' }}
+              className="btn-logout-mobile"
             >
               Logout
             </button>
           </div>
         ) : null}
+
         {navItems.map((item) => (
           <NavLink
             key={item.path}
@@ -220,20 +220,19 @@ export default function Navbar() {
             {item.label}
           </NavLink>
         ))}
+
         {!student && (
           <button
             type="button"
-            className="btn-register btn-login"
+            className="btn-fest-login"
             onClick={handleLoginClick}
-            style={{ textAlign: 'center', marginTop: '0.5rem', width: '100%', justifyContent: 'center' }}
+            style={{ textAlign: 'center', marginTop: '0.8rem', width: '100%', justifyContent: 'center' }}
             id="mobile-navbar-login-btn"
           >
-            ✦ Login
+            ✦ Login / Register
           </button>
         )}
       </div>
-
-
 
       {/* Student Account Registration & Login Modal */}
       <StudentAuthModal

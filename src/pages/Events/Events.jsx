@@ -157,13 +157,14 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
       .filter((cat) => (cat.data || []).length > 0 || (cat.events || []).length > 0);
   }, [categories, activeTab, searchQuery]);
 
-  // Derived category filter tabs
+  // Derived category filter tabs (CULTURALS, SPORTS, CREO, FETE)
   const categoryTabs = useMemo(() => {
     if (!categories || categories.length === 0) {
       return [
-        { id: 'SPORTS', label: 'Sports & Games' },
-        { id: 'CULTURALS', label: 'Culturals Events' },
-        { id: 'CREO', label: 'Creo Events' }
+        { id: 'CULTURALS', label: 'Culturals' },
+        { id: 'SPORTS', label: 'Sports' },
+        { id: 'CREO', label: 'Creo Events' },
+        { id: 'FETE', label: 'Fete Carnival' }
       ];
     }
     return categories.map((cat) => {
@@ -192,10 +193,13 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
         <div className="container text-center">
           {/* Fest Badge */}
           <div className="events-badge-top">
-            ADITYA UNIVERSITY • {themeCode} 2027
+            ADITYA UNIVERSITY • {themeCode} 2027 • ₹10 LAKHS IN CASH PRIZES
           </div>
 
-          <h1 className="events-hero-title">Official Events & Competitions</h1>
+          <h1 className="events-hero-title">Official Competitions & Championships</h1>
+          <p className="events-hero-subtitle">
+            Browse all competitive events across Culturals, Sports, Creo & Fete • 7 • 8 • 9 January 2027
+          </p>
 
           {/* Theme Summary Metrics Bar */}
 

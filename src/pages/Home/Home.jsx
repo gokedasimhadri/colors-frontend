@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import { getLoggedStudent } from '../../services/api';
 import {
   EVENT_START_DATE,
-  EVENT_DATE_RAW,
   EVENT_DAYS,
   EVENT_DATE_FORMAL,
+  getDayShortDate,
 } from '../../utils/eventDate';
 import './Home.css';
 
-// ─── Countdown Timer ─────────────────────────────────────────────────────────
+// ─── Countdown Timer Hook ───────────────────────────────────────────────────
 const EVENT_DATE = EVENT_START_DATE;
 
 function useCountdown() {
@@ -37,74 +37,106 @@ function useCountdown() {
   return { time, pulse };
 }
 
-// ─── Ticker ───────────────────────────────────────────────────────────────────
+// ─── Ticker Items ───────────────────────────────────────────────────────────
 const TICKER_ITEMS = [
-  'Cultural Performances', 'Sports Championships', 'Music Concerts',
-  'Dance Competitions', 'Art Exhibitions', 'Drama & Theatre',
-  'Stand-Up Comedy', 'Fashion Show', 'Literary Events',
-  'Singing Competitions', 'Photography Contest',
+  '₹10 Lakhs in Cash Prizes',
+  'Culturals: Singing, Dance, Mime & Theatre',
+  'Sports: Athletics, Volleyball, Basketball & Cricket',
+  'Creo: Fashion Show, Spot Painting & Film Making',
+  'Fete: Carnival Games, Food Fiesta & E-Sports',
+  '7 • 8 • 9 January 2027',
+  'Aditya University Surampalem',
+  '50+ Universities & Colleges',
+  '25,000+ Student Delegates',
 ];
 
-// ─── Stats (below hero) ───────────────────────────────────────────────────────
-const STATS = [
-  { icon: '🎭', number: '100', plus: true, label: 'Events' },
-  { icon: '🏫', number: '50', plus: true, label: 'Colleges' },
-  { icon: '👥', number: '25K', plus: true, label: 'Students' },
-  { icon: '🌟', number: '3', plus: false, label: 'Days of Fest' },
+// ─── The 4 Pillars from the Official Poster ─────────────────────────────────
+const FEST_PILLARS = [
+  {
+    code: 'CULTURALS',
+    name: 'Culturals',
+    tagline: 'Music, Dance, Theatre & Expressions',
+    coordinator: 'Mr. P. Raju',
+    phone: '8374245400',
+    color: '#ff007f',
+    icon: '🎭',
+    events: ['Dance Solo & Group', 'Classical & Western Singing', 'Mime Championship', 'Mono Action', 'Battle of Bands'],
+    bgImage: '/culturals_bg.png'
+  },
+  {
+    code: 'SPORTS',
+    name: 'Sports',
+    tagline: 'Athletics, Team Championships & Glory',
+    coordinator: 'Dr. N. Ravi',
+    phone: '9912393905',
+    color: '#00d2ff',
+    icon: '🏆',
+    events: ['100m / 200m Sprint', 'Volleyball Tournament', 'Basketball League', 'Relay 4x100m', 'Badminton Singles'],
+    bgImage: '/sports_bg.png'
+  },
+  {
+    code: 'CREO',
+    name: 'Creo',
+    tagline: 'Fine Arts, Media, Fashion & Innovation',
+    coordinator: 'Dr. B. Srinivas',
+    phone: '9866732745',
+    color: '#ffe600',
+    icon: '🎨',
+    events: ['Ethnic & Modern Runway', 'Spot Painting Contest', 'Treasure Quest', 'Short Film Making', 'Mobile Photography'],
+    bgImage: '/creo_bg.png'
+  },
+  {
+    code: 'FETE',
+    name: 'Fete',
+    tagline: 'Carnival, Food Fiesta, Stalls & Games',
+    coordinator: 'Mr. J. D. Venkatesh',
+    phone: '7036266661',
+    color: '#10b981',
+    icon: '🎪',
+    events: ['Carnival Fun Stalls', 'Food Truck Arena', 'E-Sports Showdown', 'Open Mic Jamming', 'Cosplay Gala'],
+    bgImage: '/hero_bg.png'
+  }
 ];
 
-// ─── Big Description Stats ─────────────────────────────────────────────────────
-const DESC_STATS = [
-  { number: '50+', label: 'Colleges', color: '#e8005a' },
-  { number: '100+', label: 'Events', color: '#7c3aed' },
-  { number: '25000+', label: 'Students', color: '#0891b2' },
-  { number: '35000+', label: 'Visitors', color: '#f59e0b' },
-];
-
-const EDITION_YEARS = ['Colours 2019', 'Colours 2020', 'Colours 2021', 'Colours 2022', 'Colours 2023', 'Colours 2024'];
-
-// ─── Schedule (3 days) ────────────────────────────────────────────────────────
+// ─── Schedule (3 Days) ──────────────────────────────────────────────────────
 const SCHEDULE_DAYS = EVENT_DAYS.map((d) => d.dayScheduleTitle);
 
 const SCHEDULE_DATA = {
   0: [
-    { time: '09:00 AM', name: 'Inaugural Ceremony', venue: 'Main Auditorium', tag: 'Ceremony' },
-    { time: '11:00 AM', name: 'Painting Competition', venue: 'Art Gallery', tag: 'Art' },
-    { time: '02:00 PM', name: 'Cricket Semi-Finals', venue: 'Cricket Ground', tag: 'Sports' },
-    { time: '05:00 PM', name: 'Classical Dance Show', venue: 'Dance Arena', tag: 'Dance' },
-    { time: '07:30 PM', name: 'Opening Music Night', venue: 'Open Air Stage', tag: 'Music' },
+    { time: '09:00 AM', name: 'Grand Inaugural Ceremony & Lamp Lighting', venue: 'Main University Amphitheatre', tag: 'Ceremony', track: 'CULTURALS' },
+    { time: '11:00 AM', name: 'Inter-College Athletics Prelims & Field Events', venue: 'Olympic Athletic Stadium', tag: 'Sports', track: 'SPORTS' },
+    { time: '02:00 PM', name: 'Spot Painting & Fine Arts Canvas Carnival', venue: 'Fine Arts Studio Block', tag: 'Creo', track: 'CREO' },
+    { time: '04:30 PM', name: 'Carnival Fiesta & Open Mic Acoustic Jam', venue: 'Campus Central Quad', tag: 'Fete', track: 'FETE' },
+    { time: '07:00 PM', name: 'Opening Pro-Night Musical Concert', venue: 'Grand Open Air Stage', tag: 'Music', track: 'CULTURALS' },
   ],
   1: [
-    { time: '10:00 AM', name: 'Photography Walk', venue: 'Campus Grounds', tag: 'Art' },
-    { time: '12:00 PM', name: 'Debate Championship', venue: 'Seminar Hall', tag: 'Literary' },
-    { time: '02:30 PM', name: 'Battle of Bands (Semi)', venue: 'Open Air Stage', tag: 'Music' },
-    { time: '05:00 PM', name: 'Football Quarter Finals', venue: 'Football Ground', tag: 'Sports' },
-    { time: '08:00 PM', name: 'Stand-Up Comedy Night', venue: 'Amphitheatre', tag: 'Comedy' },
+    { time: '09:30 AM', name: 'Volleyball & Basketball Championship Knockouts', venue: 'Outdoor Sports Complex', tag: 'Sports', track: 'SPORTS' },
+    { time: '11:30 AM', name: 'Classical & Western Solo Singing Showdown', venue: 'University Auditorium Stage A', tag: 'Cultural', track: 'CULTURALS' },
+    { time: '02:00 PM', name: 'Campus Treasure Hunt Quest', venue: 'University Landmark Zones', tag: 'Creo', track: 'CREO' },
+    { time: '05:00 PM', name: 'Group Dance & Folk Fusion Battles', venue: 'Open Air Amphitheatre', tag: 'Dance', track: 'CULTURALS' },
+    { time: '08:00 PM', name: 'Stand-Up Comedy & Mime Gala Night', venue: 'Central Auditorium', tag: 'Comedy', track: 'CULTURALS' },
   ],
   2: [
-    { time: '09:30 AM', name: 'Street Dance Battles', venue: 'Dance Arena', tag: 'Dance' },
-    { time: '12:00 PM', name: 'Tech Talk Sessions', venue: 'Tech Hub', tag: 'Tech' },
-    { time: '03:00 PM', name: 'Cricket Finals', venue: 'Cricket Ground', tag: 'Sports' },
-    { time: '06:00 PM', name: 'Fashion Show', venue: 'Main Auditorium', tag: 'Fashion' },
-    { time: '08:30 PM', name: 'Grand Closing Ceremony', venue: 'Main Auditorium', tag: 'Cultural' },
+    { time: '09:30 AM', name: '4x100m Sprint Relay & Sports Final Showdowns', venue: 'Olympic Athletic Stadium', tag: 'Sports', track: 'SPORTS' },
+    { time: '11:30 AM', name: 'E-Sports Gaming Finals & Short Film Screening', venue: 'Multimedia Tech Hub', tag: 'Fete', track: 'FETE' },
+    { time: '02:30 PM', name: 'Ethnic & Modern Runway Fashion Show', venue: 'Grand Ramp Auditorium', tag: 'Fashion', track: 'CREO' },
+    { time: '06:00 PM', name: 'Grand Valedictory & ₹10 Lakhs Prize Distribution', venue: 'Main Auditorium', tag: 'Awards', track: 'ALL' },
+    { time: '08:30 PM', name: 'Celebrity DJ Blast & Colours 2027 Farewell', venue: 'Open Air Grounds', tag: 'Pro Night', track: 'ALL' },
   ],
 };
 
-// ─── Gallery ──────────────────────────────────────────────────────────────────
+// ─── Memories Gallery ───────────────────────────────────────────────────────
 const GALLERY = [
-  { emoji: '🎭', bg: 'linear-gradient(135deg, #4a0030, #9b1a6e)', label: 'Drama Night 2024' },
-  { emoji: '🎵', bg: 'linear-gradient(135deg, #1a0050, #5a1ab0)', label: 'Music Fest' },
-  { emoji: '⚽', bg: 'linear-gradient(135deg, #004030, #007a50)', label: 'Sports Finals' },
-  { emoji: '💃', bg: 'linear-gradient(135deg, #5a0025, #c0305a)', label: 'Dance Gala' },
-  { emoji: '🎨', bg: 'linear-gradient(135deg, #503000, #a06010)', label: 'Art Walk' },
+  { emoji: '🎭', bg: 'linear-gradient(135deg, #4a0030, #9b1a6e)', label: 'Drama & Mime Nights' },
+  { emoji: '🎵', bg: 'linear-gradient(135deg, #1a0050, #5a1ab0)', label: 'Battle of Bands Live' },
+  { emoji: '⚽', bg: 'linear-gradient(135deg, #004030, #007a50)', label: 'Inter-College Athletics' },
+  { emoji: '💃', bg: 'linear-gradient(135deg, #5a0025, #c0305a)', label: 'Dance Mega Championship' },
+  { emoji: '🎨', bg: 'linear-gradient(135deg, #503000, #a06010)', label: 'Creative Runway & Arts' },
 ];
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 export default function Home() {
   const { time, pulse } = useCountdown();
   const [activeDay, setActiveDay] = useState(0);
-  const [bgLoaded, setBgLoaded] = useState(false);
-  const [activeYear, setActiveYear] = useState('Colours 2024');
   const heroRef = useRef(null);
 
   const [student, setStudent] = useState(getLoggedStudent());
@@ -119,121 +151,167 @@ export default function Home() {
     };
   }, []);
 
-  useEffect(() => {
-    const img = new Image();
-    img.src = '/hero_bg.png';
-    img.onload = () => setBgLoaded(true);
-  }, []);
-
   return (
-    <main>
-      {/* ── HERO ── */}
-      <section className="hero" ref={heroRef} id="hero">
-        <div className={`hero-bg ${bgLoaded ? 'loaded' : ''}`} />
-        <div className="hero-overlay" />
-        <div className="hero-grid" />
-        <div className="hero-orb hero-orb-1" />
-        <div className="hero-orb hero-orb-2" />
-        <div className="hero-orb hero-orb-3" />
-
-        <div className="hero-content">
-          <div className="hero-left">
-            <div className="hero-eyebrow">
-              <span className="hero-eyebrow-text">✦ Aditya University Presents</span>
-              <span className="hero-year-badge">✦ 2027</span>
+    <main className="colours-home-main">
+      {/* ─────────────────────────────────────────────────────────────
+          HERO SECTION: Split Dual-Tone Canvas with Powder Burst
+          Faithful recreation of the official poster design
+          ───────────────────────────────────────────────────────────── */}
+      <section className="fest-split-hero" ref={heroRef} id="hero">
+        <div className="hero-split-container">
+          
+          {/* LEFT HALF: Pure White Canvas */}
+          <div className="hero-half hero-half-light">
+            {/* Top Emblem & Institution */}
+            <div className="hero-institution-row">
+              <div className="au-golden-crest">
+                <span className="crest-inner">AU</span>
+              </div>
+              <div className="au-inst-text">
+                <span className="au-gold-title">ADITYA UNIVERSITY</span>
+                <span className="au-gold-invite">YOU'RE INVITED TO</span>
+              </div>
             </div>
 
-            <h1 className="hero-title">
-              <span className="gradient-text">COLOURS</span>
-              <br />
-              <span>2027</span>
-            </h1>
+            {/* Split "COLOURS" Title: "COL" in solid black on white */}
+            <div className="hero-title-box">
+              <h1 className="hero-split-heading">
+                <span className="text-col">COL</span>
+                <span className="text-ours-ghost">OURS</span>
+              </h1>
+              <p className="hero-fest-tagline">
+                A NATIONAL LEVEL YOUTH FESTIVAL
+              </p>
+            </div>
 
-            <p className="hero-subtitle">Where Talent Meets Triumph</p>
+            {/* Save the Dates Block from Poster */}
+            <div className="hero-dates-card">
+              <span className="save-dates-label">SAVE THE DATES</span>
+              <div className="dates-display">
+                <span className="dates-highlight">7 • 8 • 9</span>
+                <span className="month-highlight">JANUARY 2027</span>
+              </div>
+              <p className="hero-dates-campus">
+                📍 Aditya University Campus, Surampalem, Kakinada Dist.
+              </p>
+            </div>
 
-            <p className="hero-desc">
-              Three electrifying days of cultural performances, sports championships,
-              music concerts, drama nights, and memories that last a lifetime.
-              The biggest fest in Aditya University's history.
-            </p>
-
-            <div className="hero-actions">
-              <Link to="/events" className="btn-primary" id="hero-explore-btn">
-                ✦ Explore Events
+            {/* Action Buttons */}
+            <div className="hero-light-actions">
+              <Link to="/events" className="btn-hero-primary" id="hero-explore-btn">
+                <span>✦ Explore Events</span>
               </Link>
-              <Link to="/events-schedule" className="btn-secondary" id="hero-schedule-btn">
-                📅 View Schedule
+              <Link to="/invitation" className="btn-hero-secondary" id="hero-invitation-btn">
+                <span>📄 View Official Poster</span>
               </Link>
             </div>
           </div>
 
-          {/* Live Countdown Card */}
-          <div className="hero-right">
-            <div className="countdown-card">
-              <div className="countdown-label">
-                <span className="glow-dot" />
-                Countdown to Fest
+          {/* CENTER SPLATTER: 3D Color Burst Graphic */}
+          <div className="hero-center-splatter-wrapper" aria-hidden="true">
+            <div className="splatter-glow-halo" />
+            <img
+              src="/colours_poster_theme.png"
+              alt="Colours 2027 Official Theme Splatter"
+              className="hero-center-poster-img"
+            />
+          </div>
+
+          {/* RIGHT HALF: Deep Midnight Black Canvas */}
+          <div className="hero-half hero-half-dark">
+            {/* Split "COLOURS" Title continuation: "OURS" in pure white */}
+            <div className="hero-dark-header">
+              <div className="hero-title-continuation">
+                <span className="text-ours-real">OURS</span>
+              </div>
+              <div className="fest-national-pill">
+                <span>2027 EDITION</span>
+              </div>
+            </div>
+
+            {/* ₹10 Lakhs Cash Prize Card from Poster */}
+            <div className="hero-prize-card">
+              <div className="prize-badge-glow">
+                <span className="prize-symbol">₹</span>
+                <span className="prize-number">10 Lakhs</span>
+              </div>
+              <div className="prize-caption">IN CASH PRIZES</div>
+              <p className="prize-sub">
+                Massive cash awards, national merit trophies & university honors across Culturals, Sports, Creo & Fete!
+              </p>
+            </div>
+
+            {/* Live Interactive Countdown Timer */}
+            <div className="hero-countdown-box">
+              <div className="countdown-label-row">
+                <span className="glow-neon-dot" />
+                <span>COUNTDOWN TO INAUGURATION</span>
               </div>
 
-              <div className="countdown-units">
+              <div className="countdown-neon-grid">
                 <div className="countdown-unit">
-                  <div className={`countdown-number ${pulse ? 'pulse' : ''}`}>
+                  <div className={`countdown-val ${pulse ? 'pulse' : ''}`}>
                     {String(time.days).padStart(2, '0')}
                   </div>
-                  <span className="countdown-unit-label">Days</span>
+                  <span className="countdown-lbl">DAYS</span>
                 </div>
-                <div className="countdown-divider">:</div>
+                <div className="countdown-sep">:</div>
                 <div className="countdown-unit">
-                  <div className={`countdown-number ${pulse ? 'pulse' : ''}`}>
+                  <div className={`countdown-val ${pulse ? 'pulse' : ''}`}>
                     {String(time.hours).padStart(2, '0')}
                   </div>
-                  <span className="countdown-unit-label">Hours</span>
+                  <span className="countdown-lbl">HOURS</span>
                 </div>
-                <div className="countdown-divider">:</div>
+                <div className="countdown-sep">:</div>
                 <div className="countdown-unit">
-                  <div className={`countdown-number ${pulse ? 'pulse' : ''}`}>
+                  <div className={`countdown-val ${pulse ? 'pulse' : ''}`}>
                     {String(time.minutes).padStart(2, '0')}
                   </div>
-                  <span className="countdown-unit-label">Mins</span>
+                  <span className="countdown-lbl">MINS</span>
                 </div>
-                <div className="countdown-divider">:</div>
+                <div className="countdown-sep">:</div>
                 <div className="countdown-unit">
-                  <div className={`countdown-number ${pulse ? 'pulse' : ''}`}>
+                  <div className={`countdown-val ${pulse ? 'pulse' : ''}`}>
                     {String(time.seconds).padStart(2, '0')}
                   </div>
-                  <span className="countdown-unit-label">Secs</span>
-                </div>
-              </div>
-
-              <div className="countdown-event-info">
-                <div className="info-row">
-                  <span className="info-icon">📅</span>
-                  <span className="info-label">Date</span>
-                  <span className="info-value">{EVENT_DATE_RAW}</span>
-                </div>
-                <div className="info-row">
-                  <span className="info-icon">📍</span>
-                  <span className="info-label">Venue</span>
-                  <span className="info-value">Aditya University</span>
-                </div>
-                <div className="info-row">
-                  <span className="info-icon">🎟️</span>
-                  <span className="info-label">Entry</span>
-                  <span className="info-value">Open for All</span>
+                  <span className="countdown-lbl">SECS</span>
                 </div>
               </div>
             </div>
+
+            {/* Fast Register & Schedule CTA */}
+            <div className="hero-dark-actions">
+              {!student ? (
+                <button
+                  type="button"
+                  className="btn-hero-gold"
+                  onClick={() => {
+                    window.dispatchEvent(new CustomEvent('fest-open-auth-modal', { detail: { mode: 'login' } }));
+                  }}
+                >
+                  ✦ Register / Login Now
+                </button>
+              ) : (
+                <Link to="/dashboard" className="btn-hero-gold">
+                  ✦ Open Student Dashboard
+                </Link>
+              )}
+              <Link to="/events-schedule" className="btn-hero-dark-outline">
+                📅 3-Day Schedule
+              </Link>
+            </div>
           </div>
+
         </div>
       </section>
 
-      {/* ── TICKER ── */}
-      <div className="ticker-section" aria-hidden="true">
-        <div className="ticker-inner">
+      {/* ── TICKER TAPE ── */}
+      <div className="fest-ticker-bar" aria-hidden="true">
+        <div className="ticker-track-wrapper">
           <div className="ticker-track">
             {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-              <span key={i} className="ticker-item">
-                <span className="ticker-dot" />
+              <span key={i} className="ticker-badge">
+                <span className="ticker-splat">✦</span>
                 {item}
               </span>
             ))}
@@ -241,209 +319,268 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── DESCRIPTION SECTION (from screenshot) ── */}
-      <section className="description-section" id="about" aria-label="About Colours 2027">
+      {/* ─────────────────────────────────────────────────────────────
+          FOUR MAIN FESTIVAL DOMAINS (FROM OFFICIAL POSTER)
+          CULTURALS • SPORTS • CREO • FETE
+          ───────────────────────────────────────────────────────────── */}
+      <section className="fest-pillars-section" id="pillars">
         <div className="container">
-          <div className="description-inner">
-            {/* Left – Text content */}
-            <div className="description-left">
-              <div className="description-festival-badge">
-                ✦ A Festival of Non-Stop Entertainment
-              </div>
-
-              <h2 className="description-title">
-                Colours <span className="highlight">2027</span>
-              </h2>
-
-              <div className="description-body">
-                <p className="description-para">
-                  Mark your calendars for Colours 2027, an international youth festival happening from{' '}
-                  <span className="text-accent">{EVENT_DATE_FORMAL}</span>! Get ready for{' '}
-                  <span className="text-accent">three days</span> of pure excitement at Colours 2027.
-                  This vibrant celebration will be packed with non-stop entertainment, featuring{' '}
-                  <span className="text-accent-purple">electrifying dance performances</span>,
-                  soul-stirring music, dazzling cultural shows, and captivating art displays.
-                </p>
-
-                <p className="description-para">
-                  From the rhythmic beats of traditional music to{' '}
-                  <span className="text-accent">high-energy modern acts</span>, every moment of
-                  Colours 2027 will be a feast for the senses. Experience the joy of unity as
-                  performers from around the world come together to celebrate their cultures and talents.
-                  Don't miss this incredible event filled with fun, laughter, and unforgettable memories.
-                  Colours 2027 is where the world comes to celebrate{' '}
-                  <span className="text-accent-purple">youth, diversity, and togetherness</span>!
-                </p>
-              </div>
-
-              {/* Edition year pills */}
-              <div className="edition-years" role="list" aria-label="Past editions">
-                {EDITION_YEARS.map((year) => (
-                  <button
-                    key={year}
-                    className={`edition-pill ${activeYear === year ? 'active-year' : ''}`}
-                    onClick={() => setActiveYear(year)}
-                    role="listitem"
-                  >
-                    {year}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Right – Big stats grid */}
-            <div className="description-stats">
-              {DESC_STATS.map((s) => (
-                <div
-                  key={s.label}
-                  className="desc-stat-card"
-                  style={{ '--stat-color': s.color }}
-                >
-                  <div className="desc-stat-number">{s.number}</div>
-                  <div className="desc-stat-label">{s.label}</div>
-                </div>
-              ))}
-            </div>
+          <div className="section-head text-center">
+            <span className="section-tag">OFFICIAL FESTIVAL DOMAINS</span>
+            <h2 className="section-title">
+              Four Arenas of <span>Glory</span>
+            </h2>
+            <p className="section-desc" style={{ margin: '0 auto' }}>
+              Competitions span 4 major tracks, supervised by dedicated university chairpersons with a total cash pool of ₹10,00,000.
+            </p>
           </div>
-        </div>
-      </section>
 
-      <div className="gradient-divider" />
-
-      {/* ── STATS ── */}
-      <section className="stats-section" aria-label="Festival statistics">
-        <div className="container">
-          <div className="stats-grid">
-            {STATS.map((s) => (
-              <div key={s.label} className="stat-card">
-                <span className="stat-icon">{s.icon}</span>
-                <div className="stat-number">
-                  {s.number}
-                  {s.plus && <span className="plus">+</span>}
+          <div className="pillars-grid">
+            {FEST_PILLARS.map((pillar) => (
+              <div
+                key={pillar.code}
+                className="pillar-card"
+                style={{ '--pillar-accent': pillar.color }}
+              >
+                <div className="pillar-header">
+                  <span className="pillar-icon">{pillar.icon}</span>
+                  <div className="pillar-title-group">
+                    <span className="pillar-code">{pillar.code}</span>
+                    <h3 className="pillar-name">{pillar.name}</h3>
+                  </div>
                 </div>
-                <div className="stat-label">{s.label}</div>
+
+                <p className="pillar-tagline">{pillar.tagline}</p>
+
+                <div className="pillar-events-snippet">
+                  <span className="events-snippet-label">Key Competitions:</span>
+                  <ul className="snippet-list">
+                    {pillar.events.map((ev, i) => (
+                      <li key={i}>{ev}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Coordinator pill with telephone link matching poster */}
+                <div className="pillar-coordinator-box">
+                  <span className="coord-chip-label">Domain In-charge:</span>
+                  <div className="coord-person-row">
+                    <span className="coord-name">{pillar.coordinator}</span>
+                    <a href={`tel:${pillar.phone}`} className="coord-phone-pill">
+                      📞 {pillar.phone}
+                    </a>
+                  </div>
+                </div>
+
+                <div className="pillar-card-footer">
+                  <Link
+                    to={`/events`}
+                    className="btn-pillar-explore"
+                  >
+                    Check Out {pillar.name} Events →
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── SCHEDULE PREVIEW ── */}
-      <section className="schedule-section" id="schedule" aria-label="Events schedule preview">
+      {/* ─────────────────────────────────────────────────────────────
+          ₹10 LAKHS MEGA CASH PRIZES SHOWCASE
+          ───────────────────────────────────────────────────────────── */}
+      <section className="fest-cash-showcase">
         <div className="container">
-          <div className="section-header">
-            <div className="section-header-left">
-              <span className="section-tag">✦ Schedule</span>
-              <h2 className="section-title">
-                3-Day <span>Lineup</span>
+          <div className="cash-showcase-card">
+            <div className="cash-glow-orb" />
+            <div className="cash-showcase-content">
+              <span className="cash-pill-tag">🏆 OFFICIAL PRIZE POOL</span>
+              <h2 className="cash-grand-title">
+                ₹10,00,000+ <span>in Cash Rewards</span>
               </h2>
+              <p className="cash-lead-text">
+                Compete against South India’s finest talent. Aditya University awards direct cash rewards,
+                championship trophies, and national certificates across every single event category.
+              </p>
+
+              <div className="cash-perks-row">
+                <div className="cash-perk">
+                  <span className="perk-icon">💰</span>
+                  <span className="perk-title">Instant Cash Awards</span>
+                  <span className="perk-desc">Presented at the Grand Valedictory ceremony on 9th Jan</span>
+                </div>
+                <div className="cash-perk">
+                  <span className="perk-icon">🥇</span>
+                  <span className="perk-title">National Merit Cups</span>
+                  <span className="perk-desc">Prestigious rolling trophies for champion college delegations</span>
+                </div>
+                <div className="cash-perk">
+                  <span className="perk-icon">📜</span>
+                  <span className="perk-title">Authenticated Certificates</span>
+                  <span className="perk-desc">University-sealed participation & merit credentials</span>
+                </div>
+              </div>
+
+              <div className="cash-actions-row">
+                <Link to="/events" className="btn-hero-primary">
+                  ✦ Register Your Contingent Now
+                </Link>
+                <Link to="/invitation" className="btn-hero-secondary">
+                  📄 Read Official Invitation Letter
+                </Link>
+              </div>
             </div>
-            <Link to="/events-schedule" className="view-all-link" id="schedule-view-all-link">
-              Full Schedule →
-            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          FESTIVAL 3-DAY SCHEDULE
+          ───────────────────────────────────────────────────────────── */}
+      <section className="fest-schedule-section" id="schedule">
+        <div className="container">
+          <div className="section-head text-center">
+            <span className="section-tag">3-DAY FESTIVAL ITINERARY</span>
+            <h2 className="section-title">
+              The <span>Lineup</span>
+            </h2>
+            <p className="section-desc" style={{ margin: '0 auto' }}>
+              Mark your schedule for three action-packed days on Aditya University’s state-of-the-art campus.
+            </p>
           </div>
 
-          <div className="schedule-tabs" role="tablist">
-            {SCHEDULE_DAYS.map((day, i) => (
+          <div className="schedule-day-tabs">
+            {SCHEDULE_DAYS.map((dayTitle, i) => (
               <button
                 key={i}
-                className={`schedule-tab ${activeDay === i ? 'active' : ''}`}
+                type="button"
+                className={`schedule-tab-btn ${activeDay === i ? 'active' : ''}`}
                 onClick={() => setActiveDay(i)}
-                role="tab"
-                aria-selected={activeDay === i}
-                id={`schedule-tab-${i}`}
               >
-                {day}
+                <span className="tab-circle">{i + 1}</span>
+                <span>{dayTitle}</span>
               </button>
             ))}
           </div>
 
-          <div className="schedule-list" role="tabpanel">
-            {SCHEDULE_DATA[activeDay].map((item, i) => (
-              <div key={i} className="schedule-item">
-                <div className="schedule-time">{item.time}</div>
-                <div className="schedule-event-info">
-                  <div className="schedule-event-name">{item.name}</div>
-                  <div className="schedule-event-venue">📍 {item.venue}</div>
+          <div className="schedule-timeline-grid">
+            {SCHEDULE_DATA[activeDay].map((item, idx) => (
+              <div key={idx} className="timeline-card">
+                <div className="timeline-time-col">
+                  <span className="timeline-clock">⏰ {item.time}</span>
+                  <span className={`timeline-track-pill ${item.track.toLowerCase()}`}>
+                    {item.track}
+                  </span>
                 </div>
-                <span className="schedule-event-tag">{item.tag}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── GALLERY ── */}
-      <section className="gallery-section" id="gallery" aria-label="Event gallery">
-        <div className="container">
-          <span className="section-tag">✦ Memories</span>
-          <h2 className="section-title">
-            From Past <span>Editions</span>
-          </h2>
-          <div className="gallery-grid">
-            {GALLERY.map((g, i) => (
-              <div key={i} className="gallery-item">
-                <div
-                  className="gallery-item-inner"
-                  style={{ background: g.bg, height: '100%', minHeight: i === 0 ? '400px' : '200px' }}
-                >
-                  <span style={{ fontSize: i === 0 ? '6rem' : '3rem' }}>{g.emoji}</span>
+                <div className="timeline-info-col">
+                  <h4 className="timeline-event-name">{item.name}</h4>
+                  <p className="timeline-venue">📍 {item.venue}</p>
                 </div>
-                <div className="gallery-overlay">
-                  <span className="gallery-overlay-text">{g.label}</span>
+                <div className="timeline-tag-col">
+                  <span className="event-type-chip">{item.tag}</span>
                 </div>
               </div>
             ))}
           </div>
+
+          <div className="text-center" style={{ marginTop: '2.5rem' }}>
+            <Link to="/events-schedule" className="btn-hero-secondary">
+              View Complete Detailed Schedule →
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section className="cta-section" id="register" aria-label="Register call to action">
-        <div className="cta-bg" />
+      {/* ─────────────────────────────────────────────────────────────
+          MEMORIES & GALLERY
+          ───────────────────────────────────────────────────────────── */}
+      <section className="fest-memories-section" id="gallery">
         <div className="container">
-          <div className="cta-content">
-            <span className="section-tag">✦ Don't Miss Out</span>
-            <h2 className="cta-title">
-              Be Part of <span>History</span>
+          <div className="section-head text-center">
+            <span className="section-tag">FESTIVAL LEGACY</span>
+            <h2 className="section-title">
+              Moments That <span>Inspire</span>
             </h2>
-            <p className="cta-desc">
-              Register now to secure your spot at the most spectacular
-              university festival of 2027. Limited seats available!
+            <p className="section-desc" style={{ margin: '0 auto' }}>
+              From legendary pro-nights to breathless track sprint finishes, celebrate the unforgettable energy of Colours.
             </p>
-            <div className="cta-actions">
-              {!student ? (
-                <button
-                  type="button"
-                  className="btn-primary"
-                  id="cta-login-btn"
-                  onClick={() => {
-                    window.dispatchEvent(new CustomEvent('fest-open-auth-modal', { detail: { mode: 'login' } }));
-                  }}
-                >
-                  ✦ Login
-                </button>
-              ) : (
-                <Link to="/events" className="btn-primary" id="cta-explore-btn">
-                  ✦ Explore Events
+          </div>
+
+          <div className="memories-grid">
+            {GALLERY.map((g, i) => (
+              <div key={i} className="memory-card">
+                <div className="memory-card-inner" style={{ background: g.bg }}>
+                  <span className="memory-emoji">{g.emoji}</span>
+                  <div className="memory-overlay">
+                    <span className="memory-label">{g.label}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          CAMPUS & REGISTRATION CTA WITH QR CODE
+          ───────────────────────────────────────────────────────────── */}
+      <section className="fest-final-cta" id="register">
+        <div className="container">
+          <div className="final-cta-card">
+            <div className="cta-left-details">
+              <span className="section-tag">JOIN THE CELEBRATION</span>
+              <h2 className="cta-title">
+                Be Part of <span>Colours 2027</span>
+              </h2>
+              <p className="cta-desc">
+                Don't miss the biggest national collegiate festival of 2027. Secure your student participation,
+                represent your college contingent, and battle for the grand ₹10,00,000 prize pool!
+              </p>
+
+              <div className="cta-location-block">
+                <span className="loc-icon">📍</span>
+                <div className="loc-info">
+                  <strong>Aditya University</strong>
+                  <span>Aditya Nagar, ADB Road, Surampalem – 533437, Kakinada Dist., AP</span>
+                </div>
+              </div>
+
+              <div className="cta-buttons-row">
+                {!student ? (
+                  <button
+                    type="button"
+                    className="btn-hero-primary"
+                    onClick={() => {
+                      window.dispatchEvent(new CustomEvent('fest-open-auth-modal', { detail: { mode: 'register' } }));
+                    }}
+                  >
+                    ✦ Register Online Now
+                  </button>
+                ) : (
+                  <Link to="/events" className="btn-hero-primary">
+                    ✦ Browse & Enter Events
+                  </Link>
+                )}
+                <Link to="/contact" className="btn-hero-secondary">
+                  ✉️ Hospitality & Support Desk
                 </Link>
-              )}
-              <Link to="/contact" id="cta-contact-btn" style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
-                padding: '0.85rem 2rem',
-                background: 'transparent',
-                color: 'var(--clr-primary)',
-                fontFamily: 'var(--font-body)',
-                fontWeight: 600,
-                fontSize: '0.95rem',
-                letterSpacing: '0.05em',
-                border: '1.5px solid var(--clr-primary)',
-                borderRadius: 'var(--radius-sm)',
-                textDecoration: 'none',
-                transition: 'all 0.35s ease',
-              }}>
-                ✉️ Contact Us
-              </Link>
+              </div>
+            </div>
+
+            {/* QR Code and Poster Card matching Poster Bottom */}
+            <div className="cta-qr-card">
+              <div className="poster-thumbnail-wrapper">
+                <img
+                  src="/colours_poster_theme.png"
+                  alt="Colours 2027 Official Festival Poster"
+                  className="poster-thumbnail-img"
+                />
+              </div>
+              <div className="qr-info-block">
+                <span className="qr-headline">SCAN OR VISIT</span>
+                <span className="qr-url">adityauniversity.in/colours2027</span>
+                <span className="qr-dates">7 • 8 • 9 JANUARY 2027</span>
+              </div>
             </div>
           </div>
         </div>

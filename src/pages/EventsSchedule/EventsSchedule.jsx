@@ -26,49 +26,56 @@ export default function EventsSchedule() {
       day: 1, time: '08:30 AM – 10:00 AM', category: 'General',
       name: 'Grand Inauguration Ceremony & Torch Relay',
       venue: 'University Central Amphitheatre',
-      incharge: 'Convener & Student Senate',
+      incharge: 'Convener & University Senate',
       type: 'Ceremony', link: '/invitation'
     },
     {
       day: 1, time: '10:30 AM – 01:30 PM', category: 'Sports & Games',
       name: 'Basketball Tournament (Men & Women Prelims)',
       venue: 'KL Rao Bhavan Sports Arena',
-      incharge: 'Department of Physical Education',
+      incharge: 'Dr. N. Ravi (Sports Chair - 9912393905)',
       type: 'Sports', link: '/events/Sports%20%26%20Games/Basketball'
     },
     {
       day: 1, time: '10:30 AM – 02:00 PM', category: 'Culturals',
       name: 'Classical Dance & Folk Dance (Solo)',
       venue: 'Visweswaraya Bhavan Seminar Hall',
-      incharge: 'Dr. Paramesh (CSE)',
+      incharge: 'Mr. P. Raju (Culturals Chair - 8374245400)',
       type: 'Cultural', link: '/events/Culturals/Dance'
     },
     {
       day: 1, time: '11:00 AM – 02:30 PM', category: 'Culturals',
       name: 'Instrumental Solo & Group Rounds',
       venue: 'Ramanujan Bhavan Seminar Hall',
-      incharge: 'T. Himaja (EEE)',
+      incharge: 'Mr. P. Raju (Culturals Chair - 8374245400)',
       type: 'Cultural', link: '/events/Culturals/Instrumental'
     },
     {
       day: 1, time: '11:00 AM – 03:00 PM', category: 'Creo',
       name: 'Spot Photography & Sahityam Literary Symposium',
       venue: 'Ratan Tata Bhavan – Room 210 & 212',
-      incharge: 'Department of Humanities',
+      incharge: 'Dr. B. Srinivas (Creo Chair - 9866732745)',
       type: 'Creo', link: '/events/Creo/Spot%20Photography'
+    },
+    {
+      day: 1, time: '01:00 PM – 05:00 PM', category: 'Fete',
+      name: 'Food Fiesta, Carnival Stalls & Flea Market Opening',
+      venue: 'Central Campus Promenade',
+      incharge: 'Mr. J. D. Venkatesh (Fete Chair - 7036266661)',
+      type: 'Fete', link: '/events'
     },
     {
       day: 1, time: '02:00 PM – 05:30 PM', category: 'Sports & Games',
       name: 'Kabaddi & Volleyball Knockouts',
       venue: 'CV Raman & KL Rao Grounds',
-      incharge: 'Physical Education Directorate',
+      incharge: 'Dr. N. Ravi (Sports Chair - 9912393905)',
       type: 'Sports', link: '/events/Sports%20%26%20Games/Volleyball'
     },
     {
       day: 1, time: '06:00 PM – 09:30 PM', category: 'Culturals',
       name: 'Opening Cultural Night & Student Beats Showcase',
       venue: 'Central Open Air Stage',
-      incharge: 'Central Cultural Committee',
+      incharge: 'Mr. P. Raju (Culturals Chair - 8374245400)',
       type: 'Concert', link: '/events'
     },
 
@@ -77,42 +84,49 @@ export default function EventsSchedule() {
       day: 2, time: '08:30 AM – 12:00 PM', category: 'Sports & Games',
       name: 'Athletics, Track & Field, Relay (Men & Women)',
       venue: 'University Synthetic Track & BPED Ground',
-      incharge: 'Athletics Committee',
+      incharge: 'Dr. N. Ravi (Sports Chair - 9912393905)',
       type: 'Sports', link: '/events/Sports%20%26%20Games/Running'
     },
     {
       day: 2, time: '10:00 AM – 01:30 PM', category: 'Culturals',
       name: 'Mono Action & Theatrical Mime Presentations',
       venue: 'Newton Bhavan Seminar Hall',
-      incharge: 'Dr. P. Vijaya Kumar & S. Ganapathi',
+      incharge: 'Mr. P. Raju (Culturals Chair - 8374245400)',
       type: 'Cultural', link: '/events/Culturals/Mono%20Action'
     },
     {
       day: 2, time: '10:00 AM – 02:00 PM', category: 'Creo',
       name: 'Spot Painting, Mehandi & Rangoli Arts',
       venue: 'KL Rao Bhavan Drawing Hall & Lawns',
-      incharge: 'Faculty of Fine Arts',
+      incharge: 'Dr. B. Srinivas (Creo Chair - 9866732745)',
       type: 'Creo', link: '/events/Creo/Spot%20Painting'
     },
     {
       day: 2, time: '11:00 AM – 03:00 PM', category: 'Culturals',
       name: 'Stand-up Comedy & Mimicry Competitions',
       venue: 'Cotton Bhavan Seminar Hall',
-      incharge: 'A.K. Chakravarthy & K. Kalyani',
+      incharge: 'Mr. P. Raju (Culturals Chair - 8374245400)',
       type: 'Cultural', link: '/events/Culturals/Stand-up%20Comedy'
     },
     {
       day: 2, time: '02:00 PM – 05:30 PM', category: 'Sports & Games',
       name: 'Shuttle Badminton & Table Tennis Semi-Finals',
       venue: 'Indoor Sports Complex',
-      incharge: 'Racket Sports Committee',
+      incharge: 'Dr. N. Ravi (Sports Chair - 9912393905)',
       type: 'Sports', link: '/events/Sports%20%26%20Games/Shuttle%20Badminton%20Singles'
+    },
+    {
+      day: 2, time: '02:30 PM – 06:00 PM', category: 'Fete',
+      name: 'Youth Carnival, DJ Beat Battle & Gaming Arena',
+      venue: 'Open Air Fete Ground',
+      incharge: 'Mr. J. D. Venkatesh (Fete Chair - 7036266661)',
+      type: 'Fete', link: '/events'
     },
     {
       day: 2, time: '06:30 PM – 10:00 PM', category: 'Culturals',
       name: 'Battle of Bands & Pro Celebrity Night Concert',
       venue: 'Open Air Stadium',
-      incharge: 'Festival Committee & Pro Artist Team',
+      incharge: 'Mr. P. Raju (Culturals Chair - 8374245400)',
       type: 'Concert', link: '/events/Culturals/Singing'
     },
 
@@ -121,28 +135,35 @@ export default function EventsSchedule() {
       day: 3, time: '09:00 AM – 12:30 PM', category: 'Sports & Games',
       name: 'Championship Grand Finals (Football, Basketball, Volleyball)',
       venue: 'University Stadium Grounds',
-      incharge: 'Referees Panel & Sports Directorate',
+      incharge: 'Dr. N. Ravi (Sports Chair - 9912393905)',
       type: 'Sports', link: '/events/Sports%20%26%20Games/Football'
     },
     {
       day: 3, time: '10:00 AM – 01:30 PM', category: 'Creo',
       name: 'Treasure Hunt & Short Film Movie Making Screening',
       venue: 'Ramanujan & Ratan Tata Auditoriums',
-      incharge: 'Media & Animation Cell',
+      incharge: 'Dr. B. Srinivas (Creo Chair - 9866732745)',
       type: 'Creo', link: '/events/Creo/Movie%20Making'
+    },
+    {
+      day: 3, time: '11:00 AM – 04:00 PM', category: 'Fete',
+      name: 'Grand Fete Fun Fair, Street Magic & Talent Showdown',
+      venue: 'Central Amphitheatre Walkway',
+      incharge: 'Mr. J. D. Venkatesh (Fete Chair - 7036266661)',
+      type: 'Fete', link: '/events'
     },
     {
       day: 3, time: '02:00 PM – 04:30 PM', category: 'Creo',
       name: 'Grand Runway Fashion Show Extravaganza',
       venue: 'ACOP Main Seminar Hall',
-      incharge: 'Fashion & Design Dept',
+      incharge: 'Dr. B. Srinivas (Creo Chair - 9866732745)',
       type: 'Creo', link: '/events/Creo/Fashion%20Show'
     },
     {
       day: 3, time: '05:00 PM – 07:30 PM', category: 'General',
-      name: 'Valedictory Ceremony, Trophy Presentation & Medals',
+      name: 'Valedictory Ceremony, Trophy Presentation & Medals (₹10 Lakhs Cash Prizes)',
       venue: 'Central Amphitheatre',
-      incharge: 'Chancellor, Vice-Chancellor & Dignitaries',
+      incharge: 'Chancellor, Vice-Chancellor & Domain Chairs',
       type: 'Ceremony', link: '/invitation'
     },
     {
@@ -169,11 +190,11 @@ export default function EventsSchedule() {
       {/* Header Banner */}
       <section className="schedule-hero">
         <div className="container text-center">
-          <div className="schedule-badge-top">ADITYA UNIVERSITY • FESTIVAL ITINERARY</div>
+          <div className="schedule-badge-top">ADITYA UNIVERSITY • COLOURS 2027 • ₹10 LAKHS IN CASH PRIZES</div>
           <h1 className="schedule-hero-title">Events Schedule & Timeline</h1>
           <p className="schedule-hero-sub">
-            Plan your 3-day festival journey across 40+ competitions, arenas, and grand concerts.
-            All fixtures, reporting times, and venue locations are updated live.
+            Plan your 3-day festival journey across 40+ national championships, live arenas, and celebrity concerts.
+            7 • 8 • 9 January 2027 • Surampalem Campus
           </p>
 
           {/* Day Selection Tabs */}
@@ -216,13 +237,19 @@ export default function EventsSchedule() {
                 className={`f-pill ${selectedCategory === 'Culturals' ? 'active' : ''}`}
                 onClick={() => setSelectedCategory('Culturals')}
               >
-                🎭 Culturals & Music
+                🎭 Culturals
               </button>
               <button
                 className={`f-pill ${selectedCategory === 'Creo' ? 'active' : ''}`}
                 onClick={() => setSelectedCategory('Creo')}
               >
-                🎨 Creo Creative Arts
+                🎨 Creo Events
+              </button>
+              <button
+                className={`f-pill ${selectedCategory === 'Fete' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('Fete')}
+              >
+                🎪 Fete Carnival
               </button>
             </div>
 

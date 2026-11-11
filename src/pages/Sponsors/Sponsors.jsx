@@ -111,7 +111,7 @@ export default function Sponsors() {
       {/* Hero Header */}
       <section className="sponsors-hero">
         <div className="container text-center">
-          <div className="sponsors-badge-top">ADITYA UNIVERSITY • FESTIVAL PARTNERS</div>
+          <div className="sponsors-badge-top">ADITYA UNIVERSITY • COLOURS 2027 • ₹10 LAKHS IN CASH PRIZES</div>
           <h1 className="sponsors-hero-title">Proud Sponsors & Partners</h1>
           <p className="sponsors-hero-sub">
             We extend our profound gratitude to our esteemed corporate, financial, and media partners

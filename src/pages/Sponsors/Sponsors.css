@@ -1,48 +1,51 @@
 /* ==========================================================================
-   University Sponsors Page Styles (White / Light Theme)
+   COLOURS 2027 – Sponsors & Corporate Partners (Official Festival Theme)
+   Obsidian Midnight, Metallic Gold Glow & Tiered Partner Cards
    ========================================================================== */
 
 .sponsors-page-wrapper {
   min-height: 100vh;
-  background-color: #ffffff;
-  color: #0f172a;
+  background-color: var(--clr-bg-black);
+  color: var(--clr-text-white);
   padding-top: var(--navbar-height);
   padding-bottom: 5rem;
   font-family: var(--font-body), sans-serif;
+  position: relative;
 }
 
 .sponsors-hero {
   padding: 4.5rem 1.5rem 3.5rem;
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
-  border-bottom: 1px solid #e2e8f0;
+  background: radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.12) 0%, rgba(10, 11, 18, 0.98) 75%);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
 }
 
 .sponsors-badge-top {
   display: inline-block;
-  background: #fef3c7;
-  border: 1px solid #fde68a;
-  color: #b45309;
-  font-size: 0.75rem;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+  color: #fde68a;
+  font-size: 0.76rem;
   font-weight: 800;
-  letter-spacing: 0.15em;
-  padding: 5px 16px;
-  border-radius: 50px;
-  margin-bottom: 1rem;
+  letter-spacing: 0.18em;
+  padding: 6px 18px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 1.25rem;
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.2);
 }
 
 .sponsors-hero-title {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  color: #0f172a;
-  margin-bottom: 1rem;
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  margin-bottom: 0.75rem;
 }
 
 .sponsors-hero-sub {
   font-size: 1.1rem;
-  color: #475569;
-  max-width: 680px;
+  color: #cbd5e1;
+  max-width: 700px;
   margin: 0 auto 2.5rem;
   line-height: 1.7;
 }
@@ -50,127 +53,125 @@
 .sponsors-hero-actions {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
 }
 
 .btn-sponsors-primary {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #ffffff;
-  padding: 12px 28px;
+  background: linear-gradient(135deg, #d4af37, #b8860b);
+  color: #06070a;
+  padding: 12px 30px;
   border-radius: 50px;
-  font-weight: 700;
+  font-weight: 900;
   font-size: 0.95rem;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.25);
-  transition: all 0.2s ease;
-  border: none;
-  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+  letter-spacing: 0.02em;
 }
 
 .btn-sponsors-primary:hover {
+  background: linear-gradient(135deg, #fde68a, #d4af37);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.35);
+  box-shadow: 0 10px 28px rgba(212, 175, 55, 0.5);
 }
 
 .btn-sponsors-outline {
-  background: #ffffff;
-  border: 1.5px solid #cbd5e1;
-  color: #1e293b;
-  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  color: #fde68a;
+  padding: 12px 28px;
   border-radius: 50px;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 0.95rem;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
 .btn-sponsors-outline:hover {
-  background: #f8fafc;
-  border-color: #94a3b8;
-  color: #0f172a;
+  background: rgba(212, 175, 55, 0.12);
+  border-color: #d4af37;
+  color: #ffffff;
 }
 
 /* Tiered Sections */
 .sponsors-grid-section {
-  padding: 4rem 1rem;
-  background: #ffffff;
+  padding: 4.5rem 1rem 5rem;
+  background: var(--clr-bg-black);
 }
 
 .tier-group-block {
-  margin-bottom: 4rem;
+  max-width: 1200px;
+  margin: 0 auto 4rem;
 }
 
 .tier-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
 }
 
 .tier-badge-pill {
-  border: 1.5px solid;
-  padding: 4px 14px;
-  border-radius: 50px;
-  font-size: 0.75rem;
+  font-size: 0.76rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 50px;
+  border: 1.5px solid;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .tier-heading {
+  font-family: var(--font-heading);
   font-size: 1.6rem;
-  font-weight: 800;
-  color: #0f172a;
+  font-weight: 900;
+  color: #ffffff;
   margin: 0;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
 }
 
 .tier-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
+  gap: 1.75rem;
 }
 
 .sponsor-card {
-  background: #ffffff;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 2rem;
+  background: rgba(14, 16, 26, 0.9);
+  border: 1.5px solid rgba(212, 175, 55, 0.3);
+  border-radius: 18px;
+  padding: 2.2rem;
   display: flex;
   align-items: flex-start;
   gap: 1.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
 }
 
 .sponsor-card:hover {
-  border-color: #fbbf24;
+  border-color: #d4af37;
   transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(217, 119, 6, 0.1);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.2);
 }
 
 .sponsor-logo-circle {
-  width: 64px;
-  height: 64px;
-  border-radius: 14px;
-  background: #f8fafc;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
   border: 2px solid;
+  background: rgba(255, 255, 255, 0.04);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
   font-weight: 900;
-  color: #0f172a;
+  color: #ffffff;
   flex-shrink: 0;
+  font-family: var(--font-heading);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
 .sponsor-details {
@@ -179,32 +180,34 @@
 }
 
 .sponsor-name {
+  font-family: var(--font-heading);
   font-size: 1.25rem;
   font-weight: 800;
-  color: #0f172a;
-  margin: 0 0 0.25rem;
+  color: #ffffff;
+  margin: 0 0 0.3rem;
+  letter-spacing: 0.02em;
 }
 
 .sponsor-tagline {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #b45309;
-  margin-bottom: 0.75rem;
+  color: #d4af37;
+  margin-bottom: 0.6rem;
 }
 
 .sponsor-desc {
-  font-size: 0.92rem;
-  color: #475569;
+  font-size: 0.9rem;
+  color: #cbd5e1;
   line-height: 1.6;
   margin: 0;
 }
 
-/* Benefits Grid */
+/* Benefits Section */
 .sponsors-benefits-section {
-  padding: 5rem 1rem;
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 4.5rem 1rem 5.5rem;
+  background: radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.08) 0%, rgba(6, 7, 10, 0.98) 70%);
+  border-top: 1px solid rgba(212, 175, 55, 0.25);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
 }
 
 .benefits-header {
@@ -212,15 +215,16 @@
 }
 
 .benefits-sub {
-  color: #475569;
   font-size: 1.05rem;
-  margin-top: 0.5rem;
+  color: #94a3b8;
+  max-width: 600px;
+  margin: 0.5rem auto 0;
 }
 
 .benefits-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
+  gap: 1.75rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -231,68 +235,69 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .benefits-grid {
     grid-template-columns: 1fr;
   }
 }
 
 .benefit-card {
-  background: #ffffff;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 2rem 1.5rem;
+  background: rgba(14, 16, 26, 0.9);
+  border: 1.5px solid rgba(212, 175, 55, 0.3);
+  border-radius: 18px;
+  padding: 2.2rem 1.8rem;
   text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
 }
 
 .benefit-card:hover {
-  border-color: #f59e0b;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.08);
+  border-color: #d4af37;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(212, 175, 55, 0.2);
 }
 
 .benefit-icon {
   font-size: 2.2rem;
-  display: block;
   margin-bottom: 1rem;
+  display: inline-block;
 }
 
 .benefit-card h4 {
-  font-size: 1.15rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
   font-weight: 800;
-  color: #0f172a;
-  margin-bottom: 0.5rem;
+  color: #fde68a;
+  margin-bottom: 0.75rem;
 }
 
 .benefit-card p {
   font-size: 0.9rem;
-  color: #475569;
+  color: #cbd5e1;
   line-height: 1.6;
   margin: 0;
 }
 
-/* Form Section */
+/* Sponsor Form Card */
 .sponsors-form-section {
-  padding: 5rem 1rem 3rem;
-  background: #ffffff;
+  padding: 4.5rem 1rem 6rem;
+  background: var(--clr-bg-black);
 }
 
 .sponsor-form-card {
   max-width: 1100px;
   margin: 0 auto;
-  background: #ffffff;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 20px;
-  padding: 3.5rem;
+  background: rgba(14, 16, 26, 0.95);
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  border-radius: 24px;
+  padding: 3rem;
   display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: 3.5rem;
-  box-shadow: 0 16px 45px rgba(15, 23, 42, 0.06);
+  grid-template-columns: 1fr 1.2fr;
+  gap: 3rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 860px) {
   .sponsor-form-card {
     grid-template-columns: 1fr;
     padding: 2rem;
@@ -301,98 +306,108 @@
 }
 
 .form-info-col h3 {
+  font-family: var(--font-heading);
   font-size: 2rem;
-  font-weight: 800;
-  color: #0f172a;
+  font-weight: 900;
+  color: #ffffff;
   margin: 0.5rem 0 1rem;
 }
 
 .form-info-col p {
-  color: #475569;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  color: #cbd5e1;
   line-height: 1.7;
+  margin-bottom: 2rem;
 }
 
 .sponsor-direct-contact {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background: #f8fafc;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 14px;
+  padding: 1.25rem;
 }
 
 .sponsor-direct-contact p {
-  margin: 0.4rem 0;
-  font-size: 0.92rem;
-  color: #334155;
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+  color: #cbd5e1;
 }
 
-.sponsor-form {
+.sponsor-direct-contact p strong {
+  color: #fde68a;
+}
+
+.form-input-col form {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
 
-.form-row-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-@media (max-width: 600px) {
-  .form-row-2 {
-    grid-template-columns: 1fr;
-  }
-}
-
-.form-field {
+.s-field {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 }
 
-.form-field label {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #334155;
+.s-field label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #d4af37;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
-.form-field input,
-.form-field select,
-.form-field textarea {
-  background: #ffffff;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 8px;
+.s-field input,
+.s-field select,
+.s-field textarea {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  border-radius: 12px;
   padding: 12px 16px;
-  color: #0f172a;
-  font-family: inherit;
   font-size: 0.95rem;
+  color: #ffffff;
   outline: none;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
+  font-family: inherit;
 }
 
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+.s-field select option {
+  background: #0f121d;
+  color: #ffffff;
 }
 
-.form-field select option {
-  background: #ffffff;
-  color: #0f172a;
+.s-field input:focus,
+.s-field select:focus,
+.s-field textarea:focus {
+  border-color: #d4af37;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.25);
 }
 
-.w-100 {
-  width: 100%;
+.btn-sponsor-submit {
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+  color: #06070a;
+  border: none;
+  font-size: 1rem;
+  font-weight: 900;
+  padding: 14px 28px;
+  border-radius: 50px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+  margin-top: 0.5rem;
+}
+
+.btn-sponsor-submit:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #fde68a 0%, #d4af37 100%);
+  box-shadow: 0 10px 28px rgba(212, 175, 55, 0.5);
 }
 
 .form-success-banner {
   text-align: center;
-  padding: 3rem 1.5rem;
-  background: #ecfdf5;
-  border: 1px solid #a7f3d0;
-  border-radius: 12px;
+  padding: 3rem 1rem;
 }
 
 .form-success-banner span {
@@ -402,7 +417,12 @@
 }
 
 .form-success-banner h4 {
-  font-size: 1.4rem;
-  color: #059669;
+  font-size: 1.5rem;
+  color: #6ee7b7;
+  font-weight: 800;
   margin-bottom: 0.5rem;
+}
+
+.form-success-banner p {
+  color: #cbd5e1;
 }
