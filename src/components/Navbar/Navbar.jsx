@@ -8,7 +8,7 @@ const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Events', path: '/events' },
   { label: 'Invitation', path: '/invitation' },
-  { label: 'Events Schedule', path: '/events-schedule' },
+  { label: 'Events Schedule', href: '/Schedule_of_Events.pdf' },
   { label: 'Sponsors', path: '/sponsors' },
   { label: 'Contact', path: '/contact' },
 ];
@@ -106,14 +106,24 @@ export default function Navbar() {
           {/* Desktop Nav Links */}
           <ul className="navbar-links">
             {navItems.map((item) => (
-              <li key={item.path}>
-                <NavLink
-                  to={item.path}
-                  end={item.path === '/'}
-                  className={({ isActive }) => (isActive ? 'active' : '')}
-                >
-                  <span>{item.label}</span>
-                </NavLink>
+              <li key={item.label}>
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>{item.label}</span>
+                  </a>
+                ) : (
+                  <NavLink
+                    to={item.path}
+                    end={item.path === '/'}
+                    className={({ isActive }) => (isActive ? 'active' : '')}
+                  >
+                    <span>{item.label}</span>
+                  </NavLink>
+                )}
               </li>
             ))}
           </ul>
@@ -208,18 +218,31 @@ export default function Navbar() {
           </div>
         ) : null}
 
-        {navItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            end={item.path === '/'}
-            className={({ isActive }) => (isActive ? 'active' : '')}
-            onClick={closeMenu}
-            role="menuitem"
-          >
-            {item.label}
-          </NavLink>
-        ))}
+        {navItems.map((item) =>
+          item.href ? (
+            <a
+              key={item.label}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeMenu}
+              role="menuitem"
+            >
+              {item.label}
+            </a>
+          ) : (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              end={item.path === '/'}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              onClick={closeMenu}
+              role="menuitem"
+            >
+              {item.label}
+            </NavLink>
+          )
+        )}
 
         {!student && (
           <button

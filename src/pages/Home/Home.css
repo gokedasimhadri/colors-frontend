@@ -1,16 +1,16 @@
 /* ==========================================================================
-   HOME PAGE – Official Colours 2027 Split Theme
-   Faithful to the White & Black Dual-Tone Poster with Multicolored Splash
+   HOME PAGE – Official Colours 2027 Light Theme
+   Clean Dual-Light Split Hero with Multicolored Splash & Crisp White Surfaces
    ========================================================================== */
 
 .colours-home-main {
-  background-color: var(--clr-bg-black);
-  color: var(--clr-text-white);
+  background-color: #f8fafc;
+  color: #0f172a;
   overflow-x: hidden;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   SPLIT HERO SECTION: Left (White) / Center (Splash) / Right (Black)
+   SPLIT HERO SECTION: Pure White / Soft Warm Light Surface
    ───────────────────────────────────────────────────────────── */
 .fest-split-hero {
   position: relative;
@@ -18,8 +18,9 @@
   display: flex;
   align-items: stretch;
   padding-top: var(--navbar-height);
-  background: #000000;
+  background: #ffffff;
   overflow: hidden;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .hero-split-container {
@@ -33,14 +34,13 @@
 /* ── LEFT HALF: Crisp White Canvas ── */
 .hero-half-light {
   background-color: #ffffff;
-  color: #0b0d17;
+  color: #0f172a;
   padding: 3.5rem 3.5rem 4rem 4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
   z-index: 2;
-  box-shadow: 12px 0 36px rgba(0, 0, 0, 0.25);
 }
 
 /* Institution Header with Golden Emblem */
@@ -55,12 +55,12 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border: 2px solid #d4af37;
+  border: 2px solid #d97706;
   display: flex;
   align-items: center;
   justify-content: center;
   background: radial-gradient(circle, #fffbeb 0%, #fef3c7 60%, #fde68a 100%);
-  box-shadow: 0 0 16px rgba(212, 175, 55, 0.35);
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.2);
   flex-shrink: 0;
 }
 
@@ -111,8 +111,7 @@
 }
 
 .text-col {
-  color: #0b0c14;
-  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
+  color: #0f172a;
 }
 
 .text-ours-ghost {
@@ -124,7 +123,7 @@
   font-weight: 800;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #1e293b;
+  color: #334155;
   margin-top: 0.75rem;
 }
 
@@ -132,7 +131,7 @@
 .hero-dates-card {
   background: #f8fafc;
   border: 1.5px solid #e2e8f0;
-  border-left: 4px solid #d4af37;
+  border-left: 4px solid #d97706;
   padding: 1.25rem 1.75rem;
   border-radius: var(--radius-sm);
   margin-bottom: 2.25rem;
@@ -205,13 +204,13 @@
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition-normal);
-  box-shadow: 0 8px 24px rgba(225, 29, 72, 0.35);
+  box-shadow: 0 6px 20px rgba(225, 29, 72, 0.28);
 }
 
 .btn-hero-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(225, 29, 72, 0.5);
-  filter: brightness(1.1);
+  box-shadow: 0 10px 28px rgba(225, 29, 72, 0.4);
+  filter: brightness(1.08);
 }
 
 .btn-hero-secondary {
@@ -231,7 +230,7 @@
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition-normal);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
 }
 
 .btn-hero-secondary:hover {
@@ -241,27 +240,76 @@
   transform: translateY(-2px);
 }
 
-/* ── CENTER GRAPHIC: Explosive 3D Splash Splatter ── */
+/* ── CENTER GRAPHIC: Interactive Draggable Poster Card ── */
 .hero-center-splatter-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 440px;
-  height: 620px;
+  width: 400px;
+  height: 580px;
   z-index: 4;
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  outline: none;
+}
+
+.hero-center-splatter-wrapper.dragging {
+  cursor: grabbing;
+  transition: none;
+}
+
+.hero-center-splatter-wrapper:focus-visible .hero-center-poster-img {
+  outline: 2px solid #d97706;
+  outline-offset: 6px;
 }
 
 .hero-center-poster-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.65));
+  filter: drop-shadow(0 15px 30px rgba(15, 23, 42, 0.22));
   animation: float 6s ease-in-out infinite;
+  -webkit-user-drag: none;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.hero-center-splatter-wrapper.dragging .hero-center-poster-img {
+  animation-play-state: paused;
+  filter: drop-shadow(0 24px 42px rgba(15, 23, 42, 0.3));
+  transform: scale(1.02);
+}
+
+.hero-poster-drag-hint {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.32rem 0.9rem;
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+  pointer-events: none;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hero-center-splatter-wrapper:hover .hero-poster-drag-hint,
+.hero-center-splatter-wrapper.dragging .hero-poster-drag-hint {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
 }
 
 .splatter-glow-halo {
@@ -269,22 +317,22 @@
   width: 320px;
   height: 320px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 0, 127, 0.25) 0%, rgba(0, 210, 255, 0.2) 50%, transparent 75%);
+  background: radial-gradient(circle, rgba(225, 29, 72, 0.14) 0%, rgba(2, 132, 199, 0.12) 50%, transparent 75%);
   filter: blur(45px);
   animation: pulseGlow 4s ease-in-out infinite;
 }
 
-/* ── RIGHT HALF: Deep Midnight Black Canvas ── */
+/* ── RIGHT HALF: Soft Luminous Light Canvas ── */
 .hero-half-dark {
-  background-color: #07070b;
-  color: #ffffff;
+  background: linear-gradient(135deg, #f8fafc 0%, #fffbeb 55%, #fdf2f8 100%);
+  color: #0f172a;
   padding: 3.5rem 4rem 4rem 3.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
   z-index: 2;
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 1px solid #e2e8f0;
 }
 
 .hero-dark-header {
@@ -299,9 +347,8 @@
   font-size: clamp(4.5rem, 9.5vw, 9rem);
   line-height: 0.88;
   letter-spacing: 0.05em;
-  color: #ffffff;
+  color: #e11d48;
   font-weight: 900;
-  text-shadow: 0 0 24px rgba(255, 255, 255, 0.35);
 }
 
 .fest-national-pill {
@@ -309,22 +356,22 @@
   align-items: center;
   padding: 0.35rem 0.9rem;
   border-radius: var(--radius-pill);
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(212, 175, 55, 0.5);
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
   font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.15em;
-  color: #fde68a;
+  color: #92400e;
 }
 
 /* ₹10 Lakhs Cash Prize Card from Poster */
 .hero-prize-card {
-  background: linear-gradient(135deg, rgba(24, 25, 38, 0.9), rgba(12, 13, 22, 0.95));
-  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  background: #ffffff;
+  border: 1.5px solid #fcd34d;
   border-radius: var(--radius-md);
   padding: 1.5rem 2rem;
   margin-bottom: 1.8rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.18);
+  box-shadow: 0 10px 30px rgba(217, 119, 6, 0.12);
   position: relative;
   overflow: hidden;
 }
@@ -347,7 +394,7 @@
   font-family: var(--font-heading);
   font-size: 2.8rem;
   line-height: 1;
-  color: #f59e0b;
+  color: #d97706;
 }
 
 .prize-number {
@@ -359,7 +406,6 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
 }
 
 .prize-caption {
@@ -367,25 +413,26 @@
   font-size: 0.95rem;
   font-weight: 900;
   letter-spacing: 0.22em;
-  color: #fef08a;
+  color: #92400e;
   text-transform: uppercase;
   margin-top: 0.2rem;
 }
 
 .prize-sub {
   font-size: 0.85rem;
-  color: #94a3b8;
+  color: #475569;
   margin-top: 0.6rem;
   line-height: 1.5;
 }
 
-/* Live Countdown Box on Dark Side */
+/* Live Countdown Box */
 .hero-countdown-box {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: var(--radius-md);
   padding: 1.25rem 1.5rem;
   margin-bottom: 2rem;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
 }
 
 .countdown-label-row {
@@ -395,7 +442,7 @@
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.18em;
-  color: #38bdf8;
+  color: #0284c7;
   margin-bottom: 0.85rem;
 }
 
@@ -403,8 +450,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #00d2ff;
-  box-shadow: 0 0 10px #00d2ff;
+  background: #0284c7;
+  box-shadow: 0 0 8px rgba(2, 132, 199, 0.5);
 }
 
 .countdown-neon-grid {
@@ -424,14 +471,12 @@
   font-family: var(--font-heading);
   font-size: 2.2rem;
   line-height: 1;
-  color: #ffffff;
+  color: #0f172a;
   letter-spacing: 0.05em;
-  text-shadow: 0 0 14px rgba(255, 255, 255, 0.3);
 }
 
 .countdown-val.pulse {
-  color: #f59e0b;
-  text-shadow: 0 0 16px rgba(245, 158, 11, 0.6);
+  color: #d97706;
 }
 
 .countdown-lbl {
@@ -445,11 +490,11 @@
 .countdown-sep {
   font-family: var(--font-heading);
   font-size: 1.8rem;
-  color: rgba(212, 175, 55, 0.5);
+  color: #cbd5e1;
   margin-bottom: 0.75rem;
 }
 
-/* Dark Side Actions */
+/* Right Side Actions */
 .hero-dark-actions {
   display: flex;
   align-items: center;
@@ -463,10 +508,10 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.85rem 1.8rem;
-  background: var(--clr-gold-gradient);
-  color: #000000;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
   font-family: var(--font-body);
-  font-weight: 900;
+  font-weight: 800;
   font-size: 0.92rem;
   letter-spacing: 0.04em;
   border: none;
@@ -474,13 +519,13 @@
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition-normal);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+  box-shadow: 0 6px 18px rgba(217, 119, 6, 0.28);
 }
 
 .btn-hero-gold:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(212, 175, 55, 0.5);
-  filter: brightness(1.08);
+  box-shadow: 0 10px 24px rgba(217, 119, 6, 0.38);
+  filter: brightness(1.06);
 }
 
 .btn-hero-dark-outline {
@@ -489,32 +534,33 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.82rem 1.6rem;
-  background: transparent;
-  color: #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.9rem;
   letter-spacing: 0.04em;
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border: 1.5px solid #cbd5e1;
   border-radius: var(--radius-pill);
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition-normal);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
 .btn-hero-dark-outline:hover {
-  border-color: rgba(212, 175, 55, 0.5);
-  color: #fde68a;
-  background: rgba(255, 255, 255, 0.05);
+  border-color: #d97706;
+  color: #b45309;
+  background: #fffbeb;
 }
 
 /* ─────────────────────────────────────────────────────────────
    TICKER BAR
    ───────────────────────────────────────────────────────────── */
 .fest-ticker-bar {
-  background: #08090f;
-  border-top: 1px solid rgba(212, 175, 55, 0.25);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
   padding: 0.85rem 0;
   overflow: hidden;
   position: relative;
@@ -545,7 +591,7 @@
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #f1f5f9;
+  color: #0f172a;
 }
 
 .ticker-splat {
@@ -553,12 +599,12 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   THE 4 FESTIVAL PILLARS SECTION (POSTER CORE)
+   THE 3 FESTIVAL PILLARS SECTION
    ───────────────────────────────────────────────────────────── */
 .fest-pillars-section {
-  padding: 6.5rem 0;
+  padding: 5.5rem 0;
   position: relative;
-  background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
+  background: #f8fafc;
 }
 
 .pillars-grid {
@@ -569,8 +615,8 @@
 }
 
 .pillar-card {
-  background: rgba(14, 16, 26, 0.88);
-  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
   border-top: 4px solid var(--pillar-accent);
   border-radius: var(--radius-md);
   padding: 2rem 1.6rem;
@@ -578,14 +624,13 @@
   flex-direction: column;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  backdrop-filter: blur(16px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.05);
 }
 
 .pillar-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-6px);
   border-color: var(--pillar-accent);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.1);
 }
 
 .pillar-header {
@@ -597,7 +642,6 @@
 
 .pillar-icon {
   font-size: 2.2rem;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
 }
 
 .pillar-title-group {
@@ -617,20 +661,20 @@
   font-family: var(--font-heading);
   font-size: 1.8rem;
   line-height: 1;
-  color: #ffffff;
+  color: #0f172a;
   letter-spacing: 0.05em;
 }
 
 .pillar-tagline {
   font-size: 0.88rem;
-  color: #94a3b8;
+  color: #64748b;
   margin-bottom: 1.5rem;
   line-height: 1.5;
 }
 
 .pillar-events-snippet {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: var(--radius-sm);
   padding: 1rem 1.1rem;
   margin-bottom: 1.5rem;
@@ -642,7 +686,7 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #cbd5e1;
+  color: #475569;
   display: block;
   margin-bottom: 0.5rem;
 }
@@ -655,10 +699,11 @@
 }
 
 .snippet-list li {
-  font-size: 0.82rem;
-  color: #e2e8f0;
+  font-size: 0.85rem;
+  color: #1e293b;
   position: relative;
   padding-left: 1.1rem;
+  font-weight: 500;
 }
 
 .snippet-list li::before {
@@ -671,8 +716,8 @@
 
 /* Coordinator phone card from poster */
 .pillar-coordinator-box {
-  background: rgba(212, 175, 55, 0.06);
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  background: #fffbeb;
+  border: 1px solid #fde68a;
   border-radius: var(--radius-sm);
   padding: 0.85rem 1rem;
   margin-bottom: 1.5rem;
@@ -683,7 +728,7 @@
   font-weight: 800;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #d4af37;
+  color: #b45309;
   display: block;
   margin-bottom: 0.35rem;
 }
@@ -699,23 +744,23 @@
 .coord-name {
   font-size: 0.9rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .coord-phone-pill {
   font-size: 0.78rem;
   font-weight: 800;
-  color: #fde68a;
+  color: #92400e;
   text-decoration: none;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  padding: 3px 8px;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  padding: 3px 10px;
   border-radius: var(--radius-pill);
   transition: var(--transition-fast);
 }
 
 .coord-phone-pill:hover {
-  background: rgba(212, 175, 55, 0.3);
+  background: #f59e0b;
   color: #ffffff;
 }
 
@@ -723,10 +768,10 @@
   display: block;
   text-align: center;
   padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
   border-radius: var(--radius-pill);
-  color: #ffffff;
+  color: #0f172a;
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 700;
@@ -738,331 +783,16 @@
   background: var(--pillar-accent);
   border-color: var(--pillar-accent);
   color: #ffffff;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
-}
-
-/* ─────────────────────────────────────────────────────────────
-   ₹10 LAKHS CASH PRIZES SHOWCASE
-   ───────────────────────────────────────────────────────────── */
-.fest-cash-showcase {
-  padding: 3rem 0 6rem;
-}
-
-.cash-showcase-card {
-  position: relative;
-  background: linear-gradient(135deg, rgba(20, 22, 35, 0.95), rgba(10, 11, 18, 0.98));
-  border: 2px solid rgba(212, 175, 55, 0.5);
-  border-radius: var(--radius-lg);
-  padding: 4rem 3rem;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(212, 175, 55, 0.2);
-}
-
-.cash-glow-orb {
-  position: absolute;
-  top: -120px;
-  right: -120px;
-  width: 450px;
-  height: 450px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, rgba(225, 29, 72, 0.1) 50%, transparent 75%);
-  filter: blur(60px);
-  pointer-events: none;
-}
-
-.cash-showcase-content {
-  position: relative;
-  z-index: 2;
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.cash-pill-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.45rem 1.3rem;
-  background: rgba(212, 175, 55, 0.15);
-  border: 1px solid rgba(212, 175, 55, 0.45);
-  border-radius: var(--radius-pill);
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.18em;
-  color: #fde68a;
-  margin-bottom: 1.5rem;
-}
-
-.cash-grand-title {
-  font-family: var(--font-heading);
-  font-size: clamp(3rem, 6.5vw, 5rem);
-  line-height: 1.05;
-  letter-spacing: 0.04em;
-  color: #ffffff;
-  margin-bottom: 1.25rem;
-}
-
-.cash-grand-title span {
-  background: var(--clr-gold-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.cash-lead-text {
-  font-size: 1.15rem;
-  color: #cbd5e1;
-  max-width: 760px;
-  margin: 0 auto 3rem;
-  line-height: 1.8;
-}
-
-.cash-perks-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3.5rem;
-  text-align: left;
-}
-
-.cash-perk {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
-  transition: var(--transition-fast);
-}
-
-.cash-perk:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(212, 175, 55, 0.4);
-}
-
-.perk-icon {
-  font-size: 2rem;
-  display: block;
-  margin-bottom: 0.75rem;
-}
-
-.perk-title {
-  font-size: 1rem;
-  font-weight: 800;
-  color: #ffffff;
-  display: block;
-  margin-bottom: 0.4rem;
-}
-
-.perk-desc {
-  font-size: 0.85rem;
-  color: #94a3b8;
-  line-height: 1.5;
-}
-
-.cash-actions-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.25rem;
-  flex-wrap: wrap;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   3-DAY FESTIVAL SCHEDULE
-   ───────────────────────────────────────────────────────────── */
-.fest-schedule-section {
-  padding: 6rem 0;
-  background: #06070a;
-}
-
-.schedule-day-tabs {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin: 2.5rem 0 3.5rem;
-  flex-wrap: wrap;
-}
-
-.schedule-tab-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1.8rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-pill);
-  color: #cbd5e1;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: var(--transition-fast);
-}
-
-.schedule-tab-btn .tab-circle {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 900;
-}
-
-.schedule-tab-btn:hover {
-  border-color: rgba(212, 175, 55, 0.5);
-  color: #fde68a;
-}
-
-.schedule-tab-btn.active {
-  background: linear-gradient(135deg, rgba(225, 29, 72, 0.2), rgba(124, 58, 237, 0.2));
-  border-color: #e11d48;
-  color: #ffffff;
-  box-shadow: 0 0 20px rgba(225, 29, 72, 0.35);
-}
-
-.schedule-tab-btn.active .tab-circle {
-  background: #e11d48;
-  color: #ffffff;
-}
-
-.schedule-timeline-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.timeline-card {
-  display: grid;
-  grid-template-columns: 200px 1fr 140px;
-  align-items: center;
-  gap: 1.5rem;
-  background: rgba(15, 17, 28, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-sm);
-  padding: 1.25rem 1.6rem;
-  transition: var(--transition-fast);
-}
-
-.timeline-card:hover {
-  background: rgba(20, 23, 38, 0.95);
-  border-color: rgba(212, 175, 55, 0.35);
-  transform: translateX(4px);
-}
-
-.timeline-time-col {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.timeline-clock {
-  font-family: var(--font-heading);
-  font-size: 1.2rem;
-  color: #fde68a;
-  letter-spacing: 0.05em;
-}
-
-.timeline-track-pill {
-  display: inline-block;
-  font-size: 0.65rem;
-  font-weight: 900;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #38bdf8;
-}
-
-.timeline-event-name {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 0.25rem;
-}
-
-.timeline-venue {
-  font-size: 0.82rem;
-  color: #94a3b8;
-}
-
-.event-type-chip {
-  display: inline-flex;
-  padding: 0.35rem 0.85rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-pill);
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #cbd5e1;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   MEMORIES GALLERY
-   ───────────────────────────────────────────────────────────── */
-.fest-memories-section {
-  padding: 6rem 0;
-  background: #08090f;
-}
-
-.memories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.25rem;
-  margin-top: 3.5rem;
-}
-
-.memory-card {
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-}
-
-.memory-card-inner {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  transition: transform 0.4s ease;
-}
-
-.memory-card:hover .memory-card-inner {
-  transform: scale(1.05);
-}
-
-.memory-emoji {
-  font-size: 4.5rem;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
-}
-
-.memory-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
-  display: flex;
-  align-items: flex-end;
-  padding: 1.25rem;
-}
-
-.memory-label {
-  font-family: var(--font-brand);
-  font-size: 0.95rem;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: 0.03em;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
 }
 
 /* ─────────────────────────────────────────────────────────────
    FINAL REGISTRATION CTA WITH QR CODE MATCHING POSTER
    ───────────────────────────────────────────────────────────── */
 .fest-final-cta {
-  padding: 6rem 0 8rem;
-  background: radial-gradient(circle at 50% 100%, rgba(225, 29, 72, 0.1) 0%, transparent 70%);
+  padding: 5.5rem 0 7rem;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
 }
 
 .final-cta-card {
@@ -1070,18 +800,18 @@
   grid-template-columns: 1.2fr 0.8fr;
   align-items: center;
   gap: 3.5rem;
-  background: rgba(14, 16, 26, 0.92);
-  border: 1.5px solid rgba(212, 175, 55, 0.4);
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
   border-radius: var(--radius-lg);
   padding: 3.5rem 3rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.06);
 }
 
 .cta-title {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 5vw, 3.8rem);
   line-height: 1.1;
-  color: #ffffff;
+  color: #0f172a;
   margin-bottom: 1.2rem;
 }
 
@@ -1094,7 +824,7 @@
 
 .cta-desc {
   font-size: 1.05rem;
-  color: #cbd5e1;
+  color: #475569;
   line-height: 1.8;
   margin-bottom: 2rem;
 }
@@ -1103,8 +833,8 @@
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: var(--radius-sm);
   padding: 1rem 1.25rem;
   margin-bottom: 2rem;
@@ -1117,12 +847,12 @@
 .cta-location-block .loc-info strong {
   display: block;
   font-size: 0.95rem;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .cta-location-block .loc-info span {
   font-size: 0.82rem;
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .cta-buttons-row {
@@ -1134,15 +864,15 @@
 
 /* Poster Thumbnail Preview Card in CTA */
 .cta-qr-card {
-  background: #000000;
-  border: 2px solid rgba(212, 175, 55, 0.5);
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
   border-radius: var(--radius-md);
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
 .poster-thumbnail-wrapper {
@@ -1151,7 +881,7 @@
   border-radius: var(--radius-sm);
   overflow: hidden;
   margin-bottom: 1rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
 }
 
 .poster-thumbnail-img {
@@ -1170,7 +900,7 @@
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.15em;
-  color: #d4af37;
+  color: #b45309;
   text-transform: uppercase;
 }
 
@@ -1178,7 +908,7 @@
   font-family: var(--font-brand);
   font-size: 0.88rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .qr-dates {
@@ -1202,6 +932,8 @@
 
   .hero-half-dark {
     padding: 3rem 2rem;
+    border-left: none;
+    border-top: 1px solid #e2e8f0;
   }
 
   .hero-center-splatter-wrapper {
@@ -1224,15 +956,6 @@
 }
 
 @media (max-width: 768px) {
-  .timeline-card {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  .cash-showcase-card {
-    padding: 2.5rem 1.5rem;
-  }
-
   .final-cta-card {
     padding: 2.5rem 1.5rem;
   }

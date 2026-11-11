@@ -1,12 +1,12 @@
 /* ==========================================================================
-   FOOTER – Official Colours 2027 Theme
-   Gold Metallic, Deep Midnight Glass, Multi-Domain Contacts
+   FOOTER – Official Colours 2027 Light Theme
+   Clean White Canvas, Gold Accents & Crisp Domain Contacts
    ========================================================================== */
 
 .uni-footer {
-  background: #040508;
-  color: #94a3b8;
-  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  background: #ffffff;
+  color: #475569;
+  border-top: 1px solid #e2e8f0;
   position: relative;
   overflow: hidden;
 }
@@ -16,11 +16,11 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #ff007f, #8b5cf6, #00d2ff, #10b981, #ffe600);
+  background: linear-gradient(90deg, #e11d48, #7c3aed, #0284c7, #059669, #f59e0b);
 }
 
 .uni-footer-top {
-  padding: 5rem 0 3.5rem;
+  padding: 4.5rem 0 3.5rem;
 }
 
 .uni-footer-grid {
@@ -41,22 +41,22 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #d4af37, #b45309);
-  color: #000000;
+  background: linear-gradient(135deg, #f59e0b, #b45309);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-heading);
   font-size: 1.3rem;
   font-weight: 900;
-  box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
 }
 
 .uni-footer-title {
   font-family: var(--font-brand);
   font-size: 1.05rem;
   font-weight: 900;
-  color: #ffffff;
+  color: #0f172a;
   letter-spacing: 0.12em;
 }
 
@@ -64,13 +64,13 @@
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.16em;
-  color: #d4af37;
+  color: #b45309;
   display: block;
 }
 
 .uni-footer-desc {
   font-size: 0.92rem;
-  color: #94a3b8;
+  color: #475569;
   line-height: 1.7;
   margin-bottom: 1.5rem;
 }
@@ -84,17 +84,17 @@
 .uni-tag-pill {
   font-size: 0.72rem;
   font-weight: 800;
-  padding: 3px 10px;
+  padding: 4px 10px;
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #cbd5e1;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #334155;
 }
 
 .uni-tag-pill.gold {
-  background: rgba(212, 175, 55, 0.15);
-  border-color: rgba(212, 175, 55, 0.45);
-  color: #fde68a;
+  background: #fffbeb;
+  border-color: #fcd34d;
+  color: #92400e;
 }
 
 /* ── Headings ── */
@@ -104,7 +104,7 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #ffffff;
+  color: #0f172a;
   margin-bottom: 1.4rem;
   position: relative;
   padding-bottom: 0.5rem;
@@ -116,7 +116,7 @@
   bottom: 0; left: 0;
   width: 28px;
   height: 2px;
-  background: #d4af37;
+  background: #d97706;
 }
 
 /* ── Domain Chairs List ── */
@@ -131,20 +131,20 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: var(--radius-sm);
-  padding: 0.5rem 0.75rem;
+  padding: 0.55rem 0.8rem;
 }
 
 .chair-badge {
   font-size: 0.68rem;
   font-weight: 900;
-  color: #d4af37;
+  color: #b45309;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  background: rgba(212, 175, 55, 0.12);
-  padding: 2px 7px;
+  background: #fef3c7;
+  padding: 3px 8px;
   border-radius: 4px;
   flex-shrink: 0;
 }
@@ -157,12 +157,12 @@
 .chair-person {
   font-size: 0.85rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .chair-tel {
   font-size: 0.75rem;
-  color: #fde68a;
+  color: #b45309;
   text-decoration: none;
   font-weight: 700;
 }
@@ -181,13 +181,14 @@
 
 .uni-footer-links a {
   font-size: 0.9rem;
-  color: #94a3b8;
+  color: #475569;
   text-decoration: none;
+  font-weight: 500;
   transition: var(--transition-fast);
 }
 
 .uni-footer-links a:hover {
-  color: #fde68a;
+  color: #e11d48;
   transform: translateX(4px);
   display: inline-block;
 }
@@ -199,17 +200,18 @@
   font-size: 0.88rem;
   line-height: 1.6;
   margin-bottom: 0.85rem;
-  color: #cbd5e1;
+  color: #334155;
 }
 
 .uni-contact-item a {
-  color: #cbd5e1;
+  color: #334155;
   text-decoration: none;
+  font-weight: 500;
   transition: var(--transition-fast);
 }
 
 .uni-contact-item a:hover {
-  color: #fde68a;
+  color: #e11d48;
 }
 
 .uni-social-wrapper {
@@ -220,7 +222,7 @@
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.1em;
-  color: #d4af37;
+  color: #b45309;
   text-transform: uppercase;
   display: block;
   margin-bottom: 0.6rem;
@@ -232,12 +234,12 @@
 }
 
 .social-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -245,51 +247,32 @@
   transition: var(--transition-fast);
 }
 
-.social-btn:hover {
-  background: var(--clr-gold-gradient);
-  color: #000000;
+.social-btn.facebook:hover {
+  background: #1877f2;
+  border-color: #1877f2;
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
-/* ── Bottom Bar ── */
-.uni-footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 1.5rem 0;
-  background: #020305;
+.social-btn.twitter:hover {
+  background: #0f172a;
+  border-color: #0f172a;
+  color: #ffffff;
+  transform: translateY(-2px);
 }
 
-.bottom-flex {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
+.social-btn.linkedin:hover {
+  background: #0a66c2;
+  border-color: #0a66c2;
+  color: #ffffff;
+  transform: translateY(-2px);
 }
 
-.copyright-text {
-  font-size: 0.82rem;
-  color: #64748b;
-}
-
-.copyright-text strong {
-  color: #cbd5e1;
-}
-
-.bottom-links {
-  display: flex;
-  gap: 0.75rem;
-  font-size: 0.82rem;
-  color: #64748b;
-}
-
-.bottom-links a {
-  color: #94a3b8;
-  text-decoration: none;
-  transition: var(--transition-fast);
-}
-
-.bottom-links a:hover {
-  color: #fde68a;
+.social-btn.youtube:hover {
+  background: #ff0000;
+  border-color: #ff0000;
+  color: #ffffff;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 1024px) {

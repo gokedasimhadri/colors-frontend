@@ -12,7 +12,7 @@ export default function Contact() {
   });
   const [sent, setSent] = useState(false);
 
-  // 4 Official Domain Chairs from the official Colours poster + Central support
+  // Official Domain Chairs from the official Colours poster
   const officialDomainChairs = [
     {
       domain: 'CULTURALS IN-CHARGE',
@@ -36,16 +36,22 @@ export default function Contact() {
       phone: '9866732745',
       email: 'creo.colours@adityauniversity.in',
       tag: 'Fine Arts • Photography • Literary • Runway',
-      accent: 'var(--clr-fest-yellow)'
-    },
-    {
-      domain: 'FETE IN-CHARGE',
-      name: 'Mr. J. D. Venkatesh',
-      phone: '7036266661',
-      email: 'fete.colours@adityauniversity.in',
-      tag: 'Carnival • Stalls • DJ Beat • Food Fiesta',
-      accent: 'var(--clr-fest-cyan)'
+      accent: 'var(--clr-fest-orange)'
     }
+  ];
+
+  const organizingCommittee = [
+    { name: 'Dr. M. Sreenivasa Reddy', designation: 'Dy. Pro-Chancellor', phone: '9866576662' },
+    { name: 'Dr. M. B. Srinivas', designation: 'Vice Chancellor', phone: '7093817666' },
+    { name: 'Dr. A. Ramesh', designation: 'Principal', phone: '9000476662' },
+    { name: 'Dr. S. Rama Sree', designation: 'Pro Vice-Chancellor (Academics)', phone: '703617666' },
+    { name: 'Dr. G. Suresh', designation: 'Registrar', phone: '7036266664' },
+    { name: 'Mr. S. T. V. S. Kumar', designation: 'Principal', phone: '9502876667' },
+    { name: 'Dr. D. Satish Kumar', designation: 'Principal', phone: '9866076671' },
+    { name: 'Dr. K. Ravi Shankar', designation: 'Principal', phone: '9000576662' },
+    { name: 'Mr. Vilas Anil Chavan', designation: 'Principal', phone: '8978296668' },
+    { name: 'Mrs. A. Vijaya Bhargavi', designation: 'Principal (I / C)', phone: '9704976662' },
+    { name: 'Mr. V. Satyanarayana', designation: 'Dean - CLM', phone: '8374856665' }
   ];
 
   const supportCommittee = [
@@ -95,17 +101,17 @@ export default function Contact() {
           <h1 className="contact-hero-title">Contact & Domain In-Charges</h1>
           <p className="contact-hero-sub">
             Have queries regarding registrations, stage allotments, rulebooks, or accommodation?
-            Connect directly with the 4 Official Domain Chairs and festival conveners.
+            Connect directly with the Official Domain Chairs and festival conveners.
           </p>
         </div>
       </section>
 
-      {/* 4 Official Domain Chairs Highlight (from Poster) */}
+      {/* Official Domain Chairs Highlight (from Poster) */}
       <section className="contact-poster-chairs-section">
         <div className="container">
           <div className="section-title-wrap text-center">
             <span className="gold-sub-title">OFFICIAL FESTIVAL DIRECTORS</span>
-            <h2 className="chairs-heading">The 4 Festival Domain In-Charges</h2>
+            <h2 className="chairs-heading">Festival Domain In-Charges</h2>
           </div>
 
           <div className="chairs-poster-grid">
@@ -124,6 +130,45 @@ export default function Contact() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Organizing Committee Section */}
+      <section className="contact-organizing-section" id="organizing-committee">
+        <div className="container">
+          <div className="organizing-committee-header">
+            <span className="gold-sub-title">UNIVERSITY LEADERSHIP & ADMINISTRATION</span>
+            <h2 className="chairs-heading">Organizing Committee</h2>
+            <p className="organizing-committee-sub">
+              Core executive leadership, institutional Principals, and Deans guiding Colours 2027.
+            </p>
+          </div>
+
+          <div className="organizing-table-card">
+            <div className="organizing-table-head">
+              <span>Name</span>
+              <span>Designation</span>
+              <span>Contact</span>
+            </div>
+            <div className="organizing-rows-list">
+              {organizingCommittee.map((member, idx) => (
+                <div key={idx} className="organizing-row">
+                  <div className="org-cell-name">
+                    <span className="org-index">{String(idx + 1).padStart(2, '0')}</span>
+                    <span className="org-member-name">{member.name}</span>
+                  </div>
+                  <div className="org-cell-role">
+                    <span className="org-role-pill">{member.designation}</span>
+                  </div>
+                  <div className="org-cell-phone">
+                    <a href={`tel:${member.phone}`} className="org-phone-pill">
+                      📞 {member.phone}
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -269,7 +314,6 @@ export default function Contact() {
                       <option>Culturals (Mr. P. Raju - 8374245400)</option>
                       <option>Sports (Dr. N. Ravi - 9912393905)</option>
                       <option>Creo (Dr. B. Srinivas - 9866732745)</option>
-                      <option>Fete (Mr. J. D. Venkatesh - 7036266661)</option>
                       <option>Hostel Accommodation & Hospitality</option>
                       <option>Other / General Enquiry</option>
                     </select>

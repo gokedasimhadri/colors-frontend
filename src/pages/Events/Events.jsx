@@ -113,18 +113,19 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
   const filteredCategories = useMemo(() => {
     return categories
       .filter((cat) => {
+        const cCode = (cat.code || cat._id || '').toUpperCase();
+        const cName = (cat.name || '').toUpperCase();
+        if (cCode.includes('FETE') || cName.includes('FETE')) return false;
         if (activeTab === 'ALL') return true;
-        const catCode = (cat.code || cat._id || '').toUpperCase();
-        const catName = (cat.name || '').toUpperCase();
         const tab = activeTab.toUpperCase();
 
         return (
-          catCode === tab ||
-          catName === tab ||
-          catCode.includes(tab) ||
-          tab.includes(catCode) ||
-          catName.includes(tab) ||
-          tab.includes(catName)
+          cCode === tab ||
+          cName === tab ||
+          cCode.includes(tab) ||
+          tab.includes(cCode) ||
+          cName.includes(tab) ||
+          tab.includes(cName)
         );
       })
       .map((cat) => {
@@ -157,24 +158,29 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
       .filter((cat) => (cat.data || []).length > 0 || (cat.events || []).length > 0);
   }, [categories, activeTab, searchQuery]);
 
-  // Derived category filter tabs (CULTURALS, SPORTS, CREO, FETE)
+  // Derived category filter tabs (CULTURALS, SPORTS, CREO)
   const categoryTabs = useMemo(() => {
     if (!categories || categories.length === 0) {
       return [
         { id: 'CULTURALS', label: 'Culturals' },
         { id: 'SPORTS', label: 'Sports' },
-        { id: 'CREO', label: 'Creo Events' },
-        { id: 'FETE', label: 'Fete Carnival' }
+        { id: 'CREO', label: 'Creo Events' }
       ];
     }
-    return categories.map((cat) => {
-      const id = cat.code || cat._id;
-      let label = cat.name || cat.code;
-      if (id === 'CREO' && !label.toLowerCase().includes('events') && !label.toLowerCase().includes('arts')) {
-        label = 'Creo Events';
-      }
-      return { id, label, count: cat.totalEventsCount || (cat.data || []).length };
-    });
+    return categories
+      .filter((cat) => {
+        const id = (cat.code || cat._id || '').toUpperCase();
+        const nm = (cat.name || '').toUpperCase();
+        return !id.includes('FETE') && !nm.includes('FETE');
+      })
+      .map((cat) => {
+        const id = cat.code || cat._id;
+        let label = cat.name || cat.code;
+        if (id === 'CREO' && !label.toLowerCase().includes('events') && !label.toLowerCase().includes('arts')) {
+          label = 'Creo Events';
+        }
+        return { id, label, count: cat.totalEventsCount || (cat.data || []).length };
+      });
   }, [categories]);
 
   // Total metrics across COLORS
@@ -198,7 +204,7 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
 
           <h1 className="events-hero-title">Official Competitions & Championships</h1>
           <p className="events-hero-subtitle">
-            Browse all competitive events across Culturals, Sports, Creo & Fete • 7 • 8 • 9 January 2027
+            Browse all competitive events across Culturals, Sports & Creo • 7 • 8 • 9 January 2027
           </p>
 
           {/* Theme Summary Metrics Bar */}

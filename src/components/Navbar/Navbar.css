@@ -1,6 +1,6 @@
 /* ==========================================================================
-   NAVBAR – Official Colours 2027 Theme
-   Gold Metallic, Deep Midnight Glass, Neon Spectrum Highlights
+   NAVBAR – Official Colours 2027 Light Theme
+   Crisp White Frosted Glass, Metallic Gold Accents & Spectrum Highlights
    ========================================================================== */
 
 .navbar {
@@ -9,18 +9,18 @@
   z-index: 1000;
   height: var(--navbar-height);
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  background: rgba(6, 7, 11, 0.82);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.22);
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .navbar.scrolled {
-  background: rgba(6, 7, 12, 0.96);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.4);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.75), 0 0 24px rgba(212, 175, 55, 0.08);
+  border-bottom: 1px solid #cbd5e1;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
 .navbar-inner {
@@ -49,22 +49,21 @@
   max-width: 180px;
   object-fit: contain;
   display: block;
-  filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3));
 }
 
 .navbar-logo-fallback {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #d4af37, #b45309);
+  background: linear-gradient(135deg, #f59e0b, #b45309);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-heading);
   font-size: 1.3rem;
-  color: #000000;
+  color: #ffffff;
   font-weight: 900;
-  box-shadow: 0 0 16px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
 }
 
 .navbar-brand-group {
@@ -78,8 +77,7 @@
   font-size: 0.88rem;
   font-weight: 800;
   letter-spacing: 0.12em;
-  color: #e5c07b;
-  text-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  color: #b45309;
 }
 
 .navbar-fest-pill {
@@ -93,11 +91,11 @@
 }
 
 .navbar-fest-pill .fest-name {
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .navbar-fest-pill .fest-year {
-  color: var(--clr-fest-pink);
+  color: #e11d48;
 }
 
 /* ── Desktop Nav Links ── */
@@ -112,33 +110,34 @@
   display: inline-flex;
   align-items: center;
   padding: 0.45rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid #e2e8f0;
   border-radius: var(--radius-pill);
   font-size: 0.86rem;
   font-weight: 600;
   font-family: var(--font-body);
-  color: #cbd5e1;
+  color: #334155;
   text-decoration: none;
   letter-spacing: 0.03em;
-  background: rgba(255, 255, 255, 0.03);
+  background: #f8fafc;
   transition: var(--transition-fast);
   position: relative;
   overflow: hidden;
 }
 
 .navbar-links li a:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(212, 175, 55, 0.4);
-  color: #fde68a;
+  background: #ffffff;
+  border-color: #d97706;
+  color: #b45309;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.15);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.12);
 }
 
 .navbar-links li a.active {
-  background: linear-gradient(135deg, rgba(225, 29, 72, 0.25), rgba(124, 58, 237, 0.25));
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.1), rgba(124, 58, 237, 0.1));
   border-color: #e11d48;
-  color: #ffffff;
-  box-shadow: 0 0 16px rgba(225, 29, 72, 0.35);
+  color: #be123c;
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(225, 29, 72, 0.15);
 }
 
 /* ── Right Cluster: Cash Prize Pill & Login ── */
@@ -153,10 +152,10 @@
   align-items: center;
   gap: 0.4rem;
   padding: 0.35rem 0.85rem;
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(245, 158, 11, 0.2));
-  border: 1px solid rgba(212, 175, 55, 0.5);
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #f59e0b;
   border-radius: var(--radius-pill);
-  box-shadow: 0 0 14px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 2px 10px rgba(217, 119, 6, 0.15);
 }
 
 .navbar-prize-pill .prize-icon {
@@ -167,14 +166,14 @@
   font-family: var(--font-brand);
   font-weight: 800;
   font-size: 0.85rem;
-  color: #fef08a;
+  color: #92400e;
   letter-spacing: 0.03em;
 }
 
 .navbar-prize-pill .prize-sub {
   font-size: 0.68rem;
   font-weight: 700;
-  color: #e5c07b;
+  color: #b45309;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -186,7 +185,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.55rem 1.4rem;
-  background: linear-gradient(135deg, #e11d48 0%, #7c3aed 50%, #d4af37 100%);
+  background: linear-gradient(135deg, #e11d48 0%, #7c3aed 65%, #d97706 100%);
   color: #ffffff;
   font-family: var(--font-body);
   font-weight: 700;
@@ -197,13 +196,13 @@
   cursor: pointer;
   overflow: hidden;
   transition: var(--transition-normal);
-  box-shadow: 0 4px 18px rgba(225, 29, 72, 0.35);
+  box-shadow: 0 4px 16px rgba(225, 29, 72, 0.28);
 }
 
 .btn-fest-login:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 26px rgba(225, 29, 72, 0.5), 0 0 15px rgba(212, 175, 55, 0.4);
-  filter: brightness(1.1);
+  box-shadow: 0 8px 22px rgba(225, 29, 72, 0.4);
+  filter: brightness(1.06);
 }
 
 /* ── Logged in Student Info Box ── */
@@ -218,22 +217,22 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
   padding: 5px 14px;
   border-radius: var(--radius-pill);
   transition: var(--transition-fast);
 }
 
 .student-pill-link:hover {
-  background: rgba(212, 175, 55, 0.15);
-  border-color: #d4af37;
+  background: #fffbeb;
+  border-color: #d97706;
 }
 
 .student-name-text {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .student-badge-dash {
@@ -247,20 +246,20 @@
 }
 
 .btn-logout {
-  background: transparent;
-  border: none;
-  color: #f87171;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
   font-size: 0.78rem;
   font-weight: 700;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 6px;
   transition: var(--transition-fast);
 }
 
 .btn-logout:hover {
-  background: rgba(239, 68, 68, 0.15);
-  color: #fca5a5;
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 /* ── Hamburger ── */
@@ -277,7 +276,7 @@
 .hamburger span {
   display: block;
   width: 24px; height: 2px;
-  background: #ffffff;
+  background: #0f172a;
   border-radius: 2px;
   transition: var(--transition-normal);
 }
@@ -292,16 +291,16 @@
   position: fixed;
   top: var(--navbar-height);
   left: 0; right: 0;
-  background: rgba(8, 9, 14, 0.98);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  border-bottom: 1px solid #e2e8f0;
   padding: 1.5rem 1.5rem 2rem;
   flex-direction: column;
   gap: 0.75rem;
   z-index: 999;
   animation: fadeIn 0.25s ease;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
 }
 
 .mobile-menu.open { display: flex; }
@@ -312,40 +311,40 @@
   justify-content: center;
   gap: 0.6rem;
   padding: 0.6rem 1rem;
-  background: rgba(212, 175, 55, 0.12);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
   border-radius: var(--radius-sm);
   font-size: 0.8rem;
   font-weight: 700;
-  color: #fef08a;
+  color: #92400e;
   margin-bottom: 0.5rem;
 }
 
 .mobile-menu a {
   display: block;
   padding: 0.75rem 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid #e2e8f0;
   border-radius: var(--radius-sm);
-  color: #e2e8f0;
+  color: #1e293b;
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95rem;
   letter-spacing: 0.02em;
-  background: rgba(255, 255, 255, 0.03);
+  background: #f8fafc;
   transition: var(--transition-fast);
 }
 
 .mobile-menu a:hover,
 .mobile-menu a.active {
-  border-color: rgba(212, 175, 55, 0.5);
-  background: rgba(212, 175, 55, 0.12);
-  color: #fde68a;
+  border-color: #e11d48;
+  background: #fff1f2;
+  color: #be123c;
 }
 
 .mobile-student-card {
   padding: 0.85rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: var(--radius-sm);
   display: flex;
   justify-content: space-between;
@@ -360,7 +359,7 @@
 
 .mobile-student-name {
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .mobile-student-action {
@@ -370,9 +369,9 @@
 }
 
 .btn-logout-mobile {
-  background: rgba(239, 68, 68, 0.2);
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  color: #fca5a5;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
   padding: 5px 12px;
   border-radius: 6px;
   font-weight: 700;

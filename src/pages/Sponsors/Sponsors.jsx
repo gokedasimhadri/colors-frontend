@@ -17,7 +17,7 @@ export default function Sponsors() {
     {
       tier: 'TITLE SPONSOR',
       badge: 'Platinum Presenter',
-      color: '#ffd700',
+      color: '#b45309',
       sponsors: [
         {
           name: 'ADITYA GROUP OF INSTITUTIONS',
@@ -30,7 +30,7 @@ export default function Sponsors() {
     {
       tier: 'POWERED BY & CO-SPONSORS',
       badge: 'Premier Partners',
-      color: '#ff1f78',
+      color: '#e11d48',
       sponsors: [
         {
           name: 'STATE BANK OF INDIA',
@@ -49,7 +49,7 @@ export default function Sponsors() {
     {
       tier: 'ASSOCIATE & SPORTS GEAR PARTNERS',
       badge: 'Gold Partners',
-      color: '#38bdf8',
+      color: '#0284c7',
       sponsors: [
         {
           name: 'DECATHLON SPORTS INDIA',
@@ -74,7 +74,7 @@ export default function Sponsors() {
     {
       tier: 'MEDIA & BROADCAST PARTNERS',
       badge: 'Official Media',
-      color: '#a855f7',
+      color: '#7c3aed',
       sponsors: [
         {
           name: 'THE HINDU',
