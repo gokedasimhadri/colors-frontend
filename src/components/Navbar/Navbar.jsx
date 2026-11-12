@@ -5,7 +5,7 @@ import StudentAuthModal from '../RegistrationModals/StudentAuthModal';
 import './Navbar.css';
 
 const navItems = [
-  { label: 'Home', path: '/' },
+  // { label: 'Home', path: '/' },
   // { label: 'Events', path: '/events' },
   // Auxiliary page links commented out for later use:
   // { label: 'Invitation', path: '/invitation' },
@@ -31,13 +31,6 @@ function UniversityLogo() {
           <div className="logo-icon-circle">AU</div>
         </div>
       )}
-      <div className="navbar-brand-group">
-        <span className="navbar-brand-title">ADITYA UNIVERSITY</span>
-        <div className="navbar-fest-pill">
-          <span className="fest-name">COLOURS</span>
-          <span className="fest-year">2027</span>
-        </div>
-      </div>
     </Link>
   );
 }
@@ -129,15 +122,8 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* Prize Chip & Login/Dashboard CTA */}
+          {/* Login/Dashboard CTA */}
           <div className="navbar-right-cluster">
-            {/* Cash Prize Highlight Pill from Poster */}
-            <div className="navbar-prize-pill" title="₹10 Lakhs in Cash Prizes across all events!">
-              <span className="prize-icon">🏆</span>
-              <span className="prize-text">₹10 Lakhs</span>
-              <span className="prize-sub">Prizes</span>
-            </div>
-
             <div className="navbar-cta">
               {student ? (
                 <div className="student-logged-box">

@@ -4,187 +4,227 @@
    ========================================================================== */
 
 .colours-home-main {
-  background-color: #f8fafc;
+  background: linear-gradient(to right, #ffffff 50%, #000000 50%);
+  background-attachment: fixed;
   color: #0f172a;
   overflow-x: hidden;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   SPLIT HERO SECTION: Pure White / Soft Warm Light Surface
+   SPLIT HERO SECTION: Official Poster Dual-Tone Identity
+   Left: 50% Pure White | Right: 50% Deep Black
    ───────────────────────────────────────────────────────────── */
 .fest-split-hero {
   position: relative;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: stretch;
-  padding-top: var(--navbar-height);
-  background: #ffffff;
+  padding-top: calc(var(--navbar-height) + 0.5rem);
+  background: linear-gradient(to right, #ffffff 50%, #000000 50%);
+  background-attachment: fixed;
+  background-size: 100% 100%;
   overflow: hidden;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.hero-split-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+/* ── GRAND SPLIT POSTER HEADER (Exact match to official banner) ── */
+.hero-poster-header {
   width: 100%;
-  min-height: calc(100vh - var(--navbar-height));
-  position: relative;
-}
-
-/* ── LEFT HALF: Crisp White Canvas ── */
-.hero-half-light {
-  background-color: #ffffff;
-  color: #0f172a;
-  padding: 3.5rem 3.5rem 4rem 4rem;
+  padding: 1.75rem 1rem 0.5rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 3;
+}
+
+
+/* Shared Poster Header Rows (Perfect Page Center Alignment) */
+.poster-header-row {
+  width: 100%;
+  display: flex;
   justify-content: center;
+  align-items: center;
+  text-align: center;
   position: relative;
   z-index: 2;
 }
 
-/* Institution Header with Golden Emblem */
-.hero-institution-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
+/* Row 1: ADITYA UNIVERSITY (Centered) */
+.poster-inst-row {
+  margin-bottom: clamp(0.65rem, 1.2vw, 1.15rem);
 }
 
-.au-golden-crest {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid #d97706;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle, #fffbeb 0%, #fef3c7 60%, #fde68a 100%);
-  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.2);
-  flex-shrink: 0;
-}
-
-.au-golden-crest .crest-inner {
-  font-family: var(--font-heading);
-  font-size: 1.4rem;
-  font-weight: 900;
-  color: #92400e;
-  letter-spacing: -0.5px;
-}
-
-.au-inst-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.au-gold-title {
+.poster-inst-text {
   font-family: var(--font-brand);
-  font-size: 1.1rem;
+  font-size: clamp(1.25rem, 2.5vw, 2.2rem);
   font-weight: 900;
   letter-spacing: 0.16em;
-  color: #b45309;
-}
-
-.au-gold-invite {
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.24em;
-  color: #d97706;
+  color: #Be9337;
   text-transform: uppercase;
-  margin-top: 2px;
+  text-align: center;
+  line-height: 1.3;
+  margin: 0;
+  padding: 0;
 }
 
-/* Split Heading */
-.hero-title-box {
-  margin-bottom: 2rem;
+/* Row 2: YOU'RE INVITED TO (Centered) */
+.poster-invite-row {
+  margin-bottom: clamp(0.75rem, 1.4vw, 1.25rem);
 }
 
-.hero-split-heading {
-  font-family: var(--font-heading);
-  font-size: clamp(4.5rem, 9.5vw, 9rem);
-  line-height: 0.88;
-  letter-spacing: 0.05em;
-  font-weight: 900;
-  display: flex;
-  align-items: baseline;
-  gap: 0;
-}
-
-.text-col {
-  color: #0f172a;
-}
-
-.text-ours-ghost {
-  display: none;
-}
-
-.hero-fest-tagline {
-  font-size: 0.95rem;
+.poster-invite-text {
+  font-family: var(--font-brand);
+  font-size: clamp(0.72rem, 1.15vw, 0.96rem);
   font-weight: 800;
+  letter-spacing: 0.32em;
+  color: #Be9337;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+}
+
+/* Row 3: COLOURS (Horizontally centered across the 50/50 canvas) */
+.poster-title-row {
+  justify-content: center;
+  margin: clamp(0.4rem, 1vw, 0.8rem) 0 clamp(0.75rem, 1.5vw, 1.25rem);
+  line-height: 1.05;
+}
+
+.poster-colours-heading {
+  font-family: var(--font-brand);
+  font-weight: 900;
+  font-size: clamp(5.2rem, 14.5vw, 12rem);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0.2rem 0;
+  background: linear-gradient(to right, #0d1536 50%, #ffffff 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  user-select: none;
+}
+
+/* Row 4: A NATIONAL LEVEL YOUTH FESTIVAL (Centered with 50/50 Dual-Tone Split) */
+.poster-tagline-row {
+  margin-top: clamp(0.75rem, 1.4vw, 1.25rem);
+}
+
+.poster-tagline-text {
+  font-family: var(--font-brand);
+  font-size: clamp(0.76rem, 1.25vw, 1.05rem);
+  font-weight: 900;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #334155;
-  margin-top: 0.75rem;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #0d1536 50%, #ffffff 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.35;
 }
 
-/* Save the Dates Block on Light Side */
+/* ── HERO CONTENT CARDS CONTAINER (Even Row for Dates & ₹10 Lakhs) ── */
+.hero-split-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  align-items: center;
+  position: relative;
+  background: transparent;
+  padding: clamp(1rem, 2vw, 2rem) 0 clamp(0.75rem, 1.5vw, 1.5rem);
+}
+
+/* ── LEFT HALF: Crisp White Canvas ── */
+.hero-half-light {
+  background-color: transparent;
+  color: #0f172a;
+  padding: 1rem clamp(1rem, 3vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Save the Dates Block on Light Side (Transparent & Borderless) */
 .hero-dates-card {
-  background: #f8fafc;
-  border: 1.5px solid #e2e8f0;
-  border-left: 4px solid #d97706;
-  padding: 1.25rem 1.75rem;
-  border-radius: var(--radius-sm);
-  margin-bottom: 2.25rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0 auto;
   max-width: 480px;
-  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+  width: fit-content;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
 }
 
 .save-dates-label {
-  font-size: 0.72rem;
+  font-family: var(--font-brand);
+  font-size: clamp(0.72rem, 1.1vw, 0.85rem);
   font-weight: 800;
-  letter-spacing: 0.2em;
-  color: #b45309;
+  letter-spacing: 0.28em;
+  color: #be9337;
   text-transform: uppercase;
   display: block;
-  margin-bottom: 0.4rem;
+  margin-bottom: clamp(0.65rem, 1.2vw, 0.9rem);
+  line-height: 1.4;
+  text-align: left;
+  align-self: flex-start;
 }
 
 .dates-display {
   display: flex;
   align-items: baseline;
-  gap: 0.6rem;
+  justify-content: flex-start;
+  gap: 0.65rem;
   flex-wrap: wrap;
+  line-height: 1.15;
 }
 
 .dates-highlight {
   font-family: var(--font-heading);
-  font-size: 2.4rem;
-  line-height: 1;
-  color: #0f172a;
-  letter-spacing: 0.05em;
+  font-size: clamp(2.3rem, 4.3vw, 3.3rem);
+  font-weight: 900;
+  line-height: 1.15;
+  color: #0A1128;
+  letter-spacing: 0.04em;
 }
 
 .month-highlight {
-  font-family: var(--font-brand);
-  font-size: 1.35rem;
+  font-family: var(--font-heading);
+  font-size: clamp(2.3rem, 4.3vw, 3.3rem);
   font-weight: 900;
-  color: #e11d48;
-  letter-spacing: 0.08em;
-}
-
-.hero-dates-campus {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #64748b;
-  margin-top: 0.4rem;
+  line-height: 1.15;
+  color: #0A1128;
+  letter-spacing: 0.04em;
 }
 
 /* Light Side Action Buttons */
 .hero-light-actions {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .btn-hero-primary {
@@ -240,115 +280,26 @@
   transform: translateY(-2px);
 }
 
-/* ── CENTER GRAPHIC: Interactive Draggable Poster Card ── */
-.hero-center-splatter-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  height: 580px;
-  z-index: 4;
-  pointer-events: auto;
-  cursor: grab;
-  user-select: none;
-  touch-action: pan-y;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-  outline: none;
-}
 
-.hero-center-splatter-wrapper.dragging {
-  cursor: grabbing;
-  transition: none;
-}
-
-.hero-center-splatter-wrapper:focus-visible .hero-center-poster-img {
-  outline: 2px solid #d97706;
-  outline-offset: 6px;
-}
-
-.hero-center-poster-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 15px 30px rgba(15, 23, 42, 0.22));
-  animation: float 6s ease-in-out infinite;
-  -webkit-user-drag: none;
-  transition: filter 0.2s ease, transform 0.2s ease;
-}
-
-.hero-center-splatter-wrapper.dragging .hero-center-poster-img {
-  animation-play-state: paused;
-  filter: drop-shadow(0 24px 42px rgba(15, 23, 42, 0.3));
-  transform: scale(1.02);
-}
-
-.hero-poster-drag-hint {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.94);
-  border: 1px solid #fcd34d;
-  color: #92400e;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.32rem 0.9rem;
-  border-radius: 999px;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
-  pointer-events: none;
-  opacity: 0.85;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.hero-center-splatter-wrapper:hover .hero-poster-drag-hint,
-.hero-center-splatter-wrapper.dragging .hero-poster-drag-hint {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-2px);
-}
-
-.splatter-glow-halo {
-  position: absolute;
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(225, 29, 72, 0.14) 0%, rgba(2, 132, 199, 0.12) 50%, transparent 75%);
-  filter: blur(45px);
-  animation: pulseGlow 4s ease-in-out infinite;
-}
-
-/* ── RIGHT HALF: Soft Luminous Light Canvas ── */
+/* ── RIGHT HALF: Deep Midnight Black Canvas ── */
 .hero-half-dark {
-  background: linear-gradient(135deg, #f8fafc 0%, #fffbeb 55%, #fdf2f8 100%);
-  color: #0f172a;
-  padding: 3.5rem 4rem 4rem 3.5rem;
+  background-color: transparent;
+  color: #ffffff;
+  padding: 1rem clamp(1rem, 3vw, 3rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   position: relative;
   z-index: 2;
-  border-left: 1px solid #e2e8f0;
+  border-left: none;
 }
 
 .hero-dark-header {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-}
-
-.hero-title-continuation .text-ours-real {
-  font-family: var(--font-heading);
-  font-size: clamp(4.5rem, 9.5vw, 9rem);
-  line-height: 0.88;
-  letter-spacing: 0.05em;
-  color: #e11d48;
-  font-weight: 900;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 }
 
 .fest-national-pill {
@@ -356,102 +307,301 @@
   align-items: center;
   padding: 0.35rem 0.9rem;
   border-radius: var(--radius-pill);
-  background: #fffbeb;
-  border: 1px solid #fcd34d;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.45);
   font-size: 0.74rem;
   font-weight: 800;
   letter-spacing: 0.15em;
-  color: #92400e;
+  color: #fde68a;
 }
 
-/* ₹10 Lakhs Cash Prize Card from Poster */
-.hero-prize-card {
-  background: #ffffff;
-  border: 1.5px solid #fcd34d;
-  border-radius: var(--radius-md);
-  padding: 1.5rem 2rem;
-  margin-bottom: 1.8rem;
-  box-shadow: 0 10px 30px rgba(217, 119, 6, 0.12);
-  position: relative;
-  overflow: hidden;
+/* ₹10 Lakhs Cash Prize Text Block (Transparent & Borderless, Even with Dates) */
+.hero-prize-heading-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  margin: 0 auto;
+  max-width: 480px;
+  width: fit-content;
+  padding: 0;
 }
 
-.hero-prize-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--clr-gold-gradient);
-}
-
-.prize-badge-glow {
+.prize-amount-title {
   display: flex;
   align-items: baseline;
+  justify-content: flex-start;
   gap: 0.35rem;
+  line-height: 1.15;
 }
 
-.prize-symbol {
+.prize-rupee {
   font-family: var(--font-heading);
-  font-size: 2.8rem;
-  line-height: 1;
-  color: #d97706;
-}
-
-.prize-number {
-  font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 5vw, 3.8rem);
-  line-height: 1;
-  letter-spacing: 0.04em;
-  background: var(--clr-gold-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.prize-caption {
-  font-family: var(--font-brand);
-  font-size: 0.95rem;
+  font-size: clamp(2.3rem, 4.3vw, 3.3rem);
   font-weight: 900;
-  letter-spacing: 0.22em;
-  color: #92400e;
+  color: #be9337;
+  line-height: 1.15;
+}
+
+.prize-val {
+  font-family: var(--font-heading);
+  font-size: clamp(2.3rem, 4.3vw, 3.3rem);
+  font-weight: 900;
+  color: #be9337;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+
+.prize-tagline {
+  font-family: var(--font-brand);
+  font-size: clamp(0.72rem, 1.1vw, 0.85rem);
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: #ffffff;
   text-transform: uppercase;
-  margin-top: 0.2rem;
+  margin-top: clamp(0.65rem, 1.2vw, 0.9rem);
+  line-height: 1.4;
+  text-align: left;
+  align-self: flex-start;
+  display: block;
 }
 
-.prize-sub {
-  font-size: 0.85rem;
-  color: #475569;
-  margin-top: 0.6rem;
-  line-height: 1.5;
+/* ── SWAPPED HERO SECTIONS ── */
+/* Row 1 (Top): Countdown Timer (Centered across 50/50 Split Canvas) */
+.hero-countdown-center-section,
+.hero-countdown-top-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 2vw, 2rem) 1.5rem clamp(0.5rem, 1vw, 1.25rem);
+  position: relative;
+  z-index: 3;
 }
 
-/* Live Countdown Box */
-.hero-countdown-box {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: var(--radius-md);
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+/* Row 2 (Middle): Even Split Row for Dates & ₹10 Lakhs */
+.hero-split-container,
+.hero-split-middle-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  align-items: center;
+  position: relative;
+  background: transparent;
+  padding: clamp(0.75rem, 1.5vw, 1.5rem) 0 clamp(1.25rem, 2.5vw, 2.25rem);
 }
 
+/* Row 3 (Bottom): Centered Action CTAs */
+.hero-bottom-actions-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.5rem, 1vw, 1rem) 1.5rem clamp(2.5rem, 4vw, 4rem);
+  position: relative;
+  z-index: 3;
+}
+
+/* Live Countdown Box (Transparent & Borderless Container) */
+.hero-countdown-box,
+.hero-countdown-box.hero-flip-countdown-box {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 780px;
+  width: 100%;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.hero-flip-clock-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.hero-flip-clock-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* @leenguyen/react-flip-clock-countdown Styling & Theme Matching Poster */
+.hero-flip-clock {
+  --fcc-spacing: clamp(10px, 1.8vw, 22px);
+  --fcc-digit-block-width: clamp(34px, 4.6vw, 56px);
+  --fcc-digit-block-height: clamp(54px, 7.2vw, 86px);
+  --fcc-digit-block-radius: 8px;
+  --fcc-digit-block-spacing: clamp(4px, 0.6vw, 7px);
+  --fcc-digit-font-size: clamp(32px, 4.8vw, 52px);
+  --fcc-label-font-size: clamp(10px, 1.1vw, 13px);
+  --fcc-separator-size: clamp(6px, 1vw, 9px);
+  font-family: var(--font-google-sans, 'Google Sans', sans-serif);
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.hero-flip-clock [class*="_2EBbg"] {
+  font-family: 'Bebas Neue', var(--font-google-sans, 'Google Sans'), sans-serif !important;
+  font-weight: 800 !important;
+}
+
+.hero-flip-clock [class*="_2aOn7"] {
+  font-family: var(--font-google-sans, 'Google Sans', sans-serif) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.18em !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   50/50 SPLIT THEME FOR FLIP CLOCK COUNTDOWN
+   Left Side (Days & Hours) -> Deep Navy Blue (#0A1128) over White Canvas
+   Right Side (Mins & Secs) -> Pure White (#FFFFFF) over Midnight Canvas
+   Center Colon             -> Vibrant Glowing Gold (#D4A017) Seam
+   ───────────────────────────────────────────────────────────── */
+
+/* ── LEFT HALF: DAYS & HOURS (Over Pure White Background) ── */
+.hero-flip-clock .fcc__unit_time--day,
+.hero-flip-clock .fcc__unit_time--hour {
+  --fcc-background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 60%, #e2e8f0 100%);
+  --fcc-digit-color: #0A1128;
+  --fcc-divider-color: rgba(10, 17, 40, 0.22);
+  --fcc-divider-height: 1.5px;
+  --fcc-label-color: #0A1128;
+}
+
+.hero-flip-clock .fcc__digit_block--day,
+.hero-flip-clock .fcc__digit_block--hour,
+.hero-flip-clock .fcc__unit_time--day ._2EBbg,
+.hero-flip-clock .fcc__unit_time--hour ._2EBbg {
+  color: #0A1128 !important;
+  box-shadow: 0 6px 18px rgba(10, 17, 40, 0.14), 0 2px 5px rgba(10, 17, 40, 0.08), inset 0 1px 0 #ffffff !important;
+  border: 1px solid rgba(10, 17, 40, 0.16) !important;
+}
+
+.hero-flip-clock .fcc__digit_block--day > div,
+.hero-flip-clock .fcc__digit_block--hour > div,
+.hero-flip-clock .fcc__digit_block--day ._3luxx > div,
+.hero-flip-clock .fcc__digit_block--hour ._3luxx > div,
+.hero-flip-clock .fcc__unit_time--day ._SKh-V,
+.hero-flip-clock .fcc__unit_time--day ._106d2,
+.hero-flip-clock .fcc__unit_time--day ._2v-d4,
+.hero-flip-clock .fcc__unit_time--hour ._SKh-V,
+.hero-flip-clock .fcc__unit_time--hour ._106d2,
+.hero-flip-clock .fcc__unit_time--hour ._2v-d4 {
+  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 60%, #e2e8f0 100%) !important;
+  color: #0A1128 !important;
+}
+
+.hero-flip-clock .fcc__label--day,
+.hero-flip-clock .fcc__label--hour {
+  color: #0A1128 !important;
+}
+
+/* ── RIGHT HALF: MINUTES & SECONDS (Over Midnight Black Background) ── */
+.hero-flip-clock .fcc__unit_time--minute,
+.hero-flip-clock .fcc__unit_time--second {
+  --fcc-background: linear-gradient(180deg, #1c1e25 0%, #111216 60%, #08080b 100%);
+  --fcc-digit-color: #FFFFFF;
+  --fcc-divider-color: rgba(255, 255, 255, 0.2);
+  --fcc-divider-height: 1.5px;
+  --fcc-label-color: #FFFFFF;
+}
+
+.hero-flip-clock .fcc__digit_block--minute,
+.hero-flip-clock .fcc__digit_block--second,
+.hero-flip-clock .fcc__unit_time--minute ._2EBbg,
+.hero-flip-clock .fcc__unit_time--second ._2EBbg {
+  color: #FFFFFF !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+.hero-flip-clock .fcc__digit_block--minute > div,
+.hero-flip-clock .fcc__digit_block--second > div,
+.hero-flip-clock .fcc__digit_block--minute ._3luxx > div,
+.hero-flip-clock .fcc__digit_block--second ._3luxx > div,
+.hero-flip-clock .fcc__unit_time--minute ._SKh-V,
+.hero-flip-clock .fcc__unit_time--minute ._106d2,
+.hero-flip-clock .fcc__unit_time--minute ._2v-d4,
+.hero-flip-clock .fcc__unit_time--second ._SKh-V,
+.hero-flip-clock .fcc__unit_time--second ._106d2,
+.hero-flip-clock .fcc__unit_time--second ._2v-d4 {
+  background: linear-gradient(180deg, #1c1e25 0%, #111216 60%, #08080b 100%) !important;
+  color: #FFFFFF !important;
+}
+
+.hero-flip-clock .fcc__label--minute,
+.hero-flip-clock .fcc__label--second {
+  color: #FFFFFF !important;
+}
+
+/* ── COLON ( : ) SEPARATORS: SPLIT-COLOR SYSTEM ── */
+/* 1st Separator (between DAYS & HOURS - on Pure White Canvas): SOLID BLACK / DEEP NAVY */
+.hero-flip-clock .fcc__unit_time--day + .fcc__separator:before,
+.hero-flip-clock .fcc__unit_time--day + .fcc__separator:after,
+.hero-flip-clock > div.fcc__separator:nth-child(2):before,
+.hero-flip-clock > div.fcc__separator:nth-child(2):after {
+  background: #0A1128 !important;
+  background-color: #0A1128 !important;
+  box-shadow: 0 1px 2px rgba(10, 17, 40, 0.25) !important;
+}
+
+/* 2nd Separator (between HOURS & MINS - at exact 50% split center seam): DUAL-TONE SPLIT COLOR */
+.hero-flip-clock .fcc__unit_time--hour + .fcc__separator:before,
+.hero-flip-clock .fcc__unit_time--hour + .fcc__separator:after,
+.hero-flip-clock > div.fcc__separator:nth-child(4):before,
+.hero-flip-clock > div.fcc__separator:nth-child(4):after {
+  background: linear-gradient(to right, #0A1128 0%, #0A1128 50%, #ffffff 50%, #ffffff 100%) !important;
+  background-color: transparent !important;
+  box-shadow: -1px 0 2px rgba(10, 17, 40, 0.25), 1px 0 4px rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 3rd Separator (between MINS & SECS - on Midnight Black Canvas): SOLID PURE WHITE */
+.hero-flip-clock .fcc__unit_time--minute + .fcc__separator:before,
+.hero-flip-clock .fcc__unit_time--minute + .fcc__separator:after,
+.hero-flip-clock > div.fcc__separator:nth-child(6):before,
+.hero-flip-clock > div.fcc__separator:nth-child(6):after {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Header row above Flip Clock (Only "COUNTDOWN" with Dual 50/50 Split) */
 .countdown-label-row {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  color: #0284c7;
-  margin-bottom: 0.85rem;
+  justify-content: center;
+  margin-bottom: clamp(0.75rem, 1.4vw, 1.15rem);
+  text-align: center;
+}
+
+.countdown-title-text {
+  font-family: var(--font-brand);
+  font-size: clamp(0.9rem, 1.5vw, 1.18rem);
+  font-weight: 900;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  text-align: center;
+  background: linear-gradient(to right, #0d1536 50%, #ffffff 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.2;
 }
 
 .glow-neon-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #0284c7;
-  box-shadow: 0 0 8px rgba(2, 132, 199, 0.5);
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
 }
 
 .countdown-neon-grid {
@@ -471,18 +621,19 @@
   font-family: var(--font-heading);
   font-size: 2.2rem;
   line-height: 1;
-  color: #0f172a;
+  color: #ffffff;
   letter-spacing: 0.05em;
+  text-shadow: 0 0 14px rgba(255, 255, 255, 0.25);
 }
 
 .countdown-val.pulse {
-  color: #d97706;
+  color: #f59e0b;
 }
 
 .countdown-lbl {
   font-size: 0.64rem;
   font-weight: 800;
-  color: #64748b;
+  color: #94a3b8;
   letter-spacing: 0.12em;
   margin-top: 0.25rem;
 }
@@ -490,16 +641,21 @@
 .countdown-sep {
   font-family: var(--font-heading);
   font-size: 1.8rem;
-  color: #cbd5e1;
+  color: rgba(255, 255, 255, 0.25);
   margin-bottom: 0.75rem;
 }
 
-/* Right Side Actions */
+/* Centered Hero CTAs (Row Below Countdown) */
+.hero-center-actions,
 .hero-dark-actions {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 .btn-hero-gold {
@@ -519,13 +675,13 @@
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition-normal);
-  box-shadow: 0 6px 18px rgba(217, 119, 6, 0.28);
+  box-shadow: 0 6px 18px rgba(217, 119, 6, 0.35);
 }
 
 .btn-hero-gold:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(217, 119, 6, 0.38);
-  filter: brightness(1.06);
+  box-shadow: 0 10px 24px rgba(217, 119, 6, 0.45);
+  filter: brightness(1.08);
 }
 
 .btn-hero-dark-outline {
@@ -534,24 +690,25 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.82rem 1.6rem;
-  background: #ffffff;
-  color: #0f172a;
+  background: #0b0c16;
+  color: #ffffff;
   font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.9rem;
   letter-spacing: 0.04em;
-  border: 1.5px solid #cbd5e1;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
   border-radius: var(--radius-pill);
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition-normal);
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .btn-hero-dark-outline:hover {
-  border-color: #d97706;
-  color: #b45309;
-  background: #fffbeb;
+  background: #1e293b;
+  border-color: #f59e0b;
+  color: #fde68a;
+  transform: translateY(-2px);
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -921,32 +1078,26 @@
 /* ─────────────────────────────────────────────────────────────
    RESPONSIVE MEDIA QUERIES
    ───────────────────────────────────────────────────────────── */
-@media (max-width: 1100px) {
+@media (max-width: 860px) {
   .hero-split-container {
     grid-template-columns: 1fr;
+    padding: 1rem 0 2.5rem;
   }
 
   .hero-half-light {
-    padding: 3rem 2rem;
+    padding: 2rem 1.5rem;
+    background-color: #ffffff;
   }
 
   .hero-half-dark {
-    padding: 3rem 2rem;
+    padding: 2.5rem 1.5rem;
+    background-color: #000000;
     border-left: none;
-    border-top: 1px solid #e2e8f0;
-  }
-
-  .hero-center-splatter-wrapper {
-    display: none;
-  }
-
-  .text-ours-ghost {
-    display: inline;
-    color: #e11d48;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .hero-dark-header {
-    display: none;
+    justify-content: flex-start;
   }
 
   .final-cta-card {

@@ -1,7 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getLoggedStudent } from '../../services/api';
 import { EVENT_START_DATE } from '../../utils/eventDate';
+import FlipClockCountdown from '@leenguyen/react-flip-clock-countdown';
+import '@leenguyen/react-flip-clock-countdown/dist/index.css';
+import SplitColorText from '../../components/SplitColor/SplitColorWrapper';
 import './Home.css';
 
 // ─── Countdown Timer Hook ───────────────────────────────────────────────────
@@ -83,53 +86,7 @@ const FEST_PILLARS = [
 
 export default function Home() {
   const { time, pulse } = useCountdown();
-  const heroRef = useRef(null);
-
   const [student, setStudent] = useState(getLoggedStudent());
-  const [posterOffsetX, setPosterOffsetX] = useState(0);
-  const [isDraggingPoster, setIsDraggingPoster] = useState(false);
-  const posterDragRef = useRef({
-    active: false,
-    startX: 0,
-    startOffset: 0,
-    maxOffset: 380,
-  });
-
-  const clampPosterOffset = (value, max) => Math.max(-max, Math.min(max, value));
-
-  const handlePosterPointerDown = (e) => {
-    if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
-    e.preventDefault();
-    const heroWidth = heroRef.current?.clientWidth || window.innerWidth;
-    const cardWidth = e.currentTarget.offsetWidth || 420;
-    const maxOffset = Math.max(180, Math.round((heroWidth - cardWidth) / 2) - 24);
-
-    posterDragRef.current = {
-      active: true,
-      startX: e.clientX,
-      startOffset: posterOffsetX,
-      maxOffset,
-    };
-    setIsDraggingPoster(true);
-    e.currentTarget.setPointerCapture?.(e.pointerId);
-  };
-
-  const handlePosterPointerMove = (e) => {
-    if (!posterDragRef.current.active) return;
-    const deltaX = e.clientX - posterDragRef.current.startX;
-    setPosterOffsetX(
-      clampPosterOffset(posterDragRef.current.startOffset + deltaX, posterDragRef.current.maxOffset)
-    );
-  };
-
-  const handlePosterPointerEnd = (e) => {
-    if (!posterDragRef.current.active) return;
-    posterDragRef.current.active = false;
-    setIsDraggingPoster(false);
-    if (e.currentTarget.hasPointerCapture?.(e.pointerId)) {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    }
-  };
 
   useEffect(() => {
     const handleAuth = () => setStudent(getLoggedStudent());
@@ -147,184 +104,121 @@ export default function Home() {
           HERO SECTION: Split Dual-Tone Canvas with Powder Burst
           Faithful recreation of the official poster design
           ───────────────────────────────────────────────────────────── */}
-      <section className="fest-split-hero" ref={heroRef} id="hero">
-        <div className="hero-split-container">
+      <section className="fest-split-hero" id="hero">
+        {/* Top Grand Split Header matching the Official Poster (Perfect Page Center Alignment) */}
+        <header className="hero-poster-header">
+          {/* Row 1: ADITYA UNIVERSITY (Centered) */}
+          <div className="poster-header-row poster-inst-row">
+            <h2 className="poster-inst-text">ADITYA UNIVERSITY</h2>
+          </div>
+
+          {/* Row 2: YOU'RE INVITED TO (Centered) */}
+          <div className="poster-header-row poster-invite-row">
+            <span className="poster-invite-text">YOU'RE INVITED TO</span>
+          </div>
+
+          {/* Row 3: COLOURS (Centered with 50/50 Dual-Tone Split) */}
+          <div className="poster-header-row poster-title-row">
+            <SplitColorText as="h1" className="poster-colours-heading" splitPercent={50}>
+              COLOURS
+            </SplitColorText>
+          </div>
+
+          {/* Row 4: A NATIONAL LEVEL YOUTH FESTIVAL (Centered with 50/50 Dual-Tone Split) */}
+          <div className="poster-header-row poster-tagline-row">
+            <SplitColorText as="p" className="poster-tagline-text" splitPercent={50}>
+              A NATIONAL LEVEL YOUTH FESTIVAL
+            </SplitColorText>
+          </div>
+        </header>
+
+        {/* ROW 1 (TOP): Live Interactive Split-Flap Countdown Timer (Centered across 50/50 Canvas) */}
+        <div className="hero-countdown-center-section hero-countdown-top-row">
+          <div className="hero-countdown-box hero-flip-countdown-box">
+            <div className="countdown-label-row">
+              <SplitColorText as="span" className="countdown-title-text" splitPercent={50}>
+                COUNTDOWN
+              </SplitColorText>
+            </div>
+
+            <div className="hero-flip-clock-wrapper">
+              <FlipClockCountdown
+                to={new Date(EVENT_DATE).getTime()}
+                labels={['DAYS', 'HOURS', 'MINS', 'SECS']}
+                duration={0.6}
+                hideOnComplete={false}
+                className="hero-flip-clock"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* ROW 2 (MIDDLE): Dates on Left (White), ₹10 Lakhs on Right (Black) in ONE Even Row */}
+        <div className="hero-split-container hero-split-middle-row">
           
           {/* LEFT HALF: Pure White Canvas */}
           <div className="hero-half hero-half-light">
-            {/* Top Emblem & Institution */}
-            <div className="hero-institution-row">
-              <div className="au-golden-crest">
-                <span className="crest-inner">AU</span>
-              </div>
-              <div className="au-inst-text">
-                <span className="au-gold-title">ADITYA UNIVERSITY</span>
-                <span className="au-gold-invite">YOU'RE INVITED TO</span>
-              </div>
-            </div>
-
-            {/* Split "COLOURS" Title: "COL" in solid black on white */}
-            <div className="hero-title-box">
-              <h1 className="hero-split-heading">
-                <span className="text-col">COL</span>
-                <span className="text-ours-ghost">OURS</span>
-              </h1>
-              <p className="hero-fest-tagline">
-                A NATIONAL LEVEL YOUTH FESTIVAL
-              </p>
-            </div>
-
             {/* Save the Dates Block from Poster */}
             <div className="hero-dates-card">
               <span className="save-dates-label">SAVE THE DATES</span>
               <div className="dates-display">
                 <span className="dates-highlight">7 • 8 • 9</span>
-                <span className="month-highlight">JANUARY 2027</span>
+                <span className="month-highlight">JANUARY</span>
               </div>
-              <p className="hero-dates-campus">
-                📍 Aditya University Campus, Surampalem, Kakinada Dist.
-              </p>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="hero-light-actions">
-              <Link to="/events" className="btn-hero-primary" id="hero-explore-btn">
-                <span>✦ Explore Events</span>
-              </Link>
-              <Link to="/invitation" className="btn-hero-secondary" id="hero-invitation-btn">
-                <span>📄 View Official Poster</span>
-              </Link>
-            </div>
-          </div>
-
-          {/* CENTER SPLATTER: Interactive Horizontal Draggable Poster Card */}
-          <div
-            className={`hero-center-splatter-wrapper ${isDraggingPoster ? 'dragging' : ''}`}
-            style={{ transform: `translate(calc(-50% + ${posterOffsetX}px), -50%)` }}
-            onPointerDown={handlePosterPointerDown}
-            onPointerMove={handlePosterPointerMove}
-            onPointerUp={handlePosterPointerEnd}
-            onPointerCancel={handlePosterPointerEnd}
-            onDoubleClick={() => setPosterOffsetX(0)}
-            role="slider"
-            aria-label="Drag poster card left or right"
-            aria-valuemin={-400}
-            aria-valuemax={400}
-            aria-valuenow={Math.round(posterOffsetX)}
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'ArrowLeft') setPosterOffsetX((prev) => Math.max(-380, prev - 40));
-              if (e.key === 'ArrowRight') setPosterOffsetX((prev) => Math.min(380, prev + 40));
-              if (e.key === 'Home' || e.key === '0') setPosterOffsetX(0);
-            }}
-            title="Drag left or right with mouse • Double-click to recenter"
-          >
-            <div className="splatter-glow-halo" />
-            <img
-              src="/colours_poster_theme.png"
-              alt="Colours 2027 Official Theme Splatter"
-              className="hero-center-poster-img"
-              draggable={false}
-            />
-            <div className="hero-poster-drag-hint">
-              <span>⇄ Drag Left or Right</span>
             </div>
           </div>
 
           {/* RIGHT HALF: Deep Midnight Black Canvas */}
           <div className="hero-half hero-half-dark">
-            {/* Split "COLOURS" Title continuation: "OURS" in pure white */}
-            <div className="hero-dark-header">
-              <div className="hero-title-continuation">
-                <span className="text-ours-real">OURS</span>
+            {/* ₹10 Lakhs In Cash Prizes Text Heading (Transparent & Borderless) */}
+            <div className="hero-prize-heading-block">
+              <div className="prize-amount-title">
+                <span className="prize-rupee">₹</span>
+                <span className="prize-val">10 Lakhs</span>
               </div>
-              <div className="fest-national-pill">
-                <span>2027 EDITION</span>
-              </div>
-            </div>
-
-            {/* ₹10 Lakhs Cash Prize Card from Poster */}
-            <div className="hero-prize-card">
-              <div className="prize-badge-glow">
-                <span className="prize-symbol">₹</span>
-                <span className="prize-number">10 Lakhs</span>
-              </div>
-              <div className="prize-caption">IN CASH PRIZES</div>
-              <p className="prize-sub">
-                Massive cash awards, national merit trophies & university honors across Culturals, Sports & Creo!
-              </p>
-            </div>
-
-            {/* Live Interactive Countdown Timer */}
-            <div className="hero-countdown-box">
-              <div className="countdown-label-row">
-                <span className="glow-neon-dot" />
-                <span>COUNTDOWN TO INAUGURATION</span>
-              </div>
-
-              <div className="countdown-neon-grid">
-                <div className="countdown-unit">
-                  <div className={`countdown-val ${pulse ? 'pulse' : ''}`}>
-                    {String(time.days).padStart(2, '0')}
-                  </div>
-                  <span className="countdown-lbl">DAYS</span>
-                </div>
-                <div className="countdown-sep">:</div>
-                <div className="countdown-unit">
-                  <div className={`countdown-val ${pulse ? 'pulse' : ''}`}>
-                    {String(time.hours).padStart(2, '0')}
-                  </div>
-                  <span className="countdown-lbl">HOURS</span>
-                </div>
-                <div className="countdown-sep">:</div>
-                <div className="countdown-unit">
-                  <div className={`countdown-val ${pulse ? 'pulse' : ''}`}>
-                    {String(time.minutes).padStart(2, '0')}
-                  </div>
-                  <span className="countdown-lbl">MINS</span>
-                </div>
-                <div className="countdown-sep">:</div>
-                <div className="countdown-unit">
-                  <div className={`countdown-val ${pulse ? 'pulse' : ''}`}>
-                    {String(time.seconds).padStart(2, '0')}
-                  </div>
-                  <span className="countdown-lbl">SECS</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Fast Register & Schedule CTA */}
-            <div className="hero-dark-actions">
-              {!student ? (
-                <button
-                  type="button"
-                  className="btn-hero-gold"
-                  onClick={() => {
-                    window.dispatchEvent(new CustomEvent('fest-open-auth-modal', { detail: { mode: 'login' } }));
-                  }}
-                >
-                  ✦ Register / Login Now
-                </button>
-              ) : (
-                <Link to="/dashboard" className="btn-hero-gold">
-                  ✦ Open Student Dashboard
-                </Link>
-              )}
-              <a
-                href="/Schedule_of_Events.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-hero-dark-outline"
-              >
-                📅 3-Day Schedule
-              </a>
+              <span className="prize-tagline">IN CASH PRIZES</span>
             </div>
           </div>
 
         </div>
+
+        {/* ROW 3 (BOTTOM): Centered Action CTAs */}
+        <div className="hero-bottom-actions-section">
+          <div className="hero-center-actions">
+            {!student ? (
+              <button
+                type="button"
+                className="btn-hero-gold"
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('fest-open-auth-modal', { detail: { mode: 'login' } }));
+                }}
+              >
+                ✦ Register / Login Now
+              </button>
+            ) : (
+              <Link to="/dashboard" className="btn-hero-gold">
+                ✦ Open Student Dashboard
+              </Link>
+            )}
+            <Link to="/events" className="btn-hero-primary" id="hero-explore-btn">
+              <span>✦ Explore Events</span>
+            </Link>
+            <a
+              href="/Schedule_of_Events.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-hero-dark-outline"
+            >
+              📅 3-Day Schedule
+            </a>
+            <Link to="/invitation" className="btn-hero-secondary" id="hero-invitation-btn">
+              <span>📄 View Official Poster</span>
+            </Link>
+          </div>
+        </div>
       </section>
 
-      {/* ── TICKER TAPE ── */}
+      {/* ── TICKER TAPE (Commented out) ──
       <div className="fest-ticker-bar" aria-hidden="true">
         <div className="ticker-track-wrapper">
           <div className="ticker-track">
@@ -337,6 +231,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      */}
 
       {/* ─────────────────────────────────────────────────────────────
           THREE MAIN FESTIVAL DOMAINS (FROM OFFICIAL POSTER)
