@@ -6,11 +6,12 @@ import './Navbar.css';
 
 const navItems = [
   { label: 'Home', path: '/' },
-  { label: 'Events', path: '/events' },
-  { label: 'Invitation', path: '/invitation' },
-  { label: 'Events Schedule', href: '/Schedule_of_Events.pdf' },
-  { label: 'Sponsors', path: '/sponsors' },
-  { label: 'Contact', path: '/contact' },
+  // { label: 'Events', path: '/events' },
+  // Auxiliary page links commented out for later use:
+  // { label: 'Invitation', path: '/invitation' },
+  // { label: 'Events Schedule', href: '/Schedule_of_Events.pdf' },
+  // { label: 'Sponsors', path: '/sponsors' },
+  // { label: 'Contact', path: '/contact' },
 ];
 
 function UniversityLogo() {
