@@ -1,0 +1,43 @@
+/* ==========================================================================
+   SplitColorText / SplitColorWrapper Component Styles
+   Dual-tone sharp split-color text gradient effect
+   Left default: #0A1128 (Deep Navy Blue) | Right default: #FFFFFF (Pure White)
+   ========================================================================== */
+
+.split-color-text {
+  /* Crisp clipping of background gradient to text glyphs */
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  /* Background positioning & rendering */
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  display: inline-block;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+/* Block-level heading and paragraph elements */
+h1.split-color-text,
+h2.split-color-text,
+h3.split-color-text,
+h4.split-color-text,
+h5.split-color-text,
+h6.split-color-text,
+p.split-color-text,
+div.split-color-text {
+  display: block;
+  width: 100%;
+}
+
+/* Interactive elements (Buttons, Links) */
+button.split-color-text,
+a.split-color-text {
+  text-decoration: none;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+

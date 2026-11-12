@@ -11,6 +11,7 @@
     "preview": "vite preview --port 2001"
   },
   "dependencies": {
+    "@leenguyen/react-flip-clock-countdown": "^1.7.2",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.4"
