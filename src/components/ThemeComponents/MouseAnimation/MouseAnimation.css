@@ -1,0 +1,17 @@
+/* ==========================================================================
+   MouseAnimation Component Styles
+   Auto-triggering website load powder explosion container
+   ========================================================================== */
+
+.mouse-animation-container {
+  pointer-events: none;
+  user-select: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  z-index: 99999;
+}
+

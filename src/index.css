@@ -65,7 +65,7 @@
   --font-body:    var(--font-google-sans);
 
   /* ── Layout & Radii ── */
-  --navbar-height: 84px;
+  --navbar-height: 98px;
   --radius-xs: 6px;
   --radius-sm: 10px;
   --radius-md: 16px;

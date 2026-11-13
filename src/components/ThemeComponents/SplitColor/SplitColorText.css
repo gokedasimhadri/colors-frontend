@@ -1,0 +1,73 @@
+/* ==========================================================================
+   SplitColorText Component Styles
+   Supports:
+   1. Real-time pixel-level background inversion via mix-blend-mode: difference
+   2. Sharp dual-tone split gradient (classic mode for headings/countdown)
+   3. Fallback luminance detection with smooth CSS transitions
+   ========================================================================== */
+
+.split-color-text {
+  display: inline-block;
+  box-sizing: border-box;
+  vertical-align: middle;
+  position: relative;
+  transition: color var(--split-transition, 0.25s) ease,
+              -webkit-text-fill-color var(--split-transition, 0.25s) ease;
+}
+
+/* ── 1. Real-Time Pixel Inversion Mode (mix-blend-mode: difference) ── */
+.split-color-text.mode-difference,
+.split-color-text[data-mode="difference"] {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  color: #ffffff !important;
+  mix-blend-mode: difference !important;
+  isolation: auto !important;
+}
+
+/* ── 2. Classic Sharp Dual-Tone Gradient Mode (Background Clip) ── */
+.split-color-text.mode-split,
+.split-color-text[data-mode="split"] {
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  mix-blend-mode: normal;
+}
+
+/* ── 3. Fallback Mode (When difference blend mode is overridden or unsuited) ── */
+.split-color-text.mode-fallback,
+.split-color-text[data-mode="fallback"] {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  color: var(--split-active-color, #ffffff) !important;
+  -webkit-text-fill-color: var(--split-active-color, #ffffff) !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Block-level heading and paragraph elements */
+h1.split-color-text,
+h2.split-color-text,
+h3.split-color-text,
+h4.split-color-text,
+h5.split-color-text,
+h6.split-color-text,
+p.split-color-text,
+div.split-color-text {
+  display: block;
+  width: 100%;
+}
+
+/* Interactive elements (Buttons, Links) */
+button.split-color-text,
+a.split-color-text {
+  text-decoration: none;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}

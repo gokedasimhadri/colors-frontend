@@ -4,50 +4,15 @@ import { getLoggedStudent } from '../../services/api';
 import { EVENT_START_DATE } from '../../utils/eventDate';
 import FlipClockCountdown from '@leenguyen/react-flip-clock-countdown';
 import '@leenguyen/react-flip-clock-countdown/dist/index.css';
-import SplitColorText from '../../components/SplitColor/SplitColorWrapper';
+import SplitColorText from '../../components/ThemeComponents/SplitColor/SplitColorText';
+import SplitBackground from '../../components/ThemeComponents/backgrounds/SplitBackground';
+import ThemeButton from '../../components/ThemeComponents/ThemeButton';
+import { LiquidGlass } from '../../components/ThemeComponents/LiquidGlass';
 import './Home.css';
 
-// ─── Countdown Timer Hook ───────────────────────────────────────────────────
 const EVENT_DATE = EVENT_START_DATE;
 
-function useCountdown() {
-  const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [pulse, setPulse] = useState(false);
-
-  useEffect(() => {
-    const calc = () => {
-      const diff = EVENT_DATE - new Date();
-      if (diff <= 0) return;
-      setTime({
-        days: Math.floor(diff / 86400000),
-        hours: Math.floor((diff % 86400000) / 3600000),
-        minutes: Math.floor((diff % 3600000) / 60000),
-        seconds: Math.floor((diff % 60000) / 1000),
-      });
-      setPulse(true);
-      setTimeout(() => setPulse(false), 300);
-    };
-    calc();
-    const id = setInterval(calc, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  return { time, pulse };
-}
-
-// ─── Ticker Items ───────────────────────────────────────────────────────────
-const TICKER_ITEMS = [
-  '₹10 Lakhs in Cash Prizes',
-  'Culturals: Singing, Dance, Mime & Theatre',
-  'Sports: Athletics, Volleyball, Basketball & Cricket',
-  'Creo: Fashion Show, Spot Painting & Film Making',
-  '7 • 8 • 9 January 2027',
-  'Aditya University Surampalem',
-  '50+ Universities & Colleges',
-  '25,000+ Student Delegates',
-];
-
-// ─── The 3 Pillars from the Official Poster ─────────────────────────────────
+// ─── The Festival Arenas (Culturals, Sports, Creo, Fete) ───────────────────
 const FEST_PILLARS = [
   {
     code: 'CULTURALS',
@@ -81,11 +46,21 @@ const FEST_PILLARS = [
     icon: '🎨',
     events: ['Ethnic & Modern Runway', 'Spot Painting Contest', 'Treasure Quest', 'Short Film Making', 'Mobile Photography'],
     bgImage: '/creo_bg.png'
+  },
+  {
+    code: 'FETE',
+    name: 'Fete',
+    tagline: 'Food Carnival, Fun Fiesta, Games & Stalls',
+    coordinator: 'Dr. K. Kishore',
+    phone: '9490111222',
+    color: '#059669',
+    icon: '🎪',
+    events: ['Master Chef & Cookery', 'Carnival & Fun Games', 'Youth Flea Market', 'Live Acoustic & DJ Arena', 'Flash Mob & Open Mic'],
+    bgImage: '/hero_bg.png'
   }
 ];
 
-export default function Home() {
-  const { time, pulse } = useCountdown();
+function Home() {
   const [student, setStudent] = useState(getLoggedStudent());
 
   useEffect(() => {
@@ -99,7 +74,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="colours-home-main">
+    <SplitBackground as="main" className="colours-home-main">
       {/* ─────────────────────────────────────────────────────────────
           HERO SECTION: Split Dual-Tone Canvas with Powder Burst
           Faithful recreation of the official poster design
@@ -107,24 +82,14 @@ export default function Home() {
       <section className="fest-split-hero" id="hero">
         {/* Top Grand Split Header matching the Official Poster (Perfect Page Center Alignment) */}
         <header className="hero-poster-header">
-          {/* Row 1: ADITYA UNIVERSITY (Centered) */}
-          <div className="poster-header-row poster-inst-row">
-            <h2 className="poster-inst-text">ADITYA UNIVERSITY</h2>
-          </div>
-
-          {/* Row 2: YOU'RE INVITED TO (Centered) */}
-          <div className="poster-header-row poster-invite-row">
-            <span className="poster-invite-text">YOU'RE INVITED TO</span>
-          </div>
-
-          {/* Row 3: COLOURS (Centered with 50/50 Dual-Tone Split) */}
+          {/* Row 1: COLOURS (Centered with 50/50 Dual-Tone Split) */}
           <div className="poster-header-row poster-title-row">
             <SplitColorText as="h1" className="poster-colours-heading" splitPercent={50}>
               COLOURS
             </SplitColorText>
           </div>
 
-          {/* Row 4: A NATIONAL LEVEL YOUTH FESTIVAL (Centered with 50/50 Dual-Tone Split) */}
+          {/* Row 2: A NATIONAL LEVEL YOUTH FESTIVAL (Centered with 50/50 Dual-Tone Split) */}
           <div className="poster-header-row poster-tagline-row">
             <SplitColorText as="p" className="poster-tagline-text" splitPercent={50}>
               A NATIONAL LEVEL YOUTH FESTIVAL
@@ -135,12 +100,6 @@ export default function Home() {
         {/* ROW 1 (TOP): Live Interactive Split-Flap Countdown Timer (Centered across 50/50 Canvas) */}
         <div className="hero-countdown-center-section hero-countdown-top-row">
           <div className="hero-countdown-box hero-flip-countdown-box">
-            <div className="countdown-label-row">
-              <SplitColorText as="span" className="countdown-title-text" splitPercent={50}>
-                COUNTDOWN
-              </SplitColorText>
-            </div>
-
             <div className="hero-flip-clock-wrapper">
               <FlipClockCountdown
                 to={new Date(EVENT_DATE).getTime()}
@@ -186,78 +145,99 @@ export default function Home() {
         <div className="hero-bottom-actions-section">
           <div className="hero-center-actions">
             {!student ? (
-              <button
-                type="button"
-                className="btn-hero-gold"
+              <ThemeButton
                 onClick={() => {
-                  window.dispatchEvent(new CustomEvent('fest-open-auth-modal', { detail: { mode: 'login' } }));
+                  window.dispatchEvent(new CustomEvent('fest-open-auth-modal', { detail: { mode: 'register' } }));
                 }}
+                className="hero-action-btn"
               >
-                ✦ Register / Login Now
-              </button>
+                <SplitColorText>Register</SplitColorText>
+              </ThemeButton>
             ) : (
-              <Link to="/dashboard" className="btn-hero-gold">
-                ✦ Open Student Dashboard
-              </Link>
+              <ThemeButton
+                as={Link}
+                to="/dashboard"
+                className="hero-action-btn"
+              >
+                <SplitColorText>Student Dashboard</SplitColorText>
+              </ThemeButton>
             )}
-            <Link to="/events" className="btn-hero-primary" id="hero-explore-btn">
-              <span>✦ Explore Events</span>
-            </Link>
-            <a
+
+            <ThemeButton
+              as={Link}
+              to="/events"
+              id="hero-explore-btn"
+              className="hero-action-btn"
+            >
+              <SplitColorText>Explore Events</SplitColorText>
+            </ThemeButton>
+
+            <ThemeButton
+              as="a"
               href="/Schedule_of_Events.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-hero-dark-outline"
+              className="hero-action-btn"
             >
-              📅 3-Day Schedule
-            </a>
-            <Link to="/invitation" className="btn-hero-secondary" id="hero-invitation-btn">
-              <span>📄 View Official Poster</span>
-            </Link>
+              <SplitColorText>3-Day Schedule</SplitColorText>
+            </ThemeButton>
+
+            <ThemeButton
+              as={Link}
+              to="/invitation"
+              id="hero-invitation-btn"
+              className="hero-action-btn"
+            >
+              <SplitColorText>View Official Poster</SplitColorText>
+            </ThemeButton>
           </div>
         </div>
       </section>
 
-      {/* ── TICKER TAPE (Commented out) ──
-      <div className="fest-ticker-bar" aria-hidden="true">
-        <div className="ticker-track-wrapper">
-          <div className="ticker-track">
-            {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-              <span key={i} className="ticker-badge">
-                <span className="ticker-splat">✦</span>
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-      */}
-
       {/* ─────────────────────────────────────────────────────────────
-          THREE MAIN FESTIVAL DOMAINS (FROM OFFICIAL POSTER)
-          CULTURALS • SPORTS • CREO
+          FOUR MAIN FESTIVAL DOMAINS (FROM OFFICIAL POSTER)
+          CULTURALS • SPORTS • CREO • FETE
           ───────────────────────────────────────────────────────────── */}
       <section className="fest-pillars-section" id="pillars">
-        <div className="container">
-          <div className="section-head text-center">
-            <span className="section-tag">OFFICIAL FESTIVAL DOMAINS</span>
-            <h2 className="section-title">
-              Three Arenas of <span>Glory</span>
-            </h2>
-            <p className="section-desc" style={{ margin: '0 auto' }}>
-              Competitions span 3 major tracks, supervised by dedicated university chairpersons with a total cash pool of ₹10,00,000.
-            </p>
+        <div className="container pillars-container">
+          <div className="section-head text-center pillars-header-centered">
+            <div className="pillars-title-wrap">
+              <SplitColorText
+                as="h2"
+                className="section-title pillars-section-title"
+                screenSync={true}
+                leftColor="#0f172a"
+                rightColor="#ffffff"
+              >
+                Four Arenas of Glory
+              </SplitColorText>
+            </div>
+            <div className="pillars-desc-wrap">
+              <SplitColorText
+                as="p"
+                className="section-desc pillars-section-desc"
+                screenSync={true}
+                leftColor="#0f172a"
+                rightColor="#ffffff"
+              >
+                Competitions span 4 major tracks, supervised by dedicated university
+                <br className="pillars-desc-br" />
+                chairpersons with a total cash pool of ₹10,00,000.
+              </SplitColorText>
+            </div>
           </div>
 
           <div className="pillars-grid">
-            {FEST_PILLARS.map((pillar) => (
-              <div
+            {FEST_PILLARS.map((pillar, index) => (
+              <LiquidGlass
                 key={pillar.code}
                 className="pillar-card"
-                style={{ '--pillar-accent': pillar.color }}
+                theme={index < 2 ? 'light' : 'dark'}
               >
                 <div className="pillar-header">
-                  <span className="pillar-icon">{pillar.icon}</span>
+                  <div className="pillar-icon-box">
+                    <span className="pillar-icon">{pillar.icon}</span>
+                  </div>
                   <div className="pillar-title-group">
                     <span className="pillar-code">{pillar.code}</span>
                     <h3 className="pillar-name">{pillar.name}</h3>
@@ -287,14 +267,18 @@ export default function Home() {
                 </div>
 
                 <div className="pillar-card-footer">
-                  <Link
-                    to={`/events`}
+                  <ThemeButton
+                    as={Link}
+                    to="/events"
                     className="btn-pillar-explore"
+                    borderRadius={12}
+                    width="100%"
+                    color={index < 2 ? '#0f172a' : '#ffffff'}
                   >
-                    Check Out {pillar.name} Events →
-                  </Link>
+                    Check Out {pillar.name} Events
+                  </ThemeButton>
                 </div>
-              </div>
+              </LiquidGlass>
             ))}
           </div>
         </div>
@@ -364,6 +348,8 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </main>
+    </SplitBackground>
   );
 }
+
+export default Home;

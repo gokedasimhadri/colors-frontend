@@ -1,0 +1,22 @@
+/* ==========================================================================
+   SplitBackground Component Styles
+   Dual-tone sharp 50/50 vertical split background
+   Left 50%: Pure White (#FFFFFF) | Right 50%: Pure Black (#000000)
+   Exact vertical split at 50% viewport width with zero blur or gradient transition
+   ========================================================================== */
+
+.split-background {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(
+    to right,
+    #ffffff 0%,
+    #ffffff 50%,
+    #000000 50%,
+    #000000 100%
+  );
+  background-size: 100% 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}

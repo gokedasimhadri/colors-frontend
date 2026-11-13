@@ -221,7 +221,7 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
     setSaving(true);
     try {
       const teamMembersOnly = participants.slice(1);
-      const res = await updateEventParticipants(regId, participants, teamMembersOnly);
+      await updateEventParticipants(regId, participants, teamMembersOnly);
 
       setSuccessMsg('🎉 Team roster successfully updated!');
       if (typeof onUpdated === 'function') {
