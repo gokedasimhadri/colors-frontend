@@ -7,6 +7,8 @@ import Invitation from './pages/Invitation/Invitation';
 import Sponsors from './pages/Sponsors/Sponsors';
 import Contact from './pages/Contact/Contact';
 import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
+import MouseAnimation from './components/ThemeComponents/MouseAnimation/MouseAnimation';
+import ColourBlast from './components/ThemeComponents/ColourBlast/ColourBlast';
 
 import Footer from './components/Footer/Footer';
 
@@ -32,6 +34,9 @@ function App() {
   return (
     <Router>
       <div className="app">
+        {/* Colorful powder blast animations: page load & user clicks */}
+        <MouseAnimation autoPlay={true} />
+        <ColourBlast enabled={true} particleCount={420} duration={900} size={0.42} spread={0.36} />
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />

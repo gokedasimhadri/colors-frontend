@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
-import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { getLoggedStudent, logoutStudent } from '../../services/api';
 import StudentAuthModal from '../RegistrationModals/StudentAuthModal';
+import ThemeButton from '../ThemeComponents/ThemeButton';
+import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
+import NavbarMenu from './NavbarMenu';
 import './Navbar.css';
 
 const navItems = [
-  // { label: 'Home', path: '/' },
-  // { label: 'Events', path: '/events' },
-  // Auxiliary page links commented out for later use:
-  // { label: 'Invitation', path: '/invitation' },
-  // { label: 'Events Schedule', href: '/Schedule_of_Events.pdf' },
-  // { label: 'Sponsors', path: '/sponsors' },
-  // { label: 'Contact', path: '/contact' },
+  { label: 'Events', path: '/events' },
+  { label: 'Invitation', path: '/invitation' },
+  { label: 'Events Schedule', href: '/Schedule_of_Events.pdf' },
+  { label: 'Sponsors', path: '/sponsors' },
+  { label: 'Contact', path: '/contact' },
 ];
 
 function UniversityLogo() {
@@ -21,7 +22,7 @@ function UniversityLogo() {
     <Link to="/" className="navbar-logo" aria-label="Aditya University – Colours 2027 Home">
       {!imgError ? (
         <img
-          src="/ADITYA LOGO2.png"
+          src="/aus-logo.svg"
           alt="Aditya University"
           className="navbar-logo-img"
           onError={() => setImgError(true)}
@@ -38,6 +39,7 @@ function UniversityLogo() {
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const isHome = location.pathname === '/';
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [student, setStudent] = useState(getLoggedStudent());
@@ -45,9 +47,18 @@ export default function Navbar() {
   const [authMode, setAuthMode] = useState('login');
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset || document.documentElement?.scrollTop || document.body?.scrollTop || 0;
+      setScrolled(scrollY > 15);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -89,38 +100,17 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`navbar ${scrolled ? 'scrolled' : ''}`}
+        className={`navbar ${!isHome ? 'navbar-subpage' : ''} ${scrolled ? 'scrolled' : ''}`}
         role="navigation"
         aria-label="Main navigation"
       >
+        <div className="navbar-glass-backdrop" aria-hidden="true" />
         <div className="navbar-inner">
           {/* University Logo & Branding */}
           <UniversityLogo />
 
           {/* Desktop Nav Links */}
-          <ul className="navbar-links">
-            {navItems.map((item) => (
-              <li key={item.label}>
-                {item.href ? (
-                  <a
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span>{item.label}</span>
-                  </a>
-                ) : (
-                  <NavLink
-                    to={item.path}
-                    end={item.path === '/'}
-                    className={({ isActive }) => (isActive ? 'active' : '')}
-                  >
-                    <span>{item.label}</span>
-                  </NavLink>
-                )}
-              </li>
-            ))}
-          </ul>
+          <NavbarMenu key={location.pathname} items={navItems} />
 
           {/* Login/Dashboard CTA */}
           <div className="navbar-right-cluster">
@@ -149,15 +139,15 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : (
-                <button
-                  type="button"
+                <ThemeButton
                   onClick={handleLoginClick}
-                  className="btn-fest-login"
                   id="navbar-login-btn"
+                  key={location.pathname}
                 >
-                  <span className="btn-glow" />
-                  ✦ Login / Register
-                </button>
+                  <SplitColorText leftColor="#0f172a" rightColor="#ffffff">
+                    Login
+                  </SplitColorText>
+                </ThemeButton>
               )}
             </div>
           </div>
@@ -205,42 +195,22 @@ export default function Navbar() {
           </div>
         ) : null}
 
-        {navItems.map((item) =>
-          item.href ? (
-            <a
-              key={item.label}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={closeMenu}
-              role="menuitem"
-            >
-              {item.label}
-            </a>
-          ) : (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              end={item.path === '/'}
-              className={({ isActive }) => (isActive ? 'active' : '')}
-              onClick={closeMenu}
-              role="menuitem"
-            >
-              {item.label}
-            </NavLink>
-          )
-        )}
+        {/* Mobile Navigation Links */}
+        <NavbarMenu
+          items={navItems}
+          isMobile
+          onItemClick={closeMenu}
+        />
 
         {!student && (
-          <button
-            type="button"
-            className="btn-fest-login"
+          <ThemeButton
             onClick={handleLoginClick}
-            style={{ textAlign: 'center', marginTop: '0.8rem', width: '100%', justifyContent: 'center' }}
             id="mobile-navbar-login-btn"
+            width="100%"
+            style={{ marginTop: '0.8rem' }}
           >
-            ✦ Login / Register
-          </button>
+            Login
+          </ThemeButton>
         )}
       </div>
 

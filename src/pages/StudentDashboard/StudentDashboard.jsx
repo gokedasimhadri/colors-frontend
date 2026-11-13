@@ -399,44 +399,6 @@ export default function StudentDashboard() {
     : null;
   const [photoError, setPhotoError] = useState(false);
 
-  // If not logged in, prompt state
-  if (!student) {
-    return (
-      <div className="student-dashboard-page">
-        <div className="dashboard-container">
-          <div className="empty-dash-card" style={{ padding: '5rem 2rem' }}>
-            <div className="empty-dash-icon">🔒</div>
-            <h2 className="empty-dash-title">Student Portal & Account Access</h2>
-            <p className="empty-dash-desc">
-              Please sign in with your student credentials or register your account to view your enrolled events, download official fest passes, and manage account security.
-            </p>
-            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-              <button
-                type="button"
-                className="btn-hero-action primary"
-                onClick={() => setAuthModalOpen(true)}
-              >
-                ✦ Sign In / Register Account
-              </button>
-              <Link to="/events" className="btn-hero-action secondary">
-                Browse Events
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        <StudentAuthModal
-          isOpen={authModalOpen}
-          onClose={() => setAuthModalOpen(false)}
-          onSuccess={() => {
-            setAuthModalOpen(false);
-            setStudent(getLoggedStudent());
-          }}
-        />
-      </div>
-    );
-  }
-
   // Active student details
   const activeStudent = dashboardData.student || student;
   const paymentsList = dashboardData.payments || [];
@@ -484,6 +446,44 @@ export default function StudentDashboard() {
       };
     });
   }, [paymentsList, registrationsList, catalogEvents]);
+
+  // If not logged in, prompt state
+  if (!student) {
+    return (
+      <div className="student-dashboard-page">
+        <div className="dashboard-container">
+          <div className="empty-dash-card" style={{ padding: '5rem 2rem' }}>
+            <div className="empty-dash-icon">🔒</div>
+            <h2 className="empty-dash-title">Student Portal & Account Access</h2>
+            <p className="empty-dash-desc">
+              Please sign in with your student credentials or register your account to view your enrolled events, download official fest passes, and manage account security.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+              <button
+                type="button"
+                className="btn-hero-action primary"
+                onClick={() => setAuthModalOpen(true)}
+              >
+                ✦ Sign In / Register Account
+              </button>
+              <Link to="/events" className="btn-hero-action secondary">
+                Browse Events
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <StudentAuthModal
+          isOpen={authModalOpen}
+          onClose={() => setAuthModalOpen(false)}
+          onSuccess={() => {
+            setAuthModalOpen(false);
+            setStudent(getLoggedStudent());
+          }}
+        />
+      </div>
+    );
+  }
 
   // Compute stats
   const totalRegistrations = displayEventsList.length;

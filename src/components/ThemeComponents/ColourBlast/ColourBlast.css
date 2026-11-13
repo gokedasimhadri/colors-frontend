@@ -1,0 +1,16 @@
+/* ==========================================================================
+   ColourBlast Component Styles
+   Lightweight container that ensures zero click-blocking
+   ========================================================================== */
+
+.colour-blast-container {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Ensure the Three.js shared canvas never intercepts pointer events */
+.blast-engine-canvas {
+  pointer-events: none !important;
+  user-select: none !important;
+}
+

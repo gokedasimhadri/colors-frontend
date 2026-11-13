@@ -1,0 +1,139 @@
+/* ==========================================================================
+   THEME BUTTON – Pure Transparent Liquid Glass Reusable Component
+   Zero Solid Color. Pure Optical Glass. Blends Dynamically with Any Background.
+   ========================================================================== */
+
+.theme-glass-btn {
+  /* ── 1. Reset all conflicting native & inherited button styles ── */
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  border: none;
+  background: transparent;
+  margin: 0;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+
+  /* ── 2. Layout & Positioning ── */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: var(--tb-padding, 0.65rem 1.6rem);
+  width: var(--tb-width, auto);
+  height: var(--tb-height, auto);
+  box-sizing: border-box;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+
+  /* ── 3. Geometry & Typography ── */
+  border-radius: var(--tb-radius, 10px);
+  font-family: inherit;
+  font-size: var(--tb-font-size, 0.92rem);
+  font-weight: 700;
+  letter-spacing: 0.035em;
+  color: var(--tb-color, #ffffff);
+  line-height: 1.2;
+
+  /* ── 4. Pure Optical Glass Physics (NO COLOR – blends into any background) ── */
+  background: var(--tb-bg, rgba(255, 255, 255, 0.06));
+  -webkit-backdrop-filter: blur(var(--tb-blur, 16px)) saturate(var(--tb-saturate, 170%)) brightness(var(--tb-brightness, 1.05));
+  backdrop-filter: blur(var(--tb-blur, 16px)) saturate(var(--tb-saturate, 170%)) brightness(var(--tb-brightness, 1.05));
+
+  /* ── 5. Pure Seamless Glass Edge (Zero Border) ── */
+  border: var(--tb-border, none);
+  box-shadow:
+    var(--tb-shadow, 0 10px 24px -6px rgba(0, 0, 0, 0.20)),
+    inset 0 1px 1.5px 0 var(--tb-top-highlight, rgba(255, 255, 255, 0.28)),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.10);
+
+  /* ── 6. Transitions ── */
+  transition: opacity 0.2s ease;
+}
+
+/* ── Overhead Curved Lens Ambient Glare ── */
+.theme-glass-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48%;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.24) 0%,
+      rgba(255, 255, 255, 0.03) 75%,
+      transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Content Container (Keeps text above glare) ── */
+.theme-glass-btn-content {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Blast Effect: Center Point Locked to Button Bottom-Right Corner ── */
+.theme-glass-btn-blast {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: var(--tb-blast-size, 75px);
+  height: var(--tb-blast-size, 75px);
+  max-width: 180%;
+  max-height: 180%;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  /* Mathematically locks the center point of the blast to the bottom-right corner */
+  transform: translate(50%, 50%) scale(0.2);
+  transform-origin: center center;
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.28s ease;
+  will-change: transform, opacity;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: saturate(135%) brightness(1.06);
+}
+
+.theme-glass-btn:hover .theme-glass-btn-blast {
+  opacity: 1;
+  /* Center point remains locked directly at the bottom-right corner strictly within button bounds */
+  transform: translate(50%, 50%) scale(1);
+}
+
+/* ── Disabled State ── */
+.theme-glass-btn:disabled,
+.theme-glass-btn.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Focus-Visible Ring (Accessibility) ── */
+.theme-glass-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 3px;
+}
+
+/* ── Accessibility: Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .theme-glass-btn {
+    transition: none !important;
+    transform: none !important;
+  }
+}

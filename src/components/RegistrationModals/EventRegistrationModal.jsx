@@ -34,8 +34,7 @@ export default function EventRegistrationModal({
   isOpen,
   eventData,
   student,
-  onClose,
-  onChangeStudent
+  onClose
 }) {
   const [agreeRules, setAgreeRules] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -95,7 +94,7 @@ export default function EventRegistrationModal({
   const existingReg = useMemo(() => {
     if (!student || !eventData) return null;
     return isStudentRegisteredForEvent(student.roll || student._id, eventTitle);
-  }, [student, eventData, eventTitle, successRecord]);
+  }, [student, eventData, eventTitle]);
 
   const activeRecord = successRecord || existingReg;
   const minTeamSize = eventData?.minTeamSize || (isTeam ? 2 : 1);

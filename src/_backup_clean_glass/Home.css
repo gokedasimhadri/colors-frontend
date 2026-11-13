@@ -1,0 +1,1329 @@
+/* ==========================================================================
+   HOME PAGE – Official Colours 2027 Light Theme
+   Clean Dual-Light Split Hero with Multicolored Splash & Crisp White Surfaces
+   ========================================================================== */
+
+.colours-home-main {
+  color: #0f172a;
+  overflow-x: hidden;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SPLIT HERO SECTION: Official Poster Dual-Tone Identity
+   Left: 50% Pure White | Right: 50% Deep Black
+   ───────────────────────────────────────────────────────────── */
+.fest-split-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding-top: calc(var(--navbar-height) + 0.5rem);
+  background: transparent;
+  overflow: hidden;
+  border-bottom: none;
+}
+
+/* ── GRAND SPLIT POSTER HEADER (Exact match to official banner) ── */
+.hero-poster-header {
+  width: 100%;
+  padding: 1.75rem 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 3;
+}
+
+
+/* Shared Poster Header Rows (Perfect Page Center Alignment) */
+.poster-header-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Row 1: ADITYA UNIVERSITY (Centered) */
+.poster-inst-row {
+  margin-bottom: clamp(0.65rem, 1.2vw, 1.15rem);
+}
+
+.poster-inst-text {
+  font-family: var(--font-brand);
+  font-size: clamp(1.25rem, 2.5vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  color: #Be9337;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.3;
+  margin: 0;
+  padding: 0;
+}
+
+/* Row 2: YOU'RE INVITED TO (Centered) */
+.poster-invite-row {
+  margin-bottom: clamp(0.75rem, 1.4vw, 1.25rem);
+}
+
+.poster-invite-text {
+  font-family: var(--font-brand);
+  font-size: clamp(0.72rem, 1.15vw, 0.96rem);
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  color: #Be9337;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+}
+
+/* Row 3: COLOURS (Horizontally centered across the 50/50 canvas) */
+.poster-title-row {
+  justify-content: center;
+  margin: clamp(0.4rem, 1vw, 0.8rem) 0 clamp(0.75rem, 1.5vw, 1.25rem);
+  line-height: 1.05;
+}
+
+.poster-colours-heading {
+  font-family: var(--font-brand);
+  font-weight: 900;
+  font-size: clamp(5.2rem, 14.5vw, 12rem);
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0.2rem 0;
+  background: linear-gradient(to right, #0d1536 50%, #ffffff 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  user-select: none;
+}
+
+/* Row 4: A NATIONAL LEVEL YOUTH FESTIVAL (Centered with 50/50 Dual-Tone Split) */
+.poster-tagline-row {
+  margin-top: clamp(0.75rem, 1.4vw, 1.25rem);
+}
+
+.poster-tagline-text {
+  font-family: var(--font-brand);
+  font-size: clamp(0.76rem, 1.25vw, 1.05rem);
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #0d1536 50%, #ffffff 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.35;
+}
+
+/* ── HERO CONTENT CARDS CONTAINER (Even Row for Dates & ₹10 Lakhs) ── */
+.hero-split-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  align-items: center;
+  position: relative;
+  background: transparent;
+  padding: clamp(1rem, 2vw, 2rem) 0 clamp(0.75rem, 1.5vw, 1.5rem);
+}
+
+/* ── LEFT HALF: Crisp White Canvas ── */
+.hero-half-light {
+  background-color: transparent;
+  color: #0f172a;
+  padding: 1rem clamp(1rem, 3vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Save the Dates Block on Light Side (Transparent & Borderless) */
+.hero-dates-card {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 480px;
+  width: fit-content;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+}
+
+.save-dates-label {
+  font-family: var(--font-brand);
+  font-size: clamp(0.72rem, 1.1vw, 0.85rem);
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: #be9337;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: clamp(0.65rem, 1.2vw, 0.9rem);
+  line-height: 1.4;
+  text-align: left;
+  align-self: flex-start;
+}
+
+.dates-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  line-height: 1.15;
+}
+
+.dates-highlight {
+  font-family: var(--font-heading);
+  font-size: clamp(2.3rem, 4.3vw, 3.3rem);
+  font-weight: 900;
+  line-height: 1.15;
+  color: #0A1128;
+  letter-spacing: 0.04em;
+}
+
+.month-highlight {
+  font-family: var(--font-heading);
+  font-size: clamp(2.3rem, 4.3vw, 3.3rem);
+  font-weight: 900;
+  line-height: 1.15;
+  color: #0A1128;
+  letter-spacing: 0.04em;
+}
+
+/* Light Side Action Buttons */
+.hero-light-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.btn-hero-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 2rem;
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.20) 0%, rgba(124, 58, 237, 0.14) 100%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.06) contrast(1.02);
+  backdrop-filter: blur(24px) saturate(200%) brightness(1.06) contrast(1.02);
+  color: #be123c;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  border: 1.5px solid rgba(225, 29, 72, 0.42);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: all 0.28s cubic-bezier(0.2, 0, 0, 1);
+  box-shadow: 
+    0 14px 32px -6px rgba(225, 29, 72, 0.22),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -1px 1px 0 rgba(225, 29, 72, 0.18),
+    inset 0 0 20px 0 rgba(225, 29, 72, 0.12);
+}
+
+.btn-hero-primary::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 48%;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.btn-hero-primary:hover {
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.30) 0%, rgba(124, 58, 237, 0.20) 100%);
+  border-color: #e11d48;
+  color: #9f1239;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 18px 40px -6px rgba(225, 29, 72, 0.34),
+    inset 0 1.5px 2px 0 #ffffff,
+    inset 0 0 26px 0 rgba(225, 29, 72, 0.22);
+}
+
+.btn-hero-secondary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.82rem 1.8rem;
+  background: rgba(255, 255, 255, 0.14);
+  -webkit-backdrop-filter: blur(24px) saturate(190%) brightness(1.1) contrast(1.02);
+  backdrop-filter: blur(24px) saturate(190%) brightness(1.1) contrast(1.02);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.03em;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: all 0.28s cubic-bezier(0.2, 0, 0, 1);
+  box-shadow: 
+    0 12px 30px -6px rgba(0, 0, 0, 0.42),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 20px 0 rgba(255, 255, 255, 0.12);
+}
+
+.btn-hero-secondary::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 48%;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.btn-hero-secondary:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #ffffff;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 16px 38px -6px rgba(0, 0, 0, 0.55),
+    inset 0 1.5px 2px 0 #ffffff,
+    inset 0 0 26px 0 rgba(255, 255, 255, 0.2);
+}
+
+
+/* ── RIGHT HALF: Deep Midnight Black Canvas ── */
+.hero-half-dark {
+  background-color: transparent;
+  color: #ffffff;
+  padding: 1rem clamp(1rem, 3vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  border-left: none;
+}
+
+.hero-dark-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.fest-national-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-pill);
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #fde68a;
+}
+
+/* ₹10 Lakhs Cash Prize Text Block (Transparent & Borderless, Even with Dates) */
+.hero-prize-heading-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  margin: 0 auto;
+  max-width: 480px;
+  width: fit-content;
+  padding: 0;
+}
+
+.prize-amount-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 0.35rem;
+  line-height: 1.15;
+}
+
+.prize-rupee {
+  font-family: var(--font-heading);
+  font-size: clamp(2.3rem, 4.3vw, 3.3rem);
+  font-weight: 900;
+  color: #be9337;
+  line-height: 1.15;
+}
+
+.prize-val {
+  font-family: var(--font-heading);
+  font-size: clamp(2.3rem, 4.3vw, 3.3rem);
+  font-weight: 900;
+  color: #be9337;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+
+.prize-tagline {
+  font-family: var(--font-brand);
+  font-size: clamp(0.72rem, 1.1vw, 0.85rem);
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin-top: clamp(0.65rem, 1.2vw, 0.9rem);
+  line-height: 1.4;
+  text-align: left;
+  align-self: flex-start;
+  display: block;
+}
+
+/* ── SWAPPED HERO SECTIONS ── */
+/* Row 1 (Top): Countdown Timer (Centered across 50/50 Split Canvas) */
+.hero-countdown-center-section,
+.hero-countdown-top-row {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 2vw, 2rem) 1.5rem clamp(0.5rem, 1vw, 1.25rem);
+  position: relative;
+  z-index: 3;
+}
+
+/* Row 2 (Middle): Even Split Row for Dates & ₹10 Lakhs */
+.hero-split-container,
+.hero-split-middle-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  align-items: center;
+  position: relative;
+  background: transparent;
+  padding: clamp(0.75rem, 1.5vw, 1.5rem) 0 clamp(1.25rem, 2.5vw, 2.25rem);
+}
+
+/* Row 3 (Bottom): Centered Action CTAs */
+.hero-bottom-actions-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.5rem, 1vw, 1rem) 1.5rem clamp(2.5rem, 4vw, 4rem);
+  position: relative;
+  z-index: 3;
+}
+
+/* Live Countdown Box (Transparent & Borderless Container) */
+.hero-countdown-box,
+.hero-countdown-box.hero-flip-countdown-box {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 780px;
+  width: 100%;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.hero-flip-clock-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.hero-flip-clock-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* @leenguyen/react-flip-clock-countdown Styling & Theme Matching Poster */
+.hero-flip-clock {
+  --fcc-spacing: clamp(10px, 1.8vw, 22px);
+  --fcc-digit-block-width: clamp(34px, 4.6vw, 56px);
+  --fcc-digit-block-height: clamp(54px, 7.2vw, 86px);
+  --fcc-digit-block-radius: 8px;
+  --fcc-digit-block-spacing: clamp(4px, 0.6vw, 7px);
+  --fcc-digit-font-size: clamp(32px, 4.8vw, 52px);
+  --fcc-label-font-size: clamp(10px, 1.1vw, 13px);
+  --fcc-separator-size: clamp(6px, 1vw, 9px);
+  font-family: var(--font-google-sans, 'Google Sans', sans-serif);
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.hero-flip-clock [class*="_2EBbg"] {
+  font-family: 'Bebas Neue', var(--font-google-sans, 'Google Sans'), sans-serif !important;
+  font-weight: 800 !important;
+}
+
+.hero-flip-clock [class*="_2aOn7"] {
+  font-family: var(--font-google-sans, 'Google Sans', sans-serif) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.18em !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   50/50 SPLIT THEME FOR FLIP CLOCK COUNTDOWN
+   Left Side (Days & Hours) -> Deep Navy Blue (#0A1128) over White Canvas
+   Right Side (Mins & Secs) -> Pure White (#FFFFFF) over Midnight Canvas
+   Center Colon             -> Vibrant Glowing Gold (#D4A017) Seam
+   ───────────────────────────────────────────────────────────── */
+
+/* ── LEFT HALF: DAYS & HOURS (Over Pure White Background) ── */
+.hero-flip-clock .fcc__unit_time--day,
+.hero-flip-clock .fcc__unit_time--hour {
+  --fcc-background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 60%, #e2e8f0 100%);
+  --fcc-digit-color: #0A1128;
+  --fcc-divider-color: rgba(10, 17, 40, 0.22);
+  --fcc-divider-height: 1.5px;
+  --fcc-label-color: #0A1128;
+}
+
+.hero-flip-clock .fcc__digit_block--day,
+.hero-flip-clock .fcc__digit_block--hour,
+.hero-flip-clock .fcc__unit_time--day ._2EBbg,
+.hero-flip-clock .fcc__unit_time--hour ._2EBbg {
+  color: #0A1128 !important;
+  box-shadow: 0 6px 18px rgba(10, 17, 40, 0.14), 0 2px 5px rgba(10, 17, 40, 0.08), inset 0 1px 0 #ffffff !important;
+  border: 1px solid rgba(10, 17, 40, 0.16) !important;
+}
+
+.hero-flip-clock .fcc__digit_block--day > div,
+.hero-flip-clock .fcc__digit_block--hour > div,
+.hero-flip-clock .fcc__digit_block--day ._3luxx > div,
+.hero-flip-clock .fcc__digit_block--hour ._3luxx > div,
+.hero-flip-clock .fcc__unit_time--day ._SKh-V,
+.hero-flip-clock .fcc__unit_time--day ._106d2,
+.hero-flip-clock .fcc__unit_time--day ._2v-d4,
+.hero-flip-clock .fcc__unit_time--hour ._SKh-V,
+.hero-flip-clock .fcc__unit_time--hour ._106d2,
+.hero-flip-clock .fcc__unit_time--hour ._2v-d4 {
+  background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 60%, #e2e8f0 100%) !important;
+  color: #0A1128 !important;
+}
+
+.hero-flip-clock .fcc__label--day,
+.hero-flip-clock .fcc__label--hour {
+  color: #0A1128 !important;
+}
+
+/* ── RIGHT HALF: MINUTES & SECONDS (Over Midnight Black Background) ── */
+.hero-flip-clock .fcc__unit_time--minute,
+.hero-flip-clock .fcc__unit_time--second {
+  --fcc-background: linear-gradient(180deg, #1c1e25 0%, #111216 60%, #08080b 100%);
+  --fcc-digit-color: #FFFFFF;
+  --fcc-divider-color: rgba(255, 255, 255, 0.2);
+  --fcc-divider-height: 1.5px;
+  --fcc-label-color: #FFFFFF;
+}
+
+.hero-flip-clock .fcc__digit_block--minute,
+.hero-flip-clock .fcc__digit_block--second,
+.hero-flip-clock .fcc__unit_time--minute ._2EBbg,
+.hero-flip-clock .fcc__unit_time--second ._2EBbg {
+  color: #FFFFFF !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+.hero-flip-clock .fcc__digit_block--minute > div,
+.hero-flip-clock .fcc__digit_block--second > div,
+.hero-flip-clock .fcc__digit_block--minute ._3luxx > div,
+.hero-flip-clock .fcc__digit_block--second ._3luxx > div,
+.hero-flip-clock .fcc__unit_time--minute ._SKh-V,
+.hero-flip-clock .fcc__unit_time--minute ._106d2,
+.hero-flip-clock .fcc__unit_time--minute ._2v-d4,
+.hero-flip-clock .fcc__unit_time--second ._SKh-V,
+.hero-flip-clock .fcc__unit_time--second ._106d2,
+.hero-flip-clock .fcc__unit_time--second ._2v-d4 {
+  background: linear-gradient(180deg, #1c1e25 0%, #111216 60%, #08080b 100%) !important;
+  color: #FFFFFF !important;
+}
+
+.hero-flip-clock .fcc__label--minute,
+.hero-flip-clock .fcc__label--second {
+  color: #FFFFFF !important;
+}
+
+/* ── COLON ( : ) SEPARATORS: SPLIT-COLOR SYSTEM ── */
+/* 1st Separator (between DAYS & HOURS - on Pure White Canvas): SOLID BLACK / DEEP NAVY */
+.hero-flip-clock .fcc__unit_time--day + .fcc__separator:before,
+.hero-flip-clock .fcc__unit_time--day + .fcc__separator:after,
+.hero-flip-clock > div.fcc__separator:nth-child(2):before,
+.hero-flip-clock > div.fcc__separator:nth-child(2):after {
+  background: #0A1128 !important;
+  background-color: #0A1128 !important;
+  box-shadow: 0 1px 2px rgba(10, 17, 40, 0.25) !important;
+}
+
+/* 2nd Separator (between HOURS & MINS - at exact 50% split center seam): DUAL-TONE SPLIT COLOR */
+.hero-flip-clock .fcc__unit_time--hour + .fcc__separator:before,
+.hero-flip-clock .fcc__unit_time--hour + .fcc__separator:after,
+.hero-flip-clock > div.fcc__separator:nth-child(4):before,
+.hero-flip-clock > div.fcc__separator:nth-child(4):after {
+  background: linear-gradient(to right, #0A1128 0%, #0A1128 50%, #ffffff 50%, #ffffff 100%) !important;
+  background-color: transparent !important;
+  box-shadow: -1px 0 2px rgba(10, 17, 40, 0.25), 1px 0 4px rgba(255, 255, 255, 0.6) !important;
+}
+
+/* 3rd Separator (between MINS & SECS - on Midnight Black Canvas): SOLID PURE WHITE */
+.hero-flip-clock .fcc__unit_time--minute + .fcc__separator:before,
+.hero-flip-clock .fcc__unit_time--minute + .fcc__separator:after,
+.hero-flip-clock > div.fcc__separator:nth-child(6):before,
+.hero-flip-clock > div.fcc__separator:nth-child(6):after {
+  background: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Header row above Flip Clock (Only "COUNTDOWN" with Dual 50/50 Split) */
+.countdown-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: clamp(0.75rem, 1.4vw, 1.15rem);
+  text-align: center;
+}
+
+.countdown-title-text {
+  font-family: var(--font-brand);
+  font-size: clamp(0.9rem, 1.5vw, 1.18rem);
+  font-weight: 900;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  text-align: center;
+  background: linear-gradient(to right, #0d1536 50%, #ffffff 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  line-height: 1.2;
+}
+
+.glow-neon-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
+}
+
+.countdown-neon-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.countdown-val {
+  font-family: var(--font-heading);
+  font-size: 2.2rem;
+  line-height: 1;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 14px rgba(255, 255, 255, 0.25);
+}
+
+.countdown-val.pulse {
+  color: #f59e0b;
+}
+
+.countdown-lbl {
+  font-size: 0.64rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.12em;
+  margin-top: 0.25rem;
+}
+
+.countdown-sep {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: rgba(255, 255, 255, 0.25);
+  margin-bottom: 0.75rem;
+}
+
+/* Centered Hero CTAs (Row Below Countdown) */
+.hero-center-actions,
+.hero-dark-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+/* Hero Action Buttons (ThemeButton Liquid Glass Integration) */
+.hero-action-btn {
+  padding: 0.8rem 1.85rem !important;
+  font-size: 0.94rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.035em !important;
+  border-radius: 10px !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  isolation: auto !important;
+}
+
+.hero-action-btn .theme-glass-btn-content {
+  isolation: auto !important;
+}
+
+.hero-action-btn .split-color-text {
+  font-weight: 700;
+  letter-spacing: 0.035em;
+  line-height: 1.2;
+}
+
+.btn-hero-gold {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.9rem;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.12) 100%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.06) contrast(1.02);
+  backdrop-filter: blur(24px) saturate(200%) brightness(1.06) contrast(1.02);
+  color: #b45309;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.94rem;
+  letter-spacing: 0.04em;
+  border: 1.5px solid rgba(245, 158, 11, 0.48);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: all 0.28s cubic-bezier(0.2, 0, 0, 1);
+  box-shadow: 
+    0 14px 32px -6px rgba(217, 119, 6, 0.22),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -1px 1px 0 rgba(245, 158, 11, 0.2),
+    inset 0 0 20px 0 rgba(245, 158, 11, 0.15);
+}
+
+.btn-hero-gold::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 48%;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.btn-hero-gold:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.32) 0%, rgba(217, 119, 6, 0.18) 100%);
+  border-color: #f59e0b;
+  color: #92400e;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 18px 40px -6px rgba(217, 119, 6, 0.35),
+    inset 0 1.5px 2px 0 #ffffff,
+    inset 0 0 26px 0 rgba(245, 158, 11, 0.25);
+}
+
+.btn-hero-dark-outline {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.82rem 1.8rem;
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(24px) saturate(190%) brightness(1.08) contrast(1.02);
+  backdrop-filter: blur(24px) saturate(190%) brightness(1.08) contrast(1.02);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.04em;
+  border: 1.5px solid rgba(255, 255, 255, 0.36);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: all 0.28s cubic-bezier(0.2, 0, 0, 1);
+  box-shadow: 
+    0 12px 30px -6px rgba(0, 0, 0, 0.45),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 18px 0 rgba(255, 255, 255, 0.08);
+}
+
+.btn-hero-dark-outline::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 48%;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.btn-hero-dark-outline:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 16px 38px -6px rgba(0, 0, 0, 0.55),
+    inset 0 1.5px 2px 0 #ffffff,
+    inset 0 0 24px 0 rgba(255, 255, 255, 0.16);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   THE 3 FESTIVAL PILLARS SECTION
+   ───────────────────────────────────────────────────────────── */
+.fest-pillars-section {
+  padding: 5.5rem 0;
+  position: relative;
+  background: transparent;
+  width: 100%;
+}
+
+.fest-pillars-section .container,
+.fest-pillars-section .pillars-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 clamp(1.5rem, 8vw, 2in) !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.fest-pillars-section .section-head,
+.pillars-header-centered {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  margin: 0 auto 3rem !important;
+}
+
+.pillars-title-wrap,
+.pillars-desc-wrap {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+}
+
+.pillars-section-title {
+  text-align: center !important;
+  width: 100% !important;
+  margin: 0 auto 1.15rem !important;
+  font-family: var(--font-heading) !important;
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem) !important;
+  line-height: 1.1 !important;
+  letter-spacing: 0.04em !important;
+  display: block !important;
+}
+
+.pillars-section-desc {
+  text-align: center !important;
+  width: 100% !important;
+  max-width: 660px !important;
+  margin: 0 auto !important;
+  font-size: 14px !important;
+  font-weight: 300 !important;
+  line-height: 1.65 !important;
+  letter-spacing: 0.01em !important;
+  display: block !important;
+}
+
+@media (max-width: 640px) {
+  .pillars-desc-br {
+    display: none;
+  }
+}
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1rem, 1.6vw, 1.5rem);
+  margin-top: 3.5rem;
+  align-items: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1100px) {
+  .pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* ── Festival Domain Pillar Cards with Liquid Glass Physics ── */
+.pillar-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  border: none !important;
+  outline: none !important;
+}
+
+/* ── Light Variant (Left 50%: Culturals & Sports over White Canvas) ── */
+.pillar-card.lg-card-light {
+  color: #0f172a;
+}
+
+.pillar-card.lg-card-light .pillar-name {
+  color: #0f172a;
+}
+
+.pillar-card.lg-card-light .pillar-tagline {
+  color: #475569;
+}
+
+.pillar-card.lg-card-light .events-snippet-label {
+  color: #334155;
+}
+
+.pillar-card.lg-card-light .snippet-list li {
+  color: #0f172a;
+}
+
+.pillar-card.lg-card-light .coord-chip-label {
+  color: #64748b;
+}
+
+.pillar-card.lg-card-light .coord-name {
+  color: #0f172a;
+}
+
+.pillar-card.lg-card-light .coord-phone-pill {
+  color: #0f172a;
+}
+
+.pillar-card.lg-card-light .btn-pillar-explore {
+  color: #0f172a;
+}
+
+/* ── Dark Variant (Right 50%: Creo & Fete over Black Canvas) ── */
+.pillar-card.lg-card-dark {
+  color: #ffffff;
+}
+
+.pillar-card.lg-card-dark .pillar-name {
+  color: #ffffff;
+}
+
+.pillar-card.lg-card-dark .pillar-tagline {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.pillar-card.lg-card-dark .events-snippet-label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pillar-card.lg-card-dark .snippet-list li {
+  color: #f8fafc;
+}
+
+.pillar-card.lg-card-dark .coord-chip-label {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.pillar-card.lg-card-dark .coord-name {
+  color: #ffffff;
+}
+
+.pillar-card.lg-card-dark .coord-phone-pill {
+  color: #ffffff;
+}
+
+.pillar-card.lg-card-dark .btn-pillar-explore {
+  color: #ffffff;
+}
+
+/* ── Content Text Alignments & Layout ── */
+.pillar-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.9rem;
+}
+
+.pillar-icon-box {
+  width: auto;
+  height: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pillar-icon {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.pillar-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.pillar-code {
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  color: inherit;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+.pillar-name {
+  font-family: var(--font-heading);
+  font-size: 1.85rem;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+.pillar-tagline {
+  font-size: 0.88rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.pillar-events-snippet {
+  margin-bottom: 1.4rem;
+  flex: 1;
+}
+
+.events-snippet-label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.65rem;
+}
+
+.snippet-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+}
+
+.snippet-list li {
+  font-size: 0.86rem;
+  position: relative;
+  padding-left: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.snippet-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  font-weight: 900;
+  font-size: 1.1rem;
+  line-height: 1;
+  top: 1px;
+  opacity: 0.6;
+}
+
+.pillar-coordinator-box {
+  margin-bottom: 1.4rem;
+}
+
+.coord-chip-label {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.coord-person-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.coord-name {
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.coord-phone-pill {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  opacity: 0.85;
+}
+
+.coord-phone-pill:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.pillar-card-footer {
+  margin-top: auto;
+  padding-top: 0.8rem;
+}
+
+.btn-pillar-explore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0.8rem 0;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.btn-pillar-explore:hover {
+  opacity: 0.75;
+  transform: translateX(4px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FINAL REGISTRATION CTA WITH QR CODE MATCHING POSTER
+   ───────────────────────────────────────────────────────────── */
+.fest-final-cta {
+  padding: 5.5rem 0 7rem;
+  background: transparent;
+  border-top: none;
+}
+
+.final-cta-card {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  gap: 3.5rem;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  padding: 3.5rem 3rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+}
+
+.cta-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 3.8rem);
+  line-height: 1.1;
+  color: #0f172a;
+  margin-bottom: 1.2rem;
+}
+
+.cta-title span {
+  background: var(--clr-spectrum-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cta-desc {
+  font-size: 1.05rem;
+  color: #475569;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.cta-location-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.cta-location-block .loc-icon {
+  font-size: 1.5rem;
+}
+
+.cta-location-block .loc-info strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.cta-location-block .loc-info span {
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.cta-buttons-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Poster Thumbnail Preview Card in CTA */
+.cta-qr-card {
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+.poster-thumbnail-wrapper {
+  width: 100%;
+  max-width: 260px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
+}
+
+.poster-thumbnail-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.qr-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.qr-headline {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #b45309;
+  text-transform: uppercase;
+}
+
+.qr-url {
+  font-family: var(--font-brand);
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.qr-dates {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #e11d48;
+  letter-spacing: 0.05em;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   RESPONSIVE MEDIA QUERIES
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .hero-split-container {
+    grid-template-columns: 1fr;
+    padding: 1rem 0 2.5rem;
+  }
+
+  .hero-half-light {
+    padding: 2rem 1.5rem;
+    background-color: #ffffff;
+  }
+
+  .hero-half-dark {
+    padding: 2.5rem 1.5rem;
+    background-color: #000000;
+    border-left: none;
+    border-top: none;
+  }
+
+  .hero-dark-header {
+    justify-content: flex-start;
+  }
+
+  .final-cta-card {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .final-cta-card {
+    padding: 2.5rem 1.5rem;
+  }
+}
