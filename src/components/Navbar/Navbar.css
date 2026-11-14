@@ -569,3 +569,35 @@
     display: flex;
   }
 }
+
+/* ── Mobile View: Only Logo Center in Top Bar, Menus in Bottom Bar ── */
+@media (max-width: 900px) {
+  .navbar-inner {
+    justify-content: center !important;
+    padding: 0 1rem !important;
+  }
+
+  .navbar-logo {
+    margin: 0 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .navbar-logo-img {
+    height: clamp(48px, 6vw, 62px) !important;
+    max-width: 280px !important;
+  }
+
+  .navbar-right-cluster {
+    display: none !important;
+  }
+
+  .hamburger {
+    display: none !important;
+  }
+
+  .mobile-menu {
+    display: none !important;
+  }
+}

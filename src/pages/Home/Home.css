@@ -93,9 +93,9 @@
 .poster-colours-heading {
   font-family: var(--font-brand);
   font-weight: 900;
-  font-size: clamp(5.2rem, 14.5vw, 12rem);
+  font-size: clamp(2.35rem, 12vw, 11rem);
   line-height: 1.05;
-  letter-spacing: 0.04em;
+  letter-spacing: clamp(0.01em, 0.4vw, 0.04em);
   text-transform: uppercase;
   text-align: center;
   width: 100%;
@@ -111,19 +111,19 @@
 
 /* Row 4: A NATIONAL LEVEL YOUTH FESTIVAL (Centered with 50/50 Dual-Tone Split) */
 .poster-tagline-row {
-  margin-top: clamp(0.75rem, 1.4vw, 1.25rem);
+  margin-top: clamp(0.5rem, 1.2vw, 1.25rem);
 }
 
 .poster-tagline-text {
   font-family: var(--font-brand);
-  font-size: clamp(0.76rem, 1.25vw, 1.05rem);
+  font-size: clamp(0.56rem, 1.8vw, 1.05rem);
   font-weight: 900;
-  letter-spacing: 0.22em;
+  letter-spacing: clamp(0.08em, 0.4vw, 0.22em);
   text-transform: uppercase;
   text-align: center;
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 0 0.5rem;
   background: linear-gradient(to right, #0d1536 50%, #ffffff 50%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -156,7 +156,91 @@
   z-index: 2;
 }
 
-/* Save the Dates Block on Light Side (Transparent & Borderless) */
+/* Centered Save the Dates Section across 50/50 Canvas */
+.hero-dates-center-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(0.75rem, 1.5vw, 1.5rem) 1rem clamp(1rem, 2vw, 2rem);
+  position: relative;
+  z-index: 3;
+}
+
+.save-dates-label {
+  font-family: var(--font-brand);
+  font-size: clamp(0.75rem, 1.15vw, 0.95rem);
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: #be9337;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: clamp(0.5rem, 1vw, 0.85rem);
+  line-height: 1.4;
+  text-align: center;
+}
+
+.dates-display-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+.dates-split-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 4.3vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: clamp(0.02em, 0.3vw, 0.05em);
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0 0.5rem;
+  background: linear-gradient(to right, #0d1536 50%, #ffffff 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  user-select: none;
+}
+
+/* ── COMING SOON Grand Split Title ── */
+.hero-coming-soon-section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: clamp(1.25rem, 2.8vw, 2.75rem);
+  padding: 0 1rem clamp(3rem, 6vw, 5.5rem);
+  position: relative;
+  z-index: 3;
+}
+
+.hero-coming-soon-text {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(2.8rem, 7.5vw, 6.2rem);
+  line-height: 1.05;
+  letter-spacing: clamp(0.04em, 0.4vw, 0.12em);
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0 0.5rem;
+  background: linear-gradient(to right, #0d1536 50%, #ffffff 50%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  user-select: none;
+}
+
 .hero-dates-card {
   background: transparent;
   border: none;
@@ -167,23 +251,9 @@
   box-shadow: none;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  text-align: left;
-}
-
-.save-dates-label {
-  font-family: var(--font-brand);
-  font-size: clamp(0.72rem, 1.1vw, 0.85rem);
-  font-weight: 800;
-  letter-spacing: 0.28em;
-  color: #be9337;
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: clamp(0.65rem, 1.2vw, 0.9rem);
-  line-height: 1.4;
-  text-align: left;
-  align-self: flex-start;
+  text-align: center;
 }
 
 .dates-display {
@@ -469,24 +539,21 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.hero-flip-clock-wrapper::-webkit-scrollbar {
-  display: none;
+  overflow: visible;
+  padding: 0 0.5rem;
+  box-sizing: border-box;
 }
 
 /* @leenguyen/react-flip-clock-countdown Styling & Theme Matching Poster */
 .hero-flip-clock {
-  --fcc-spacing: clamp(10px, 1.8vw, 22px);
-  --fcc-digit-block-width: clamp(34px, 4.6vw, 56px);
-  --fcc-digit-block-height: clamp(54px, 7.2vw, 86px);
-  --fcc-digit-block-radius: 8px;
-  --fcc-digit-block-spacing: clamp(4px, 0.6vw, 7px);
-  --fcc-digit-font-size: clamp(32px, 4.8vw, 52px);
-  --fcc-label-font-size: clamp(10px, 1.1vw, 13px);
-  --fcc-separator-size: clamp(6px, 1vw, 9px);
+  --fcc-spacing: clamp(6px, 1.6vw, 22px);
+  --fcc-digit-block-width: clamp(20px, 4.2vw, 56px);
+  --fcc-digit-block-height: clamp(34px, 6.8vw, 86px);
+  --fcc-digit-block-radius: clamp(4px, 0.8vw, 8px);
+  --fcc-digit-block-spacing: clamp(2px, 0.5vw, 7px);
+  --fcc-digit-font-size: clamp(20px, 4.2vw, 52px);
+  --fcc-label-font-size: clamp(7.5px, 1vw, 13px);
+  --fcc-separator-size: clamp(4px, 0.8vw, 9px);
   font-family: var(--font-google-sans, 'Google Sans', sans-serif);
   justify-content: center;
   margin: 0 auto;
@@ -1092,7 +1159,7 @@
   font-size: 0.88rem;
   margin-bottom: 1.5rem;
   line-height: 1.5;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .pillar-events-snippet {
@@ -1128,7 +1195,7 @@
   font-size: 0.86rem;
   position: relative;
   padding-left: 1.2rem;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.4;
 }
 
@@ -1136,7 +1203,7 @@
   content: '•';
   position: absolute;
   left: 0;
-  font-weight: 900;
+  font-weight: 400;
   font-size: 1.1rem;
   line-height: 1;
   top: 1px;
@@ -1172,15 +1239,25 @@
 
 .coord-name {
   font-size: 0.92rem;
-  font-weight: 800;
+  font-weight: 400;
 }
 
 .coord-phone-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 400;
   text-decoration: none;
   transition: opacity 0.2s ease;
   opacity: 0.85;
+}
+
+.coord-phone-icon {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  opacity: 0.9;
 }
 
 .coord-phone-pill:hover {
@@ -1210,162 +1287,546 @@
   border-top: none;
 }
 
-.final-cta-card {
+.liquid-glass-card.final-cta-card {
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 3.5rem 3rem !important;
+  border-radius: 16px !important;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(20px) saturate(190%) brightness(1.04) !important;
+  backdrop-filter: blur(20px) saturate(190%) brightness(1.04) !important;
+  overflow: hidden;
+  transition: none !important;
+  transform: none !important;
+}
+
+.liquid-glass-card.final-cta-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.liquid-glass-card.final-cta-card::before {
+  border-radius: 16px !important;
+}
+
+.liquid-glass-card.final-cta-card::after {
+  border-radius: calc(16px - 1.5px) !important;
+}
+
+.final-cta-card .lg-card-content {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
-  align-items: center;
+  align-items: stretch;
   gap: 3.5rem;
-  background: #ffffff;
-  border: 1.5px solid #e2e8f0;
-  border-radius: var(--radius-lg);
-  padding: 3.5rem 3rem;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  width: 100%;
+}
+
+.cta-left-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.final-cta-card .section-tag,
+.cta-celebration-tag {
+  display: inline-block;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 0.85rem;
+  width: fit-content;
+
+  /* VIBGYOR Spectrum Gradient Text */
+  background: linear-gradient(
+    90deg,
+    #7c3aed 0%,
+    #3b82f6 18%,
+    #06b6d4 36%,
+    #10b981 54%,
+    #eab308 70%,
+    #f97316 86%,
+    #ef4444 100%
+  ) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
 }
 
 .cta-title {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 5vw, 3.8rem);
   line-height: 1.1;
-  color: #0f172a;
   margin-bottom: 1.2rem;
-}
-
-.cta-title span {
-  background: var(--clr-spectrum-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .cta-desc {
   font-size: 1.05rem;
   color: #475569;
   line-height: 1.8;
-  margin-bottom: 2rem;
-}
-
-.cta-location-block {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: var(--radius-sm);
-  padding: 1rem 1.25rem;
-  margin-bottom: 2rem;
-}
-
-.cta-location-block .loc-icon {
-  font-size: 1.5rem;
-}
-
-.cta-location-block .loc-info strong {
-  display: block;
-  font-size: 0.95rem;
-  color: #0f172a;
-}
-
-.cta-location-block .loc-info span {
-  font-size: 0.82rem;
-  color: #64748b;
+  margin-bottom: 1.5rem;
 }
 
 .cta-buttons-row {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1.25rem;
   flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 1.5rem;
 }
 
-/* Poster Thumbnail Preview Card in CTA */
+.cta-theme-btn {
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  padding: 0.82rem 1.8rem !important;
+}
+
+/* Poster Card with Transparent Background */
 .cta-qr-card {
-  background: #ffffff;
-  border: 2px solid #e2e8f0;
-  border-radius: var(--radius-md);
-  padding: 1.25rem;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  width: 100%;
 }
 
 .poster-thumbnail-wrapper {
   width: 100%;
-  max-width: 260px;
-  border-radius: var(--radius-sm);
+  max-width: 380px;
+  border-radius: 0 !important;
   overflow: hidden;
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.1);
+  margin-bottom: 0;
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.2);
+  transform: none !important;
+  transition: none !important;
+}
+
+.poster-thumbnail-wrapper:hover {
+  transform: none !important;
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.2) !important;
 }
 
 .poster-thumbnail-img {
   width: 100%;
   height: auto;
   display: block;
+  border-radius: 0 !important;
 }
 
 .qr-info-block {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-.qr-headline {
-  font-size: 0.72rem;
+.qr-info-block .qr-headline {
+  font-size: 0.74rem;
   font-weight: 800;
-  letter-spacing: 0.15em;
-  color: #b45309;
+  letter-spacing: 0.16em;
+  color: #fbbf24;
+  margin-bottom: 0.25rem;
   text-transform: uppercase;
 }
 
-.qr-url {
-  font-family: var(--font-brand);
-  font-size: 0.88rem;
-  font-weight: 800;
-  color: #0f172a;
+.qr-info-block .qr-url {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.25rem;
 }
 
-.qr-dates {
-  font-size: 0.76rem;
-  font-weight: 700;
-  color: #e11d48;
-  letter-spacing: 0.05em;
+.qr-info-block .qr-dates {
+  font-size: 0.80rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #fb7185;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   RESPONSIVE MEDIA QUERIES
+   RESPONSIVE MEDIA QUERIES (BOOTSTRAP 5 BREAKPOINTS)
    ───────────────────────────────────────────────────────────── */
-@media (max-width: 860px) {
-  .hero-split-container {
-    grid-template-columns: 1fr;
-    padding: 1rem 0 2.5rem;
+
+/* ── 1. Bootstrap XL & XXL (>= 1200px) ── */
+@media (min-width: 1200px) {
+  .poster-colours-heading {
+    font-size: clamp(6.5rem, 13vw, 11rem);
   }
 
-  .hero-half-light {
-    padding: 2rem 1.5rem;
-    background-color: #ffffff;
+  .hero-flip-clock {
+    --fcc-spacing: 20px !important;
+    --fcc-digit-block-width: 52px !important;
+    --fcc-digit-block-height: 82px !important;
+    --fcc-digit-font-size: 50px !important;
+    --fcc-digit-block-spacing: 6px !important;
   }
 
-  .hero-half-dark {
-    padding: 2.5rem 1.5rem;
-    background-color: #000000;
-    border-left: none;
-    border-top: none;
+  .pillars-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* ── 2. Bootstrap LG (992px - 1199.98px) ── */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .poster-colours-heading {
+    font-size: clamp(4.8rem, 11vw, 6.5rem);
   }
 
-  .hero-dark-header {
-    justify-content: flex-start;
+  .hero-flip-clock {
+    --fcc-spacing: 14px !important;
+    --fcc-digit-block-width: 40px !important;
+    --fcc-digit-block-height: 64px !important;
+    --fcc-digit-font-size: 38px !important;
+    --fcc-digit-block-spacing: 5px !important;
   }
 
-  .final-cta-card {
-    grid-template-columns: 1fr;
+  .pillars-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+  }
+
+  .final-cta-card .lg-card-content {
+    grid-template-columns: 1.15fr 0.85fr;
     gap: 2.5rem;
   }
 }
 
-@media (max-width: 768px) {
+/* ── 3. Bootstrap MD (768px - 991.98px) – Tablets ── */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .poster-colours-heading {
+    font-size: clamp(3.6rem, 9.2vw, 4.8rem);
+  }
+
+  .poster-tagline-text {
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+  }
+
+  .hero-flip-clock {
+    --fcc-spacing: 10px !important;
+    --fcc-digit-block-width: 32px !important;
+    --fcc-digit-block-height: 50px !important;
+    --fcc-digit-font-size: 30px !important;
+    --fcc-digit-block-spacing: 4px !important;
+    --fcc-label-font-size: 10px !important;
+    --fcc-separator-size: 7px !important;
+  }
+
+  .pillars-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+  }
+
+  .final-cta-card .lg-card-content {
+    grid-template-columns: 1fr !important;
+    gap: 2.5rem !important;
+  }
+
   .final-cta-card {
-    padding: 2.5rem 1.5rem;
+    padding: 2.5rem 2rem !important;
+  }
+}
+
+/* ── 4. Bootstrap SM (576px - 767.98px) – Phablets / Landscape Phones ── */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .poster-colours-heading {
+    font-size: clamp(2.8rem, 8.6vw, 3.6rem) !important;
+  }
+
+  .poster-tagline-text {
+    font-size: 0.72rem !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  .hero-flip-clock {
+    --fcc-spacing: 8px !important;
+    --fcc-digit-block-width: 26px !important;
+    --fcc-digit-block-height: 42px !important;
+    --fcc-digit-font-size: 25px !important;
+    --fcc-digit-block-spacing: 3px !important;
+    --fcc-label-font-size: 9px !important;
+    --fcc-separator-size: 5px !important;
+  }
+
+  .hero-center-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.75rem !important;
+    padding: 0 1rem !important;
+    max-width: 100% !important;
+  }
+
+  .hero-action-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .pillars-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  .final-cta-card .lg-card-content {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .final-cta-card {
+    padding: 2.25rem 1.5rem !important;
+  }
+
+  .cta-buttons-row {
+    flex-direction: column !important;
+    gap: 0.85rem !important;
+  }
+
+  .cta-buttons-row .cta-theme-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
+
+/* ── 5. Bootstrap XS (< 576px) – Mobile Phones ── */
+@media (max-width: 575.98px) {
+  .fest-split-hero {
+    padding-top: calc(var(--navbar-height) + 0.25rem) !important;
+    min-height: auto !important;
+    padding-bottom: 2rem !important;
+  }
+
+  .hero-poster-header {
+    padding: 1rem 0.5rem 0.35rem !important;
+  }
+
+  .poster-title-row {
+    margin: 0.25rem 0 0.5rem !important;
+  }
+
+  .poster-colours-heading {
+    font-size: clamp(2.15rem, 11.5vw, 2.9rem) !important;
+    letter-spacing: 0.02em !important;
+    line-height: 1.05 !important;
+    padding: 0 0.25rem !important;
+  }
+
+  .poster-tagline-row {
+    margin-top: 0.45rem !important;
+  }
+
+  .poster-tagline-text {
+    font-size: clamp(0.55rem, 2.3vw, 0.72rem) !important;
+    letter-spacing: 0.08em !important;
+    padding: 0 0.35rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .hero-countdown-top-row {
+    margin: 0.75rem 0 1rem !important;
+  }
+
+  .hero-flip-clock-wrapper {
+    padding: 0 0.25rem !important;
+    overflow: visible !important;
+  }
+
+  .hero-flip-clock {
+    --fcc-spacing: 5px !important;
+    --fcc-digit-block-width: 21px !important;
+    --fcc-digit-block-height: 35px !important;
+    --fcc-digit-block-radius: 5px !important;
+    --fcc-digit-block-spacing: 2px !important;
+    --fcc-digit-font-size: 20px !important;
+    --fcc-label-font-size: 7.5px !important;
+    --fcc-separator-size: 4px !important;
+  }
+
+  .hero-dates-center-section {
+    padding: 0.5rem 0.5rem 1rem !important;
+  }
+
+  .save-dates-label {
+    font-size: 0.65rem !important;
+    letter-spacing: 0.16em !important;
+    margin-bottom: 0.35rem !important;
+    text-align: center !important;
+  }
+
+  .dates-split-heading {
+    font-size: clamp(1.4rem, 5.6vw, 2.1rem) !important;
+    letter-spacing: 0.03em !important;
+    line-height: 1.15 !important;
+    text-align: center !important;
+  }
+
+  .hero-coming-soon-section {
+    margin-top: 0.95rem !important;
+    padding: 0 0.5rem 3.5rem !important;
+  }
+
+  .hero-coming-soon-text {
+    font-size: clamp(2rem, 8.2vw, 2.85rem) !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.15 !important;
+  }
+
+  .hero-center-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.6rem !important;
+    padding: 0 0.75rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .hero-action-btn {
+    width: 100% !important;
+    padding: 0.65rem 0.4rem !important;
+    font-size: 0.8rem !important;
+    justify-content: center !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+
+  .hero-action-btn .split-color-text {
+    font-size: 0.8rem !important;
+  }
+
+  /* Pillars Section Mobile */
+  .fest-pillars-section {
+    padding: 3.5rem 0 4rem !important;
+  }
+
+  .pillars-container {
+    padding: 0 0.85rem !important;
+  }
+
+  .pillars-section-title {
+    font-size: clamp(1.85rem, 6.5vw, 2.4rem) !important;
+  }
+
+  .pillars-section-desc {
+    font-size: 0.88rem !important;
+    line-height: 1.6 !important;
+    padding: 0 0.5rem !important;
+  }
+
+  .pillars-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.25rem !important;
+    margin-top: 2rem !important;
+  }
+
+  .pillar-card {
+    padding: 1.35rem 1.15rem !important;
+  }
+
+  .pillar-name {
+    font-size: 1.35rem !important;
+  }
+
+  .pillar-tagline {
+    font-size: 0.88rem !important;
+  }
+
+  /* Final Registration CTA Mobile */
+  .fest-final-cta {
+    padding: 3rem 0 5.5rem !important;
+  }
+
+  .fest-final-cta .container {
+    padding: 0 0.85rem !important;
+  }
+
+  .final-cta-card {
+    padding: 2rem 1.25rem !important;
+  }
+
+  .final-cta-card .lg-card-content {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .cta-title {
+    font-size: clamp(1.8rem, 6.5vw, 2.4rem) !important;
+  }
+
+  .cta-desc {
+    font-size: 0.9rem !important;
+    line-height: 1.65 !important;
+  }
+
+  .cta-buttons-row {
+    flex-direction: column !important;
+    gap: 0.85rem !important;
+    width: 100% !important;
+    margin-top: 1.25rem !important;
+    padding-top: 1rem !important;
+  }
+
+  .cta-buttons-row .cta-theme-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .poster-thumbnail-wrapper {
+    max-width: 300px !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* ── 6. Ultra-Small Mobile Phones (< 360px – e.g. iPhone SE, Fold) ── */
+@media (max-width: 359.98px) {
+  .poster-colours-heading {
+    font-size: 1.95rem !important;
+    letter-spacing: 0.01em !important;
+  }
+
+  .poster-tagline-text {
+    font-size: 0.52rem !important;
+    letter-spacing: 0.06em !important;
+  }
+
+  .hero-flip-clock {
+    --fcc-spacing: 4px !important;
+    --fcc-digit-block-width: 17px !important;
+    --fcc-digit-block-height: 29px !important;
+    --fcc-digit-font-size: 17px !important;
+    --fcc-digit-block-spacing: 1.5px !important;
+    --fcc-label-font-size: 7px !important;
+    --fcc-separator-size: 3px !important;
+  }
+
+  .dates-split-heading {
+    font-size: 1.35rem !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  .hero-coming-soon-text {
+    font-size: 1.75rem !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  .hero-center-actions {
+    grid-template-columns: 1fr !important;
   }
 }

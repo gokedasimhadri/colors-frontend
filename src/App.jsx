@@ -10,7 +10,8 @@ import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
 import MouseAnimation from './components/ThemeComponents/MouseAnimation/MouseAnimation';
 import ColourBlast from './components/ThemeComponents/ColourBlast/ColourBlast';
 
-import Footer from './components/Footer/Footer';
+// import Footer from './components/Footer/Footer';
+// import MobileBottomBar from './components/MobileBottomBar/MobileBottomBar';
 
 function SchedulePdfRedirect() {
   useEffect(() => {
@@ -50,7 +51,8 @@ function App() {
           <Route path="/dashboard" element={<StudentDashboard />} />
           <Route path="/account" element={<StudentDashboard />} />
         </Routes>
-        <Footer />
+        {/* <Footer /> */}
+        {/* <MobileBottomBar /> */}
       </div>
     </Router>
   );

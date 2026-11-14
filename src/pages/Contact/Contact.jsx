@@ -232,12 +232,12 @@ export default function Contact() {
             {/* Official Poster Preview Snippet */}
             <div className="contact-poster-banner">
               <div className="poster-thumb">
-                <img src="/colours_poster_theme.png" alt="Colours 2027 Poster" />
+                <img src="/colours_poster_theme.webp" alt="Colours 2027 Poster" />
               </div>
               <div className="poster-banner-info">
                 <h4>COLOURS 2027 Official Poster</h4>
                 <p>National Level Youth Festival • 7 • 8 • 9 January 2027</p>
-                <a href="/colours_poster_theme.png" download="Colours_2027_Poster.png" className="btn-download-poster">
+                <a href="/colours_poster_theme.webp" download="Colours_2027_Poster.webp" className="btn-download-poster">
                   📥 Download Poster
                 </a>
               </div>
