@@ -47,7 +47,14 @@
   background-clip: unset !important;
   color: var(--split-active-color, #ffffff) !important;
   -webkit-text-fill-color: var(--split-active-color, #ffffff) !important;
+  stroke: var(--split-active-color, currentColor) !important;
   mix-blend-mode: normal !important;
+}
+
+.split-color-text.mode-fallback svg,
+.split-color-text[data-mode="fallback"] svg {
+  stroke: currentColor !important;
+  color: inherit !important;
 }
 
 /* Block-level heading and paragraph elements */

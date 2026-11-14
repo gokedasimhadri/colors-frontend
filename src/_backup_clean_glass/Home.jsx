@@ -113,37 +113,36 @@ function Home() {
           </div>
         </div>
 
-        {/* ROW 2 (MIDDLE): Save the Dates (Centered across 50/50 Canvas with SplitColorText) */}
+        {/* ROW 2 (MIDDLE): Dates & Month (2 Lines: #be9337 Rounded Squares for Dates + SplitColorText for Month) */}
         <div className="hero-dates-center-section">
-          <span className="save-dates-label">SAVE THE DATES</span>
-          <div className="dates-display-row">
+          {/* Line 1: Dates (7, 8, 9) in #be9337 Rounded Corner Squares (No Dots) */}
+          <div className="dates-squares-row">
+            <div className="date-square-tile">
+              <span className="date-digit">7</span>
+            </div>
+            <div className="date-square-tile">
+              <span className="date-digit">8</span>
+            </div>
+            <div className="date-square-tile">
+              <span className="date-digit">9</span>
+            </div>
+          </div>
+
+          {/* Line 2: Month (JANUARY) Centered with SplitColorText */}
+          <div className="dates-month-row">
             <SplitColorText
               as="h2"
-              className="dates-split-heading"
+              className="month-split-heading"
               splitPercent={50}
               leftColor="#0d1536"
               rightColor="#ffffff"
             >
-              7 • 8 • 9 JANUARY
+              JANUARY
             </SplitColorText>
           </div>
         </div>
 
-        {/* COMING SOON (Large SplitColorText Centered across 50/50 Canvas) */}
-        <div className="hero-coming-soon-section">
-          <SplitColorText
-            as="h2"
-            className="hero-coming-soon-text"
-            splitPercent={50}
-            leftColor="#0d1536"
-            rightColor="#ffffff"
-          >
-            COMING SOON
-          </SplitColorText>
-        </div>
-
-        {/* ROW 3 (BOTTOM): Centered Action CTAs (Commented out) */}
-        {/*
+        {/* ROW 3 (BOTTOM): Centered Action CTAs */}
         <div className="hero-bottom-actions-section">
           <div className="hero-center-actions">
             {!student ? (
@@ -194,14 +193,12 @@ function Home() {
             </ThemeButton>
           </div>
         </div>
-        */}
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
           FOUR MAIN FESTIVAL DOMAINS (FROM OFFICIAL POSTER)
-          CULTURALS • SPORTS • CREO • FETE (Commented out)
+          CULTURALS • SPORTS • CREO • FETE
           ───────────────────────────────────────────────────────────── */}
-      {/*
       <section className="fest-pillars-section" id="pillars">
         <div className="container pillars-container">
           <div className="section-head text-center pillars-header-centered">
@@ -243,29 +240,104 @@ function Home() {
                     <span className="pillar-icon">{pillar.icon}</span>
                   </div>
                   <div className="pillar-title-group">
-                    <span className="pillar-code">{pillar.code}</span>
-                    <h3 className="pillar-name">{pillar.name}</h3>
+                    {pillar.code && (
+                      <SplitColorText
+                        as="span"
+                        className="pillar-code"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                      >
+                        {pillar.code}
+                      </SplitColorText>
+                    )}
+                    <SplitColorText
+                      as="h3"
+                      className="pillar-name"
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      {pillar.name}
+                    </SplitColorText>
                   </div>
                 </div>
 
-                <p className="pillar-tagline">{pillar.tagline}</p>
+                <SplitColorText
+                  as="p"
+                  className="pillar-tagline"
+                  screenSync={true}
+                  leftColor="#334155"
+                  rightColor="#e2e8f0"
+                >
+                  {pillar.tagline}
+                </SplitColorText>
 
                 <div className="pillar-events-snippet">
-                  <span className="events-snippet-label">Key Competitions:</span>
+                  <SplitColorText
+                    as="span"
+                    className="events-snippet-label"
+                    screenSync={true}
+                    leftColor="#475569"
+                    rightColor="#cbd5e1"
+                  >
+                    Key Competitions:
+                  </SplitColorText>
                   <ul className="snippet-list">
                     {pillar.events.map((ev, i) => (
-                      <li key={i}>{ev}</li>
+                      <li key={i}>
+                        <SplitColorText
+                          as="span"
+                          screenSync={true}
+                          leftColor="#0f172a"
+                          rightColor="#ffffff"
+                        >
+                          {ev}
+                        </SplitColorText>
+                      </li>
                     ))}
                   </ul>
                 </div>
 
                 <div className="pillar-coordinator-box">
-                  <span className="coord-chip-label">Domain In-charge:</span>
+                  <SplitColorText
+                    as="span"
+                    className="coord-chip-label"
+                    screenSync={true}
+                    leftColor="#475569"
+                    rightColor="#cbd5e1"
+                  >
+                    Domain In-charge:
+                  </SplitColorText>
                   <div className="coord-person-row">
-                    <span className="coord-name">{pillar.coordinator}</span>
+                    <SplitColorText
+                      as="span"
+                      className="coord-name"
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      {pillar.coordinator}
+                    </SplitColorText>
                     <a href={`tel:${pillar.phone}`} className="coord-phone-pill">
-                      <Phone size={13} className="coord-phone-icon" strokeWidth={2} />
-                      <span>{pillar.phone}</span>
+                      <SplitColorText
+                        as="span"
+                        mode="fallback"
+                        className="coord-phone-icon-box"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                      >
+                        <Phone size={13} className="coord-phone-icon" strokeWidth={2} />
+                      </SplitColorText>
+                      <SplitColorText
+                        as="span"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                      >
+                        {pillar.phone}
+                      </SplitColorText>
                     </a>
                   </div>
                 </div>
@@ -279,7 +351,13 @@ function Home() {
                     width="100%"
                     color={index < 2 ? '#0f172a' : '#ffffff'}
                   >
-                    Check Out {pillar.name} Events
+                    <SplitColorText
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      Check Out {pillar.name} Events
+                    </SplitColorText>
                   </ThemeButton>
                 </div>
               </LiquidGlass>
@@ -287,17 +365,15 @@ function Home() {
           </div>
         </div>
       </section>
-      */}
 
       {/* ─────────────────────────────────────────────────────────────
-          CAMPUS & REGISTRATION CTA WITH QR CODE (Commented out)
+          CAMPUS & REGISTRATION CTA WITH QR CODE
           ───────────────────────────────────────────────────────────── */}
-      {/*
       <section className="fest-final-cta" id="register">
         <div className="container">
           <LiquidGlass className="final-cta-card" theme="light" borderRadius={16} enableShader={false}>
             <div className="cta-left-details">
-              <span className="cta-celebration-tag">JOIN THE CELEBRATION</span>
+              <span className="cta-celebration-tag">Join The Celebration</span>
               <SplitColorText
                 as="h2"
                 className="cta-title"
@@ -311,7 +387,7 @@ function Home() {
                 as="p"
                 className="cta-desc"
                 screenSync={true}
-                leftColor="#475569"
+                leftColor="#334155"
                 rightColor="#ffffff"
               >
                 Don't pass up 2027's largest national college event. Secure student participation, compete for the ₹10,000,000 prize pool, and represent your campus contingent!
@@ -326,7 +402,13 @@ function Home() {
                     borderRadius={12}
                     className="cta-theme-btn"
                   >
-                    <SplitColorText>Register Now</SplitColorText>
+                    <SplitColorText
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      Register Now
+                    </SplitColorText>
                   </ThemeButton>
                 ) : (
                   <ThemeButton
@@ -335,7 +417,13 @@ function Home() {
                     borderRadius={12}
                     className="cta-theme-btn"
                   >
-                    <SplitColorText>Browse Events</SplitColorText>
+                    <SplitColorText
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      Browse Events
+                    </SplitColorText>
                   </ThemeButton>
                 )}
                 <ThemeButton
@@ -344,7 +432,13 @@ function Home() {
                   borderRadius={12}
                   className="cta-theme-btn"
                 >
-                  <SplitColorText>Support & Help Desk</SplitColorText>
+                  <SplitColorText
+                    screenSync={true}
+                    leftColor="#0f172a"
+                    rightColor="#ffffff"
+                  >
+                    Support & Help Desk
+                  </SplitColorText>
                 </ThemeButton>
               </div>
             </div>
@@ -361,7 +455,6 @@ function Home() {
           </LiquidGlass>
         </div>
       </section>
-      */}
     </SplitBackground>
   );
 }

@@ -46,41 +46,28 @@ function resolveOrigin(origin) {
   return { x: w / 2, y: h / 2 };
 }
 
+const SESSION_CANNON_KEY = 'fest_initial_cannon_blast';
+
 /**
  * MouseAnimation Component
  *
- * Automatically triggers a grand, colorful powder explosion when the website loads
- * or component mounts. Supports repeat modes, configurable origin, particle count,
- * duration, and realistic powder physics.
- *
- * @param {Object} props
- * @param {boolean} [props.autoPlay=true] - Trigger explosion automatically after mount
- * @param {boolean} [props.repeat=false] - Whether to repeat explosion periodically
- * @param {number} [props.repeatDelay=4000] - Interval between repeated explosions in ms
- * @param {number} [props.duration=2500] - Lifespan of the powder blast in ms
- * @param {number} [props.particleCount=3000] - Number of powder particles
- * @param {string|{x: number, y: number}} [props.origin='center'] - Position ('center'|'top'|'bottom'|coords)
- * @param {string[]} [props.colors] - Array of hex colors for the explosion
- * @param {number} [props.size=1.0] - Base particle size multiplier
- * @param {number} [props.spread=1.2] - Radial burst spread multiplier
- * @param {number} [props.gravity=50] - Downward gravitational drift (px/s^2)
- * @param {number} [props.delay=200] - Initial delay in ms before autoPlay fires
- * @param {string} [props.className=''] - Custom CSS class
- * @param {React.CSSProperties} [props.style={}] - Inline styles
+ * Triggers realistic dual-corner color powder cannons (from bottom-left and bottom-right)
+ * on first page load, dynamically calculated from system screen dimensions.
+ * Prevents repeating on subsequent page refreshes within the same browser session.
  */
 export const MouseAnimation = forwardRef(function MouseAnimation(
   {
     autoPlay = true,
     repeat = false,
     repeatDelay = 4000,
-    duration = 2500,
-    particleCount = 3000,
+    duration = 3400,
+    particleCount = 2200,
     origin = 'center',
     colors = DEFAULT_COLORS,
-    size = 1.0,
-    spread = 1.2,
+    size = 1.15,
+    spread = 1.0,
     gravity = 50,
-    delay = 200,
+    delay = 350,
     className = '',
     style = {},
   },
@@ -95,15 +82,30 @@ export const MouseAnimation = forwardRef(function MouseAnimation(
     engine.retain();
     engineRef.current = engine;
 
+    // Attach global testing trigger so user can test cannons anytime via console or buttons
+    if (typeof window !== 'undefined') {
+      window.__triggerFestCannonBlast = () => {
+        if (engineRef.current) {
+          engineRef.current.triggerDualCornerCannons({
+            particleCount,
+            duration,
+            size,
+            spread,
+            gravity,
+          });
+        }
+      };
+    }
+
     return () => {
       if (engineRef.current) {
         engineRef.current.release();
         engineRef.current = null;
       }
     };
-  }, []);
+  }, [particleCount, duration, size, spread, gravity]);
 
-  // Callable trigger function
+  // Callable single trigger function (backward compatibility)
   const trigger = useCallback(
     (customOrigin) => {
       if (!engineRef.current) return;
@@ -122,14 +124,46 @@ export const MouseAnimation = forwardRef(function MouseAnimation(
     [origin, particleCount, duration, colors, size, spread, gravity]
   );
 
+  // Callable dual corner cannon trigger (bottom-left and bottom-right)
+  const triggerCannons = useCallback(() => {
+    if (!engineRef.current) return;
+    engineRef.current.triggerDualCornerCannons({
+      particleCount,
+      duration,
+      size,
+      spread,
+      gravity,
+    });
+  }, [particleCount, duration, size, spread, gravity]);
+
   // Expose imperative handle to parent components
   useImperativeHandle(ref, () => ({
     trigger,
+    triggerCannons,
   }));
 
-  // Handle autoPlay on mount (preventing duplicate fires on React StrictMode re-renders)
+  // Handle autoPlay on initial page load (session-guarded, dual corner cannons)
   useEffect(() => {
     if (!autoPlay) return;
+
+    // Check if session has already witnessed the entrance blast
+    let hasSeenBlast = false;
+    let forceTest = false;
+
+    if (typeof window !== 'undefined') {
+      try {
+        hasSeenBlast = sessionStorage.getItem(SESSION_CANNON_KEY) === 'true';
+        const urlParams = new URLSearchParams(window.location.search);
+        forceTest = urlParams.has('blast') || urlParams.has('test_blast');
+      } catch (err) {
+        hasSeenBlast = false;
+      }
+    }
+
+    // If already fired in this session and not forced by test flag, skip on refresh!
+    if (hasSeenBlast && !forceTest && !repeat) {
+      return;
+    }
 
     let repeatTimer = null;
     let initialTimer = null;
@@ -137,17 +171,25 @@ export const MouseAnimation = forwardRef(function MouseAnimation(
     if (!firedRef.current) {
       firedRef.current = true;
       initialTimer = setTimeout(() => {
-        trigger();
+        // Trigger realistic dual corner cannons from bottom-left and bottom-right
+        triggerCannons();
+
+        // Mark as fired in sessionStorage so page refreshes don't re-trigger
+        try {
+          sessionStorage.setItem(SESSION_CANNON_KEY, 'true');
+        } catch (err) {
+          // ignore storage exceptions
+        }
 
         if (repeat) {
           repeatTimer = setInterval(() => {
-            trigger();
+            triggerCannons();
           }, Math.max(duration + 500, repeatDelay));
         }
       }, delay);
     } else if (repeat) {
       repeatTimer = setInterval(() => {
-        trigger();
+        triggerCannons();
       }, Math.max(duration + 500, repeatDelay));
     }
 
@@ -155,7 +197,7 @@ export const MouseAnimation = forwardRef(function MouseAnimation(
       if (initialTimer) clearTimeout(initialTimer);
       if (repeatTimer) clearInterval(repeatTimer);
     };
-  }, [autoPlay, repeat, repeatDelay, duration, delay, trigger]);
+  }, [autoPlay, repeat, repeatDelay, duration, delay, triggerCannons]);
 
   return (
     <div

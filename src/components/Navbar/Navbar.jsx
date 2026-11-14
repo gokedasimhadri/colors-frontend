@@ -5,23 +5,34 @@ import StudentAuthModal from '../RegistrationModals/StudentAuthModal';
 import ThemeButton from '../ThemeComponents/ThemeButton';
 import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
 import NavbarMenu from './NavbarMenu';
-// import MobileBottomBar from './MobileBottomBar';
 import './Navbar.css';
 
 const navItems = [
-  // Links disabled (paths commented out) – hover animation active, click disabled
-  { label: 'Events' /*, path: '/events' */ },
-  { label: 'Invitation' /*, path: '/invitation' */ },
-  { label: 'Events Schedule' /*, href: '/Schedule_of_Events.pdf' */ },
-  { label: 'Sponsors' /*, path: '/sponsors' */ },
-  { label: 'Contact' /*, path: '/contact' */ },
+  { label: 'Events', path: '/events' },
+  { label: 'Invitation', path: '/invitation' },
+  { label: 'Events Schedule', href: '/Schedule_of_Events.pdf' },
+  { label: 'Sponsors', path: '/sponsors' },
+  { label: 'Contact', path: '/contact' },
 ];
 
 function UniversityLogo() {
   const [imgError, setImgError] = useState(false);
+  const location = useLocation();
+
+  const handleLogoClick = (e) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <Link to="/" className="navbar-logo" aria-label="Aditya University – Colours 2027 Home">
+    <Link
+      to="/"
+      onClick={handleLogoClick}
+      className="navbar-logo"
+      aria-label="Aditya University – Colours 2027 Home"
+    >
       {!imgError ? (
         <img
           src="/aus-logo.svg"
@@ -43,25 +54,70 @@ export default function Navbar() {
   const location = useLocation();
   const isHome = location.pathname === '/';
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [student, setStudent] = useState(getLoggedStudent());
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
 
   useEffect(() => {
+    let lastScrollY = window.scrollY || window.pageYOffset || 0;
+    let ticking = false;
+
     const handleScroll = () => {
-      const scrollY = window.scrollY || window.pageYOffset || document.documentElement?.scrollTop || document.body?.scrollTop || 0;
-      setScrolled(scrollY > 15);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY =
+            window.scrollY ||
+            window.pageYOffset ||
+            document.documentElement?.scrollTop ||
+            document.body?.scrollTop ||
+            0;
+
+          setScrolled(currentScrollY > 15);
+
+          // If menu or auth modal is open, keep navbar visible
+          if (menuOpen || authModalOpen) {
+            setHidden(false);
+            lastScrollY = currentScrollY;
+            ticking = false;
+            return;
+          }
+
+          // At top of the page, always show navbar
+          if (currentScrollY <= 20) {
+            setHidden(false);
+          } else {
+            const diff = currentScrollY - lastScrollY;
+            // Scroll down past 70px threshold: hide navbar smoothly
+            if (diff > 6 && currentScrollY > 70) {
+              setHidden(true);
+            }
+            // Scroll up: show navbar smoothly
+            else if (diff < -6) {
+              setHidden(false);
+            }
+          }
+
+          lastScrollY = Math.max(0, currentScrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [menuOpen, authModalOpen]);
+
+  // Always show navbar on route navigation
+  useEffect(() => {
+    setHidden(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleAuth = () => setStudent(getLoggedStudent());
@@ -74,8 +130,10 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const handleOpenAuth = () => {
-      // Auth modal opening disabled as requested
+    const handleOpenAuth = (e) => {
+      const mode = e?.detail?.mode || 'login';
+      setAuthMode(mode);
+      setAuthModalOpen(true);
     };
     window.addEventListener('fest-open-auth-modal', handleOpenAuth);
     return () => window.removeEventListener('fest-open-auth-modal', handleOpenAuth);
@@ -84,18 +142,23 @@ export default function Navbar() {
   const closeMenu = () => setMenuOpen(false);
 
   const handleLoginClick = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    if (e) e.preventDefault();
     closeMenu();
-    // Login action disabled – click will not open modal, hover animation preserved
+    const current = getLoggedStudent();
+    if (!current) {
+      setAuthMode('login');
+      setAuthModalOpen(true);
+    } else {
+      if (location.pathname !== '/dashboard') {
+        navigate('/dashboard');
+      }
+    }
   };
 
   return (
     <>
       <nav
-        className={`navbar ${!isHome ? 'navbar-subpage' : ''} ${scrolled ? 'scrolled' : ''}`}
+        className={`navbar ${!isHome ? 'navbar-subpage' : ''} ${scrolled ? 'scrolled' : ''} ${hidden ? 'nav-hidden' : ''}`}
         role="navigation"
         aria-label="Main navigation"
       >
@@ -138,7 +201,6 @@ export default function Navbar() {
                   onClick={handleLoginClick}
                   id="navbar-login-btn"
                   key={location.pathname}
-                  aria-disabled="true"
                 >
                   <SplitColorText leftColor="#0f172a" rightColor="#ffffff">
                     Login
@@ -220,9 +282,6 @@ export default function Navbar() {
         }}
         initialMode={authMode}
       />
-
-      {/* Mobile Floating Bottom Bar with all Menus (Commented out) */}
-      {/* <MobileBottomBar /> */}
     </>
   );
 }

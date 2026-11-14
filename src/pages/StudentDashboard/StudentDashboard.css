@@ -1290,3 +1290,18 @@
     display: none !important;
   }
 }
+
+/* ── Mobile View Container Spacing (16px Left & Right) ── */
+@media (max-width: 900px) {
+  .student-dashboard-page {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .dashboard-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
+  }
+}

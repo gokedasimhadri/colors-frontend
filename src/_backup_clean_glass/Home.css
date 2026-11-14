@@ -1,4 +1,4 @@
-/* ==========================================================================
+/* ===e=======================================================================
    HOME PAGE – Official Colours 2027 Light Theme
    Clean Dual-Light Split Hero with Multicolored Splash & Crisp White Surfaces
    ========================================================================== */
@@ -49,36 +49,36 @@
 
 /* Row 1: ADITYA UNIVERSITY (Centered) */
 .poster-inst-row {
-  margin-bottom: clamp(0.65rem, 1.2vw, 1.15rem);
+  margin-bottom: clamp(0.5rem, 1vw, 0.85rem);
 }
 
 .poster-inst-text {
   font-family: var(--font-brand);
-  font-size: clamp(1.25rem, 2.5vw, 2.2rem);
-  font-weight: 900;
-  letter-spacing: 0.16em;
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wider);
   color: #Be9337;
   text-transform: uppercase;
   text-align: center;
-  line-height: 1.3;
+  line-height: var(--lh-snug);
   margin: 0;
   padding: 0;
 }
 
 /* Row 2: YOU'RE INVITED TO (Centered) */
 .poster-invite-row {
-  margin-bottom: clamp(0.75rem, 1.4vw, 1.25rem);
+  margin-bottom: clamp(0.5rem, 1vw, 0.85rem);
 }
 
 .poster-invite-text {
   font-family: var(--font-brand);
-  font-size: clamp(0.72rem, 1.15vw, 0.96rem);
-  font-weight: 800;
-  letter-spacing: 0.32em;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-widest);
   color: #Be9337;
   text-transform: uppercase;
   text-align: center;
-  line-height: 1.4;
+  line-height: var(--lh-snug);
   margin: 0;
   padding: 0;
 }
@@ -86,21 +86,21 @@
 /* Row 3: COLOURS (Horizontally centered across the 50/50 canvas) */
 .poster-title-row {
   justify-content: center;
-  margin: clamp(0.4rem, 1vw, 0.8rem) 0 clamp(0.75rem, 1.5vw, 1.25rem);
+  margin: clamp(0.35rem, 0.8vw, 0.75rem) 0 clamp(0.6rem, 1.2vw, 1rem);
   line-height: 1.05;
 }
 
 .poster-colours-heading {
   font-family: var(--font-brand);
-  font-weight: 900;
-  font-size: clamp(2.35rem, 12vw, 11rem);
-  line-height: 1.05;
-  letter-spacing: clamp(0.01em, 0.4vw, 0.04em);
+  font-weight: var(--fw-black);
+  font-size: var(--fs-hero-title);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
   text-transform: uppercase;
   text-align: center;
   width: 100%;
   margin: 0;
-  padding: 0.2rem 0;
+  padding: 0.15rem 0;
   background: linear-gradient(to right, #0d1536 50%, #ffffff 50%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -111,14 +111,14 @@
 
 /* Row 4: A NATIONAL LEVEL YOUTH FESTIVAL (Centered with 50/50 Dual-Tone Split) */
 .poster-tagline-row {
-  margin-top: clamp(0.5rem, 1.2vw, 1.25rem);
+  margin-top: clamp(0.4rem, 0.9vw, 0.85rem);
 }
 
 .poster-tagline-text {
   font-family: var(--font-brand);
-  font-size: clamp(0.56rem, 1.8vw, 1.05rem);
-  font-weight: 900;
-  letter-spacing: clamp(0.08em, 0.4vw, 0.22em);
+  font-size: var(--fs-subtitle);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wider);
   text-transform: uppercase;
   text-align: center;
   width: 100%;
@@ -129,7 +129,7 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
-  line-height: 1.35;
+  line-height: var(--lh-snug);
 }
 
 /* ── HERO CONTENT CARDS CONTAINER (Even Row for Dates & ₹10 Lakhs) ── */
@@ -190,12 +190,106 @@
   text-align: center;
 }
 
-.dates-split-heading {
+/* Row 1: Dates (7, 8, 9) in #be9337 Rounded Corner Squares (No Dots, No Drop Shadow) */
+.dates-squares-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.5rem, 1.1vw, 0.95rem);
+  margin-bottom: clamp(0.45rem, 0.9vw, 0.75rem);
+  width: 100%;
+}
+
+@keyframes vibgyorRainbowFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.date-square-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(42px, 4.4vw, 58px);
+  height: clamp(42px, 4.4vw, 58px);
+  background-color: #be9337;
+  border-radius: clamp(8px, 1vw, 12px);
+  color: #ffffff;
   font-family: var(--font-heading);
-  font-size: clamp(2.2rem, 4.3vw, 3.4rem);
+  font-size: clamp(1.45rem, 2.6vw, 2.1rem);
   font-weight: 900;
-  line-height: 1.15;
-  letter-spacing: clamp(0.02em, 0.3vw, 0.05em);
+  line-height: 1;
+  box-shadow: none;
+  user-select: none;
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
+}
+
+.date-digit {
+  display: inline-block;
+  line-height: 1;
+  color: #ffffff;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+/* Hover: The card with 7 (and dates) scales up / becomes bigger */
+.date-square-tile:hover {
+  transform: scale(1.18);
+  z-index: 5;
+  box-shadow: 0 10px 24px -4px rgba(190, 147, 55, 0.45);
+}
+
+/* Hover ONLY: 7 VIBGYOR colors animate inside the number text */
+.date-square-tile:hover .date-digit {
+  background-image: linear-gradient(
+    90deg,
+    #8b00ff 0%,    /* V - Violet */
+    #4b0082 7.1%,  /* I - Indigo */
+    #0066ff 14.3%, /* B - Blue */
+    #00c853 21.4%, /* G - Green */
+    #ffd600 28.6%, /* Y - Yellow */
+    #ff6d00 35.7%, /* O - Orange */
+    #ff1744 42.8%, /* R - Red */
+    #8b00ff 50%,   /* V - Violet loop */
+    #4b0082 57.1%, /* I - Indigo */
+    #0066ff 64.3%, /* B - Blue */
+    #00c853 71.4%, /* G - Green */
+    #ffd600 78.6%, /* Y - Yellow */
+    #ff6d00 85.7%, /* O - Orange */
+    #ff1744 92.8%, /* R - Red */
+    #8b00ff 100%   /* V - Violet end */
+  );
+  background-size: 200% 100%;
+  background-repeat: repeat-x;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: vibgyorRainbowFlow 2s linear infinite;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+/* Row 2: Month (JANUARY) Centered with SplitColorText */
+.dates-month-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+.month-split-heading {
+  font-family: var(--font-heading);
+  font-size: var(--fs-hero-date);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-wider);
   text-transform: uppercase;
   text-align: center;
   width: 100%;
@@ -209,25 +303,13 @@
   user-select: none;
 }
 
-/* ── COMING SOON Grand Split Title ── */
-.hero-coming-soon-section {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: clamp(1.25rem, 2.8vw, 2.75rem);
-  padding: 0 1rem clamp(3rem, 6vw, 5.5rem);
-  position: relative;
-  z-index: 3;
-}
 
-.hero-coming-soon-text {
+.dates-split-heading {
   font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 4.3vw, 3.4rem);
   font-weight: 900;
-  font-size: clamp(2.8rem, 7.5vw, 6.2rem);
-  line-height: 1.05;
-  letter-spacing: clamp(0.04em, 0.4vw, 0.12em);
+  line-height: 1.15;
+  letter-spacing: clamp(0.02em, 0.3vw, 0.05em);
   text-transform: uppercase;
   text-align: center;
   width: 100%;
@@ -770,11 +852,11 @@
   margin: 0 auto;
 }
 
-/* Hero Action Buttons (ThemeButton Liquid Glass Integration) */
+/* Hero Action Buttons (ThemeButton Liquid Glass Integration - Synced with Login CTA: 14px, 500 weight) */
 .hero-action-btn {
   padding: 0.8rem 1.85rem !important;
-  font-size: 0.94rem !important;
-  font-weight: 700 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
   letter-spacing: 0.035em !important;
   border-radius: 10px !important;
   text-decoration: none !important;
@@ -784,10 +866,13 @@
 
 .hero-action-btn .theme-glass-btn-content {
   isolation: auto !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
 }
 
 .hero-action-btn .split-color-text {
-  font-weight: 700;
+  font-size: 14px !important;
+  font-weight: 500 !important;
   letter-spacing: 0.035em;
   line-height: 1.2;
 }
@@ -913,6 +998,22 @@
   box-sizing: border-box !important;
 }
 
+@media (max-width: 900px) {
+  .fest-pillars-section .container,
+  .fest-pillars-section .pillars-container,
+  .pillars-container {
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .pillar-card .coord-phone-pill,
+  .pillar-card .coord-phone-icon-box,
+  .pillar-card .coord-phone-icon {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+  }
+}
+
 .fest-pillars-section .section-head,
 .pillars-header-centered {
   display: flex !important;
@@ -950,7 +1051,7 @@
   max-width: 660px !important;
   margin: 0 auto !important;
   font-size: 14px !important;
-  font-weight: 300 !important;
+  font-weight: 400 !important;
   line-height: 1.65 !important;
   letter-spacing: 0.01em !important;
   display: block !important;
@@ -1014,14 +1115,14 @@
   color: #334155;
 }
 
-/* ── Inner Liquid Card for Key Competitions (Light Variant) ── */
+/* ── Inner Liquid Card for Key Competitions (Light Variant: Culturals & Sports matching Creo) ── */
 .pillar-card.lg-card-light .pillar-events-snippet {
-  background: rgba(255, 255, 255, 0.50);
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   box-shadow:
-    inset 0 1px 1.5px rgba(255, 255, 255, 0.95),
-    inset 0 -1px 1px rgba(15, 23, 42, 0.03),
-    0 4px 16px -2px rgba(15, 23, 42, 0.04);
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.18),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.35),
+    0 6px 20px -2px rgba(0, 0, 0, 0.4);
 }
 
 .pillar-card.lg-card-light .snippet-list li {
@@ -1037,17 +1138,17 @@
 }
 
 .pillar-card.lg-card-light .coord-phone-pill {
-  color: #0f172a;
+  color: inherit;
 }
 
-/* ── Inner Liquid Card for Domain In-Charge (Light Variant) ── */
+/* ── Inner Liquid Card for Domain In-Charge (Light Variant: Culturals & Sports matching Creo) ── */
 .pillar-card.lg-card-light .pillar-coordinator-box {
-  background: rgba(255, 255, 255, 0.50);
-  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   box-shadow:
-    inset 0 1px 1.5px rgba(255, 255, 255, 0.95),
-    inset 0 -1px 1px rgba(15, 23, 42, 0.03),
-    0 4px 16px -2px rgba(15, 23, 42, 0.04);
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.18),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.35),
+    0 6px 20px -2px rgba(0, 0, 0, 0.4);
 }
 
 .pillar-card.lg-card-light .btn-pillar-explore {
@@ -1094,7 +1195,7 @@
 }
 
 .pillar-card.lg-card-dark .coord-phone-pill {
-  color: #ffffff;
+  color: inherit;
 }
 
 /* ── Inner Liquid Card for Domain In-Charge (Dark Variant) ── */
@@ -1139,27 +1240,28 @@
 }
 
 .pillar-code {
-  font-size: 0.74rem;
-  font-weight: 900;
-  letter-spacing: 0.18em;
+  font-size: var(--fs-badge);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-widest);
   color: inherit;
-  opacity: 0.8;
+  opacity: 0.85;
   text-transform: uppercase;
 }
 
 .pillar-name {
   font-family: var(--font-heading);
-  font-size: 1.85rem;
-  line-height: 1.1;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
   margin-top: 2px;
 }
 
 .pillar-tagline {
-  font-size: 0.88rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-  font-weight: 400;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  margin-bottom: 1.25rem;
+  line-height: var(--lh-snug);
 }
 
 .pillar-events-snippet {
@@ -1253,10 +1355,20 @@
   opacity: 0.85;
 }
 
+.coord-phone-icon-box {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  vertical-align: middle !important;
+}
+
 .coord-phone-icon {
   width: 13px;
   height: 13px;
   flex-shrink: 0;
+  stroke: currentColor !important;
+  color: inherit !important;
   opacity: 0.9;
 }
 
@@ -1273,9 +1385,46 @@
 
 .btn-pillar-explore {
   width: 100% !important;
-  font-size: 0.90rem !important;
-  font-weight: 700 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
   letter-spacing: 0.03em !important;
+  text-align: center !important;
+  justify-content: center !important;
+}
+
+.btn-pillar-explore .theme-glass-btn-content {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+  justify-content: center !important;
+  align-items: center !important;
+  display: inline-flex !important;
+  width: 100% !important;
+}
+
+.btn-pillar-explore .split-color-text {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+  justify-content: center !important;
+  align-items: center !important;
+  display: inline-flex !important;
+  width: 100% !important;
+}
+
+.btn-pillar-explore:hover .theme-glass-btn-content,
+.btn-pillar-explore:hover .split-color-text {
+  text-align: center !important;
+  justify-content: center !important;
+  align-items: center !important;
+  display: inline-flex !important;
+}
+
+@media (max-width: 1100px) {
+  .pillar-card .snippet-list li::before {
+    color: #0f172a !important;
+    opacity: 0.75;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -1294,10 +1443,16 @@
   border-radius: 16px !important;
   border: none !important;
   outline: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: blur(20px) saturate(190%) brightness(1.04) !important;
-  backdrop-filter: blur(20px) saturate(190%) brightness(1.04) !important;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(255, 255, 255, 0.94) 50%,
+    rgba(10, 15, 30, 0.94) 50%,
+    rgba(10, 15, 30, 0.94) 100%
+  ) !important;
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.35) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
   overflow: hidden;
   transition: none !important;
   transform: none !important;
@@ -1305,8 +1460,26 @@
 
 .liquid-glass-card.final-cta-card:hover {
   transform: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.35) !important;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(255, 255, 255, 0.94) 50%,
+    rgba(10, 15, 30, 0.94) 50%,
+    rgba(10, 15, 30, 0.94) 100%
+  ) !important;
+}
+
+@media (max-width: 991px) {
+  .liquid-glass-card.final-cta-card {
+    background: transparent !important;
+    padding: 2.2rem 1.4rem !important;
+    box-shadow: none !important;
+  }
+  .liquid-glass-card.final-cta-card:hover {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
 }
 
 .liquid-glass-card.final-cta-card::before {
@@ -1335,7 +1508,7 @@
 .final-cta-card .section-tag,
 .cta-celebration-tag {
   display: inline-block;
-  background: transparent !important;
+  background-color: transparent !important;
   border: none !important;
   padding: 0 !important;
   border-radius: 0 !important;
@@ -1344,38 +1517,51 @@
   font-size: 0.88rem;
   font-weight: 900;
   letter-spacing: 0.22em;
-  text-transform: uppercase;
+  text-transform: capitalize;
   margin-bottom: 0.85rem;
   width: fit-content;
 
-  /* VIBGYOR Spectrum Gradient Text */
-  background: linear-gradient(
+  /* Animated 7 VIBGYOR Continuous Rainbow Flow */
+  background-image: linear-gradient(
     90deg,
-    #7c3aed 0%,
-    #3b82f6 18%,
-    #06b6d4 36%,
-    #10b981 54%,
-    #eab308 70%,
-    #f97316 86%,
-    #ef4444 100%
+    #8b00ff 0%,    /* V - Violet */
+    #4b0082 7.1%,  /* I - Indigo */
+    #0066ff 14.3%, /* B - Blue */
+    #00c853 21.4%, /* G - Green */
+    #ffd600 28.6%, /* Y - Yellow */
+    #ff6d00 35.7%, /* O - Orange */
+    #ff1744 42.8%, /* R - Red */
+    #8b00ff 50%,   /* V - Violet loop */
+    #4b0082 57.1%, /* I - Indigo */
+    #0066ff 64.3%, /* B - Blue */
+    #00c853 71.4%, /* G - Green */
+    #ffd600 78.6%, /* Y - Yellow */
+    #ff6d00 85.7%, /* O - Orange */
+    #ff1744 92.8%, /* R - Red */
+    #8b00ff 100%   /* V - Violet end */
   ) !important;
+  background-size: 200% 100% !important;
+  background-repeat: repeat-x !important;
   -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  animation: vibgyorRainbowFlow 2.5s linear infinite !important;
 }
 
 .cta-title {
   font-family: var(--font-heading);
   font-size: clamp(2.5rem, 5vw, 3.8rem);
+  font-weight: 800;
   line-height: 1.1;
   margin-bottom: 1.2rem;
 }
 
 .cta-desc {
   font-size: 1.05rem;
-  color: #475569;
+  font-weight: 500;
   line-height: 1.8;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .cta-buttons-row {
@@ -1390,9 +1576,20 @@
 }
 
 .cta-theme-btn {
-  font-size: 0.92rem !important;
-  font-weight: 700 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
   padding: 0.82rem 1.8rem !important;
+}
+
+.cta-theme-btn .theme-glass-btn-content,
+.cta-theme-btn .split-color-text {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
 }
 
 /* Poster Card with Transparent Background */
@@ -1550,7 +1747,12 @@
 /* ── 4. Bootstrap SM (576px - 767.98px) – Phablets / Landscape Phones ── */
 @media (min-width: 576px) and (max-width: 767.98px) {
   .poster-colours-heading {
-    font-size: clamp(2.8rem, 8.6vw, 3.6rem) !important;
+    font-size: clamp(4.2rem, 15vw, 5.6rem) !important;
+    line-height: 0.95 !important;
+    letter-spacing: 0.02em !important;
+    width: 100% !important;
+    text-align: center !important;
+    white-space: nowrap !important;
   }
 
   .poster-tagline-text {
@@ -1559,21 +1761,22 @@
   }
 
   .hero-flip-clock {
-    --fcc-spacing: 8px !important;
-    --fcc-digit-block-width: 26px !important;
-    --fcc-digit-block-height: 42px !important;
-    --fcc-digit-font-size: 25px !important;
-    --fcc-digit-block-spacing: 3px !important;
-    --fcc-label-font-size: 9px !important;
-    --fcc-separator-size: 5px !important;
+    --fcc-spacing: clamp(8px, 1.6vw, 12px) !important;
+    --fcc-digit-block-width: clamp(34px, 5.5vw, 42px) !important;
+    --fcc-digit-block-height: clamp(54px, 8.8vw, 68px) !important;
+    --fcc-digit-font-size: clamp(34px, 5.5vw, 42px) !important;
+    --fcc-digit-block-spacing: 4px !important;
+    --fcc-label-font-size: 11px !important;
+    --fcc-separator-size: 6px !important;
   }
 
   .hero-center-actions {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     gap: 0.75rem !important;
-    padding: 0 1rem !important;
+    padding: 0 16px !important;
     max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .hero-action-btn {
@@ -1609,24 +1812,34 @@
 /* ── 5. Bootstrap XS (< 576px) – Mobile Phones ── */
 @media (max-width: 575.98px) {
   .fest-split-hero {
-    padding-top: calc(var(--navbar-height) + 0.25rem) !important;
+    padding-top: calc(var(--navbar-height) + 0.15rem) !important;
     min-height: auto !important;
     padding-bottom: 2rem !important;
   }
 
   .hero-poster-header {
-    padding: 1rem 0.5rem 0.35rem !important;
+    padding: 0.65rem 16px 0.35rem !important;
+    box-sizing: border-box !important;
   }
 
   .poster-title-row {
     margin: 0.25rem 0 0.5rem !important;
+    width: 100% !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
   }
 
   .poster-colours-heading {
-    font-size: clamp(2.15rem, 11.5vw, 2.9rem) !important;
+    font-size: clamp(3.4rem, 19.2vw, 5.4rem) !important;
     letter-spacing: 0.02em !important;
-    line-height: 1.05 !important;
-    padding: 0 0.25rem !important;
+    line-height: 0.95 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    display: block !important;
   }
 
   .poster-tagline-row {
@@ -1650,24 +1863,45 @@
   }
 
   .hero-flip-clock {
-    --fcc-spacing: 5px !important;
-    --fcc-digit-block-width: 21px !important;
-    --fcc-digit-block-height: 35px !important;
-    --fcc-digit-block-radius: 5px !important;
-    --fcc-digit-block-spacing: 2px !important;
-    --fcc-digit-font-size: 20px !important;
-    --fcc-label-font-size: 7.5px !important;
-    --fcc-separator-size: 4px !important;
+    --fcc-spacing: clamp(6px, 1.8vw, 10px) !important;
+    --fcc-digit-block-width: clamp(26px, 7.8vw, 36px) !important;
+    --fcc-digit-block-height: clamp(42px, 12.5vw, 58px) !important;
+    --fcc-digit-block-radius: 6px !important;
+    --fcc-digit-block-spacing: clamp(3px, 0.9vw, 5px) !important;
+    --fcc-digit-font-size: clamp(26px, 7.8vw, 36px) !important;
+    --fcc-label-font-size: clamp(8.5px, 2.4vw, 11px) !important;
+    --fcc-separator-size: clamp(5px, 1.3vw, 7px) !important;
   }
 
   .hero-dates-center-section {
-    padding: 0.5rem 0.5rem 1rem !important;
+    padding: 0.5rem 16px 1rem !important;
+    box-sizing: border-box !important;
   }
 
   .save-dates-label {
     font-size: 0.65rem !important;
     letter-spacing: 0.16em !important;
     margin-bottom: 0.35rem !important;
+    text-align: center !important;
+  }
+
+  .dates-squares-row {
+    gap: clamp(0.55rem, 2vw, 0.75rem) !important;
+    margin-bottom: 0.45rem !important;
+  }
+
+  .date-square-tile {
+    width: clamp(46px, 12.5vw, 54px) !important;
+    height: clamp(46px, 12.5vw, 54px) !important;
+    font-size: clamp(1.6rem, 7vw, 1.95rem) !important;
+    border-radius: clamp(9px, 2.5vw, 12px) !important;
+    box-shadow: 0 4px 14px rgba(190, 147, 55, 0.3) !important;
+  }
+
+  .month-split-heading {
+    font-size: clamp(2.6rem, 11.5vw, 3.6rem) !important;
+    letter-spacing: 0.09em !important;
+    line-height: 1.05 !important;
     text-align: center !important;
   }
 
@@ -1678,22 +1912,11 @@
     text-align: center !important;
   }
 
-  .hero-coming-soon-section {
-    margin-top: 0.95rem !important;
-    padding: 0 0.5rem 3.5rem !important;
-  }
-
-  .hero-coming-soon-text {
-    font-size: clamp(2rem, 8.2vw, 2.85rem) !important;
-    letter-spacing: 0.06em !important;
-    line-height: 1.15 !important;
-  }
-
   .hero-center-actions {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     gap: 0.6rem !important;
-    padding: 0 0.75rem !important;
+    padding: 0 16px !important;
     width: 100% !important;
     box-sizing: border-box !important;
   }
@@ -1702,6 +1925,7 @@
     width: 100% !important;
     padding: 0.65rem 0.4rem !important;
     font-size: 0.8rem !important;
+    font-weight: 500 !important;
     justify-content: center !important;
     text-align: center !important;
     box-sizing: border-box !important;
@@ -1709,6 +1933,7 @@
 
   .hero-action-btn .split-color-text {
     font-size: 0.8rem !important;
+    font-weight: 500 !important;
   }
 
   /* Pillars Section Mobile */
@@ -1717,17 +1942,18 @@
   }
 
   .pillars-container {
-    padding: 0 0.85rem !important;
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
   }
 
   .pillars-section-title {
-    font-size: clamp(1.85rem, 6.5vw, 2.4rem) !important;
+    font-size: clamp(2rem, 6.5vw, 2.6rem) !important;
   }
 
   .pillars-section-desc {
-    font-size: 0.88rem !important;
-    line-height: 1.6 !important;
-    padding: 0 0.5rem !important;
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+    padding: 0 !important;
   }
 
   .pillars-grid {
@@ -1750,11 +1976,12 @@
 
   /* Final Registration CTA Mobile */
   .fest-final-cta {
-    padding: 3rem 0 5.5rem !important;
+    padding: 3rem 0 2rem !important;
   }
 
   .fest-final-cta .container {
-    padding: 0 0.85rem !important;
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
   }
 
   .final-cta-card {
@@ -1797,8 +2024,9 @@
 /* ── 6. Ultra-Small Mobile Phones (< 360px – e.g. iPhone SE, Fold) ── */
 @media (max-width: 359.98px) {
   .poster-colours-heading {
-    font-size: 1.95rem !important;
+    font-size: clamp(2.85rem, 18.5vw, 3.2rem) !important;
     letter-spacing: 0.01em !important;
+    line-height: 0.95 !important;
   }
 
   .poster-tagline-text {
@@ -1807,23 +2035,36 @@
   }
 
   .hero-flip-clock {
-    --fcc-spacing: 4px !important;
-    --fcc-digit-block-width: 17px !important;
-    --fcc-digit-block-height: 29px !important;
-    --fcc-digit-font-size: 17px !important;
-    --fcc-digit-block-spacing: 1.5px !important;
-    --fcc-label-font-size: 7px !important;
-    --fcc-separator-size: 3px !important;
+    --fcc-spacing: 5px !important;
+    --fcc-digit-block-width: 24px !important;
+    --fcc-digit-block-height: 39px !important;
+    --fcc-digit-font-size: 24px !important;
+    --fcc-digit-block-spacing: 2.5px !important;
+    --fcc-label-font-size: 8px !important;
+    --fcc-separator-size: 4px !important;
+  }
+
+  .dates-squares-row {
+    gap: 0.45rem !important;
+    margin-bottom: 0.35rem !important;
+  }
+
+  .date-square-tile {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 1.45rem !important;
+    border-radius: 8px !important;
+    box-shadow: 0 3px 10px rgba(190, 147, 55, 0.25) !important;
+  }
+
+  .month-split-heading {
+    font-size: 2.3rem !important;
+    letter-spacing: 0.07em !important;
   }
 
   .dates-split-heading {
     font-size: 1.35rem !important;
     letter-spacing: 0.02em !important;
-  }
-
-  .hero-coming-soon-text {
-    font-size: 1.75rem !important;
-    letter-spacing: 0.04em !important;
   }
 
   .hero-center-actions {

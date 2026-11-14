@@ -1401,3 +1401,21 @@
   color: #e11d48;
   text-decoration: underline;
 }
+
+/* ── Mobile View Container Spacing (16px Left & Right) ── */
+@media (max-width: 900px) {
+  .events-hero-header {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  .events-hero-header .container,
+  .categories-container,
+  .subcat-view-wrapper .categories-container,
+  .event-detail-wrapper .categories-container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+}

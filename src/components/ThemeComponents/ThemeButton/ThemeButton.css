@@ -1,7 +1,18 @@
 /* ==========================================================================
    THEME BUTTON – Pure Transparent Liquid Glass Reusable Component
    Zero Solid Color. Pure Optical Glass. Blends Dynamically with Any Background.
+   Typography Synced with Login Button: Font Size 14px, Font Weight 500.
+   Hover: 7 VIBGYOR Continuous Rainbow Flow Animation.
    ========================================================================== */
+
+@keyframes vibgyorRainbowFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
 
 .theme-glass-btn {
   /* ── 1. Reset all conflicting native & inherited button styles ── */
@@ -20,6 +31,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-align: center !important;
   gap: 0.55rem;
   padding: var(--tb-padding, 0.65rem 1.6rem);
   width: var(--tb-width, auto);
@@ -29,11 +41,11 @@
   overflow: hidden;
   isolation: isolate;
 
-  /* ── 3. Geometry & Typography ── */
+  /* ── 3. Geometry & Typography (Synced with Login CTA: 14px, 500 weight) ── */
   border-radius: var(--tb-radius, 10px);
   font-family: inherit;
-  font-size: var(--tb-font-size, 0.92rem);
-  font-weight: 700;
+  font-size: var(--tb-font-size, 14px) !important;
+  font-weight: var(--tb-font-weight, 500) !important;
   letter-spacing: 0.035em;
   color: var(--tb-color, #ffffff);
   line-height: 1.2;
@@ -79,9 +91,109 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-align: center !important;
   gap: inherit;
   width: 100%;
   height: 100%;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-glass-btn .split-color-text {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  text-align: center !important;
+}
+
+/* ── Hover: 7 VIBGYOR Continuous Rainbow Flow Animation ── */
+.theme-glass-btn:hover .split-color-text,
+.theme-glass-btn.active .split-color-text {
+  background-image: linear-gradient(
+    90deg,
+    #8b00ff 0%,    /* V - Violet */
+    #4b0082 7.1%,  /* I - Indigo */
+    #0066ff 14.3%, /* B - Blue */
+    #00c853 21.4%, /* G - Green */
+    #ffd600 28.6%, /* Y - Yellow */
+    #ff6d00 35.7%, /* O - Orange */
+    #ff1744 42.8%, /* R - Red */
+    #8b00ff 50%,   /* V - Violet loop */
+    #4b0082 57.1%, /* I - Indigo */
+    #0066ff 64.3%, /* B - Blue */
+    #00c853 71.4%, /* G - Green */
+    #ffd600 78.6%, /* Y - Yellow */
+    #ff6d00 85.7%, /* O - Orange */
+    #ff1744 92.8%, /* R - Red */
+    #8b00ff 100%   /* V - Violet end */
+  ) !important;
+  background-size: 200% 100% !important;
+  background-repeat: repeat-x !important;
+  background-position: 0% 50%;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  animation: vibgyorRainbowFlow 2s linear infinite !important;
+  transform: scale(1.08) !important;
+  transform-origin: center center !important;
+  display: inline-block !important;
+  text-align: center !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  will-change: transform, background-position;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.theme-glass-btn:not(:has(.split-color-text)):hover .theme-glass-btn-content {
+  background-image: linear-gradient(
+    90deg,
+    #8b00ff 0%,    /* V - Violet */
+    #4b0082 7.1%,  /* I - Indigo */
+    #0066ff 14.3%, /* B - Blue */
+    #00c853 21.4%, /* G - Green */
+    #ffd600 28.6%, /* Y - Yellow */
+    #ff6d00 35.7%, /* O - Orange */
+    #ff1744 42.8%, /* R - Red */
+    #8b00ff 50%,   /* V - Violet loop */
+    #4b0082 57.1%, /* I - Indigo */
+    #0066ff 64.3%, /* B - Blue */
+    #00c853 71.4%, /* G - Green */
+    #ffd600 78.6%, /* Y - Yellow */
+    #ff6d00 85.7%, /* O - Orange */
+    #ff1744 92.8%, /* R - Red */
+    #8b00ff 100%   /* V - Violet end */
+  ) !important;
+  background-size: 200% 100% !important;
+  background-repeat: repeat-x !important;
+  background-position: 0% 50%;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  animation: vibgyorRainbowFlow 2s linear infinite !important;
+  transform: scale(1.08) !important;
+  transform-origin: center center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  will-change: transform, background-position;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Prevent double transform on content container when SplitColorText is inside */
+.theme-glass-btn:has(.split-color-text):hover .theme-glass-btn-content {
+  transform: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: initial !important;
 }
 
 /* ── Blast Effect: Center Point Locked to Button Bottom-Right Corner ── */

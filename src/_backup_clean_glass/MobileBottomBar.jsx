@@ -10,10 +10,8 @@ import {
   FileText,
   Award,
   Phone,
-  LogOut,
-  LogIn,
 } from 'lucide-react';
-import { getLoggedStudent, logoutStudent } from '../../services/api';
+import { getLoggedStudent } from '../../services/api';
 import './MobileBottomBar.css';
 
 export default function MobileBottomBar() {
@@ -82,92 +80,17 @@ export default function MobileBottomBar() {
           <span className="drawer-pill" />
         </div>
 
-        <div className="drawer-header">
-          <div className="drawer-title-group">
-            <span className="drawer-title">COLOURS 2027</span>
-            <span className="drawer-subtitle">National Youth Festival</span>
-          </div>
-          <button
-            type="button"
-            className="drawer-close-btn"
-            onClick={() => setDrawerOpen(false)}
-            aria-label="Close Menu"
-          >
-            <X size={19} />
-          </button>
-        </div>
+        <button
+          type="button"
+          className="drawer-close-btn"
+          onClick={() => setDrawerOpen(false)}
+          aria-label="Close Menu"
+        >
+          <X size={19} />
+        </button>
 
-        <div className="drawer-prize-badge">
-          <span>🏆 ₹10 Lakhs Cash Prizes</span>
-          <span>•</span>
-          <span>7 • 8 • 9 January 2027</span>
-        </div>
-
-        {/* Student Account Status Card */}
-        {student ? (
-          <div className="drawer-student-card">
-            <div className="drawer-student-info">
-              <span className="drawer-student-avatar">👤</span>
-              <div>
-                <span className="drawer-student-name">{student.name}</span>
-                <span className="drawer-student-role">Aditya Student Delegate</span>
-              </div>
-            </div>
-            <div className="drawer-student-actions">
-              <Link
-                to="/dashboard"
-                className="drawer-dash-btn"
-                onClick={() => setDrawerOpen(false)}
-              >
-                Dashboard →
-              </Link>
-              <button
-                type="button"
-                className="drawer-logout-btn"
-                onClick={() => {
-                  logoutStudent();
-                  setDrawerOpen(false);
-                }}
-              >
-                <LogOut size={14} /> Logout
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="drawer-auth-buttons">
-            <button
-              type="button"
-              className="drawer-auth-btn login-btn"
-              onClick={handleAccountClick}
-            >
-              <LogIn size={15} /> Student Login
-            </button>
-            <button
-              type="button"
-              className="drawer-auth-btn register-btn"
-              onClick={handleRegisterClick}
-            >
-              Register Now
-            </button>
-          </div>
-        )}
-
-        {/* All Festival Menu Links */}
+        {/* Festival Menu Links (Only items not directly available on the outer bottom bar, with exact Navbar names) */}
         <div className="drawer-links-grid">
-          <Link
-            to="/events"
-            className={`drawer-link-item ${location.pathname.startsWith('/events') ? 'active' : ''}`}
-            onClick={() => setDrawerOpen(false)}
-          >
-            <span className="drawer-icon-bubble pink">
-              <Sparkles size={18} />
-            </span>
-            <div className="drawer-link-text">
-              <span className="drawer-link-label">Browse Events</span>
-              <span className="drawer-link-sub">Competitions & Stages</span>
-            </div>
-          </Link>
-
           <Link
             to="/invitation"
             className={`drawer-link-item ${location.pathname === '/invitation' ? 'active' : ''}`}
@@ -177,26 +100,10 @@ export default function MobileBottomBar() {
               <FileText size={18} />
             </span>
             <div className="drawer-link-text">
-              <span className="drawer-link-label">Invitation Poster</span>
+              <span className="drawer-link-label">Invitation</span>
               <span className="drawer-link-sub">Official Festival Invite</span>
             </div>
           </Link>
-
-          <a
-            href="/Schedule_of_Events.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="drawer-link-item"
-            onClick={() => setDrawerOpen(false)}
-          >
-            <span className="drawer-icon-bubble blue">
-              <Calendar size={18} />
-            </span>
-            <div className="drawer-link-text">
-              <span className="drawer-link-label">Events Schedule</span>
-              <span className="drawer-link-sub">3-Day Timeline (PDF)</span>
-            </div>
-          </a>
 
           <Link
             to="/sponsors"
@@ -207,7 +114,7 @@ export default function MobileBottomBar() {
               <Award size={18} />
             </span>
             <div className="drawer-link-text">
-              <span className="drawer-link-label">Sponsors & Partners</span>
+              <span className="drawer-link-label">Sponsors</span>
               <span className="drawer-link-sub">Corporate Supporters</span>
             </div>
           </Link>
@@ -221,14 +128,14 @@ export default function MobileBottomBar() {
               <Phone size={18} />
             </span>
             <div className="drawer-link-text">
-              <span className="drawer-link-label">Helpdesk & Contact</span>
-              <span className="drawer-link-sub">Venue & Helplines</span>
+              <span className="drawer-link-label">Contact</span>
+              <span className="drawer-link-sub">Helpdesk & Helplines</span>
             </div>
           </Link>
         </div>
       </div>
 
-      {/* ── Fixed Bottom Glass Navigation Bar ── */}
+      {/* ── Fixed Floating Pill Island Navigation Bar ── */}
       <nav
         className="mobile-bottom-bar"
         role="navigation"
@@ -237,27 +144,31 @@ export default function MobileBottomBar() {
         {/* Tab 1: Home */}
         <Link
           to="/"
-          className={`bottom-tab ${location.pathname === '/' ? 'active' : ''}`}
+          onClick={(e) => {
+            if (location.pathname === '/') {
+              e.preventDefault();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className={`bottom-tab ${location.pathname === '/' && !drawerOpen ? 'active' : ''}`}
           aria-label="Home"
         >
           <span className="bottom-tab-icon">
-            <Home size={20} strokeWidth={location.pathname === '/' ? 2.4 : 1.8} />
+            <Home size={20} strokeWidth={location.pathname === '/' && !drawerOpen ? 2.2 : 1.8} />
           </span>
           <span className="bottom-tab-label">Home</span>
-          {location.pathname === '/' && <span className="bottom-active-dot" />}
         </Link>
 
         {/* Tab 2: Events */}
         <Link
           to="/events"
-          className={`bottom-tab ${location.pathname.startsWith('/events') ? 'active' : ''}`}
+          className={`bottom-tab ${location.pathname.startsWith('/events') && !drawerOpen ? 'active' : ''}`}
           aria-label="Events"
         >
           <span className="bottom-tab-icon">
-            <Sparkles size={20} strokeWidth={location.pathname.startsWith('/events') ? 2.4 : 1.8} />
+            <Sparkles size={20} strokeWidth={location.pathname.startsWith('/events') && !drawerOpen ? 2.2 : 1.8} />
           </span>
           <span className="bottom-tab-label">Events</span>
-          {location.pathname.startsWith('/events') && <span className="bottom-active-dot" />}
         </Link>
 
         {/* Tab 3: Schedule */}
@@ -283,28 +194,27 @@ export default function MobileBottomBar() {
           aria-expanded={drawerOpen}
         >
           <span className="bottom-tab-icon">
-            {drawerOpen ? <X size={20} strokeWidth={2.4} /> : <Menu size={20} strokeWidth={isMoreActive ? 2.4 : 1.8} />}
+            {drawerOpen ? <X size={20} strokeWidth={2.2} /> : <Menu size={20} strokeWidth={isMoreActive ? 2.2 : 1.8} />}
           </span>
           <span className="bottom-tab-label">Menu</span>
-          {isMoreActive && !drawerOpen && <span className="bottom-active-dot" />}
         </button>
 
         {/* Tab 5: Account / Login */}
         <button
           type="button"
-          className={`bottom-tab ${location.pathname === '/dashboard' ? 'active' : ''}`}
+          className={`bottom-tab ${location.pathname === '/dashboard' && !drawerOpen ? 'active' : ''}`}
           onClick={handleAccountClick}
           aria-label={student ? 'Student Dashboard' : 'Student Login'}
         >
           <span className="bottom-tab-icon">
-            <User size={20} strokeWidth={location.pathname === '/dashboard' ? 2.4 : 1.8} />
+            <User size={20} strokeWidth={location.pathname === '/dashboard' && !drawerOpen ? 2.2 : 1.8} />
           </span>
           <span className="bottom-tab-label">
             {student ? (student.name ? student.name.split(' ')[0] : 'Account') : 'Login'}
           </span>
-          {location.pathname === '/dashboard' && <span className="bottom-active-dot" />}
         </button>
       </nav>
     </>
   );
 }
+

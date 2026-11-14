@@ -36,6 +36,8 @@ const ThemeButton = forwardRef(function ThemeButton(
     border,
     blur,
     borderRadius,
+    fontSize,
+    fontWeight,
     className = '',
     style = {},
     showBlast = true,
@@ -139,6 +141,14 @@ const ThemeButton = forwardRef(function ThemeButton(
   if (borderRadius !== undefined) {
     dynamicStyles['--tb-radius'] = formatDim(borderRadius);
     dynamicStyles.borderRadius = formatDim(borderRadius);
+  }
+  if (fontSize !== undefined) {
+    dynamicStyles['--tb-font-size'] = formatDim(fontSize);
+    dynamicStyles.fontSize = formatDim(fontSize);
+  }
+  if (fontWeight !== undefined) {
+    dynamicStyles['--tb-font-weight'] = fontWeight;
+    dynamicStyles.fontWeight = fontWeight;
   }
   if (blastSize !== undefined) {
     dynamicStyles['--tb-blast-size'] = formatDim(blastSize);
