@@ -88,6 +88,10 @@ export default function NavbarMenu({
         };
 
         const handleClick = (e) => {
+          if (item.path === '/' && window.location.pathname === '/') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
           if (item.onClick) item.onClick(e);
           if (onItemClick) onItemClick(e, item);
         };

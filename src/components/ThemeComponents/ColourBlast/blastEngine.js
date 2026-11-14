@@ -253,7 +253,7 @@ class BlastEngine {
   }
 
   /**
-   * Triggers a realistic color powder blast
+   * Triggers a realistic color powder blast (Omnidirectional or Directional Cannon)
    *
    * @param {Object} options
    * @param {number} options.x - Screen X coordinate in pixels
@@ -263,7 +263,12 @@ class BlastEngine {
    * @param {string[]} [options.colors] - Array of hex colors
    * @param {number} [options.size=1.0] - Size multiplier
    * @param {number} [options.spread=1.0] - Blast radius spread multiplier
-   * @param {number} [options.gravity=50] - Downward gravity drift (px/s^2)
+   * @param {number} [options.gravity=60] - Downward gravity drift (px/s^2)
+   * @param {number|null} [options.direction=null] - Direction angle in radians (e.g. -Math.PI / 4)
+   * @param {number|null} [options.coneSpread=null] - Width of emission cone in radians
+   * @param {number} [options.speedMultiplier=1.0] - Velocity multiplier for high-velocity cannons
+   * @param {number} [options.drag=2.8] - Air drag coefficient
+   * @param {number} [options.cannonOriginJitter=8] - Origin jitter in px
    */
   triggerBlast({
     x = window.innerWidth / 2,
@@ -274,6 +279,11 @@ class BlastEngine {
     size = 1.0,
     spread = 1.0,
     gravity = 60,
+    direction = null,
+    coneSpread = null,
+    speedMultiplier = 1.0,
+    drag = 2.8,
+    cannonOriginJitter = 8,
   } = {}) {
     if (!this.isInitialized) {
       this.init();
@@ -291,6 +301,9 @@ class BlastEngine {
     const palette = (colors && colors.length > 0 ? colors : DEFAULT_COLORS).map(
       (hex) => new THREE.Color(hex)
     );
+
+    const isDirectional = direction !== null && Number.isFinite(direction);
+    const halfCone = (coneSpread !== null ? coneSpread : Math.PI / 4) / 2;
 
     // Number of angular color lobes (simulating multi-color powder packet explosion)
     const numPlumes = Math.min(palette.length, 8);
@@ -318,12 +331,12 @@ class BlastEngine {
 
     for (let i = 0; i < actualCount; i++) {
       const i3 = i * 3;
-      // All particles start clustered tightly around the explosion origin
-      const originJitter = Math.random() * 8;
+      // Particles start clustered tightly around the explosion / cannon nozzle origin
+      const originJitter = Math.random() * cannonOriginJitter;
       const originAngle = Math.random() * Math.PI * 2;
       positions[i3] = x + Math.cos(originAngle) * originJitter;
       positions[i3 + 1] = y + Math.sin(originAngle) * originJitter;
-      positions[i3 + 2] = (Math.random() - 0.5) * 10;
+      positions[i3 + 2] = (Math.random() - 0.5) * 12;
 
       // Classify particle into 1 of 3 physical tiers:
       // ~25% Volumetric Clouds, ~35% High-Velocity Radial Streaks, ~40% Fine Dust Motes
@@ -335,36 +348,48 @@ class BlastEngine {
         // ── 0.0 = Volumetric Cloud Puff ──
         type = 0.0;
         pSize = (22 + Math.random() * 26) * size; // 22px - 48px
-        baseSpeed = 90 + Math.random() * 200;    // Slower, billows outward
-        lifeMult = 0.85 + Math.random() * 0.35;
-        delay = Math.random() * 0.04;
+        baseSpeed = (110 + Math.random() * 230) * speedMultiplier; // Billows outward
+        lifeMult = 0.9 + Math.random() * 0.4;
+        delay = Math.random() * 0.05;
 
-        // Choose color based on plume sector + jitter
-        angle = Math.random() * Math.PI * 2;
+        if (isDirectional) {
+          const bell = Math.random() + Math.random() - 1.0;
+          angle = direction + bell * (halfCone * 0.85);
+        } else {
+          angle = Math.random() * Math.PI * 2;
+        }
       } else if (rand < 0.60) {
-        // ── 1.0 = High-Velocity Radial Streak Filament ──
+        // ── 1.0 = High-Velocity Radial Streak Filament (Core Jet) ──
         type = 1.0;
-        pSize = (9 + Math.random() * 12) * size;  // 9px - 21px
-        baseSpeed = 420 + Math.random() * 580;   // Fast outward jets
-        lifeMult = 0.75 + Math.random() * 0.3;
-        delay = Math.random() * 0.02;
+        pSize = (9 + Math.random() * 13) * size;  // 9px - 22px
+        baseSpeed = (480 + Math.random() * 640) * speedMultiplier; // High-power jets
+        lifeMult = 0.8 + Math.random() * 0.35;
+        delay = Math.random() * 0.025;
 
-        // Clustered along specific radial streak rays
-        const streakIdx = Math.floor(Math.random() * numStreaks);
-        angle = streakAngles[streakIdx] + (Math.random() - 0.5) * 0.08;
+        if (isDirectional) {
+          const bell = Math.random() + Math.random() - 1.0;
+          angle = direction + bell * (halfCone * 0.5); // Tightly focused in nozzle core
+        } else {
+          const streakIdx = Math.floor(Math.random() * numStreaks);
+          angle = streakAngles[streakIdx] + (Math.random() - 0.5) * 0.08;
+        }
       } else {
         // ── 2.0 = Fine Powder Dust & Sparkle Motes ──
         type = 2.0;
-        pSize = (3 + Math.random() * 4.5) * size; // 3px - 7.5px
-        baseSpeed = 120 + Math.random() * 600;   // Wide dispersal
-        lifeMult = 0.9 + Math.random() * 0.4;
-        delay = Math.random() * 0.06;
+        pSize = (3.2 + Math.random() * 4.8) * size; // 3.2px - 8px
+        baseSpeed = (160 + Math.random() * 700) * speedMultiplier; // Wide dispersal
+        lifeMult = 0.95 + Math.random() * 0.45;
+        delay = Math.random() * 0.07;
 
-        angle = Math.random() * Math.PI * 2;
+        if (isDirectional) {
+          const bell = Math.random() + Math.random() - 1.0;
+          angle = direction + bell * halfCone + (Math.random() - 0.5) * 0.14;
+        } else {
+          angle = Math.random() * Math.PI * 2;
+        }
       }
 
-      // Assign color according to angular sector
-      // Find closest plume center with random variation
+      // Assign color according to angular sector or plume
       let normAngle = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
       let closestPlume = Math.floor((normAngle / (Math.PI * 2)) * numPlumes);
       if (Math.random() < 0.18) {
@@ -407,7 +432,7 @@ class BlastEngine {
         uTime: { value: 0.0 },
         uDuration: { value: actualDuration / 1000.0 },
         uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
-        uDrag: { value: 2.8 },
+        uDrag: { value: drag },
         uGravity: { value: gravity },
         uSpread: { value: spread },
         uTurbulence: { value: 38.0 },
@@ -438,6 +463,94 @@ class BlastEngine {
     }
 
     return explosion;
+  }
+
+  /**
+   * Fires high-pressure dual color powder cannons from bottom-left and bottom-right corners
+   * Dynamically adapts angle, velocity, and particle dispersal to viewport width & height
+   */
+  triggerDualCornerCannons({
+    particleCount = 1800,
+    duration = 3200,
+    size = 1.15,
+    spread = 1.0,
+    gravity = 50,
+  } = {}) {
+    if (typeof window === 'undefined') return;
+    if (!this.isInitialized) {
+      this.init();
+    }
+
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    // Calculate dynamic distance and speed multiplier based on viewport size
+    const screenDiagonal = Math.hypot(w, h);
+    // Baseline is 1150px diagonal -> scales naturally across mobile and high-res desktop
+    const speedMult = Math.min(1.85, Math.max(0.95, screenDiagonal / 1050));
+
+    // Aim cannons at upper-middle portion of the screen (golden ratio elevation)
+    const targetY = h * 0.32;
+    const leftTargetX = w * 0.45;
+    const rightTargetX = w * 0.55;
+
+    const leftAngle = -Math.atan2(h - targetY, leftTargetX); // ~ -50 deg (upward-right)
+    const rightAngle = -Math.PI + Math.atan2(h - targetY, w - rightTargetX); // ~ -130 deg (upward-left)
+
+    // Rich festival pigments: Left fires cool & electric hues, Right fires warm & radiant hues
+    const leftColors = [
+      '#8b00ff', // Deep Violet
+      '#7c3aed', // Purple
+      '#2563eb', // Royal Cobalt
+      '#06b6d4', // Electric Cyan
+      '#10b981', // Vivid Emerald Green
+      '#84cc16', // Lime Green
+      '#ff007f', // Hot Magenta accent
+    ];
+
+    const rightColors = [
+      '#ff007f', // Hot Magenta
+      '#e11d48', // Vibrant Rose Pink
+      '#ea580c', // Electric Orange
+      '#f59e0b', // Radiant Sunburst Amber
+      '#ffd600', // Bright Golden Yellow
+      '#2563eb', // Cobalt Blue accent
+      '#7c3aed', // Deep Violet accent
+    ];
+
+    // Left cannon: Bottom-Left corner (0, h)
+    this.triggerBlast({
+      x: 0,
+      y: h,
+      particleCount,
+      duration,
+      colors: leftColors,
+      size,
+      spread,
+      gravity,
+      direction: leftAngle,
+      coneSpread: 0.58, // ~33 degree nozzle cone
+      speedMultiplier: speedMult,
+      drag: 1.85, // Lower drag so powder shoots high into upper canvas
+      cannonOriginJitter: 24,
+    });
+
+    // Right cannon: Bottom-Right corner (w, h)
+    this.triggerBlast({
+      x: w,
+      y: h,
+      particleCount,
+      duration,
+      colors: rightColors,
+      size,
+      spread,
+      gravity,
+      direction: rightAngle,
+      coneSpread: 0.58, // ~33 degree nozzle cone
+      speedMultiplier: speedMult,
+      drag: 1.85,
+      cannonOriginJitter: 24,
+    });
   }
 
   animate(currentTime) {

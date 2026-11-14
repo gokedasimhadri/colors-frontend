@@ -263,3 +263,14 @@
     text-align: left;
   }
 }
+
+/* ── Mobile View Container Spacing (16px Left & Right) ── */
+@media (max-width: 900px) {
+  .invitation-hero .container,
+  .invitation-dignitaries .container,
+  .invitation-page-wrapper .container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+}

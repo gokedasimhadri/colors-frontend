@@ -1,0 +1,494 @@
+/* ==========================================================================
+   MOBILE BOTTOM BAR & SLIDE-UP MENU DRAWER
+   Pure Liquid Glass Responsive Mobile Navigation
+   ========================================================================== */
+
+/* Hidden on Desktop & Large Tablets (> 900px) */
+.mobile-bottom-bar,
+.mobile-bottom-drawer,
+.mobile-bottom-drawer-backdrop {
+  display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MOBILE VIEW (<= 900px)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Give page content breathing room inside footer so no white strip appears */
+  body {
+    padding-bottom: 0 !important;
+    background-color: #0D233B;
+  }
+
+  /* ── 1. Floating Pill Island Bottom Bar (Transparent Frosted Liquid Glass) ── */
+  .mobile-bottom-bar {
+    display: flex;
+    position: fixed;
+    bottom: max(14px, env(safe-area-inset-bottom) + 8px);
+    left: 0.85rem;
+    right: 0.85rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 440px;
+    width: auto;
+    height: 64px;
+    background: rgba(13, 35, 59, 0.38);
+    -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.08);
+    backdrop-filter: blur(24px) saturate(200%) brightness(1.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 22px;
+    box-shadow:
+      0 16px 36px -4px rgba(0, 0, 0, 0.55),
+      0 4px 16px rgba(0, 0, 0, 0.35),
+      inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -1px 1px 0 rgba(0, 0, 0, 0.2);
+    z-index: 10002;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 6px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* Inner subtle hairline border (Dual-border aesthetic from screenshot) */
+  .mobile-bottom-bar::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 19px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── 2. Bottom Tab Button ── */
+  .bottom-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    outline: none;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.88);
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    padding: 4px 2px;
+    transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65);
+  }
+
+  .bottom-tab:active {
+    transform: scale(0.93);
+  }
+
+  .bottom-tab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease, color 0.2s ease;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+  }
+
+  .bottom-tab-label {
+    font-family: var(--font-heading, inherit);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    max-width: 68px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+
+  /* Active Tab State: No surrounding box/capsule shape, pure VIBGYOR continuous rainbow animation */
+  .bottom-tab.active {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+  }
+
+  .bottom-tab.active .bottom-tab-icon {
+    transform: translateY(-2px);
+    animation: vibgyorColorFlow 2.5s linear infinite !important;
+  }
+
+  .bottom-tab.active .bottom-tab-icon svg {
+    stroke: currentColor !important;
+    fill: currentColor !important;
+    fill-opacity: 0.22 !important;
+    filter: drop-shadow(0 2px 8px currentColor);
+  }
+
+  .bottom-tab.active .bottom-tab-label {
+    display: inline-block;
+    width: max-content;
+    max-width: 68px;
+    background-image: linear-gradient(
+      90deg,
+      #8b00ff 0%,    /* Violet */
+      #4b0082 7.1%,  /* Indigo */
+      #0066ff 14.3%, /* Blue */
+      #00c853 21.4%, /* Green */
+      #ffd600 28.6%, /* Yellow */
+      #ff6d00 35.7%, /* Orange */
+      #ff1744 42.8%, /* Red */
+      #8b00ff 50%,   /* Violet Loop */
+      #4b0082 57.1%, /* Indigo */
+      #0066ff 64.3%, /* Blue */
+      #00c853 71.4%, /* Green */
+      #ffd600 78.6%, /* Yellow */
+      #ff6d00 85.7%, /* Orange */
+      #ff1744 92.8%, /* Red */
+      #8b00ff 100%   /* Violet End */
+    ) !important;
+    background-size: 200% 100% !important;
+    background-repeat: repeat-x !important;
+    background-position: 0% 50%;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+    animation: vibgyorRainbowFlow 2.5s linear infinite !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.03em;
+    text-shadow: none !important;
+    transform: scale(1.06);
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+  }
+
+  .bottom-tab:not(.active):hover {
+    color: #ffffff;
+  }
+
+  .bottom-tab:not(.active):hover .bottom-tab-icon {
+    color: #ffffff;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
+  }
+
+  .bottom-active-dot {
+    display: none !important;
+  }
+
+  /* ── 3. Slide-Up Menu Drawer Backdrop ── */
+  .mobile-bottom-drawer-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(13, 35, 59, 0.42);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-bottom-drawer-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── 4. Slide-Up Menu Drawer Sheet (Transparent Frosted Liquid Glass) ── */
+  .mobile-bottom-drawer {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 85vh;
+    background: rgba(13, 35, 59, 0.42);
+    -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.08);
+    backdrop-filter: blur(24px) saturate(200%) brightness(1.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 26px 26px 0 0;
+    box-shadow:
+      0 -20px 48px rgba(0, 0, 0, 0.55),
+      inset 0 1px 1.5px rgba(255, 255, 255, 0.35),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+    z-index: 10001;
+    padding: 0.75rem 1rem 6.5rem;
+    box-sizing: border-box;
+    overflow-y: auto;
+    transform: translateY(105%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-bottom-drawer.open {
+    transform: translateY(0);
+  }
+
+  /* Drawer Handle */
+  .drawer-handle-bar {
+    display: flex;
+    justify-content: center;
+    padding: 0.25rem 0 0.85rem;
+    cursor: pointer;
+  }
+
+  .drawer-pill {
+    width: 44px;
+    height: 4.5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  /* Drawer Close Button */
+  .drawer-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #e2e8f0;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+    z-index: 10;
+  }
+
+  .drawer-close-btn:active {
+    transform: scale(0.9);
+  }
+
+  /* Student Card in Drawer */
+  .drawer-student-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 16px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .drawer-student-info {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .drawer-student-avatar {
+    font-size: 1.3rem;
+  }
+
+  .drawer-student-name {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #ffffff;
+  }
+
+  .drawer-student-role {
+    display: block;
+    font-size: 0.72rem;
+    color: #94a3b8;
+  }
+
+  .drawer-student-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .drawer-dash-btn {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #0f172a;
+    background: #fbbf24;
+    padding: 6px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+
+  .drawer-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  /* Auth Buttons in Drawer */
+  .drawer-auth-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .drawer-auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.7rem 1rem;
+    border-radius: 12px;
+    font-size: 0.86rem;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .drawer-auth-btn:active {
+    transform: scale(0.96);
+  }
+
+  .drawer-auth-btn.login-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .drawer-auth-btn.register-btn {
+    background: linear-gradient(135deg, #e11d48, #be185d);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  }
+
+  /* Menu Links Grid */
+  .drawer-links-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-top: 0.5rem;
+  }
+
+  .drawer-link-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.85rem 1.1rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 16px;
+    text-decoration: none;
+    color: #f8fafc;
+    box-shadow:
+      inset 0 1px 1px rgba(255, 255, 255, 0.18),
+      0 4px 14px rgba(0, 0, 0, 0.25);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .drawer-link-item:hover,
+  .drawer-link-item:active {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.26);
+    transform: translateY(-1px) scale(0.99);
+  }
+
+  .drawer-link-item.active {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(190, 147, 55, 0.45);
+    box-shadow:
+      0 0 16px rgba(190, 147, 55, 0.25),
+      inset 0 1px 1.5px rgba(255, 255, 255, 0.3);
+    color: #fbbf24;
+  }
+
+  .drawer-icon-bubble {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .drawer-icon-bubble.pink {
+    background: rgba(225, 29, 72, 0.15);
+    color: #fb7185;
+  }
+
+  .drawer-icon-bubble.gold {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fde68a;
+  }
+
+  .drawer-icon-bubble.blue {
+    background: rgba(2, 132, 199, 0.15);
+    color: #38bdf8;
+  }
+
+  .drawer-icon-bubble.amber {
+    background: rgba(217, 119, 6, 0.15);
+    color: #fbbf24;
+  }
+
+  .drawer-icon-bubble.teal {
+    background: rgba(13, 148, 136, 0.15);
+    color: #2dd4bf;
+  }
+
+  .drawer-link-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .drawer-link-label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .drawer-link-sub {
+    font-size: 0.72rem;
+    color: #94a3b8;
+  }
+}
+
+/* ── Global VIBGYOR Rainbow & Color Animations for Mobile Bottom Bar ── */
+@keyframes vibgyorRainbowFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes vibgyorColorFlow {
+  0%   { color: #8b00ff; } /* V - Violet */
+  14%  { color: #4b0082; } /* I - Indigo */
+  28%  { color: #0066ff; } /* B - Blue */
+  43%  { color: #00c853; } /* G - Green */
+  57%  { color: #ffd600; } /* Y - Yellow */
+  71%  { color: #ff6d00; } /* O - Orange */
+  85%  { color: #ff1744; } /* R - Red */
+  100% { color: #8b00ff; } /* Loop back to Violet */
+}
+

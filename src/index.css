@@ -58,11 +58,54 @@
   --glass-dark:          rgba(255, 255, 255, 0.92);
   --glass-white:         rgba(255, 255, 255, 0.96);
 
-  /* ── Typography (Global Google Sans with all Variable Weights 100..900) ── */
+  /* ══════════════════════════════════════════════════════════════════════
+     MASTER TYPOGRAPHY SYSTEM (Centralized Global Control for Entire App)
+     Easily control all font sizes and weights from here!
+     ══════════════════════════════════════════════════════════════════════ */
+  
+  /* ── Typography Families ── */
   --font-google-sans: 'Google Sans', 'Google Sans Flex', 'Google Sans Text', 'Product Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-heading: var(--font-google-sans);
   --font-brand:   var(--font-google-sans);
   --font-body:    var(--font-google-sans);
+
+  /* ── Centralized Font Weights (Refined & Modern, Avoids Chunky Clutter) ── */
+  --fw-light:     300;
+  --fw-regular:   400;
+  --fw-medium:    500;  /* Aesthetic standard for subheadings, cards, and links */
+  --fw-semibold:  600;
+  --fw-bold:      700;
+  --fw-extrabold: 800;
+  --fw-black:     900;
+
+  /* ── Centralized Fluid Responsive Font Sizes (Desktop Baseline) ── */
+  --fs-hero-title: clamp(2.5rem, 8vw, 7rem);     /* Giant 'COLOURS' headline */
+  --fs-hero-date:  clamp(2.2rem, 4.6vw, 3.8rem); /* 'JANUARY' headline */
+  --fs-display:    clamp(1.8rem, 3.5vw, 2.6rem); /* Display / Section grand titles */
+  --fs-h1:         clamp(1.45rem, 2.6vw, 2.1rem);/* Main Page Headings / 'Four Arenas of Glory' */
+  --fs-h2:         clamp(1.2rem, 2vw, 1.65rem);  /* Section Headings */
+  --fs-h3:         clamp(1.02rem, 1.5vw, 1.3rem);/* Card Titles / Arena names */
+  --fs-h4:         clamp(0.9rem, 1.15vw, 1.08rem);/* Column Headings / Small Titles */
+  --fs-subtitle:   clamp(0.8rem, 1.05vw, 0.95rem);/* Taglines / Subtitles */
+  --fs-label:      clamp(0.68rem, 0.85vw, 0.78rem);/* Overlines / Badge labels */
+  --fs-body-lg:    clamp(0.9rem, 1.05vw, 1.02rem);/* Lead Paragraphs / Features */
+  --fs-body:       clamp(0.82rem, 0.92vw, 0.92rem);/* Standard Body Text */
+  --fs-body-sm:    clamp(0.75rem, 0.82vw, 0.84rem);/* Secondary / Descriptions / Links */
+  --fs-caption:    clamp(0.66rem, 0.75vw, 0.74rem);/* Fine print / Footnotes / Meta */
+  --fs-badge:      clamp(0.6rem, 0.68vw, 0.68rem); /* Badges / Micro tags */
+
+  /* ── Line Heights ── */
+  --lh-tight:      1.12;
+  --lh-snug:       1.28;
+  --lh-normal:     1.55;
+  --lh-relaxed:    1.7;
+
+  /* ── Letter Spacings ── */
+  --ls-tight:      -0.015em;
+  --ls-normal:     0em;
+  --ls-wide:       0.03em;
+  --ls-wider:      0.08em;
+  --ls-widest:     0.16em;
 
   /* ── Layout & Radii ── */
   --navbar-height: 98px;
@@ -85,6 +128,61 @@
   --transition-slow:   0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ── Tablet Typography Scale (<= 992px) ── */
+@media (max-width: 991.98px) {
+  :root {
+    --navbar-height: 72px;
+    --fs-hero-title: clamp(2.3rem, 9vw, 5.2rem);
+    --fs-hero-date:  clamp(1.95rem, 5.2vw, 3rem);
+    --fs-display:    clamp(1.65rem, 3.2vw, 2.2rem);
+    --fs-h1:         clamp(1.35rem, 2.5vw, 1.8rem);
+    --fs-h2:         clamp(1.15rem, 1.9vw, 1.45rem);
+    --fs-h3:         clamp(0.98rem, 1.45vw, 1.2rem);
+    --fs-h4:         clamp(0.86rem, 1.1vw, 1rem);
+    --fs-subtitle:   clamp(0.76rem, 1vw, 0.88rem);
+    --fs-label:      clamp(0.65rem, 0.8vw, 0.74rem);
+    --fs-body-lg:    0.88rem;
+    --fs-body:       0.82rem;
+    --fs-body-sm:    0.74rem;
+  }
+}
+
+/* ── Mobile Phone Typography Scale (<= 576px) ── */
+@media (max-width: 575.98px) {
+  :root {
+    --navbar-height: 66px;
+    --fs-hero-title: clamp(1.95rem, 10.5vw, 3.4rem);
+    --fs-hero-date:  clamp(1.6rem, 6.2vw, 2.1rem);
+    --fs-display:    clamp(1.35rem, 5vw, 1.75rem);
+    --fs-h1:         clamp(1.2rem, 4.2vw, 1.5rem);
+    --fs-h2:         clamp(1.05rem, 3.5vw, 1.28rem);
+    --fs-h3:         clamp(0.92rem, 3vw, 1.1rem);
+    --fs-h4:         clamp(0.82rem, 2.5vw, 0.94rem);
+    --fs-subtitle:   clamp(0.72rem, 2vw, 0.82rem);
+    --fs-label:      clamp(0.6rem, 1.7vw, 0.7rem);
+    --fs-body-lg:    0.84rem;
+    --fs-body:       0.78rem;
+    --fs-body-sm:    0.72rem;
+    --fs-caption:    0.66rem;
+    --fs-badge:      0.6rem;
+  }
+}
+
+/* ── Ultra-Small Phones (<= 360px) ── */
+@media (max-width: 360px) {
+  :root {
+    --fs-hero-title: 1.8rem;
+    --fs-hero-date:  1.4rem;
+    --fs-display:    1.25rem;
+    --fs-h1:         1.12rem;
+    --fs-h2:         0.98rem;
+    --fs-h3:         0.88rem;
+    --fs-h4:         0.8rem;
+    --fs-body:       0.75rem;
+    --fs-body-sm:    0.68rem;
+  }
+}
+
 /* Reset & Foundation */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -99,10 +197,12 @@ html {
 }
 
 body {
-  font-family: var(--font-google-sans);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
   background-color: #f8fafc;
   color: #0f172a;
-  line-height: 1.6;
+  line-height: var(--lh-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -110,11 +210,58 @@ body {
 }
 
 button, input, select, textarea, optgroup {
-  font-family: var(--font-google-sans);
+  font-family: var(--font-body);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-google-sans);
+h1, .h1 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
+
+h2, .h2 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+}
+
+h3, .h3 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+}
+
+h4, .h4 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+}
+
+p, .body-text {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+}
+
+small, .text-sm {
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-regular);
+}
+
+.text-xs {
+  font-size: var(--fs-caption);
+}
+
+.text-badge {
+  font-size: var(--fs-badge);
+  font-weight: var(--fw-medium);
 }
 
 /* Global Festive Background Pattern (Subtle Light Tint) */
@@ -130,15 +277,40 @@ body::before {
   z-index: -1;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #f1f5f9; }
-::-webkit-scrollbar-thumb { 
-  background: linear-gradient(180deg, #cbd5e1, #94a3b8); 
-  border-radius: 4px; 
+/* ==========================================================================
+   SCROLLBAR – Sleek Rounded Pill Scrollbar
+   Width: 4px, Color: #000000 (Pure Black), Radius: 9999px (Pill)
+   ========================================================================== */
+
+/* Firefox standard scrollbar */
+@supports (-moz-appearance: none) {
+  html, body, * {
+    scrollbar-width: thin;
+    scrollbar-color: #000000 transparent;
+  }
 }
-::-webkit-scrollbar-thumb:hover { 
-  background: linear-gradient(180deg, #94a3b8, #64748b); 
+
+/* Chrome, Edge, Safari, Opera (WebKit / Blink) */
+*::-webkit-scrollbar,
+::-webkit-scrollbar {
+  width: 4px !important;
+  height: 4px !important;
+}
+
+*::-webkit-scrollbar-track,
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+*::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb {
+  background: #000000 !important;
+  border-radius: 9999px !important;
+}
+
+*::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:hover {
+  background: #222222 !important;
 }
 
 .app {
@@ -155,6 +327,30 @@ body::before {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
+}
+
+/* ── Mobile Layout Master Spacing (16px left & right on all parent containers across every page) ── */
+@media (max-width: 900px) {
+  .container,
+  .pillars-container,
+  .categories-container,
+  .dashboard-container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* ── Mobile Layout Master Spacing (16px left & right on all parent containers across every page) ── */
+@media (max-width: 900px) {
+  .container,
+  .pillars-container,
+  .categories-container,
+  .dashboard-container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
 }
 
 /* ── Typography Utilities ── */
@@ -225,6 +421,28 @@ body::before {
   background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.5), rgba(225, 29, 72, 0.5), rgba(0, 210, 255, 0.5), transparent);
   margin: 0;
   opacity: 0.7;
+}
+
+/* Global VIBGYOR 7-Color Continuous Rainbow Flow */
+@keyframes vibgyorRainbowFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* Global VIBGYOR 7-Color Continuous SVG/Icon Color Flow */
+@keyframes vibgyorColorFlow {
+  0%   { color: #8b00ff; } /* V - Violet */
+  14%  { color: #4b0082; } /* I - Indigo */
+  28%  { color: #0066ff; } /* B - Blue */
+  43%  { color: #00c853; } /* G - Green */
+  57%  { color: #ffd600; } /* Y - Yellow */
+  71%  { color: #ff6d00; } /* O - Orange */
+  85%  { color: #ff1744; } /* R - Red */
+  100% { color: #8b00ff; } /* Loop to Violet */
 }
 
 /* Keyframe Animations */
