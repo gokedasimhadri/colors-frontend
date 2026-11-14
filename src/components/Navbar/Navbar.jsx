@@ -139,6 +139,7 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : (
+                /* Commented out Login button as requested
                 <ThemeButton
                   onClick={handleLoginClick}
                   id="navbar-login-btn"
@@ -148,6 +149,8 @@ export default function Navbar() {
                     Login
                   </SplitColorText>
                 </ThemeButton>
+                */
+                null
               )}
             </div>
           </div>
@@ -202,6 +205,7 @@ export default function Navbar() {
           onItemClick={closeMenu}
         />
 
+        {/* Commented out Mobile Login button as requested
         {!student && (
           <ThemeButton
             onClick={handleLoginClick}
@@ -212,6 +216,7 @@ export default function Navbar() {
             Login
           </ThemeButton>
         )}
+        */}
       </div>
 
       {/* Student Account Registration & Login Modal */}

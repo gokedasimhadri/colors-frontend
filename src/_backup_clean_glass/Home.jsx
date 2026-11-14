@@ -51,8 +51,8 @@ const FEST_PILLARS = [
     code: 'FETE',
     name: 'Fete',
     tagline: 'Food Carnival, Fun Fiesta, Games & Stalls',
-    coordinator: 'Dr. K. Kishore',
-    phone: '9490111222',
+    coordinator: 'Mr. J. D. Venkatesh',
+    phone: '7036266661',
     color: '#059669',
     icon: '🎪',
     events: ['Master Chef & Cookery', 'Carnival & Fun Games', 'Youth Flea Market', 'Live Acoustic & DJ Arena', 'Flash Mob & Open Mic'],
@@ -114,7 +114,7 @@ function Home() {
 
         {/* ROW 2 (MIDDLE): Dates on Left (White), ₹10 Lakhs on Right (Black) in ONE Even Row */}
         <div className="hero-split-container hero-split-middle-row">
-          
+
           {/* LEFT HALF: Pure White Canvas */}
           <div className="hero-half hero-half-light">
             {/* Save the Dates Block from Poster */}
@@ -144,6 +144,7 @@ function Home() {
         {/* ROW 3 (BOTTOM): Centered Action CTAs */}
         <div className="hero-bottom-actions-section">
           <div className="hero-center-actions">
+            {/* Commented out Register button as requested
             {!student ? (
               <ThemeButton
                 onClick={() => {
@@ -162,6 +163,7 @@ function Home() {
                 <SplitColorText>Student Dashboard</SplitColorText>
               </ThemeButton>
             )}
+            */}
 
             <ThemeButton
               as={Link}
@@ -267,12 +269,16 @@ function Home() {
                 </div>
 
                 <div className="pillar-card-footer">
-                  <Link
-                    to={`/events`}
+                  <ThemeButton
+                    as={Link}
+                    to="/events"
                     className="btn-pillar-explore"
+                    borderRadius={12}
+                    width="100%"
+                    color={index < 2 ? '#0f172a' : '#ffffff'}
                   >
-                    Check Out {pillar.name} Events →
-                  </Link>
+                    Check Out {pillar.name} Events
+                  </ThemeButton>
                 </div>
               </LiquidGlass>
             ))}
@@ -305,6 +311,7 @@ function Home() {
               </div>
 
               <div className="cta-buttons-row">
+                {/* Commented out Register Online Now button as requested
                 {!student ? (
                   <button
                     type="button"
@@ -320,6 +327,7 @@ function Home() {
                     ✦ Browse & Enter Events
                   </Link>
                 )}
+                */}
                 <Link to="/contact" className="btn-hero-secondary">
                   ✉️ Hospitality & Support Desk
                 </Link>
