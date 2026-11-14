@@ -254,6 +254,26 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                 </button>
               ))}
             </div>
+
+            {/* View Mode Switcher: Subcategories vs Direct Events */}
+            <div className="view-mode-toggle-group">
+              <button
+                type="button"
+                className={`view-mode-btn ${viewMode === 'subcategories' ? 'active' : ''}`}
+                onClick={() => setViewMode('subcategories')}
+                title="Browse by Activities & Subcategories"
+              >
+                ▦ Subcategories
+              </button>
+              <button
+                type="button"
+                className={`view-mode-btn ${viewMode === 'events' ? 'active' : ''}`}
+                onClick={() => setViewMode('events')}
+                title="View All Competitions"
+              >
+                ▤ All Competitions ({totalEventsCount})
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -339,66 +359,134 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                   )}
                 </div>
 
-                {/* Subcategory Grid */}
-                <div className="subcat-grid">
-                  {Array.isArray(cat.data) && cat.data.map((item, idx) => {
-                    const subCatTitle = item.SubCatogory || item.name;
-                    const bannerVal = item.banner || item.Image || item.image;
-                    const imageSrc = getSubCatImageUrl(bannerVal, subCatTitle);
-                    const localFallback = getLocalFallbackSubCatImageUrl(bannerVal, subCatTitle);
-                    const eventCount = item.eventCount ?? (item.events ? item.events.length : 0);
-                    const subCoord = item.coordinator || (item.coordinators && item.coordinators[0]);
+                {/* Subcategory Grid (When Subcategories Exist) */}
+                {Array.isArray(cat.data) && cat.data.length > 0 && (
+                  <div className="subcat-grid">
+                    {cat.data.map((item, idx) => {
+                      const subCatTitle = item.SubCatogory || item.name;
+                      const bannerVal = item.banner || item.Image || item.image;
+                      const imageSrc = getSubCatImageUrl(bannerVal, subCatTitle);
+                      const localFallback = getLocalFallbackSubCatImageUrl(bannerVal, subCatTitle);
+                      const eventCount = item.eventCount ?? (item.events ? item.events.length : 0);
+                      const subCoord = item.coordinator || (item.coordinators && item.coordinators[0]);
 
-                    return (
-                      <div
-                        key={item._id || idx}
-                        className="subcat-card"
-                        onClick={() => onSelectSubCategory(cat.code || cat.name || cat._id, subCatTitle)}
-                      >
-                        <img
-                          src={imageSrc}
-                          alt={subCatTitle}
-                          className="subcat-image"
-                          loading="lazy"
-                          onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = localFallback;
-                          }}
-                        />
+                      return (
+                        <div
+                          key={item._id || idx}
+                          className="subcat-card"
+                          onClick={() => onSelectSubCategory(cat.code || cat.name || cat._id, subCatTitle)}
+                        >
+                          <img
+                            src={imageSrc}
+                            alt={subCatTitle}
+                            className="subcat-image"
+                            loading="lazy"
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = localFallback;
+                            }}
+                          />
 
-                        {/* Category Badge (Top Right) */}
-                        <div className="subcat-badge">{cat.name || cat.code || cat._id}</div>
+                          {/* Category Badge (Top Right) */}
+                          <div className="subcat-badge">{cat.name || cat.code || cat._id}</div>
 
-                        {/* Event Count Pill (Top Left) */}
-                        <div className="subcat-event-count-badge">
-                          {eventCount} {eventCount === 1 ? 'Event' : 'Events'}
-                        </div>
+                          {/* Event Count Pill (Top Left) */}
+                          <div className="subcat-event-count-badge">
+                            {eventCount} {eventCount === 1 ? 'Event' : 'Events'}
+                          </div>
 
-                        {/* Gradient Overlay with Title and Hover Action */}
-                        <div className="subcat-overlay">
-                          <div className="subcat-title">{subCatTitle}</div>
-                          {subCoord && subCoord.name && (
-                            <div className="subcat-coordinator-snippet">
-                              👤 {subCoord.name}
+                          {/* Gradient Overlay with Title and Hover Action */}
+                          <div className="subcat-overlay">
+                            <div className="subcat-title">{subCatTitle}</div>
+                            {subCoord && subCoord.name && (
+                              <div className="subcat-coordinator-snippet">
+                                👤 {subCoord.name}
+                              </div>
+                            )}
+                            <div className="subcat-action">
+                              <button
+                                type="button"
+                                className="btn-checkout-subcat"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onSelectSubCategory(cat.code || cat.name || cat._id, subCatTitle);
+                                }}
+                              >
+                                Check Out Events →
+                              </button>
                             </div>
-                          )}
-                          <div className="subcat-action">
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Direct Events Grid (When Category has Direct Events and no Subcategories) */}
+                {(!cat.data || cat.data.length === 0) && Array.isArray(cat.events) && cat.events.length > 0 && (
+                  <div className="events-cards-grid">
+                    {cat.events.map((ev, idx) => {
+                      const eventImg = getEventImageUrl(ev.eventImage || ev.banner?.url, ev.title || ev.eventName);
+
+                      return (
+                        <div key={ev._id || idx} className="event-sub-card">
+                          <div className="event-sub-title-bar">{ev.title || ev.eventName}</div>
+                          <div className="event-sub-body">
+                            <div className="event-sub-table-col">
+                              <div className="event-table-row">
+                                <div className="table-pill-label">Category</div>
+                                <div className="table-pill-value">{cat.name}</div>
+                              </div>
+                              <div className="event-table-row">
+                                <div className="table-pill-label">Participation</div>
+                                <div className="table-pill-value">{ev.eventType || 'Solo'}</div>
+                              </div>
+                              <div className="event-table-row">
+                                <div className="table-pill-label">Registration Fee</div>
+                                <div className="table-pill-value fee-highlight">
+                                  {ev.price ? `₹ ${ev.price}/-` : 'Free Entry'}
+                                </div>
+                              </div>
+                              <div className="event-table-row">
+                                <div className="table-pill-label">Venue</div>
+                                <div className="table-pill-value" style={{ fontSize: '0.82rem', whiteSpace: 'normal' }}>
+                                  {ev.venue || 'Aditya University Campus'}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="event-sub-image-col">
+                              <img
+                                src={eventImg}
+                                alt={ev.title || ev.eventName}
+                                className="event-sub-img"
+                                onError={(e) => {
+                                  e.currentTarget.onerror = null;
+                                  e.currentTarget.src = '/hero_bg.png';
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="event-sub-footer">
                             <button
-                              type="button"
-                              className="btn-checkout-subcat"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onSelectSubCategory(cat.code || cat.name || cat._id, subCatTitle);
-                              }}
+                              className="btn-checkout-primary"
+                              onClick={() =>
+                                onSelectEvent(
+                                  cat.code || cat.name || cat._id,
+                                  ev.subcategoryName || ev.subCategory || 'General',
+                                  ev.slug || ev.title || ev.eventName
+                                )
+                              }
                             >
-                              Check Out Events →
+                              Check Out Details →
                             </button>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
               </section>
             );
           })
