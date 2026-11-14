@@ -114,7 +114,7 @@ export const SplitColorText = forwardRef(function SplitColorText(
       if (themeAttr === 'dark') return 0;
 
       // 2. High-priority component checks (cards, hero elements, footer halves)
-      if (item.closest('.pillar-card') || item.closest('.final-cta-card') || item.closest('.hero-dates-card')) {
+      if (item.closest('.pillar-card') || item.closest('.hero-dates-card')) {
         return 1; // Light card surface
       }
       if (item.closest('.uni-footer-left')) {
@@ -135,7 +135,7 @@ export const SplitColorText = forwardRef(function SplitColorText(
         !curr.classList.contains('home-page') &&
         !curr.classList.contains('app')
       ) {
-        if (curr.classList.contains('pillar-card') || curr.classList.contains('final-cta-card')) {
+        if (curr.classList.contains('pillar-card')) {
           return 1; // Light card surface
         }
         if (curr.classList.contains('uni-footer-left')) {

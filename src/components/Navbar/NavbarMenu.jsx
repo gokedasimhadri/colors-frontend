@@ -92,9 +92,31 @@ export default function NavbarMenu({
           if (onItemClick) onItemClick(e, item);
         };
 
+        const isClickable = Boolean(item.href || item.path);
+
         return (
           <li key={item.label} className="navbar-menu-item">
-            {item.href ? (
+            {!isClickable ? (
+              <ThemeButton
+                as="div"
+                role="button"
+                tabIndex={0}
+                aria-disabled="true"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                {...itemThemeProps}
+              >
+                <SplitColorText
+                  screenSync={screenSync}
+                  leftColor={leftColor}
+                  rightColor={rightColor}
+                >
+                  {item.label}
+                </SplitColorText>
+              </ThemeButton>
+            ) : item.href ? (
               <ThemeButton
                 as="a"
                 href={item.href}

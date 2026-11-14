@@ -1,0 +1,603 @@
+/* ==========================================================================
+   NAVBAR – Official Colours 2027 Light Theme
+   Crisp White Frosted Glass, Metallic Gold Accents & Spectrum Highlights
+   ========================================================================== */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--navbar-height);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: none;
+  box-shadow: none;
+  isolation: auto !important;
+}
+
+/* Dedicated Frosted Glass Layer (Preserves non-isolating stacking for mix-blend-mode text) */
+.navbar-glass-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    -webkit-backdrop-filter 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar.scrolled .navbar-glass-backdrop {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.02);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.navbar.scrolled {
+  background: transparent !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+.navbar-inner {
+  position: relative;
+  z-index: 1;
+  isolation: auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 clamp(1.5rem, 8vw, 2in);
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* ── Logo & Brand ── */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.navbar-logo-img {
+  height: clamp(56px, 5.5vw, 72px);
+  width: auto;
+  max-width: 320px;
+  object-fit: contain;
+  display: block;
+}
+
+.navbar-logo-fallback {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f59e0b, #b45309);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  color: #ffffff;
+  font-weight: 900;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
+}
+
+.navbar-brand-group {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.navbar-brand-title {
+  font-family: var(--font-brand);
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #b45309;
+}
+
+.navbar-fest-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.navbar-fest-pill .fest-name {
+  color: #0f172a;
+}
+
+.navbar-fest-pill .fest-year {
+  color: #e11d48;
+}
+
+/* ── Desktop Nav Links ── */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links li {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Nav Item: Clean text link (NO button background, NO pill border, NO shadow) */
+.navbar-theme-btn {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.46rem 1rem !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.03em !important;
+  text-decoration: none !important;
+  border-radius: 10px !important;
+  cursor: pointer;
+  overflow: hidden !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: transform 0.2s ease, opacity 0.2s ease !important;
+}
+
+.navbar-theme-btn::before {
+  display: none !important;
+}
+
+/* Hover: subtle lift, ZERO shadow, NO button background */
+.navbar-theme-btn:hover {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Blast Effect: Exactly like ThemeButton - center locked to bottom-right corner, strictly within height */
+.navbar-theme-btn .theme-glass-btn-blast {
+  position: absolute !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  top: auto !important;
+  left: auto !important;
+  width: var(--tb-blast-size, 72px) !important;
+  height: var(--tb-blast-size, 72px) !important;
+  max-width: 180% !important;
+  max-height: 180% !important;
+  object-fit: contain !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  opacity: 0 !important;
+  transform: translate(50%, 50%) scale(0.18) !important;
+  transform-origin: center center !important;
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease !important;
+  will-change: transform, opacity;
+  filter: saturate(140%) brightness(1.06) !important;
+}
+
+.navbar-theme-btn:hover .theme-glass-btn-blast {
+  opacity: 1 !important;
+  transform: translate(50%, 50%) scale(1) !important;
+}
+
+/* Content Container (Keeps text above the blast) */
+.navbar-theme-btn .theme-glass-btn-content {
+  position: relative !important;
+  z-index: 2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.navbar-theme-btn .split-color-text {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+}
+
+/* Active Nav Route (Rose accent highlight) */
+.navbar-theme-btn.active {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.navbar-theme-btn.active .split-color-text {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #e11d48 !important;
+  color: #e11d48 !important;
+  font-weight: 800 !important;
+}
+
+/* ── Right Cluster: Cash Prize Pill & Login ── */
+.navbar-right-cluster {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-shrink: 0;
+}
+
+.navbar-prize-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #f59e0b;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 2px 10px rgba(217, 119, 6, 0.15);
+}
+
+.navbar-prize-pill .prize-icon {
+  font-size: 0.95rem;
+}
+
+.navbar-prize-pill .prize-text {
+  font-family: var(--font-brand);
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: #92400e;
+  letter-spacing: 0.03em;
+}
+
+.navbar-prize-pill .prize-sub {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #b45309;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Login CTA Button (Apple Liquid Glass ThemeButton) ── */
+#navbar-login-btn {
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+#navbar-login-btn .split-color-text {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+}
+
+/* ── Subpages (Non-home pages have solid light backgrounds) ── */
+.navbar.navbar-subpage .navbar-theme-btn .split-color-text,
+.navbar.navbar-subpage #navbar-login-btn .split-color-text {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #0f172a !important;
+  color: #0f172a !important;
+}
+
+.navbar.navbar-subpage .navbar-theme-btn.active .split-color-text {
+  -webkit-text-fill-color: #e11d48 !important;
+  color: #e11d48 !important;
+  font-weight: 700 !important;
+}
+
+.navbar.navbar-subpage #navbar-login-btn {
+  background: rgba(15, 23, 42, 0.05) !important;
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+}
+
+.navbar.navbar-subpage #navbar-login-btn:hover {
+  background: rgba(15, 23, 42, 0.1) !important;
+  border-color: rgba(15, 23, 42, 0.25) !important;
+}
+
+.btn-fest-login {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.65rem;
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(24px) saturate(190%) brightness(1.08) contrast(1.02);
+  backdrop-filter: blur(24px) saturate(190%) brightness(1.08) contrast(1.02);
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: all 0.28s cubic-bezier(0.2, 0, 0, 1);
+  box-shadow:
+    0 12px 28px -6px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 18px 0 rgba(255, 255, 255, 0.08);
+}
+
+.btn-fest-login::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48%;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.03) 100%);
+  pointer-events: none;
+}
+
+.btn-fest-login:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow:
+    0 16px 36px -6px rgba(0, 0, 0, 0.45),
+    inset 0 1.5px 2px 0 #ffffff,
+    inset 0 0 24px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* ── Logged in Student Info Box ── */
+.student-logged-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.student-pill-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  transition: var(--transition-fast);
+}
+
+.student-pill-link:hover {
+  background: #fffbeb;
+  border-color: #d97706;
+}
+
+.student-name-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.student-badge-dash {
+  font-size: 0.7rem;
+  background: linear-gradient(135deg, #e11d48, #be185d);
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.btn-logout {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: var(--transition-fast);
+}
+
+.btn-logout:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* ── Hamburger ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 6px;
+  background: none;
+  border: none;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #0f172a;
+  border-radius: 2px;
+  transition: var(--transition-normal);
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-8px);
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ── Mobile Menu ── */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: none;
+  padding: 1.5rem 1.5rem 2rem;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 999;
+  animation: fadeIn 0.25s ease;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+}
+
+.mobile-menu.open {
+  display: flex;
+}
+
+.mobile-prize-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1rem;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 0.75rem 1.2rem;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  color: #1e293b;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  background: #f8fafc;
+  transition: var(--transition-fast);
+}
+
+.mobile-menu a:hover,
+.mobile-menu a.active {
+  border-color: #e11d48;
+  background: #fff1f2;
+  color: #be123c;
+}
+
+.mobile-student-card {
+  padding: 0.85rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-student-link {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-student-name {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.mobile-student-action {
+  font-size: 0.75rem;
+  color: #e11d48;
+  font-weight: 700;
+}
+
+.btn-logout-mobile {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .navbar-links {
+    display: none;
+  }
+
+  .navbar-prize-pill {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}
+
+/* ── Mobile View: Only Logo Center in Top Bar, Menus in Bottom Bar ── */
+@media (max-width: 900px) {
+  .navbar-inner {
+    justify-content: center !important;
+    padding: 0 1rem !important;
+  }
+
+  .navbar-logo {
+    margin: 0 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  .navbar-logo-img {
+    height: clamp(48px, 6vw, 62px) !important;
+    max-width: 280px !important;
+  }
+
+  .navbar-right-cluster {
+    display: none !important;
+  }
+
+  .hamburger {
+    display: none !important;
+  }
+
+  .mobile-menu {
+    display: none !important;
+  }
+}

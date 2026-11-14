@@ -4,13 +4,11 @@
    ========================================================================== */
 
 .uni-footer {
-  background: linear-gradient(
-    to right,
-    #000000 0%,
-    #000000 50%,
-    #ffffff 50%,
-    #ffffff 100%
-  );
+  background: linear-gradient(to right,
+      #000000 0%,
+      #000000 50%,
+      #ffffff 50%,
+      #ffffff 100%);
   color: #cbd5e1;
   border-top: none;
   position: relative;
@@ -37,7 +35,11 @@
 }
 
 .uni-footer-left {
-  grid-template-columns: 1.3fr 1fr;
+  grid-template-columns: 1fr;
+}
+
+.brand-col {
+  max-width: 520px;
 }
 
 .uni-footer-right {
@@ -48,46 +50,69 @@
 .uni-footer-left .uni-footer-logo-row {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.35rem;
 }
 
-.uni-footer-left .uni-crest-badge {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #f59e0b, #b45309);
-  color: #ffffff;
-  display: flex;
+.uni-footer-brand-lockup {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  font-family: var(--font-heading);
-  font-size: 1.3rem;
-  font-weight: 900;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+  gap: 1.15rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.uni-footer-left .uni-footer-title {
+.uni-footer-brand-lockup:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.uni-footer-logo-img {
+  height: clamp(38px, 4vw, 46px);
+  width: auto;
+  max-width: 190px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
+}
+
+.uni-footer-logo-fallback {
   font-family: var(--font-brand);
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   font-weight: 900;
-  color: #ffffff;
+  color: #be9337;
   letter-spacing: 0.12em;
 }
 
-.uni-footer-left .uni-footer-subtitle {
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  color: #fbbf24;
-  display: block;
+.uni-footer-vr {
+  display: inline-block;
+  width: 1.5px;
+  height: clamp(30px, 3.2vw, 36px);
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.4) 30%,
+      rgba(255, 255, 255, 0.4) 70%,
+      rgba(255, 255, 255, 0.1) 100%);
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+.uni-footer-fest-text {
+  font-family: var(--font-heading);
+  font-size: clamp(1.18rem, 1.7vw, 1.42rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  white-space: nowrap;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .uni-footer-left .uni-footer-desc {
   font-size: 0.92rem;
   color: #cbd5e1;
   line-height: 1.7;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
 }
 
 .uni-footer-left .uni-footer-tags {
@@ -322,12 +347,54 @@
   color: #ffffff;
 }
 
+/* ── BOTTOM COPYRIGHT & CREDITS BAR (#0D233B) ── */
+.uni-footer-bottom {
+  background: #091727 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1.15rem 0;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.uni-footer-bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.uni-footer-credits {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #94a3b8;
+  letter-spacing: 0.02em;
+}
+
+.uni-footer-credits .credits-highlight,
+.uni-footer-copyright .credits-highlight,
+.credits-highlight {
+  color: #be9337 !important;
+  font-weight: 400;
+}
+
+.uni-footer-copyright {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #94a3b8;
+  letter-spacing: 0.02em;
+}
+
 /* ── Responsive Behavior ── */
 @media (max-width: 1024px) {
   .uni-footer-left {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
+
   .uni-footer-right {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -338,18 +405,46 @@
   .uni-footer {
     background: #000000;
   }
+
   .uni-footer-grid {
     grid-template-columns: 1fr;
     gap: 0;
   }
+
   .uni-footer-left {
     background: #000000;
     padding-bottom: 2.5rem;
   }
+
   .uni-footer-right {
     background: #ffffff;
     margin: 0 -1.5rem;
     padding: 2.5rem 1.5rem 1rem;
     border-top: 1px solid #e2e8f0;
+  }
+
+  .uni-footer-bottom-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.65rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .uni-footer-brand-lockup {
+    gap: 0.75rem;
+  }
+
+  .uni-footer-logo-img {
+    height: 34px;
+    max-width: 140px;
+  }
+
+  .uni-footer-vr {
+    height: 26px;
+  }
+
+  .uni-footer-fest-text {
+    font-size: 1.1rem;
   }
 }

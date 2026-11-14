@@ -5,14 +5,16 @@ import StudentAuthModal from '../RegistrationModals/StudentAuthModal';
 import ThemeButton from '../ThemeComponents/ThemeButton';
 import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
 import NavbarMenu from './NavbarMenu';
+// import MobileBottomBar from './MobileBottomBar';
 import './Navbar.css';
 
 const navItems = [
-  { label: 'Events', path: '/events' },
-  { label: 'Invitation', path: '/invitation' },
-  { label: 'Events Schedule', href: '/Schedule_of_Events.pdf' },
-  { label: 'Sponsors', path: '/sponsors' },
-  { label: 'Contact', path: '/contact' },
+  // Links disabled (paths commented out) – hover animation active, click disabled
+  { label: 'Events' /*, path: '/events' */ },
+  { label: 'Invitation' /*, path: '/invitation' */ },
+  { label: 'Events Schedule' /*, href: '/Schedule_of_Events.pdf' */ },
+  { label: 'Sponsors' /*, path: '/sponsors' */ },
+  { label: 'Contact' /*, path: '/contact' */ },
 ];
 
 function UniversityLogo() {
@@ -72,10 +74,8 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const handleOpenAuth = (e) => {
-      const mode = e?.detail?.mode || 'login';
-      setAuthMode(mode);
-      setAuthModalOpen(true);
+    const handleOpenAuth = () => {
+      // Auth modal opening disabled as requested
     };
     window.addEventListener('fest-open-auth-modal', handleOpenAuth);
     return () => window.removeEventListener('fest-open-auth-modal', handleOpenAuth);
@@ -84,17 +84,12 @@ export default function Navbar() {
   const closeMenu = () => setMenuOpen(false);
 
   const handleLoginClick = (e) => {
-    if (e) e.preventDefault();
-    closeMenu();
-    const current = getLoggedStudent();
-    if (!current) {
-      setAuthMode('login');
-      setAuthModalOpen(true);
-    } else {
-      if (location.pathname !== '/dashboard') {
-        navigate('/dashboard');
-      }
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
+    closeMenu();
+    // Login action disabled – click will not open modal, hover animation preserved
   };
 
   return (
@@ -139,18 +134,16 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : (
-                /* Commented out Login button as requested
                 <ThemeButton
                   onClick={handleLoginClick}
                   id="navbar-login-btn"
                   key={location.pathname}
+                  aria-disabled="true"
                 >
                   <SplitColorText leftColor="#0f172a" rightColor="#ffffff">
                     Login
                   </SplitColorText>
                 </ThemeButton>
-                */
-                null
               )}
             </div>
           </div>
@@ -205,7 +198,6 @@ export default function Navbar() {
           onItemClick={closeMenu}
         />
 
-        {/* Commented out Mobile Login button as requested
         {!student && (
           <ThemeButton
             onClick={handleLoginClick}
@@ -216,7 +208,6 @@ export default function Navbar() {
             Login
           </ThemeButton>
         )}
-        */}
       </div>
 
       {/* Student Account Registration & Login Modal */}
@@ -229,6 +220,9 @@ export default function Navbar() {
         }}
         initialMode={authMode}
       />
+
+      {/* Mobile Floating Bottom Bar with all Menus (Commented out) */}
+      {/* <MobileBottomBar /> */}
     </>
   );
 }

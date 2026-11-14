@@ -1,0 +1,420 @@
+/* ==========================================================================
+   MOBILE BOTTOM BAR & SLIDE-UP MENU DRAWER
+   Pure Liquid Glass Responsive Mobile Navigation
+   ========================================================================== */
+
+/* Hidden on Desktop & Large Tablets (> 900px) */
+.mobile-bottom-bar,
+.mobile-bottom-drawer,
+.mobile-bottom-drawer-backdrop {
+  display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MOBILE VIEW (<= 900px)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Give page content breathing room so bottom bar doesn't cover footer/content */
+  body {
+    padding-bottom: 74px !important;
+  }
+
+  /* ── 1. Fixed Bottom Glass Bar ── */
+  .mobile-bottom-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: rgba(10, 14, 26, 0.92);
+    -webkit-backdrop-filter: blur(24px) saturate(190%) brightness(1.05);
+    backdrop-filter: blur(24px) saturate(190%) brightness(1.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.55);
+    z-index: 9999;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 0.5rem;
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+    box-sizing: border-box;
+  }
+
+  /* ── 2. Bottom Tab Button ── */
+  .bottom-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    color: #94a3b8;
+    cursor: pointer;
+    position: relative;
+    padding: 6px 0 4px;
+    transition: color 0.2s ease, transform 0.15s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .bottom-tab:active {
+    transform: scale(0.92);
+  }
+
+  .bottom-tab-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    transition: transform 0.2s ease;
+  }
+
+  .bottom-tab-label {
+    font-family: var(--font-heading);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    max-width: 68px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Active Tab State */
+  .bottom-tab.active {
+    color: #f59e0b;
+  }
+
+  .bottom-tab.active .bottom-tab-icon {
+    transform: translateY(-2px);
+    color: #fbbf24;
+    filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.5));
+  }
+
+  .bottom-active-dot {
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #f59e0b;
+    box-shadow: 0 0 6px #f59e0b;
+  }
+
+  /* ── 3. Slide-Up Menu Drawer Backdrop ── */
+  .mobile-bottom-drawer-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-bottom-drawer-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ── 4. Slide-Up Menu Drawer Sheet ── */
+  .mobile-bottom-drawer {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 85vh;
+    background: rgba(13, 18, 33, 0.96);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    backdrop-filter: blur(28px) saturate(200%);
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 -16px 48px rgba(0, 0, 0, 0.7);
+    z-index: 10001;
+    padding: 0.75rem 1.25rem 2rem;
+    box-sizing: border-box;
+    overflow-y: auto;
+    transform: translateY(105%);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-bottom-drawer.open {
+    transform: translateY(0);
+  }
+
+  /* Drawer Handle */
+  .drawer-handle-bar {
+    display: flex;
+    justify-content: center;
+    padding: 0.35rem 0 0.85rem;
+    cursor: pointer;
+  }
+
+  .drawer-pill {
+    width: 44px;
+    height: 4.5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  /* Drawer Header */
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.85rem;
+  }
+
+  .drawer-title-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .drawer-title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: #ffffff;
+  }
+
+  .drawer-subtitle {
+    font-size: 0.75rem;
+    color: #f59e0b;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .drawer-close-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+
+  .drawer-close-btn:active {
+    transform: scale(0.9);
+  }
+
+  /* Prize Badge */
+  .drawer-prize-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.85rem;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: 12px;
+    color: #fde68a;
+    font-size: 0.76rem;
+    font-weight: 700;
+    margin-bottom: 1.1rem;
+  }
+
+  /* Student Card in Drawer */
+  .drawer-student-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 16px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .drawer-student-info {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .drawer-student-avatar {
+    font-size: 1.3rem;
+  }
+
+  .drawer-student-name {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #ffffff;
+  }
+
+  .drawer-student-role {
+    display: block;
+    font-size: 0.72rem;
+    color: #94a3b8;
+  }
+
+  .drawer-student-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .drawer-dash-btn {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #0f172a;
+    background: #fbbf24;
+    padding: 6px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+
+  .drawer-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  /* Auth Buttons in Drawer */
+  .drawer-auth-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .drawer-auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.7rem 1rem;
+    border-radius: 12px;
+    font-size: 0.86rem;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .drawer-auth-btn:active {
+    transform: scale(0.96);
+  }
+
+  .drawer-auth-btn.login-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .drawer-auth-btn.register-btn {
+    background: linear-gradient(135deg, #e11d48, #be185d);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  }
+
+  /* Menu Links Grid */
+  .drawer-links-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .drawer-link-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    text-decoration: none;
+    color: #e2e8f0;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .drawer-link-item:active {
+    transform: scale(0.98);
+  }
+
+  .drawer-link-item.active {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.4);
+    color: #fbbf24;
+  }
+
+  .drawer-icon-bubble {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .drawer-icon-bubble.pink {
+    background: rgba(225, 29, 72, 0.15);
+    color: #fb7185;
+  }
+
+  .drawer-icon-bubble.gold {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fde68a;
+  }
+
+  .drawer-icon-bubble.blue {
+    background: rgba(2, 132, 199, 0.15);
+    color: #38bdf8;
+  }
+
+  .drawer-icon-bubble.amber {
+    background: rgba(217, 119, 6, 0.15);
+    color: #fbbf24;
+  }
+
+  .drawer-icon-bubble.teal {
+    background: rgba(13, 148, 136, 0.15);
+    color: #2dd4bf;
+  }
+
+  .drawer-link-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .drawer-link-label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .drawer-link-sub {
+    font-size: 0.72rem;
+    color: #94a3b8;
+  }
+}
+
