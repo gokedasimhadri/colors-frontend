@@ -18,6 +18,8 @@ import {
 } from '../../services/api';
 import StudentAuthModal from '../../components/RegistrationModals/StudentAuthModal';
 import EventRegistrationModal from '../../components/RegistrationModals/EventRegistrationModal';
+import SplitBackground from '../../components/ThemeComponents/backgrounds/SplitBackground';
+import SplitColorText from '../../components/ThemeComponents/SplitColor/SplitColorText';
 import './Events.css';
 
 const FEST_TYPE = EVENT_TYPE || 'COLORS';
@@ -33,8 +35,9 @@ export default function Events() {
   // 3. Else -> View 1: All Categories & Subcategories
   // ─────────────────────────────────────────────────────────────
 
+  let content;
   if (eventCategory && eventSubCategory && eventName) {
-    return (
+    content = (
       <EventDetailView
         category={decodeURIComponent(eventCategory)}
         subCategory={decodeURIComponent(eventSubCategory)}
@@ -44,10 +47,8 @@ export default function Events() {
         onNavigateHome={() => navigate('/events')}
       />
     );
-  }
-
-  if (eventCategory && eventSubCategory) {
-    return (
+  } else if (eventCategory && eventSubCategory) {
+    content = (
       <SubCategoryEventsView
         category={decodeURIComponent(eventCategory)}
         subCategory={decodeURIComponent(eventSubCategory)}
@@ -58,18 +59,24 @@ export default function Events() {
         }
       />
     );
+  } else {
+    content = (
+      <AllCategoriesView
+        themeCode={FEST_TYPE}
+        onSelectSubCategory={(catName, subCatName) =>
+          navigate(`/events/${encodeURIComponent(catName)}/${encodeURIComponent(subCatName)}`)
+        }
+        onSelectEvent={(catName, subCatName, nameOrSlug) =>
+          navigate(`/events/${encodeURIComponent(catName)}/${encodeURIComponent(subCatName)}/${encodeURIComponent(nameOrSlug)}`)
+        }
+      />
+    );
   }
 
   return (
-    <AllCategoriesView
-      themeCode={FEST_TYPE}
-      onSelectSubCategory={(catName, subCatName) =>
-        navigate(`/events/${encodeURIComponent(catName)}/${encodeURIComponent(subCatName)}`)
-      }
-      onSelectEvent={(catName, subCatName, nameOrSlug) =>
-        navigate(`/events/${encodeURIComponent(catName)}/${encodeURIComponent(subCatName)}/${encodeURIComponent(nameOrSlug)}`)
-      }
-    />
+    <SplitBackground as="main" className="colours-events-main">
+      {content}
+    </SplitBackground>
   );
 }
 
@@ -197,15 +204,24 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
       {/* University Portal Header Banner */}
       <div className="events-hero-header">
         <div className="container text-center">
-          {/* Fest Badge */}
-          <div className="events-badge-top">
-            ADITYA UNIVERSITY • {themeCode} 2027 • ₹10 LAKHS IN CASH PRIZES
-          </div>
-
-          <h1 className="events-hero-title">Official Competitions & Championships</h1>
-          <p className="events-hero-subtitle">
-            Browse all competitive events across Culturals, Sports & Creo • 7 • 8 • 9 January 2027
-          </p>
+          <SplitColorText
+            as="h1"
+            className="events-hero-title"
+            screenSync={true}
+            leftColor="#0f172a"
+            rightColor="#ffffff"
+          >
+            Explore Events
+          </SplitColorText>
+          <SplitColorText
+            as="p"
+            className="events-hero-subtitle"
+            screenSync={true}
+            leftColor="#475569"
+            rightColor="#cbd5e1"
+          >
+            Compete, Create, and Celebrate across Cultural, Sports, and Creo arenas
+          </SplitColorText>
 
           {/* Theme Summary Metrics Bar */}
 
@@ -307,9 +323,15 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                 {/* Category Header Row with Metrics & Coordinator */}
                 <div className="category-header-row">
                   <div className="category-title-area">
-                    <h2 className="category-heading">
+                    <SplitColorText
+                      as="h2"
+                      className="category-heading"
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
                       {cat.name || `${cat.code || cat._id} Events`}
-                    </h2>
+                    </SplitColorText>
                     <div className="category-meta-chips">
                       <span className="category-count-badge">
                         {cat.data.length} {cat.data.length === 1 ? 'Subcategory' : 'Subcategories'}
@@ -416,7 +438,15 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
               <section key={cat._id || cat.code} className="category-section">
                 <div className="category-header-row">
                   <div className="category-title-area">
-                    <h2 className="category-heading">{cat.name} Competitions</h2>
+                    <SplitColorText
+                      as="h2"
+                      className="category-heading"
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      {cat.name} Competitions
+                    </SplitColorText>
                     <span className="category-count-badge badge-accent">
                       {events.length} {events.length === 1 ? 'Event' : 'Events'}
                     </span>
@@ -618,9 +648,15 @@ function SubCategoryEventsView({ category, subCategory, themeCode, onBack, onSel
             </button>
             <div className="breadcrumb-info">
               <span className="breadcrumb-subtitle">Aditya University Fest • {themeCode}</span>
-              <h1 className="breadcrumb-heading">
+              <SplitColorText
+                as="h1"
+                className="breadcrumb-heading"
+                screenSync={true}
+                leftColor="#0f172a"
+                rightColor="#ffffff"
+              >
                 Events / {subCatDetails?.categoryName || category} / {subCategory}
-              </h1>
+              </SplitColorText>
             </div>
           </div>
 

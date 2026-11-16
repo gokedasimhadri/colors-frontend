@@ -1,11 +1,18 @@
 /* ==========================================================================
-   COLOURS 2027 – Events Page Styles (Light Theme)
-   Clean White/Slate Canvases, Crisp Borders & Vibrant Cards
+   COLOURS 2027 – Events Page Styles (Dual-Tone Split Canvas Theme)
+   Sharp 50/50 Dual-Tone Split Background, Crisp Surfaces & Vibrant Cards
    ========================================================================== */
+
+.colours-events-main {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
 
 .events-page-wrapper {
   min-height: 100vh;
-  background-color: #f8fafc;
+  background: transparent !important;
   color: #0f172a;
   padding-top: var(--navbar-height);
   padding-bottom: 5rem;
@@ -19,16 +26,18 @@
 
 .events-hero-header {
   padding: 4.5rem 1rem 3.5rem;
-  background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
-  border-bottom: 1px solid #e2e8f0;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
   margin-bottom: 3.5rem;
   position: relative;
 }
 
 .events-badge-top {
   display: inline-block;
-  background: #fffbeb;
-  border: 1px solid #fcd34d;
+  background: rgba(254, 243, 199, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(245, 158, 11, 0.45);
   color: #b45309;
   font-size: 0.76rem;
   font-weight: 800;
@@ -36,7 +45,7 @@
   padding: 6px 18px;
   border-radius: var(--radius-pill);
   margin-bottom: 1rem;
-  box-shadow: 0 2px 10px rgba(217, 119, 6, 0.1);
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.15);
 }
 
 .events-hero-title {
@@ -44,13 +53,11 @@
   font-size: clamp(2.5rem, 5.5vw, 4.5rem);
   font-weight: 900;
   letter-spacing: 0.04em;
-  color: #0f172a;
   margin-bottom: 0.75rem;
 }
 
 .events-hero-subtitle {
   font-size: 1.1rem;
-  color: #475569;
   max-width: 680px;
   margin: 0 auto 2.5rem;
   line-height: 1.7;
@@ -82,8 +89,10 @@
 
 .events-search-input {
   width: 100%;
-  background: #ffffff;
-  border: 1.5px solid #cbd5e1;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(148, 163, 184, 0.4);
   border-radius: 50px;
   padding: 14px 48px;
   color: #0f172a;
@@ -91,7 +100,7 @@
   font-family: inherit;
   outline: none;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 .events-search-input::placeholder {
@@ -101,7 +110,7 @@
 .events-search-input:focus {
   border-color: #e11d48;
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.14);
+  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.18), 0 8px 30px rgba(0, 0, 0, 0.15);
 }
 
 .search-clear-btn {
@@ -127,8 +136,10 @@
 }
 
 .tab-btn {
-  background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(203, 213, 225, 0.7);
   color: #334155;
   font-size: 0.85rem;
   font-weight: 700;
@@ -136,20 +147,22 @@
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
 .tab-btn:hover {
   color: #b45309;
-  background: #fffbeb;
-  border-color: #fcd34d;
+  background: #ffffff;
+  border-color: #d97706;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
 .tab-btn.active {
   background: linear-gradient(135deg, #e11d48, #d97706);
   color: #ffffff;
   border-color: transparent;
-  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.25);
+  box-shadow: 0 4px 18px rgba(225, 29, 72, 0.35);
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -173,7 +186,7 @@
   gap: 1.5rem;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1.5px solid #e2e8f0;
+  border-bottom: 1.5px solid rgba(148, 163, 184, 0.25);
   flex-wrap: wrap;
 }
 
@@ -181,7 +194,6 @@
   font-family: var(--font-heading), sans-serif;
   font-size: 2.5rem;
   font-weight: 900;
-  color: #0f172a;
   letter-spacing: 0.04em;
   margin: 0;
   text-decoration: underline;
@@ -355,7 +367,7 @@
   position: relative;
   min-height: 85vh;
   padding: 2.5rem 0 5rem;
-  background-color: #f8fafc;
+  background: transparent !important;
 }
 
 .breadcrumb-nav {
@@ -545,7 +557,7 @@
 .event-detail-wrapper {
   min-height: 90vh;
   padding: 2.5rem 0 6rem;
-  background: #f8fafc;
+  background: transparent !important;
   color: #0f172a;
   position: relative;
 }
@@ -706,7 +718,7 @@
 
 .coordinator-phone:hover {
   color: #e11d48;
-  text-decoration: underline;
+  text-decoration: none !important;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -973,7 +985,7 @@
 
 .coord-phone-link:hover {
   color: #9f1239;
-  text-decoration: underline;
+  text-decoration: none !important;
 }
 
 /* Subcategory Card Enhancements */

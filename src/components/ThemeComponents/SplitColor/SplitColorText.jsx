@@ -50,7 +50,7 @@ export const SplitColorText = forwardRef(function SplitColorText(
   const internalRef = useRef(null);
   const location = useLocation();
   const pathname = location?.pathname || '';
-  const isSplitPage = pathname === '/' || pathname === '';
+  const isSplitPage = pathname === '/' || pathname === '' || pathname.startsWith('/events');
 
   // Active rendering mode: if splitPercent or screenSync is provided, prioritize split mode
   const resolvedMode =
@@ -62,16 +62,16 @@ export const SplitColorText = forwardRef(function SplitColorText(
       ? 'difference'
       : 'split';
 
-  // State for screenSync split calculation (default to 100% leftColor on subpages)
+  // State for screenSync split calculation (default to 100% leftColor on non-split subpages)
   const [syncedPercent, setSyncedPercent] = useState(() => {
     if (splitPercent !== undefined) return Number(splitPercent);
-    if (pathname && pathname !== '/') return 100;
+    if (!isSplitPage) return 100;
     return 50;
   });
 
   // State for IntersectionObserver section fallback
   const [detectedTheme, setDetectedTheme] = useState(() => {
-    return pathname && pathname !== '/' ? 'light' : 'dark';
+    return !isSplitPage ? 'light' : 'dark';
   });
 
   // Helper: Detect actual effective background luminance under (x, y)

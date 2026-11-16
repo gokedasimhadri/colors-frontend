@@ -690,8 +690,8 @@
   .uni-footer-right .mobile-only-social {
     display: flex !important;
     flex-direction: column !important;
-    align-items: flex-start !important;
-    text-align: left !important;
+    align-items: center !important;
+    text-align: center !important;
     width: 100% !important;
     margin-top: 0.25rem !important;
     padding-top: 1.25rem !important;
@@ -699,18 +699,19 @@
   }
 
   .uni-footer-right .mobile-only-social .uni-social-label {
-    font-size: 0.82rem !important;
+    font-size: 0.84rem !important;
     font-weight: 700 !important;
-    color: #475569 !important;
+    color: #be9337 !important;
     text-transform: capitalize !important;
-    letter-spacing: 0.02em !important;
+    letter-spacing: 0.04em !important;
     margin-bottom: 0.65rem !important;
+    text-align: center !important;
   }
 
   .uni-footer-right .mobile-only-social .uni-social-links {
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-start !important;
+    justify-content: center !important;
     gap: 0.75rem !important;
     width: 100% !important;
     flex-wrap: wrap !important;

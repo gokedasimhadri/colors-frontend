@@ -114,7 +114,7 @@
     transition: color 0.2s ease;
   }
 
-  /* Active Tab State: No surrounding box/capsule shape, pure VIBGYOR continuous rainbow animation */
+  /* Active Tab State: No surrounding box/capsule shape, slow VIBGYOR continuous rainbow animation without glow */
   .bottom-tab.active {
     background: transparent !important;
     border: 1px solid transparent !important;
@@ -123,14 +123,14 @@
 
   .bottom-tab.active .bottom-tab-icon {
     transform: translateY(-2px);
-    animation: vibgyorColorFlow 2.5s linear infinite !important;
+    animation: vibgyorColorFlow 6s linear infinite !important;
+    filter: none !important;
   }
 
   .bottom-tab.active .bottom-tab-icon svg {
     stroke: currentColor !important;
-    fill: currentColor !important;
-    fill-opacity: 0.22 !important;
-    filter: drop-shadow(0 2px 8px currentColor);
+    fill: none !important;
+    filter: none !important;
   }
 
   .bottom-tab.active .bottom-tab-label {
@@ -162,12 +162,12 @@
     background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     color: transparent !important;
-    animation: vibgyorRainbowFlow 2.5s linear infinite !important;
+    animation: vibgyorRainbowFlow 6s linear infinite !important;
     font-weight: 700 !important;
     letter-spacing: 0.03em;
     text-shadow: none !important;
     transform: scale(1.06);
-    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+    filter: none !important;
   }
 
   .bottom-tab:not(.active):hover {
