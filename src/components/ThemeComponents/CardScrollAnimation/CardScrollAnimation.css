@@ -1,0 +1,122 @@
+/* ==========================================================================
+   CardScrollAnimation - Reusable Stacking Card Scroll Animation
+   Mobile: Fluid Sticky Card Deck Stacking with Depth Elevation
+   Desktop: Preserves clean responsive grid with zero interference
+   ========================================================================== */
+
+/* ── Desktop View: Direct Grid Participation ── */
+.card-scroll-stack-container.is-desktop-grid {
+  width: 100%;
+}
+
+.card-scroll-stack-container.is-desktop-grid .card-scroll-stack-item {
+  display: contents;
+}
+
+/* ── Mobile View: Stacking Cards Mechanism ── */
+@media (max-width: 768px) {
+  .card-scroll-stack-container.is-mobile-stack {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    position: relative !important;
+    padding-bottom: 0 !important;
+  }
+
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item {
+    display: block !important;
+    position: sticky !important;
+    top: var(--sticky-top, 85px) !important;
+    z-index: var(--card-z-index, 1) !important;
+    margin-bottom: 2rem !important;
+    width: 100% !important;
+    transform-origin: top center !important;
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), filter 0.2s ease !important;
+    will-change: transform, filter !important;
+  }
+
+  /* Last card in stack sits flush without bottom gap so footer aligns cleanly */
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* Default Card: Liquid glass styling with smooth transition */
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item > * {
+    width: 100% !important;
+    box-shadow:
+      0 -4px 18px rgba(0, 0, 0, 0.16),
+      0 14px 36px rgba(0, 0, 0, 0.28),
+      inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+    border-radius: 20px !important;
+    transition: background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
+  }
+
+  /* ── Stacked State: Active ONLY when cards are stacked on top of each other ── */
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked > * {
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid rgba(15, 23, 42, 0.12) !important;
+    box-shadow:
+      0 -4px 20px rgba(0, 0, 0, 0.12),
+      0 16px 40px rgba(0, 0, 0, 0.26),
+      0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  }
+
+  /* Inner pseudo-border adjustments when card is solid white */
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked .event-sub-card::before {
+    border-color: rgba(15, 23, 42, 0.08) !important;
+  }
+
+  /* Image banner bottom border when card is white */
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked .event-sub-image-banner {
+    border-bottom: 1px solid rgba(15, 23, 42, 0.1) !important;
+  }
+
+  /* All Text Inside Stacked White Card: Crisp Dark Navy (#0f172a) for Perfect Legibility */
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked .event-sub-details .split-color-text,
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked .event-sub-footer .split-color-text {
+    background-image: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    -webkit-text-fill-color: #0f172a !important;
+    color: #0f172a !important;
+    stroke: #0f172a !important;
+  }
+
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked .table-pill-label .split-color-text {
+    color: #475569 !important;
+    -webkit-text-fill-color: #475569 !important;
+    font-weight: 700 !important;
+  }
+
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked .table-pill-value .split-color-text {
+    color: #0f172a !important;
+    -webkit-text-fill-color: #0f172a !important;
+    font-weight: 600 !important;
+  }
+
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked .table-pill-value.fee-highlight,
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked .table-pill-value.fee-highlight .split-color-text {
+    color: #0f172a !important;
+    -webkit-text-fill-color: #0f172a !important;
+    font-weight: 700 !important;
+  }
+
+  /* Checkout Button on Stacked White Card */
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked .btn-event-checkout-theme {
+    background: rgba(15, 23, 42, 0.05) !important;
+    border: 1px solid rgba(15, 23, 42, 0.18) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  }
+
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked .btn-event-checkout-theme:hover {
+    background: rgba(15, 23, 42, 0.1) !important;
+  }
+
+  .card-scroll-stack-container.is-mobile-stack .card-scroll-stack-item.is-stacked .btn-event-checkout-theme .split-color-text {
+    color: #0f172a !important;
+    -webkit-text-fill-color: #0f172a !important;
+    font-weight: 800 !important;
+  }
+}

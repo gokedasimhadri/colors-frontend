@@ -993,7 +993,7 @@
 .fest-pillars-section .pillars-container {
   width: 100% !important;
   max-width: 100% !important;
-  padding: 0 clamp(1.5rem, 8vw, 2in) !important;
+  padding: 0 var(--page-gutter) !important;
   margin: 0 !important;
   box-sizing: border-box !important;
 }

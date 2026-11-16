@@ -37,7 +37,7 @@
   gap: clamp(2rem, 5vw, 4.5rem);
   width: 100%;
   max-width: 100%;
-  padding: 0 clamp(1.5rem, 8vw, 2in);
+  padding: 0 var(--page-gutter);
   box-sizing: border-box;
 }
 
@@ -519,7 +519,7 @@
   flex-wrap: wrap;
   width: 100%;
   max-width: 100%;
-  padding: 0 clamp(1.5rem, 8vw, 2in);
+  padding: 0 var(--page-gutter);
   box-sizing: border-box;
 }
 

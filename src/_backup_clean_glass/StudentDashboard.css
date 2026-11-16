@@ -6,15 +6,19 @@
 .student-dashboard-page {
   min-height: calc(100vh - var(--navbar-height));
   background-color: #f8fafc;
-  padding: 2.5rem 1rem 5rem;
+  padding: 2.5rem 0 5rem;
   color: #0f172a;
   font-family: var(--font-body), sans-serif;
   position: relative;
 }
 
 .dashboard-container {
-  max-width: 1240px;
-  margin: 0 auto;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding-left: var(--page-gutter) !important;
+  padding-right: var(--page-gutter) !important;
+  box-sizing: border-box !important;
 }
 
 /* ── Hero Profile Banner ── */
