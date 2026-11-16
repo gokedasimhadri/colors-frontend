@@ -52,6 +52,7 @@ function UniversityLogo() {
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const isSplitThemePage = location.pathname === '/' || location.pathname.startsWith('/events');
   const isHome = location.pathname === '/';
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -158,7 +159,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`navbar ${!isHome ? 'navbar-subpage' : ''} ${scrolled ? 'scrolled' : ''} ${hidden ? 'nav-hidden' : ''}`}
+        className={`navbar ${!isSplitThemePage ? 'navbar-subpage' : ''} ${scrolled ? 'scrolled' : ''} ${hidden ? 'nav-hidden' : ''}`}
         role="navigation"
         aria-label="Main navigation"
       >

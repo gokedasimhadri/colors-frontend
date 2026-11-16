@@ -1350,7 +1350,7 @@
   gap: 0.35rem;
   font-size: 0.82rem;
   font-weight: 400;
-  text-decoration: none;
+  text-decoration: none !important;
   transition: opacity 0.2s ease;
   opacity: 0.85;
 }
@@ -1372,9 +1372,16 @@
   opacity: 0.9;
 }
 
-.coord-phone-pill:hover {
+.coord-phone-pill:hover,
+.coord-phone-pill:focus,
+.coord-phone-pill:active {
   opacity: 1;
-  text-decoration: underline;
+  text-decoration: none !important;
+}
+
+.coord-phone-pill:hover *,
+.coord-phone-pill:hover .split-color-text {
+  text-decoration: none !important;
 }
 
 .pillar-card-footer {
@@ -1818,8 +1825,9 @@
   }
 
   .hero-poster-header {
-    padding: 0.65rem 16px 0.35rem !important;
+    padding: 0.65rem 12px 0.35rem !important;
     box-sizing: border-box !important;
+    overflow: visible !important;
   }
 
   .poster-title-row {
@@ -1829,17 +1837,19 @@
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+    overflow: visible !important;
   }
 
   .poster-colours-heading {
-    font-size: clamp(3.4rem, 19.2vw, 5.4rem) !important;
-    letter-spacing: 0.02em !important;
-    line-height: 0.95 !important;
+    font-size: clamp(2.6rem, 16.5vw, 4.4rem) !important;
+    letter-spacing: 0.01em !important;
+    line-height: 1 !important;
     padding: 0 !important;
-    width: 100% !important;
+    max-width: 100% !important;
     text-align: center !important;
     white-space: nowrap !important;
     display: block !important;
+    box-sizing: border-box !important;
   }
 
   .poster-tagline-row {
@@ -2024,9 +2034,9 @@
 /* ── 6. Ultra-Small Mobile Phones (< 360px – e.g. iPhone SE, Fold) ── */
 @media (max-width: 359.98px) {
   .poster-colours-heading {
-    font-size: clamp(2.85rem, 18.5vw, 3.2rem) !important;
+    font-size: clamp(2.35rem, 15vw, 2.85rem) !important;
     letter-spacing: 0.01em !important;
-    line-height: 0.95 !important;
+    line-height: 1 !important;
   }
 
   .poster-tagline-text {
