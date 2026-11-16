@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, X } from 'lucide-react';
+import { Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import SplitColorText from '../SplitColor/SplitColorText';
 import './ThemeTab.css';
 
@@ -63,6 +63,7 @@ export default function ThemeTab({
   const currentActive = activeTab !== undefined ? activeTab : value;
   const [isSearchOpen, setIsSearchOpen] = useState(Boolean(searchQuery));
   const [tabsWidth, setTabsWidth] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   const containerRef = useRef(null);
   const listRef = useRef(null);
@@ -70,6 +71,16 @@ export default function ThemeTab({
   const searchCircleRef = useRef(null);
 
   const hasSearch = Boolean(showSearch && typeof onSearchChange === 'function');
+
+  // Track viewport to avoid constraining width on mobile search
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(typeof window !== 'undefined' && window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Measure natural width of the tabs list when search is closed
   useEffect(() => {
@@ -152,6 +163,10 @@ export default function ThemeTab({
       onSearchChange('');
     }
     setIsSearchOpen(false);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('split-color-sync'));
+      setTimeout(() => window.dispatchEvent(new CustomEvent('split-color-sync')), 60);
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -177,13 +192,38 @@ export default function ThemeTab({
     if (typeof onChange === 'function') onChange(tab.id, tab);
     if (typeof onTabChange === 'function') onTabChange(tab.id, tab);
     if (typeof onSelect === 'function') onSelect(tab.id, tab);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('split-color-sync'));
+      setTimeout(() => window.dispatchEvent(new CustomEvent('split-color-sync')), 50);
+      setTimeout(() => window.dispatchEvent(new CustomEvent('split-color-sync')), 160);
+    }
+  };
+
+  const activeIndex = normalizedTabs.findIndex(
+    (tab) => String(tab.id) === String(currentActive)
+  );
+  const validIndex = activeIndex >= 0 ? activeIndex : 0;
+  const activeTabObj = normalizedTabs[validIndex] || normalizedTabs[0];
+
+  const handlePrevTab = (e) => {
+    if (e) e.stopPropagation();
+    if (normalizedTabs.length <= 1) return;
+    const prevIndex = (validIndex - 1 + normalizedTabs.length) % normalizedTabs.length;
+    handleSelect(normalizedTabs[prevIndex]);
+  };
+
+  const handleNextTab = (e) => {
+    if (e) e.stopPropagation();
+    if (normalizedTabs.length <= 1) return;
+    const nextIndex = (validIndex + 1) % normalizedTabs.length;
+    handleSelect(normalizedTabs[nextIndex]);
   };
 
   if (!normalizedTabs.length && !hasSearch) return null;
 
   return (
     <div
-      className={`theme-tab-outer-wrapper ${className}`.trim()}
+      className={`theme-tab-outer-wrapper ${isSearchOpen ? 'search-open' : ''} ${className}`.trim()}
       style={style}
       onKeyDown={handleKeyDown}
     >
@@ -191,12 +231,12 @@ export default function ThemeTab({
       <div
         ref={containerRef}
         className={`theme-tab-container size-${size} ${isSearchOpen ? 'search-active' : ''}`}
-        style={isSearchOpen && tabsWidth ? { width: `${tabsWidth}px` } : {}}
+        style={isSearchOpen && tabsWidth && !isMobile ? { width: `${tabsWidth}px` } : {}}
         role={isSearchOpen ? 'search' : 'tablist'}
         aria-label={ariaLabel}
       >
-        {/* A. Segmented Tab Items List */}
-        <div ref={listRef} className="theme-tab-list" aria-hidden={isSearchOpen}>
+        {/* A. Segmented Tab Items List (Desktop / Tablet view) */}
+        <div ref={listRef} className="theme-tab-list theme-tab-desktop-list" aria-hidden={isSearchOpen}>
           {normalizedTabs.map((tab) => {
             const isActive = currentActive === tab.id;
 
@@ -229,6 +269,68 @@ export default function ThemeTab({
               </button>
             );
           })}
+        </div>
+
+        {/* B. Mobile Single Tab Stepper with Left and Right Chevrons */}
+        <div className="theme-tab-mobile-stepper" aria-hidden={isSearchOpen}>
+          <button
+            type="button"
+            className="theme-tab-chevron-btn theme-tab-chevron-prev"
+            onClick={handlePrevTab}
+            disabled={normalizedTabs.length <= 1}
+            title="Previous Tab"
+            aria-label="Previous Tab"
+            tabIndex={isSearchOpen ? -1 : 0}
+          >
+            <SplitColorText
+              as="span"
+              mode="fallback"
+              className="theme-tab-chevron-icon-wrap"
+              screenSync={screenSync}
+              leftColor={leftColor}
+              rightColor={rightColor}
+            >
+              <ChevronLeft size={18} strokeWidth={2.8} className="theme-tab-chevron-svg" />
+            </SplitColorText>
+          </button>
+
+          <div className="theme-tab-mobile-active-wrap">
+            {activeTabObj && (
+              <button
+                key={String(activeTabObj.id)}
+                type="button"
+                role="tab"
+                aria-selected={true}
+                tabIndex={isSearchOpen ? -1 : 0}
+                className="theme-tab-item active theme-tab-mobile-active-item"
+                onClick={() => handleSelect(activeTabObj)}
+              >
+                {activeTabObj.icon && <span className="theme-tab-icon">{activeTabObj.icon}</span>}
+                <span className="theme-tab-label active">{activeTabObj.label}</span>
+              </button>
+            )}
+          </div>
+
+          <button
+            type="button"
+            className="theme-tab-chevron-btn theme-tab-chevron-next"
+            onClick={handleNextTab}
+            disabled={normalizedTabs.length <= 1}
+            title="Next Tab"
+            aria-label="Next Tab"
+            tabIndex={isSearchOpen ? -1 : 0}
+          >
+            <SplitColorText
+              as="span"
+              mode="fallback"
+              className="theme-tab-chevron-icon-wrap"
+              screenSync={screenSync}
+              leftColor={leftColor}
+              rightColor={rightColor}
+            >
+              <ChevronRight size={18} strokeWidth={2.8} className="theme-tab-chevron-svg" />
+            </SplitColorText>
+          </button>
         </div>
 
         {/* B. Integrated Search Bar inside container (Reveals when search circle merges into tabs) */}
@@ -288,7 +390,7 @@ export default function ThemeTab({
       {hasSearch && (
         <div
           ref={searchCircleRef}
-          className={`theme-tab-search-circle ${isSearchOpen ? 'merged' : ''}`}
+          className={`theme-tab-search-circle size-${size} ${isSearchOpen ? 'merged' : ''}`}
         >
           <button
             type="button"
