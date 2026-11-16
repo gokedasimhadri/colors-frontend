@@ -3,16 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { User, Phone, Mail, ArrowLeft } from 'lucide-react';
 import {
   EVENT_TYPE,
-  fetchCategoriesWithSubCategories,
+  fetchCategories,
   fetchAllEvents,
-  fetchEventsInSubCategory,
   fetchEventDetails,
   fetchFacultyCoordinators,
   fetchStudentCoordinators,
-  getSubCatImageUrl,
-  getLocalFallbackSubCatImageUrl,
   getEventImageUrl,
-  getFacultyImageUrl,
   getFacultyCandidateUrls,
   getLoggedStudent,
   logoutStudent
@@ -28,8 +24,7 @@ import './Events.css';
 const FEST_TYPE = EVENT_TYPE || 'COLORS';
 
 /**
- * Formats strings to clean Title Case (each word capitalized)
- * instead of all-caps from backend data
+ * Formats strings to clean Title Case
  */
 export function formatTitleCase(str) {
   if (!str || typeof str !== 'string') return str;
@@ -42,75 +37,63 @@ export default function Events() {
 
   // ─────────────────────────────────────────────────────────────
   // RENDER BASED ON URL PARAMS:
-  // 1. If eventName is set -> View 3: Event Detail
-  // 2. Else if eventSubCategory is set -> View 2: Subcategory Events
-  // 3. Else -> View 1: All Categories & Subcategories
+  // 1. If viewing a specific event -> View 2: EventDetailView
+  // 2. Else -> View 1: AllCategoriesView (Direct Category & Events List)
   // ─────────────────────────────────────────────────────────────
+  let selectedEvent = null;
+  let selectedCategory = eventCategory ? decodeURIComponent(eventCategory) : null;
 
-  let content;
   if (eventCategory && eventSubCategory && eventName) {
-    content = (
-      <EventDetailView
-        category={decodeURIComponent(eventCategory)}
-        subCategory={decodeURIComponent(eventSubCategory)}
-        eventName={decodeURIComponent(eventName)}
-        themeCode={FEST_TYPE}
-        onBack={() => navigate(`/events/${eventCategory}/${eventSubCategory}`)}
-        onNavigateHome={() => navigate('/events')}
-      />
-    );
+    selectedEvent = decodeURIComponent(eventName);
   } else if (eventCategory && eventSubCategory) {
-    content = (
-      <SubCategoryEventsView
-        category={decodeURIComponent(eventCategory)}
-        subCategory={decodeURIComponent(eventSubCategory)}
-        themeCode={FEST_TYPE}
-        onBack={() => navigate('/events')}
-        onSelectEvent={(nameOrSlug) =>
-          navigate(`/events/${encodeURIComponent(eventCategory)}/${encodeURIComponent(eventSubCategory)}/${encodeURIComponent(nameOrSlug)}`)
-        }
-      />
-    );
-  } else {
-    content = (
-      <AllCategoriesView
-        themeCode={FEST_TYPE}
-        onSelectSubCategory={(catName, subCatName) =>
-          navigate(`/events/${encodeURIComponent(catName)}/${encodeURIComponent(subCatName)}`)
-        }
-        onSelectEvent={(catName, subCatName, nameOrSlug) =>
-          navigate(`/events/${encodeURIComponent(catName)}/${encodeURIComponent(subCatName)}/${encodeURIComponent(nameOrSlug)}`)
-        }
-      />
+    // When URL matches /events/:eventCategory/:eventName
+    selectedEvent = decodeURIComponent(eventSubCategory);
+  }
+
+  if (selectedCategory && selectedEvent) {
+    return (
+      <SplitBackground as="main" className="colours-events-main">
+        <EventDetailView
+          category={selectedCategory}
+          eventName={selectedEvent}
+          themeCode={FEST_TYPE}
+          onBack={() => navigate('/events')}
+          onNavigateHome={() => navigate('/events')}
+        />
+      </SplitBackground>
     );
   }
 
   return (
     <SplitBackground as="main" className="colours-events-main">
-      {content}
+      <AllCategoriesView
+        initialCategory={selectedCategory || 'ALL'}
+        themeCode={FEST_TYPE}
+        onSelectEvent={(catName, eventSlugOrTitle) =>
+          navigate(`/events/${encodeURIComponent(catName)}/${encodeURIComponent(eventSlugOrTitle)}`)
+        }
+      />
     </SplitBackground>
   );
 }
 
 // ─────────────────────────────────────────────────────────────
-// VIEW 1: All Categories, Subcategories & Events (COLORS)
+// VIEW 1: All Categories & Events (Direct Events Grid)
 // ─────────────────────────────────────────────────────────────
-function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
+function AllCategoriesView({ initialCategory = 'ALL', themeCode, onSelectEvent }) {
   const [categories, setCategories] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('ALL');
+  const [activeTab, setActiveTab] = useState(initialCategory || 'ALL');
   const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState('subcategories'); // 'subcategories' | 'events'
 
-  // Load categories and events for COLORS exclusively
   const loadData = () => {
     setLoading(true);
     setError(null);
 
     Promise.all([
-      fetchCategoriesWithSubCategories(themeCode),
+      fetchCategories(themeCode),
       fetchAllEvents(themeCode)
     ])
       .then(([catData, evData]) => {
@@ -128,7 +111,13 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
     loadData();
   }, [themeCode]);
 
-  // Filtered categories based on active category tab & search query
+  useEffect(() => {
+    if (initialCategory && initialCategory !== 'ALL') {
+      setActiveTab(initialCategory);
+    }
+  }, [initialCategory]);
+
+  // Filtered categories and events based on active category tab & search query
   const filteredCategories = useMemo(() => {
     return categories
       .filter((cat) => {
@@ -148,33 +137,24 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
         );
       })
       .map((cat) => {
-        if (!searchQuery.trim()) return cat;
-        const q = searchQuery.toLowerCase().trim();
+        let events = Array.isArray(cat.events) ? [...cat.events] : [];
 
-        // Search in subcategories
-        const filteredSubs = (cat.data || []).filter((item) => {
-          const subTitle = (item.SubCatogory || item.name || item.code || '').toLowerCase();
-          const hasMatchingEvents = (item.events || []).some((ev) =>
-            (ev.title || ev.eventName || '').toLowerCase().includes(q)
-          );
-          return subTitle.includes(q) || hasMatchingEvents;
-        });
-
-        // Search in category events
-        const filteredEvents = (cat.events || []).filter((ev) => {
-          const evTitle = (ev.title || ev.eventName || '').toLowerCase();
-          const evSub = (ev.subcategoryName || ev.subCategory || '').toLowerCase();
-          const evDesc = (ev.description || ev.overview || '').toLowerCase();
-          return evTitle.includes(q) || evSub.includes(q) || evDesc.includes(q);
-        });
+        if (searchQuery.trim()) {
+          const q = searchQuery.toLowerCase().trim();
+          events = events.filter((ev) => {
+            const evTitle = (ev.title || ev.eventName || '').toLowerCase();
+            const evDesc = (ev.description || ev.overview || '').toLowerCase();
+            const evVenue = (ev.venue || '').toLowerCase();
+            return evTitle.includes(q) || evDesc.includes(q) || evVenue.includes(q);
+          });
+        }
 
         return {
           ...cat,
-          data: filteredSubs,
-          events: filteredEvents
+          events
         };
       })
-      .filter((cat) => (cat.data || []).length > 0 || (cat.events || []).length > 0);
+      .filter((cat) => (cat.events || []).length > 0 || !searchQuery.trim());
   }, [categories, activeTab, searchQuery]);
 
   // Derived category filter tabs (CULTURALS, SPORTS, CREO)
@@ -198,24 +178,15 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
         if (id === 'CREO' && !label.toLowerCase().includes('events') && !label.toLowerCase().includes('arts')) {
           label = 'Creo Events';
         }
-        return { id, label, count: cat.totalEventsCount || (cat.data || []).length };
+        return { id, label, count: cat.totalEventsCount || (cat.events || []).length };
       });
   }, [categories]);
 
-  // Total metrics across COLORS
-  const totalEventsCount = useMemo(() => {
-    return allEvents.length || categories.reduce((sum, c) => sum + (c.totalEventsCount || 0), 0);
-  }, [allEvents, categories]);
-
-  // Combined tabs for ThemeTab (ALL + categories) - clean labels without count numbers
+  // Combined tabs for ThemeTab (ALL + categories)
   const allCategoryTabs = useMemo(() => [
     { id: 'ALL', label: 'All Events' },
     ...categoryTabs.map((t) => ({ id: t.id, label: t.label }))
   ], [categoryTabs]);
-
-  const totalSubcatsCount = useMemo(() => {
-    return categories.reduce((sum, c) => sum + (c.data?.length || 0), 0);
-  }, [categories]);
 
   return (
     <div className="events-page-wrapper">
@@ -246,17 +217,15 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
             </SplitColorText>
           </div>
 
-          {/* Search Bar & View Mode Toggle */}
+          {/* Category Filter Tabs with Integrated Circular Search */}
           <div className="events-control-bar">
-
-            {/* Category Filter Tabs with Integrated Circular Search */}
             <ThemeTab
               tabs={allCategoryTabs}
               activeTab={activeTab}
               onChange={setActiveTab}
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
-              searchPlaceholder="Search"
+              searchPlaceholder="Search events"
               className="events-filter-themetab"
             />
           </div>
@@ -267,7 +236,7 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
         {loading && (
           <div className="events-loading">
             <div className="events-spinner" />
-            <p>Loading database events for {themeCode}...</p>
+            <p>Loading events for {themeCode}...</p>
           </div>
         )}
 
@@ -289,7 +258,7 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
           <div className="events-empty-state">
             <span style={{ fontSize: '3rem' }}>🎯</span>
             <h3>No events found matching "{searchQuery}"</h3>
-            <p>Try searching for a different keyword or switch to All Categories.</p>
+            <p>Try searching for a different keyword or switch to All Events.</p>
             <button
               onClick={() => { setSearchQuery(''); setActiveTab('ALL'); }}
               className="btn-checkout-primary"
@@ -300,353 +269,96 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
           </div>
         )}
 
-        {/* ─────────────────────────────────────────────────────────────
-            MODE A: BROWSE BY SUBCATEGORIES
-            ───────────────────────────────────────────────────────────── */}
-        {!loading && !error && viewMode === 'subcategories' && (
-          filteredCategories.map((cat) => {
-            const catCoordinator = cat.coordinator || (cat.coordinators && cat.coordinators[0]);
+        {/* Categories List with Direct Events Grid */}
+        {!loading && !error && filteredCategories.map((cat) => {
+          const catCoordinator = cat.coordinator || (cat.coordinators && cat.coordinators[0]);
+          const events = Array.isArray(cat.events) ? cat.events : [];
 
-            return (
-              <section key={cat._id || cat.code} className="category-section">
-                {/* Category Header Row with Metrics & Coordinator */}
-                <div className="category-header-row">
-                  <div className="category-title-area">
-                    <SplitColorText
-                      as="h2"
-                      className="category-heading"
-                      screenSync={true}
-                      leftColor="#0f172a"
-                      rightColor="#ffffff"
-                    >
-                      {cat.name || `${cat.code || cat._id} Events`}
-                    </SplitColorText>
-                    <div className="category-meta-chips">
-                      {(cat.totalEventsCount !== undefined || cat.events?.length !== undefined) && (
-                        <span className="category-count-badge badge-accent">
-                          {cat.totalEventsCount ?? cat.events?.length ?? 0} {(cat.totalEventsCount ?? cat.events?.length ?? 0) === 1 ? 'Event' : 'Events'}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Category Coordinator Pill with Liquid Glass Design & Lucide Icons */}
-                  {catCoordinator && catCoordinator.name && (
-                    <div className="category-coord-pill">
-                      <div className="coord-icon-badge" aria-hidden="true">
-                        <SplitColorText
-                          as="span"
-                          mode="fallback"
-                          screenSync={true}
-                          leftColor="#0f172a"
-                          rightColor="#ffffff"
-                          className="coord-badge-split"
-                        >
-                          <User size={18} strokeWidth={2.3} className="coord-avatar-svg" />
-                        </SplitColorText>
-                      </div>
-                      <div className="coord-info-col">
-                        <SplitColorText
-                          as="span"
-                          mode="fallback"
-                          screenSync={true}
-                          leftColor="#0f172a"
-                          rightColor="#ffffff"
-                          className="coord-role"
-                        >
-                          Major Event Co-ordinator
-                        </SplitColorText>
-
-                        <SplitColorText
-                          as="span"
-                          mode="fallback"
-                          screenSync={true}
-                          leftColor="#0f172a"
-                          rightColor="#ffffff"
-                          className="coord-name"
-                        >
-                          {formatTitleCase(catCoordinator.name)}
-                        </SplitColorText>
-
-                        {catCoordinator.phone && (
-                          <a href={`tel:${catCoordinator.phone}`} className="coord-phone-link">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#0f172a"
-                              rightColor="#ffffff"
-                              className="coord-phone-split"
-                            >
-                              <Phone size={12} strokeWidth={2.5} className="coord-phone-lucide" />
-                              <span className="coord-phone-number">{catCoordinator.phone}</span>
-                            </SplitColorText>
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Subcategory Grid (When Subcategories Exist) */}
-                {Array.isArray(cat.data) && cat.data.length > 0 && (
-                  <div className="subcat-grid">
-                    {cat.data.map((item, idx) => {
-                      const subCatTitle = item.SubCatogory || item.name;
-                      const bannerVal = item.banner || item.Image || item.image;
-                      const imageSrc = getSubCatImageUrl(bannerVal, subCatTitle);
-                      const localFallback = getLocalFallbackSubCatImageUrl(bannerVal, subCatTitle);
-                      const eventCount = item.eventCount ?? (item.events ? item.events.length : 0);
-                      const subCoord = item.coordinator || (item.coordinators && item.coordinators[0]);
-
-                      return (
-                        <div
-                          key={item._id || idx}
-                          className="subcat-card"
-                          onClick={() => onSelectSubCategory(cat.code || cat.name || cat._id, subCatTitle)}
-                        >
-                          <img
-                            src={imageSrc}
-                            alt={subCatTitle}
-                            className="subcat-image"
-                            loading="lazy"
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = localFallback;
-                            }}
-                          />
-
-                          {/* Category Badge (Top Right) */}
-                          <div className="subcat-badge">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#0f172a"
-                              rightColor="#ffffff"
-                              className="subcat-badge-split"
-                            >
-                              {cat.name || cat.code || cat._id}
-                            </SplitColorText>
-                          </div>
-
-                          {/* Default Bottom Content (Title & Coordinator - Fades on Hover) */}
-                          <div className="subcat-overlay">
-                            <div className="subcat-title">{subCatTitle}</div>
-                            {subCoord && subCoord.name && (
-                              <div className="subcat-coordinator-snippet">
-                                <User size={13} strokeWidth={2.4} className="subcat-coord-icon" />
-                                <span>{formatTitleCase(subCoord.name)}</span>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Hover Blur Overlay (Shows ONLY Centered Checkout) */}
-                          <div className="subcat-hover-overlay">
-                            <ThemeButton
-                              as="button"
-                              type="button"
-                              borderRadius={9999}
-                              border="1px solid rgba(255, 255, 255, 0.35)"
-                              className="btn-checkout-subcat"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onSelectSubCategory(cat.code || cat.name || cat._id, subCatTitle);
-                              }}
-                            >
-                              <SplitColorText>CHECKOUT</SplitColorText>
-                            </ThemeButton>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {/* Direct Events Grid (When Category has Direct Events and no Subcategories) */}
-                {(!cat.data || cat.data.length === 0) && Array.isArray(cat.events) && cat.events.length > 0 && (
-                  <div className="events-cards-grid">
-                    {cat.events.map((ev, idx) => {
-                      const eventImg = getEventImageUrl(ev.eventImage || ev.banner?.url, ev.title || ev.eventName);
-
-                      return (
-                        <div key={ev._id || idx} className="event-sub-card">
-                          <SplitColorText
-                            as="div"
-                            className="event-sub-title-bar"
-                            screenSync={true}
-                            leftColor="#0f172a"
-                            rightColor="#ffffff"
-                          >
-                            {ev.title || ev.eventName}
-                          </SplitColorText>
-                          <div className="event-sub-body">
-                            <div className="event-sub-table-col">
-                              <div className="event-table-row">
-                                <div className="table-pill-label">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#475569"
-                                    rightColor="#cbd5e1"
-                                  >
-                                    Category
-                                  </SplitColorText>
-                                </div>
-                                <div className="table-pill-value">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#0f172a"
-                                    rightColor="#ffffff"
-                                  >
-                                    {cat.name}
-                                  </SplitColorText>
-                                </div>
-                              </div>
-                              <div className="event-table-row">
-                                <div className="table-pill-label">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#475569"
-                                    rightColor="#cbd5e1"
-                                  >
-                                    Participation
-                                  </SplitColorText>
-                                </div>
-                                <div className="table-pill-value">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#0f172a"
-                                    rightColor="#ffffff"
-                                  >
-                                    {ev.eventType || 'Solo'}
-                                  </SplitColorText>
-                                </div>
-                              </div>
-                              <div className="event-table-row">
-                                <div className="table-pill-label">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#475569"
-                                    rightColor="#cbd5e1"
-                                  >
-                                    Registration Fee
-                                  </SplitColorText>
-                                </div>
-                                <div className="table-pill-value fee-highlight">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#be123c"
-                                    rightColor="#fb7185"
-                                  >
-                                    {ev.price ? `₹ ${ev.price}/-` : 'Free Entry'}
-                                  </SplitColorText>
-                                </div>
-                              </div>
-                              <div className="event-table-row">
-                                <div className="table-pill-label">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#475569"
-                                    rightColor="#cbd5e1"
-                                  >
-                                    Venue
-                                  </SplitColorText>
-                                </div>
-                                <div className="table-pill-value" style={{ fontSize: '0.82rem', whiteSpace: 'normal' }}>
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#0f172a"
-                                    rightColor="#ffffff"
-                                  >
-                                    {ev.venue || 'Aditya University Campus'}
-                                  </SplitColorText>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="event-sub-image-col">
-                              <img
-                                src={eventImg}
-                                alt={ev.title || ev.eventName}
-                                className="event-sub-img"
-                                onError={(e) => {
-                                  e.currentTarget.onerror = null;
-                                  e.currentTarget.src = '/hero_bg.png';
-                                }}
-                              />
-                            </div>
-                          </div>
-
-                          <div className="event-sub-footer">
-                            <button
-                              className="btn-checkout-primary"
-                              onClick={() =>
-                                onSelectEvent(
-                                  cat.code || cat.name || cat._id,
-                                  ev.subcategoryName || ev.subCategory || 'General',
-                                  ev.slug || ev.title || ev.eventName
-                                )
-                              }
-                            >
-                              Check Out Details →
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </section>
-            );
-          })
-        )}
-
-        {/* ─────────────────────────────────────────────────────────────
-            MODE B: DIRECT ALL EVENTS GRID (Instant View of every Event)
-            ───────────────────────────────────────────────────────────── */}
-        {!loading && !error && viewMode === 'events' && (
-          filteredCategories.map((cat) => {
-            const events = cat.events || [];
-            if (events.length === 0) return null;
-
-            return (
-              <section key={cat._id || cat.code} className="category-section">
-                <div className="category-header-row">
-                  <div className="category-title-area">
-                    <SplitColorText
-                      as="h2"
-                      className="category-heading"
-                      screenSync={true}
-                      leftColor="#0f172a"
-                      rightColor="#ffffff"
-                    >
-                      {cat.name} Competitions
-                    </SplitColorText>
+          return (
+            <section key={cat._id || cat.code} className="category-section">
+              {/* Category Header Row with Metrics & Coordinator */}
+              <div className="category-header-row">
+                <div className="category-title-area">
+                  <SplitColorText
+                    as="h2"
+                    className="category-heading"
+                    screenSync={true}
+                    leftColor="#0f172a"
+                    rightColor="#ffffff"
+                  >
+                    {cat.name || `${cat.code || cat._id} Events`}
+                  </SplitColorText>
+                  <div className="category-meta-chips">
                     <span className="category-count-badge badge-accent">
                       {events.length} {events.length === 1 ? 'Event' : 'Events'}
                     </span>
                   </div>
                 </div>
 
+                {/* Category Coordinator Pill */}
+                {catCoordinator && catCoordinator.name && (
+                  <div className="category-coord-pill">
+                    <div className="coord-icon-badge" aria-hidden="true">
+                      <SplitColorText
+                        as="span"
+                        mode="fallback"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                        className="coord-badge-split"
+                      >
+                        <User size={18} strokeWidth={2.3} className="coord-avatar-svg" />
+                      </SplitColorText>
+                    </div>
+                    <div className="coord-info-col">
+                      <SplitColorText
+                        as="span"
+                        mode="fallback"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                        className="coord-role"
+                      >
+                        Major Event Co-ordinator
+                      </SplitColorText>
+
+                      <SplitColorText
+                        as="span"
+                        mode="fallback"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                        className="coord-name"
+                      >
+                        {formatTitleCase(catCoordinator.name)}
+                      </SplitColorText>
+
+                      {catCoordinator.phone && (
+                        <a href={`tel:${catCoordinator.phone}`} className="coord-phone-link">
+                          <SplitColorText
+                            as="span"
+                            mode="fallback"
+                            screenSync={true}
+                            leftColor="#0f172a"
+                            rightColor="#ffffff"
+                            className="coord-phone-split"
+                          >
+                            <Phone size={12} strokeWidth={2.5} className="coord-phone-lucide" />
+                            <span className="coord-phone-number">{catCoordinator.phone}</span>
+                          </SplitColorText>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Direct Events Cards Grid */}
+              {events.length > 0 ? (
                 <div className="events-cards-grid">
                   {events.map((ev, idx) => {
                     const eventImg = getEventImageUrl(ev.eventImage || ev.banner?.url, ev.title || ev.eventName);
+                    const participationType = ev.eventType || (ev.participation?.type === 'TEAM' ? 'Team' : 'Solo');
 
                     return (
                       <div key={ev._id || idx} className="event-sub-card">
@@ -670,7 +382,7 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                                   leftColor="#475569"
                                   rightColor="#cbd5e1"
                                 >
-                                  Main Event
+                                  Category
                                 </SplitColorText>
                               </div>
                               <div className="table-pill-value">
@@ -681,7 +393,7 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                                   leftColor="#0f172a"
                                   rightColor="#ffffff"
                                 >
-                                  {ev.subcategoryName || ev.subCategory || cat.name}
+                                  {cat.name}
                                 </SplitColorText>
                               </div>
                             </div>
@@ -705,7 +417,7 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                                   leftColor="#0f172a"
                                   rightColor="#ffffff"
                                 >
-                                  {ev.eventType || 'Solo'}
+                                  {participationType}
                                 </SplitColorText>
                               </div>
                             </div>
@@ -778,7 +490,6 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                             onClick={() =>
                               onSelectEvent(
                                 cat.code || cat.name || cat._id,
-                                ev.subcategoryName || ev.subCategory || 'General',
                                 ev.slug || ev.title || ev.eventName
                               )
                             }
@@ -790,17 +501,21 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                     );
                   })}
                 </div>
-              </section>
-            );
-          })
-        )}
+              ) : (
+                <div className="category-empty-notice" style={{ padding: '1.5rem', textAlign: 'center', opacity: 0.7 }}>
+                  <p>Events are currently being scheduled for {cat.name}.</p>
+                </div>
+              )}
+            </section>
+          );
+        })}
       </div>
     </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────
-// COMPONENT: Faculty Coordinator Photo with Dynamic Multi-Campus Fallback
+// COMPONENT: Faculty Coordinator Photo with Multi-Campus Fallback
 // ─────────────────────────────────────────────────────────────
 function FacultyCoordinatorPhoto({
   coordinator,
@@ -848,391 +563,9 @@ function FacultyCoordinatorPhoto({
 }
 
 // ─────────────────────────────────────────────────────────────
-// VIEW 2: Subcategory Events View
+// VIEW 2: Event Detail View
 // ─────────────────────────────────────────────────────────────
-function SubCategoryEventsView({ category, subCategory, themeCode, onBack, onSelectEvent }) {
-  const [events, setEvents] = useState([]);
-  const [subCatDetails, setSubCatDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-
-    Promise.all([
-      fetchEventsInSubCategory(category, subCategory, null, themeCode),
-      fetchCategoriesWithSubCategories(themeCode).catch(() => [])
-    ])
-      .then(([eventsList, categoriesList]) => {
-        if (!isMounted) return;
-
-        setEvents(Array.isArray(eventsList) ? eventsList : []);
-
-        // Locate current subcategory object for banner & coordinator info
-        if (Array.isArray(categoriesList)) {
-          const normCat = (category || '').toLowerCase();
-          const normSub = (subCategory || '').toLowerCase();
-          const matchedCat = categoriesList.find(
-            (c) =>
-              c.code?.toLowerCase() === normCat ||
-              c.name?.toLowerCase() === normCat ||
-              c._id?.toLowerCase() === normCat
-          );
-
-          if (matchedCat) {
-            const matchedSub = (matchedCat.data || []).find(
-              (s) => (s.name || s.SubCatogory || '').toLowerCase() === normSub
-            );
-            if (matchedSub) {
-              setSubCatDetails({
-                ...matchedSub,
-                categoryName: matchedCat.name,
-                categoryCoordinator: matchedCat.coordinator
-              });
-            }
-          }
-        }
-
-        setLoading(false);
-      })
-      .catch((err) => {
-        if (isMounted) {
-          setError(err.message || 'Failed to load subcategory events');
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [category, subCategory, themeCode]);
-
-  const coordinator = subCatDetails?.coordinator || (subCatDetails?.coordinators && subCatDetails?.coordinators[0]) || subCatDetails?.categoryCoordinator;
-
-  return (
-    <div className="events-page-wrapper">
-      <div className="subcat-view-wrapper">
-        <div className="categories-container">
-          {/* Subcategory Hero Information Card with Liquid Glass Design & Split Color Text */}
-          <div className="subcat-hero-card">
-            {/* Fest Blast Artwork in Right Corner */}
-            <img
-              src="/blast.png"
-              alt=""
-              aria-hidden="true"
-              className="subcat-hero-blast-corner"
-            />
-
-            <div className="subcat-hero-content">
-              {/* Back Button & Category Badge Top Row */}
-              <div className="subcat-hero-top-row">
-                <button
-                  type="button"
-                  onClick={onBack}
-                  className="subcat-circle-back-btn"
-                  title="Back to All Categories"
-                  aria-label="Back to All Categories"
-                >
-                  <SplitColorText
-                    as="span"
-                    mode="fallback"
-                    screenSync={true}
-                    leftColor="#0f172a"
-                    rightColor="#ffffff"
-                    className="subcat-circle-back-split"
-                  >
-                    <ArrowLeft size={15} strokeWidth={2.4} />
-                  </SplitColorText>
-                </button>
-
-                <span className="subcat-hero-badge">
-                  <SplitColorText
-                    as="span"
-                    mode="fallback"
-                    screenSync={true}
-                    leftColor="#0f172a"
-                    rightColor="#ffffff"
-                  >
-                    {category}
-                  </SplitColorText>
-                </span>
-              </div>
-
-              <SplitColorText
-                as="h2"
-                className="subcat-hero-title"
-                screenSync={true}
-                leftColor="#0f172a"
-                rightColor="#ffffff"
-              >
-                {subCategory}
-              </SplitColorText>
-
-              <SplitColorText
-                as="p"
-                className="subcat-hero-desc"
-                screenSync={true}
-                leftColor="#475569"
-                rightColor="#cbd5e1"
-              >
-                Official competitive championships under {subCategory}. Browse individual event rules, team
-                regulations, entry fees, and coordinator details below.
-              </SplitColorText>
-            </div>
-
-            {/* Coordinator Card snippet if available */}
-            {coordinator && coordinator.name && (
-              <div className="subcat-coord-card">
-                <div className="coord-card-header">
-                  Faculty In-charge
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  {(coordinator.institutionId || coordinator.empId) && (
-                    <div style={{ width: '56px', height: '56px', borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.4)', flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
-                      <FacultyCoordinatorPhoto
-                        coordinator={coordinator}
-                        index={0}
-                        alt={coordinator.name}
-                        className="subcat-coord-photo"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
-                    </div>
-                  )}
-                  <div className="coord-card-body" style={{ flex: 1 }}>
-                    <SplitColorText
-                      as="div"
-                      mode="fallback"
-                      screenSync={true}
-                      leftColor="#0f172a"
-                      rightColor="#ffffff"
-                      className="coord-card-name"
-                    >
-                      {formatTitleCase(coordinator.name)}
-                    </SplitColorText>
-                    <div className="coord-card-designation">
-                      {formatTitleCase(coordinator.designation || 'Coordinator')}
-                    </div>
-                    {coordinator.phone && (
-                      <a href={`tel:${coordinator.phone}`} className="coord-card-contact">
-                        <SplitColorText
-                          as="span"
-                          mode="fallback"
-                          screenSync={true}
-                          leftColor="#0f172a"
-                          rightColor="#ffffff"
-                          className="coord-contact-split"
-                        >
-                          <Phone size={13} strokeWidth={2.3} className="coord-contact-icon" />
-                          <span>{coordinator.phone}</span>
-                        </SplitColorText>
-                      </a>
-                    )}
-                    {coordinator.email && (
-                      <a href={`mailto:${coordinator.email}`} className="coord-card-contact">
-                        <SplitColorText
-                          as="span"
-                          mode="fallback"
-                          screenSync={true}
-                          leftColor="#0f172a"
-                          rightColor="#ffffff"
-                          className="coord-contact-split"
-                        >
-                          <Mail size={13} strokeWidth={2.3} className="coord-contact-icon" />
-                          <span>{coordinator.email}</span>
-                        </SplitColorText>
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {loading && (
-            <div className="events-loading">
-              <div className="events-spinner" />
-              <p>Loading events for {subCategory}...</p>
-            </div>
-          )}
-
-          {error && (
-            <div className="events-error">
-              <h3>Unable to load events for {subCategory}</h3>
-              <p>{error}</p>
-              <button onClick={onBack} className="btn-checkout-primary" style={{ marginTop: '1rem' }}>
-                Back to All Categories
-              </button>
-            </div>
-          )}
-
-          {!loading && !error && events.length === 0 && (
-            <div className="events-empty-state">
-              <span style={{ fontSize: '3rem' }}>🎯</span>
-              <h3>No events registered yet for {subCategory}</h3>
-              <p>New competitions are actively being scheduled for this subcategory.</p>
-              <button onClick={onBack} className="btn-checkout-primary" style={{ marginTop: '1rem' }}>
-                Back to All Categories
-              </button>
-            </div>
-          )}
-
-          {!loading && !error && events.length > 0 && (
-            <div className="events-cards-grid">
-              {events.map((ev, idx) => {
-                const eventImg = getEventImageUrl(ev.eventImage || ev.banner?.url, ev.eventName || ev.title);
-
-                return (
-                  <div key={ev._id || idx} className="event-sub-card">
-                    {/* Title Bar */}
-                    <SplitColorText
-                      as="div"
-                      className="event-sub-title-bar"
-                      screenSync={true}
-                      leftColor="#0f172a"
-                      rightColor="#ffffff"
-                    >
-                      {ev.eventName || ev.title}
-                    </SplitColorText>
-
-                    {/* Body with Key-Value Pills & Image */}
-                    <div className="event-sub-body">
-                      <div className="event-sub-table-col">
-                        <div className="event-table-row">
-                          <div className="table-pill-label">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#475569"
-                              rightColor="#cbd5e1"
-                            >
-                              Participation
-                            </SplitColorText>
-                          </div>
-                          <div className="table-pill-value">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#0f172a"
-                              rightColor="#ffffff"
-                            >
-                              {ev.eventType || 'Solo'}
-                            </SplitColorText>
-                          </div>
-                        </div>
-                        <div className="event-table-row">
-                          <div className="table-pill-label">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#475569"
-                              rightColor="#cbd5e1"
-                            >
-                              Registration Fee
-                            </SplitColorText>
-                          </div>
-                          <div className="table-pill-value fee-highlight">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#be123c"
-                              rightColor="#fb7185"
-                            >
-                              {ev.price ? `₹ ${ev.price}/-` : 'Free Entry'}
-                            </SplitColorText>
-                          </div>
-                        </div>
-                        <div className="event-table-row">
-                          <div className="table-pill-label">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#475569"
-                              rightColor="#cbd5e1"
-                            >
-                              Venue
-                            </SplitColorText>
-                          </div>
-                          <div className="table-pill-value" style={{ fontSize: '0.82rem', whiteSpace: 'normal' }}>
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#0f172a"
-                              rightColor="#ffffff"
-                            >
-                              {ev.venue || 'Aditya University Campus'}
-                            </SplitColorText>
-                          </div>
-                        </div>
-                        <div className="event-table-row">
-                          <div className="table-pill-label">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#475569"
-                              rightColor="#cbd5e1"
-                            >
-                              Mode / Rounds
-                            </SplitColorText>
-                          </div>
-                          <div className="table-pill-value">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#0f172a"
-                              rightColor="#ffffff"
-                            >
-                              {ev.mode || 'OFFLINE'} • {ev.rounds || 1} {ev.rounds === 1 ? 'Round' : 'Rounds'}
-                            </SplitColorText>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="event-sub-image-col">
-                        <img
-                          src={eventImg}
-                          alt={ev.eventName || ev.title}
-                          className="event-sub-img"
-                          onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = '/hero_bg.png';
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Bottom Checkout Button */}
-                    <div className="event-sub-footer">
-                      <button
-                        className="btn-checkout-primary"
-                        onClick={() => onSelectEvent(ev.slug || ev.eventName || ev.title)}
-                      >
-                        Check Out Details →
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-// VIEW 3: Event Detail View
-// ─────────────────────────────────────────────────────────────
-function EventDetailView({ category, subCategory, eventName, themeCode, onBack, onNavigateHome }) {
+function EventDetailView({ category, eventName, themeCode, onBack, onNavigateHome }) {
   const [eventData, setEventData] = useState(null);
   const [faculty, setFaculty] = useState([]);
   const [students, setStudents] = useState([]);
@@ -1255,10 +588,8 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
   const handleRegisterButtonClick = () => {
     const student = getLoggedStudent();
     if (!student) {
-      // Student is NOT logged in: ask to register or sign in
       setAuthModalOpen(true);
     } else {
-      // Student is ALREADY logged in: open registration modal for this particular event!
       setCurrentStudent(student);
       setRegModalOpen(true);
     }
@@ -1267,11 +598,9 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
   const handleAuthSuccess = (student, regRecord) => {
     setCurrentStudent(student);
     if (regRecord) {
-      // Registration already created and saved into central_event_student_registrations
       return;
     }
     setAuthModalOpen(false);
-    // Proceed to event registration for team member addition if needed
     setRegModalOpen(true);
   };
 
@@ -1280,9 +609,9 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
     setLoading(true);
 
     Promise.all([
-      fetchEventDetails(category, subCategory, eventName, themeCode),
-      fetchFacultyCoordinators(category, subCategory, eventName, themeCode),
-      fetchStudentCoordinators(category, subCategory, eventName)
+      fetchEventDetails(category, eventName, themeCode),
+      fetchFacultyCoordinators(category, eventName, themeCode),
+      fetchStudentCoordinators(category, eventName)
     ])
       .then(([details, facultyList, studentsList]) => {
         if (!isMounted) return;
@@ -1302,7 +631,7 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
     return () => {
       isMounted = false;
     };
-  }, [category, subCategory, eventName, themeCode]);
+  }, [category, eventName, themeCode]);
 
   const bannerImg = eventData
     ? getEventImageUrl(eventData.eventImage || eventData.banner?.url, eventData.eventName || eventData.title)
@@ -1315,14 +644,12 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
           {/* Back Navigation Bar */}
           <div className="breadcrumb-nav">
             <button onClick={onBack} className="btn-back-breadcrumb">
-              ← Back to {subCategory}
+              ← Back to Events
             </button>
             <span className="detail-breadcrumb-path">
               <span className="breadcrumb-link" onClick={onNavigateHome}>Events</span>
               {' / '}
-              <span>{category}</span>
-              {' / '}
-              <span className="breadcrumb-link" onClick={onBack}>{subCategory}</span>
+              <span className="breadcrumb-link" onClick={onBack}>{category}</span>
               {' / '}
               <span className="breadcrumb-current">{eventData?.eventName || eventData?.title || eventName}</span>
             </span>
@@ -1340,7 +667,7 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
               <h3>Unable to load event details</h3>
               <p>{error}</p>
               <button onClick={onBack} className="btn-checkout-primary" style={{ marginTop: '1rem' }}>
-                Back to {subCategory}
+                Back to Events
               </button>
             </div>
           )}
@@ -1363,7 +690,6 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                 <div className="detail-hero-info-col">
                   <div className="detail-badges-row">
                     <span className="detail-tag-badge">{category}</span>
-                    <span className="detail-tag-badge badge-sub">{subCategory}</span>
                     <span className="detail-tag-badge badge-mode">{eventData.mode || 'OFFLINE'}</span>
                   </div>
                   <h1 className="detail-main-title">{eventData.eventName || eventData.title}</h1>
@@ -1409,7 +735,7 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                 <div className="detail-stat-card">
                   <div className="stat-card-icon">📍</div>
                   <div className="stat-card-label">Venue Location</div>
-                  <div className="stat-card-value stat-small">{eventData.venue}</div>
+                  <div className="stat-card-value stat-small">{eventData.venue || 'Aditya University Campus'}</div>
                 </div>
 
                 <div className="detail-stat-card">
@@ -1421,95 +747,102 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                       : 'Jan 7 - 9, 2027'}
                   </div>
                 </div>
+              </div>
 
-                <div className="detail-stat-card">
-                  <div className="stat-card-icon">🔄</div>
-                  <div className="stat-card-label">Competition Rounds</div>
-                  <div className="stat-card-value">
-                    {eventData.rounds || 1} {eventData.rounds === 1 ? 'Round' : 'Rounds'}
-                  </div>
-                </div>
-
-                <div className="detail-stat-card">
-                  <div className="stat-card-icon">🎯</div>
-                  <div className="stat-card-label">Event Capacity</div>
-                  <div className="stat-card-value">{eventData.capacity || 100} Participants</div>
+              {/* About The Event */}
+              <div className="detail-section-card">
+                <h2 className="detail-section-title">About The Event</h2>
+                <div className="detail-prose">
+                  <p>
+                    {eventData.overview ||
+                      eventData.description ||
+                      `${eventData.eventName || eventData.title} is an official competition organized as part of Aditya University's National Level Youth Festival Colours 2027.`}
+                  </p>
                 </div>
               </div>
 
-              {/* Overview Section */}
-              <div className="detail-section">
-                <div className="detail-pill-badge">Overview & Description</div>
-                <p className="detail-overview-text">
-                  {eventData.overview || eventData.description || 'Official competitive event at Aditya University fest.'}
-                </p>
-              </div>
-
-              {/* Event Rules Section */}
+              {/* Competition Rules & Regulations */}
               {Array.isArray(eventData.regulations) && eventData.regulations.length > 0 && (
-                <div className="detail-section">
-                  <div className="detail-pill-badge">Official Rules & Regulations</div>
+                <div className="detail-section-card">
+                  <h2 className="detail-section-title">Rules & Regulations</h2>
                   <ul className="detail-rules-list">
                     {eventData.regulations.map((rule, idx) => (
                       <li key={idx}>
-                        <span className="rule-number">{idx + 1}</span>
-                        <span className="rule-content">{rule}</span>
+                        <span className="rule-bullet">{idx + 1}</span>
+                        <span>{rule}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
 
-              {/* Venue Details Section */}
-              {eventData.venueObj && (eventData.venueObj.name || eventData.venueObj.roomNo) && (
-                <div className="detail-section">
-                  <div className="detail-pill-badge">Venue Information</div>
-                  <div className="detail-venue-box">
-                    <p className="detail-venue-text">
-                      🏛️ <strong>Hall/Ground:</strong> {eventData.venueObj.name || eventData.venue}
-                    </p>
-                    {eventData.venueObj.roomNo && (
-                      <p className="detail-venue-subtext">
-                        📍 <strong>Room Number:</strong> {eventData.venueObj.roomNo} • {eventData.venueObj.venueType || 'Indoor'}
-                      </p>
-                    )}
+              {/* Rounds & Structure */}
+              {Array.isArray(eventData.roundsList) && eventData.roundsList.length > 0 && (
+                <div className="detail-section-card">
+                  <h2 className="detail-section-title">Competition Structure & Rounds</h2>
+                  <div className="rounds-timeline">
+                    {eventData.roundsList.map((rnd, idx) => (
+                      <div key={idx} className="round-timeline-step">
+                        <div className="round-number-badge">Round {rnd.roundNumber || idx + 1}</div>
+                        <div className="round-content">
+                          <h4 className="round-name">{rnd.roundName || `Stage ${idx + 1}`}</h4>
+                          <p className="round-desc">{rnd.description || 'Elimination and scoring round.'}</p>
+                          {rnd.duration && <span className="round-duration">⏱ {rnd.duration}</span>}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
+
+              {/* Cash Prizes & Recognition */}
+              <div className="detail-section-card">
+                <h2 className="detail-section-title">Cash Prizes & Awards</h2>
+                <div className="prizes-grid">
+                  <div className="prize-podium-card prize-first">
+                    <div className="prize-medal">🥇</div>
+                    <div className="prize-title">1st Place</div>
+                    <div className="prize-amount">{eventData.prizes?.first || 'Gold Trophy + Merit Certificate'}</div>
+                  </div>
+                  <div className="prize-podium-card prize-second">
+                    <div className="prize-medal">🥈</div>
+                    <div className="prize-title">2nd Place</div>
+                    <div className="prize-amount">{eventData.prizes?.second || 'Silver Trophy + Merit Certificate'}</div>
+                  </div>
+                  <div className="prize-podium-card prize-third">
+                    <div className="prize-medal">🥉</div>
+                    <div className="prize-title">3rd Place</div>
+                    <div className="prize-amount">{eventData.prizes?.third || 'Bronze Medal + Certificate'}</div>
+                  </div>
+                </div>
+              </div>
 
               {/* Faculty Coordinators Section */}
               {faculty.length > 0 && (
                 <div className="coordinators-section">
                   <h2 className="coordinators-heading">Faculty Coordinators</h2>
                   <div className="coordinators-grid">
-                    {faculty.map((fc, idx) => {
-                      return (
-                        <div key={idx} className="coordinator-card">
-                          <div className="coordinator-photo-container">
-                            <FacultyCoordinatorPhoto
-                              coordinator={fc}
-                              index={idx}
-                              alt={fc.cordinatorName}
-                              className="coordinator-photo"
-                            />
-                          </div>
-                          <div className="coordinator-name">{formatTitleCase(fc.cordinatorName)}</div>
-                          <div className="coordinator-dept">
-                            {formatTitleCase(fc.cordinatorDesignation || fc.departmentName || fc.cordinatorCollege || 'Coordinator')}
-                          </div>
-                          {fc.cordinatorPhone && (
-                            <a href={`tel:${fc.cordinatorPhone}`} className="coordinator-phone">
-                              📞 {fc.cordinatorPhone}
-                            </a>
-                          )}
-                          {fc.cordinatorEmail && (
-                            <a href={`mailto:${fc.cordinatorEmail}`} className="coordinator-email">
-                              ✉️ {fc.cordinatorEmail}
-                            </a>
-                          )}
+                    {faculty.map((fc, idx) => (
+                      <div key={idx} className="coordinator-card">
+                        <div className="coordinator-photo-container">
+                          <FacultyCoordinatorPhoto coordinator={fc} index={idx} />
                         </div>
-                      );
-                    })}
+                        <div className="coordinator-name">{formatTitleCase(fc.cordinatorName)}</div>
+                        <div className="coordinator-dept">
+                          {formatTitleCase(fc.cordinatorDesignation || 'Faculty In-Charge')}
+                        </div>
+                        {fc.cordinatorPhone && (
+                          <a href={`tel:${fc.cordinatorPhone}`} className="coordinator-phone">
+                            📞 {fc.cordinatorPhone}
+                          </a>
+                        )}
+                        {fc.cordinatorEmail && (
+                          <a href={`mailto:${fc.cordinatorEmail}`} className="coordinator-email">
+                            ✉️ {fc.cordinatorEmail}
+                          </a>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}

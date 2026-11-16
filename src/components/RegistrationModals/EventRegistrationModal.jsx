@@ -417,7 +417,7 @@ export default function EventRegistrationModal({
         eventSlug: eventData.slug || eventData.eventSlug || '',
         eventName: eventTitle,
         category: eventData.category || eventData.categoryName || 'General',
-        subCategory: eventData.subCategory || eventData.subcategoryName || '',
+        subCategory: '',
         price: feeAmount,
         amount: feeAmount,
         venue: eventData.venueObj?.name || eventData.venue || 'Aditya University Campus',
@@ -770,7 +770,7 @@ export default function EventRegistrationModal({
           <div className="fest-modal-header-banner">
             <div>
               <div className="fest-modal-badge">
-                {eventData.category || 'COLOURS 2027'} • {eventData.subCategory || 'EVENT'}
+                {eventData.category || 'COLOURS 2027'}
               </div>
               <h2 className="fest-modal-title">
                 {activeRecord ? 'Event Registration Confirmation' : `Register: ${eventTitle}`}
@@ -840,9 +840,9 @@ export default function EventRegistrationModal({
                   <span className="reg-ticket-val">{eventTitle}</span>
                 </div>
                 <div className="reg-ticket-row">
-                  <span className="reg-ticket-label">Category / Subcategory</span>
+                  <span className="reg-ticket-label">Category</span>
                   <span className="reg-ticket-val">
-                    {eventData.category} / {eventData.subCategory}
+                    {eventData.category || 'COLORS Event'}
                   </span>
                 </div>
                 <div className="reg-ticket-row">
@@ -966,9 +966,6 @@ export default function EventRegistrationModal({
                   <div className="event-reg-meta-pills">
                     <span className="event-meta-pill-item pill-category">
                       {eventData.category}
-                    </span>
-                    <span className="event-meta-pill-item">
-                      {eventData.subCategory}
                     </span>
                     <span className="event-meta-pill-item">
                       👥 {eventData.eventType || (isTeam ? 'Team' : 'Solo')}

@@ -53,7 +53,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/events" element={<Events />} />
-          <Route path="/events/:eventCategory/:eventSubCategory" element={<Events />} />
+          <Route path="/events/:eventCategory" element={<Events />} />
+          <Route path="/events/:eventCategory/:eventName" element={<Events />} />
           <Route path="/events/:eventCategory/:eventSubCategory/:eventName" element={<Events />} />
           <Route path="/invitation" element={<Invitation />} />
           <Route path="/events-schedule" element={<SchedulePdfRedirect />} />

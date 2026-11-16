@@ -194,80 +194,7 @@ export const OFFICIAL_POSTER_COORDINATORS = {
   }
 };
 
-export const SUBCATEGORY_ORDER = {
-  'Sports & Games': [
-    'Running',
-    'Jumping & Throwing',
-    'Volleyball',
-    'Basketball',
-    'Shuttle Badminton Singles',
-    'Relay',
-    'Football',
-    'TenniKoit',
-    'Kabaddi',
-    'ThrowBall',
-    'Chess',
-    'Kho Kho',
-    'Table Tennis Singles'
-  ],
-  'SPORTS': [
-    'Running',
-    'Jumping & Throwing',
-    'Volleyball',
-    'Basketball',
-    'Shuttle Badminton Singles',
-    'Relay',
-    'Football',
-    'TenniKoit',
-    'Kabaddi',
-    'ThrowBall',
-    'Chess',
-    'Kho Kho',
-    'Table Tennis Singles'
-  ],
-  'Culturals Events': [
-    'Singing',
-    'Instrumental',
-    'Mime',
-    'Mono Action',
-    'Stand-up Comedy',
-    'Skit',
-    'Dance',
-    'Mimicry'
-  ],
-  'CULTURALS': [
-    'Singing',
-    'Instrumental',
-    'Mime',
-    'Mono Action',
-    'Stand-up Comedy',
-    'Skit',
-    'Dance',
-    'Mimicry'
-  ],
-  'Creo Events': [
-    'Spot Painting',
-    'Fashion Show',
-    'Treasure Hunt',
-    'Mehandi',
-    'Movie Making',
-    'Spot Photography',
-    'Sahityam',
-    'Dumb Charades',
-    'Rangoli'
-  ],
-  'CREO': [
-    'Spot Painting',
-    'Fashion Show',
-    'Treasure Hunt',
-    'Mehandi',
-    'Movie Making',
-    'Spot Photography',
-    'Sahityam',
-    'Dumb Charades',
-    'Rangoli'
-  ]
-};
+export const SUBCATEGORY_ORDER = {};
 
 // Curated high-resolution, professional university festival photography
 export const PROFESSIONAL_EVENT_IMAGES = {
@@ -460,101 +387,14 @@ function normalizeCategories(categories, allEvents = [], typeCode = 'COLORS', ac
       );
     });
 
-    // 1. Subcategories from backend
-    let subList = Array.isArray(cat.subcategories) ? [...cat.subcategories] : [];
-
-    // 2. If backend subcategories are empty but we have live events for this category,
-    // dynamically derive subcategory groups from the events!
-    if (subList.length === 0 && catEvents.length > 0) {
-      const groupMap = new Map();
-
-      catEvents.forEach((ev) => {
-        let subName = ev.subcategoryName || ev.subCategory;
-        if (!subName || subName === 'null' || subName === 'undefined') {
-          subName = inferEventGroup(ev.title || ev.eventName || '');
-        }
-        subName = (subName || 'General').trim();
-
-        if (!groupMap.has(subName)) {
-          const facultyCoord =
-            ev.coordinators?.faculty?.[0] ||
-            (Array.isArray(ev.coordinators) ? ev.coordinators[0] : null) ||
-            ev.coordinator ||
-            cat.coordinator ||
-            null;
-
-          groupMap.set(subName, {
-            _id: ev.subcategoryId || `derived-${catCode.toLowerCase()}-${subName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
-            name: subName,
-            code: subName.toUpperCase().replace(/[^A-Z0-9]/g, '_'),
-            isActive: true,
-            sortOrder: groupMap.size + 1,
-            banner: ev.banner || null,
-            Image: ev.banner?.url || ev.eventImage || null,
-            image: ev.banner?.url || ev.eventImage || null,
-            coordinator: facultyCoord,
-            coordinators: facultyCoord ? [facultyCoord] : (cat.coordinators || [])
-          });
-        }
-      });
-
-      subList = Array.from(groupMap.values());
-    }
-
-    // 3. If subcategories are still empty (e.g. pending event creation for this category),
-    // provide fallback from official fest catalog
-    if (subList.length === 0) {
-      const fallbackList = SUBCATEGORY_ORDER[catName] || SUBCATEGORY_ORDER[catCode] || [];
-      subList = fallbackList.map((subName, index) => ({
-        _id: `fallback-${catCode.toLowerCase()}-${index}`,
-        name: subName,
-        code: subName.toUpperCase().replace(/[^A-Z0-9]/g, '_'),
-        isActive: true,
-        sortOrder: index + 1,
-        banner: null,
-        coordinator: cat.coordinator || null,
-        coordinators: cat.coordinators || []
-      }));
-    }
-
-    // Format subcategories to standard shape compatible with existing UI
-    const formattedData = subList.map((sub) => {
-      const subName = sub.name || sub.SubCatogory || sub.code;
-      const bannerUrl = sub.banner?.url || sub.Image || sub.image || null;
-
-      // Find events belonging to this subcategory
-      const subEvents = catEvents.filter((ev) => {
-        if (sub._id && ev.subcategoryId && String(ev.subcategoryId) === String(sub._id)) {
-          return true;
-        }
-        const evSub = (ev.subCategory || ev.subcategoryName || '').toLowerCase().trim();
-        const curSub = (subName || '').toLowerCase().trim();
-        const evGroup = inferEventGroup(ev.title || ev.eventName || '').toLowerCase().trim();
-        const evTitle = (ev.title || ev.eventName || '').toLowerCase().trim();
-
-        return (
-          evSub === curSub ||
-          (evSub && (evSub.includes(curSub) || curSub.includes(evSub))) ||
-          evGroup === curSub ||
-          (evGroup && (evGroup.includes(curSub) || curSub.includes(evGroup))) ||
-          (curSub.length > 3 && evTitle.includes(curSub))
-        );
-      });
-
-      return {
-        _id: sub._id,
-        code: sub.code,
-        name: subName,
-        SubCatogory: subName, // compatibility alias
-        banner: sub.banner,
-        Image: bannerUrl,
-        image: bannerUrl,
-        coordinator: sub.coordinator,
-        coordinators: sub.coordinators || (sub.coordinator ? [sub.coordinator] : []),
-        sortOrder: sub.sortOrder ?? 0,
-        eventCount: subEvents.length,
-        events: subEvents
-      };
+    // Sort events inside category
+    catEvents.sort((a, b) => {
+      if (typeof a.sortOrder === 'number' && typeof b.sortOrder === 'number' && a.sortOrder !== b.sortOrder) {
+        return a.sortOrder - b.sortOrder;
+      }
+      const titleA = (a.title || a.eventName || '').toLowerCase();
+      const titleB = (b.title || b.eventName || '').toLowerCase();
+      return titleA.localeCompare(titleB);
     });
 
     return {
@@ -566,22 +406,20 @@ function normalizeCategories(categories, allEvents = [], typeCode = 'COLORS', ac
       sortOrder: cat.sortOrder ?? 99,
       coordinator: cat.coordinator,
       coordinators: cat.coordinators || (cat.coordinator ? [cat.coordinator] : []),
-      hasSubcategories: cat.hasSubcategories,
-      data: formattedData,
       totalEventsCount: catEvents.length,
-      events: catEvents
+      events: catEvents,
+      data: [] // empty for backward compatibility
     };
   });
 }
 
 /**
- * Sort categories and their subcategories
+ * Sort categories according to sortOrder or CATEGORY_ORDER
  */
 function sortCategoriesAndSubCategories(categories) {
   if (!Array.isArray(categories)) return [];
 
-  // Sort categories according to sortOrder or CATEGORY_ORDER
-  const sorted = [...categories].sort((a, b) => {
+  return [...categories].sort((a, b) => {
     if (typeof a.sortOrder === 'number' && typeof b.sortOrder === 'number') {
       return a.sortOrder - b.sortOrder;
     }
@@ -592,113 +430,38 @@ function sortCategoriesAndSubCategories(categories) {
     if (idxB !== -1) return 1;
     return (a.name || a._id).localeCompare(b.name || b._id);
   });
-
-  // Sort subcategories inside each category
-  return sorted.map((cat) => {
-    const preferredOrder = SUBCATEGORY_ORDER[cat.name] || SUBCATEGORY_ORDER[cat.code] || [];
-    const items = Array.isArray(cat.data) ? [...cat.data] : [];
-
-    items.sort((a, b) => {
-      if (typeof a.sortOrder === 'number' && typeof b.sortOrder === 'number' && a.sortOrder !== b.sortOrder) {
-        return a.sortOrder - b.sortOrder;
-      }
-      const idxA = preferredOrder.indexOf(a.SubCatogory);
-      const idxB = preferredOrder.indexOf(b.SubCatogory);
-      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-      if (idxA !== -1) return -1;
-      if (idxB !== -1) return 1;
-      return a.SubCatogory.localeCompare(b.SubCatogory);
-    });
-
-    return {
-      ...cat,
-      data: items
-    };
-  });
 }
 
+export const fetchCategories = fetchCategoriesWithSubCategories;
+
 /**
- * Fetch events within a subcategory
- * Checks live backend central-events collection; falls back gracefully to fest events catalog
+ * Fetch events within a category
  */
-export async function fetchEventsInSubCategory(category, subCategory, subcategoryId = null, typeCode = EVENT_TYPE) {
+export async function fetchEventsForCategory(category, typeCode = EVENT_TYPE) {
   try {
     const code = (typeCode || 'COLORS').toUpperCase();
-
-    // 1. If we have cached events or can fetch all events for this theme
     let allEvents = cachedEventsByType[code];
     if (!allEvents || allEvents.length === 0) {
       allEvents = await fetchAllEvents(code);
     }
+    if (!Array.isArray(allEvents)) return [];
 
-    if (Array.isArray(allEvents) && allEvents.length > 0) {
-      const normSub = (subCategory || '').toLowerCase().trim();
-      const normCat = (category || '').toLowerCase().trim();
-
-      const filtered = allEvents.filter((ev) => {
-        // Direct subcategoryId match
-        if (subcategoryId && ev.subcategoryId && String(ev.subcategoryId) === String(subcategoryId)) {
-          return true;
-        }
-
-        const evSub = (ev.subCategory || ev.subcategoryName || '').toLowerCase().trim();
-        const evCat = (ev.category || ev.categoryName || '').toLowerCase().trim();
-        const evTitle = (ev.title || ev.eventName || '').toLowerCase().trim();
-        const evGroup = inferEventGroup(ev.title || ev.eventName || '').toLowerCase().trim();
-
-        const subMatches =
-          (evSub && (evSub === normSub || evSub.includes(normSub) || normSub.includes(evSub))) ||
-          evGroup === normSub ||
-          (evGroup && (evGroup.includes(normSub) || normSub.includes(evGroup))) ||
-          (normSub.length > 3 && evTitle.includes(normSub)) ||
-          normSub === 'general' ||
-          normSub === 'all' ||
-          normSub === normCat;
-
-        if (subMatches) {
-          // If category is provided, verify category matches too
-          if (normCat) {
-            const catMatches =
-              evCat === normCat ||
-              evCat.includes(normCat) ||
-              normCat.includes(evCat) ||
-              ev.category?.toLowerCase() === normCat;
-            return catMatches;
-          }
-          return true;
-        }
-
-        return false;
-      });
-
-      if (filtered.length > 0) {
-        return filtered;
-      }
-    }
-
-    // 2. Direct backend query by subcategoryId if provided
-    if (subcategoryId && !subcategoryId.startsWith('fallback-')) {
-      try {
-        const endpoint = `/api/central-events?typeCode=${code}&subcategoryId=${subcategoryId}`;
-        const res = await apiFetch(endpoint);
-        if (res && res.ok) {
-          const json = await res.json();
-          const live = Array.isArray(json) ? json : json.data || [];
-          if (live.length > 0) {
-            return live.map((ev) => mapBackendEvent(ev, category, subCategory));
-          }
-        }
-      } catch (e) {
-        console.warn('SubcategoryId query notice:', e.message);
-      }
-    }
-
-    // 3. Fallback to catalog events if not registered yet
-    return getCatalogEventsForSubCategory(category, subCategory);
+    const normCat = (category || '').toLowerCase().trim();
+    return allEvents.filter((ev) => {
+      const evCat = (ev.category || ev.categoryName || ev.categoryCode || '').toLowerCase().trim();
+      return evCat === normCat || evCat.includes(normCat) || normCat.includes(evCat);
+    });
   } catch (err) {
-    console.error(`Error fetching events for ${category} / ${subCategory}:`, err);
-    return getCatalogEventsForSubCategory(category, subCategory);
+    console.error(`Error fetching events for category ${category}:`, err);
+    return [];
   }
+}
+
+/**
+ * Backward compatibility alias for fetchEventsInSubCategory
+ */
+export async function fetchEventsInSubCategory(category, subCategory, subcategoryId = null, typeCode = EVENT_TYPE) {
+  return fetchEventsForCategory(category, typeCode);
 }
 
 /**
@@ -1000,10 +763,10 @@ function getCatalogEventsForSubCategory(category, subCategory) {
   // Generic fallback if subcategory is not explicitly in catalogMap
   return [
     {
-      eventName: `${normSub} Open Championship`,
+      eventName: `${normSub || 'General'} Open Championship`,
       eventType: 'Solo / Team',
       price: 100,
-      overview: `Official Aditya University competition for ${normSub}. Evaluated by certified national-level judges with cash rewards and university merit certificates.`,
+      overview: `Official Aditya University competition for ${normSub || 'the festival'}. Evaluated by certified national-level judges with cash rewards and university merit certificates.`,
       regulations: [
         'All participants must carry their valid university/college ID cards.',
         'Reporting time is 30 minutes prior to scheduled event time.',
@@ -1015,11 +778,136 @@ function getCatalogEventsForSubCategory(category, subCategory) {
 }
 
 /**
+ * Curated catalog events by Category
+ */
+export function getCatalogEventsForCategory(category = '') {
+  const normCat = (category || '').toLowerCase();
+
+  // Curated competition items for each category
+  const catalogMap = {
+    'Singing': [
+      {
+        eventName: 'Solo Singing (Classical & Western)',
+        eventType: 'Solo',
+        price: 100,
+        overview: 'Showcase your vocal prowess across classical, light, folk, or western melodies with national-level judging.',
+        regulations: [
+          'Time limit: 4 to 5 minutes maximum including sound check.',
+          'Karaoke track or acoustic accompaniment must be submitted 30 minutes prior to event start.',
+          'Judging is based on pitch (Sur), rhythm (Taal), expression (Bhav), and overall stage presence.'
+        ],
+        venue: 'Main University Auditorium'
+      },
+      {
+        eventName: 'Group Singing Harmony',
+        eventType: 'Team (3-8)',
+        price: 250,
+        overview: 'Choral, band, or ensemble vocal competition celebrating harmony, vocal balance, and synchronized performance.',
+        regulations: [
+          'Team size: 3 to 8 vocalists.',
+          'Time limit: 6 to 8 minutes.',
+          'Acoustic instruments allowed on stage; drum kit available on request.'
+        ],
+        venue: 'Open Air Amphitheatre'
+      }
+    ],
+    'Instrumental': [
+      {
+        eventName: 'Instrumental Solo (Strings & Keys)',
+        eventType: 'Solo',
+        price: 100,
+        overview: 'Solo instrumental artistry covering guitar, violin, keyboard, flute, and traditional instruments.',
+        regulations: [
+          'Time limit: 5 minutes.',
+          'Participants must bring their own instruments (amplifiers and DI boxes provided).',
+          'Selection of raag or western scale is open.'
+        ],
+        venue: 'Seminar Hall 1'
+      }
+    ],
+    'Sports': [
+      {
+        eventName: '100m Sprint Championship',
+        eventType: 'Solo',
+        price: 100,
+        overview: 'Track championship to find the fastest university runner with professional electronic timing.',
+        regulations: [
+          'Standard international athletics federation track rules apply.',
+          'Spikes or running shoes required.'
+        ],
+        venue: 'Main Sports Complex Stadium Track'
+      },
+      {
+        eventName: 'Volleyball Championship',
+        eventType: 'Team (6-12)',
+        price: 500,
+        overview: 'High-octane collegiate volleyball league matches in knockout and round-robin formats.',
+        regulations: [
+          'Official VFI standard volleyball tournament rules.',
+          'Proper team uniform mandatory.'
+        ],
+        venue: 'Outdoor Volleyball Arena'
+      }
+    ],
+    'Creo': [
+      {
+        eventName: 'National Treasure Hunt',
+        eventType: 'Team (3-5)',
+        price: 300,
+        overview: 'Decipher cryptic clues, solve campus puzzles, and race against time across the vast university estate.',
+        regulations: [
+          'Team size: 3 to 5 members.',
+          'Use of motor vehicles is strictly forbidden.',
+          'Time-based score tracking.'
+        ],
+        venue: 'Central Campus Plaza'
+      },
+      {
+        eventName: 'Spot Painting & Fine Arts',
+        eventType: 'Solo',
+        price: 100,
+        overview: 'On-the-spot fine arts competition. Express imagination on canvas based on a mystery theme announced at kickoff.',
+        regulations: [
+          'Drawing sheets provided by the university.',
+          'Duration: 2 hours.'
+        ],
+        venue: 'Design & Architecture Studios'
+      }
+    ]
+  };
+
+  if (normCat.includes('cultur') || normCat === 'culturals') {
+    return [...catalogMap['Singing'], ...catalogMap['Instrumental']];
+  }
+  if (normCat.includes('sport') || normCat === 'sports') {
+    return catalogMap['Sports'];
+  }
+  if (normCat.includes('creo')) {
+    return catalogMap['Creo'];
+  }
+  return [...catalogMap['Singing'], ...catalogMap['Sports'], ...catalogMap['Creo']];
+}
+
+/**
  * Fetch detailed event information (rules, venue, price, overview)
  * Direct backend slug lookup or all-events match
  */
-export async function fetchEventDetails(category, subCategory, eventNameOrSlug, typeCode = EVENT_TYPE) {
+export async function fetchEventDetails(category, arg2, arg3, arg4) {
   try {
+    let eventNameOrSlug = arg2;
+    let typeCode = EVENT_TYPE;
+
+    if (typeof arg3 === 'string' && arg3.trim()) {
+      if (arg4) {
+        eventNameOrSlug = arg3;
+        typeCode = arg4;
+      } else if (arg3.toUpperCase() === 'COLORS' || arg3.toUpperCase() === 'VEDA') {
+        typeCode = arg3;
+      } else {
+        eventNameOrSlug = arg3;
+      }
+    }
+
     const code = (typeCode || 'COLORS').toUpperCase();
     const queryTerm = (eventNameOrSlug || '').trim();
 
@@ -1031,7 +919,7 @@ export async function fetchEventDetails(category, subCategory, eventNameOrSlug, 
       if (res && res.ok) {
         const json = await res.json();
         if (json && json.data) {
-          return mapBackendEvent(json.data, category, subCategory);
+          return mapBackendEvent(json.data, category);
         }
       }
     } catch (e) {
@@ -1058,9 +946,9 @@ export async function fetchEventDetails(category, subCategory, eventNameOrSlug, 
     }
 
     // 3. Fallback to catalog details
-    const events = getCatalogEventsForSubCategory(category, subCategory);
+    const events = getCatalogEventsForCategory(category);
     const found = events.find(
-      (e) => e.eventName.toLowerCase() === queryTerm.toLowerCase()
+      (e) => (e.eventName || e.title || '').toLowerCase() === queryTerm.toLowerCase()
     ) || events[0];
 
     return found || {
@@ -1076,7 +964,7 @@ export async function fetchEventDetails(category, subCategory, eventNameOrSlug, 
       venue: 'Aditya University Central Campus'
     };
   } catch (err) {
-    console.error(`Error fetching event details for ${eventNameOrSlug}:`, err);
+    console.error(`Error fetching event details for ${arg2}:`, err);
     throw err;
   }
 }
@@ -1085,8 +973,22 @@ export async function fetchEventDetails(category, subCategory, eventNameOrSlug, 
  * Fetch faculty coordinators for an event
  * Uses live coordinator data from central_event_categories or central-events
  */
-export async function fetchFacultyCoordinators(category, subCategory, eventName, typeCode = EVENT_TYPE) {
+export async function fetchFacultyCoordinators(category, arg2, arg3, arg4) {
   try {
+    let eventName = arg2;
+    let typeCode = EVENT_TYPE;
+
+    if (typeof arg3 === 'string' && arg3.trim()) {
+      if (arg4) {
+        eventName = arg3;
+        typeCode = arg4;
+      } else if (arg3.toUpperCase() === 'COLORS' || arg3.toUpperCase() === 'VEDA') {
+        typeCode = arg3;
+      } else {
+        eventName = arg3;
+      }
+    }
+
     const code = (typeCode || 'COLORS').toUpperCase();
 
     // 1. Check matching event directly from allEvents if eventName provided
@@ -1143,46 +1045,6 @@ export async function fetchFacultyCoordinators(category, subCategory, eventName,
       );
 
       if (cat) {
-        // Check subcategory coordinator first
-        const normSub = (subCategory || '').toLowerCase();
-        const sub = (cat.data || []).find(
-          (s) => (s.name || s.SubCatogory || '').toLowerCase() === normSub
-        );
-
-        if (sub && Array.isArray(sub.coordinators) && sub.coordinators.length > 0) {
-          const valid = sub.coordinators.filter((c) => c && (c.name || c.empId || c.institutionId));
-          if (valid.length > 0) {
-            return valid.map((c, idx) => {
-              const instId = c.institutionId || c.empId || c.employeeId || '';
-              return {
-                cordinatorName: c.name || 'Coordinator',
-                cordinatorDesignation: c.designation || 'Faculty Coordinator',
-                cordinatorPhone: c.phone || '',
-                cordinatorEmail: c.email || '',
-                empId: instId,
-                institutionId: instId,
-                cordinatorImage: instId ? `${instId}.jpg` : ''
-              };
-            });
-          }
-        }
-
-        if (sub?.coordinator && (sub.coordinator.name || sub.coordinator.empId || sub.coordinator.institutionId)) {
-          const c = sub.coordinator;
-          const instId = c.institutionId || c.empId || c.employeeId || '';
-          return [
-            {
-              cordinatorName: c.name || 'Coordinator',
-              cordinatorDesignation: c.designation || 'Faculty Coordinator',
-              cordinatorPhone: c.phone || '',
-              cordinatorEmail: c.email || '',
-              empId: instId,
-              institutionId: instId,
-              cordinatorImage: instId ? `${instId}.jpg` : ''
-            }
-          ];
-        }
-
         // Fall back to category coordinators
         if (Array.isArray(cat.coordinators) && cat.coordinators.length > 0) {
           const valid = cat.coordinators.filter((c) => c && (c.name || c.empId || c.institutionId));
@@ -1268,7 +1130,7 @@ export async function fetchFacultyCoordinators(category, subCategory, eventName,
       }
     ];
   } catch (err) {
-    console.error('Error fetching faculty coordinators:', err);
+    console.error(`Error fetching faculty coordinators for ${arg2}:`, err);
     return [];
   }
 }
@@ -1276,8 +1138,12 @@ export async function fetchFacultyCoordinators(category, subCategory, eventName,
 /**
  * Fetch student coordinators for an event
  */
-export async function fetchStudentCoordinators(category, subCategory, eventName) {
+export async function fetchStudentCoordinators(category, arg2, arg3) {
   try {
+    let eventName = arg2;
+    if (arg3 && typeof arg3 === 'string' && !arg3.includes('COLOR')) {
+      eventName = arg3;
+    }
     const code = 'COLORS';
     let allEvents = cachedEventsByType[code];
     if (!allEvents || allEvents.length === 0) {
@@ -1317,7 +1183,7 @@ export async function fetchStudentCoordinators(category, subCategory, eventName)
       }
     ];
   } catch (err) {
-    console.error('Error fetching student coordinators:', err);
+    console.error(`Error fetching student coordinators for ${arg2}:`, err);
     return [];
   }
 }
