@@ -6,7 +6,11 @@ import {
   fetchStudentDashboard,
   updateStudentProfile,
   changeStudentPassword,
-  fetchAllEvents
+  fetchAllEvents,
+  formatRegistrationId,
+  formatPaymentReference,
+  EVENT_ACADEMIC_YEAR,
+  matchesAcademicYear
 } from '../../services/api';
 import StudentAuthModal from '../../components/RegistrationModals/StudentAuthModal';
 import ManageTeamModal from '../../components/RegistrationModals/ManageTeamModal';
@@ -428,8 +432,14 @@ export default function StudentDashboard() {
       }
     });
 
+    // Filter records matching EVENT_ACADEMIC_YEAR (VITE_EVENT_ACADEMIC_YEAR) from .env
+    const academicYearFiltered = list.filter((item) => {
+      const itemYear = item.academicYear || item.academic_year;
+      return matchesAcademicYear(itemYear, EVENT_ACADEMIC_YEAR);
+    });
+
     // Enrich each registered event with catalog metadata (category, subCategory, participationType)
-    return list.map((item) => {
+    return academicYearFiltered.map((item) => {
       const itemTitle = (item.eventTitle || item.eventName || '').toLowerCase();
       const matched = catalogEvents.find((ev) => {
         const evTitle = (ev.eventName || ev.title || '').toLowerCase();
@@ -1062,8 +1072,10 @@ export default function StudentDashboard() {
             ) : (
               <div className="events-list-wrapper">
                 {displayEventsList.map((payment) => {
-                  const regId = payment.registrationNumber || payment.registrationId;
-                  const payRef = payment.paymentReference || 'N/A';
+                  const rawRegId = payment.registrationNumber || payment.registrationId;
+                  const rawPayRef = payment.paymentReference;
+                  const regId = formatRegistrationId(rawRegId);
+                  const payRef = formatPaymentReference(rawPayRef || rawRegId);
                   const title = payment.eventTitle || payment.eventName || 'Colours 2027 Event';
                   const teamParticipants = Array.isArray(payment.participants)
                     ? payment.participants
@@ -1223,13 +1235,13 @@ export default function StudentDashboard() {
                   <tr>
                     <td className="lbl">Registration ID:</td>
                     <td className="val" style={{ color: '#e11d48' }}>
-                      {selectedReceipt.registrationNumber || selectedReceipt.registrationId}
+                      {formatRegistrationId(selectedReceipt.registrationNumber || selectedReceipt.registrationId)}
                     </td>
                   </tr>
                   <tr>
                     <td className="lbl">Payment Reference:</td>
                     <td className="val" style={{ color: '#0284c7' }}>
-                      {selectedReceipt.paymentReference}
+                      {formatPaymentReference(selectedReceipt.paymentReference || selectedReceipt.registrationNumber || selectedReceipt.registrationId)}
                     </td>
                   </tr>
                   <tr>
@@ -1276,7 +1288,7 @@ export default function StudentDashboard() {
               <div className="slip-barcode-area">
                 <div className="pass-barcode-lines" style={{ height: '36px' }} />
                 <div className="pass-barcode-text">
-                  {selectedReceipt.registrationNumber || selectedReceipt.paymentReference}
+                  {formatRegistrationId(selectedReceipt.registrationNumber || selectedReceipt.paymentReference || selectedReceipt.registrationId)}
                 </div>
               </div>
 

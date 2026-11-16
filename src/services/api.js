@@ -6,6 +6,117 @@ export const EVENT_TYPE =
   (typeof process !== 'undefined' && (process.env?.EVENT_TYPE || process.env?.VITE_EVENT_TYPE)) ||
   'COLORS';
 
+export const EVENT_YEAR = (
+  (typeof import.meta !== 'undefined' && (import.meta.env?.EVENT_YEAR || import.meta.env?.VITE_EVENT_YEAR)) ||
+  (typeof process !== 'undefined' && (process.env?.EVENT_YEAR || process.env?.VITE_EVENT_YEAR)) ||
+  '2k27'
+).toString().trim();
+
+/**
+ * Resolve Fest Code from EVENT_TYPE:
+ * - COLORS / COLOURS -> CLR
+ * - VEDA -> VEDA
+ * - Default -> EVENT_TYPE
+ */
+export function getFestPrefix(eventType = EVENT_TYPE) {
+  const t = (eventType || EVENT_TYPE || 'COLORS').toString().trim().toUpperCase();
+  if (t === 'COLORS' || t === 'COLOURS' || t === 'CLR') {
+    return 'CLR';
+  }
+  if (t === 'VEDA') {
+    return 'VEDA';
+  }
+  return t;
+}
+
+/**
+ * Resolve formatted year:
+ * - If 2027 -> 2k27
+ * - If 2026 -> 2k26
+ * - If 2k27 -> 2k27
+ */
+export function getFormattedEventYear(year = EVENT_YEAR) {
+  const y = (year || EVENT_YEAR || '2k27').toString().trim();
+  if (/^20\d{2}$/.test(y)) {
+    return '2k' + y.slice(2);
+  }
+  return y;
+}
+
+/**
+ * Extract unique suffix number/identifier from raw ID
+ * e.g. 'VEDA26-VEDA-731292' -> '731292'
+ * e.g. 'PAY-VEDA26-VEDA-731292' -> '731292'
+ * e.g. 'CLR27-COLORS-189720' -> '189720'
+ */
+export function extractUniqueSuffix(id = '') {
+  if (!id) return '';
+  const str = String(id).trim();
+  const parts = str.split('-');
+  return parts[parts.length - 1] || str;
+}
+
+/**
+ * Format Registration ID using EVENT_TYPE and EVENT_YEAR:
+ * Example:
+ * EVENT_TYPE=COLORS, EVENT_YEAR=2k27 -> REG-CLR2k27-731292
+ * EVENT_TYPE=VEDA, EVENT_YEAR=2k27   -> REG-VEDA2k27-731292
+ */
+export function formatRegistrationId(rawId, overrideType = null, overrideYear = null) {
+  const suffix = extractUniqueSuffix(rawId) || Math.floor(100000 + Math.random() * 900000).toString();
+  const code = getFestPrefix(overrideType || EVENT_TYPE);
+  const year = getFormattedEventYear(overrideYear || EVENT_YEAR);
+  return `REG-${code}${year}-${suffix}`;
+}
+
+/**
+ * Format Payment Reference using EVENT_TYPE and EVENT_YEAR:
+ * Example:
+ * EVENT_TYPE=COLORS, EVENT_YEAR=2k27 -> PAY-CLR2k27-731292
+ * EVENT_TYPE=VEDA, EVENT_YEAR=2k27   -> PAY-VEDA2k27-731292
+ */
+export function formatPaymentReference(rawRef, overrideType = null, overrideYear = null) {
+  const suffix = extractUniqueSuffix(rawRef) || Math.floor(100000 + Math.random() * 900000).toString();
+  const code = getFestPrefix(overrideType || EVENT_TYPE);
+  const year = getFormattedEventYear(overrideYear || EVENT_YEAR);
+  return `PAY-${code}${year}-${suffix}`;
+}
+
+export const EVENT_ACADEMIC_YEAR = (
+  (typeof import.meta !== 'undefined' && (import.meta.env?.VITE_EVENT_ACADEMIC_YEAR || import.meta.env?.EVENT_ACADEMIC_YEAR)) ||
+  (typeof process !== 'undefined' && (process.env?.VITE_EVENT_ACADEMIC_YEAR || process.env?.EVENT_ACADEMIC_YEAR)) ||
+  '2026-2027'
+).toString().trim();
+
+/**
+ * Standardize academic year format:
+ * e.g. "2026-27" -> "2026-2027", "2026 - 2027" -> "2026-2027"
+ */
+export function normalizeAcademicYear(yearStr = '') {
+  if (!yearStr) return '';
+  const clean = String(yearStr).replace(/\s+/g, '').trim();
+  const matchShort = clean.match(/^(\d{4})-(\d{2})$/);
+  if (matchShort) {
+    const century = matchShort[1].slice(0, 2);
+    return `${matchShort[1]}-${century}${matchShort[2]}`;
+  }
+  return clean;
+}
+
+/**
+ * Check if a record's academic year matches target year from .env
+ */
+export function matchesAcademicYear(recordYear, targetYear = EVENT_ACADEMIC_YEAR) {
+  if (!recordYear) return true; // If record omits academic year, keep it
+  const normRecord = normalizeAcademicYear(recordYear);
+  const normTarget = normalizeAcademicYear(targetYear);
+  return (
+    normRecord === normTarget ||
+    normRecord.includes(normTarget) ||
+    normTarget.includes(normRecord)
+  );
+}
+
 export const API_BASE = (
   (typeof import.meta !== 'undefined' && (import.meta.env?.VITE_API_URL || import.meta.env?.API_URL)) ||
   (typeof process !== 'undefined' && (process.env?.VITE_API_URL || process.env?.API_URL)) ||
@@ -229,11 +340,16 @@ export async function fetchThemes() {
 /**
  * Fetch all events for a given fest theme / event type
  */
-export async function fetchAllEvents(typeCode = EVENT_TYPE) {
+export async function fetchAllEvents(typeCode = EVENT_TYPE, academicYear = EVENT_ACADEMIC_YEAR) {
   const code = (typeCode || 'COLORS').toUpperCase();
+  const yearQuery = normalizeAcademicYear(academicYear || EVENT_ACADEMIC_YEAR);
   try {
-    const endpoint = `/api/central-events?typeCode=${code}&limit=100`;
-    const res = await apiFetch(endpoint);
+    const endpoint = `/api/central-events?typeCode=${code}&academicYear=${encodeURIComponent(yearQuery)}&limit=100`;
+    let res = await apiFetch(endpoint);
+
+    if (!res.ok) {
+      res = await apiFetch(`/api/central-events?typeCode=${code}&limit=100`);
+    }
 
     if (!res.ok) {
       throw new Error(`Failed to fetch events: ${res.status}`);
@@ -245,7 +361,11 @@ export async function fetchAllEvents(typeCode = EVENT_TYPE) {
       .map((ev) => mapBackendEvent(ev))
       .filter((ev) => {
         const cat = (ev.category || ev.categoryName || ev.categoryCode || '').toUpperCase();
-        return !cat.includes('FETE');
+        if (cat.includes('FETE')) return false;
+        if (ev.academicYear || ev.academic_year) {
+          return matchesAcademicYear(ev.academicYear || ev.academic_year, yearQuery);
+        }
+        return true;
       });
     cachedEventsByType[code] = mapped;
     return mapped;
@@ -259,16 +379,21 @@ export async function fetchAllEvents(typeCode = EVENT_TYPE) {
  * Fetch all categories and their subcategories based on EVENT_TYPE (e.g. 'COLORS')
  * Dynamically aggregates event counts and subcategories from backend
  */
-export async function fetchCategoriesWithSubCategories(typeCode = EVENT_TYPE) {
+export async function fetchCategoriesWithSubCategories(typeCode = EVENT_TYPE, academicYear = EVENT_ACADEMIC_YEAR) {
   try {
     const code = (typeCode || 'COLORS').toUpperCase();
-    const endpoint = `/api/central-event-types/${code}/categories`;
+    const yearQuery = normalizeAcademicYear(academicYear || EVENT_ACADEMIC_YEAR);
+    const endpoint = `/api/central-event-types/${code}/categories?academicYear=${encodeURIComponent(yearQuery)}`;
 
     // Concurrently fetch categories and live events for this theme
     let [catRes, allEvents] = await Promise.all([
-      apiFetch(endpoint),
-      fetchAllEvents(code).catch(() => [])
+      apiFetch(endpoint).catch(() => apiFetch(`/api/central-event-types/${code}/categories`)),
+      fetchAllEvents(code, yearQuery).catch(() => [])
     ]);
+
+    if (!catRes.ok) {
+      catRes = await apiFetch(`/api/central-event-types/${code}/categories`);
+    }
 
     if (!catRes.ok) {
       throw new Error(`Failed to fetch categories: ${catRes.status}`);
@@ -277,7 +402,7 @@ export async function fetchCategoriesWithSubCategories(typeCode = EVENT_TYPE) {
     const json = await catRes.json();
     const rawCategories = Array.isArray(json) ? json : json.data || [];
 
-    const normalized = normalizeCategories(rawCategories, allEvents, code);
+    const normalized = normalizeCategories(rawCategories, allEvents, code, yearQuery);
     cachedCategories = normalized;
     return sortCategoriesAndSubCategories(normalized);
   } catch (err) {
@@ -287,35 +412,98 @@ export async function fetchCategoriesWithSubCategories(typeCode = EVENT_TYPE) {
 }
 
 /**
+ * Infer activity/subcategory grouping from event title
+ * e.g. "Singing (Solo)" -> "Singing", "Instrumental (Group)" -> "Instrumental"
+ */
+export function inferEventGroup(title = '') {
+  if (!title || typeof title !== 'string') return 'General';
+  const cleaned = title.replace(/\s*\((Solo|Group|Single|Team|Men|Women)[^)]*\)/i, '').trim();
+  return cleaned || title;
+}
+
+/**
  * Normalize category objects from backend central_event_categories collection
  * Links subcategories with actual event counts and coordinator details
  */
-function normalizeCategories(categories, allEvents = [], typeCode = 'COLORS') {
+function normalizeCategories(categories, allEvents = [], typeCode = 'COLORS', academicYear = EVENT_ACADEMIC_YEAR) {
   if (!Array.isArray(categories)) return [];
 
   return categories
     .filter((cat) => {
       const cCode = (cat.code || cat._id || '').toUpperCase();
       const cName = (cat.name || '').toUpperCase();
-      return !cCode.includes('FETE') && !cName.includes('FETE');
+      if (cCode.includes('FETE') && cName.includes('FETE')) return false;
+      const catYear = cat.academicYear || cat.academic_year;
+      if (catYear && !matchesAcademicYear(catYear, academicYear)) {
+        return false;
+      }
+      return true;
     })
     .map((cat) => {
     const catCode = (cat.code || cat._id || '').toUpperCase();
     const catName = cat.name || catCode;
 
     // Filter events belonging to this category
-    const catEvents = (allEvents || []).filter(
-      (ev) =>
-        (cat._id && String(ev.categoryId) === String(cat._id)) ||
-        (ev.category && ev.category.toUpperCase() === catName.toUpperCase()) ||
-        (ev.typeCode && ev.typeCode.toUpperCase() === typeCode.toUpperCase() && ev.categoryName === catName)
-    );
+    const catEvents = (allEvents || []).filter((ev) => {
+      if (cat._id && ev.categoryId && String(ev.categoryId) === String(cat._id)) return true;
+      if (cat.rawId && ev.categoryId && String(ev.categoryId) === String(cat.rawId)) return true;
+      const evCat = (ev.category || ev.categoryName || ev.categoryCode || '').toUpperCase();
+      const cName = catName.toUpperCase();
+      const cCode = catCode.toUpperCase();
+      return (
+        evCat === cName ||
+        evCat === cCode ||
+        evCat.includes(cCode) ||
+        cCode.includes(evCat) ||
+        evCat.includes(cName) ||
+        cName.includes(evCat)
+      );
+    });
 
-    // Subcategories from backend
+    // 1. Subcategories from backend
     let subList = Array.isArray(cat.subcategories) ? [...cat.subcategories] : [];
 
-    // If subcategories are empty in DB but fest catalog defines them, provide fallback
-    if (subList.length === 0 && cat.hasSubcategories !== false) {
+    // 2. If backend subcategories are empty but we have live events for this category,
+    // dynamically derive subcategory groups from the events!
+    if (subList.length === 0 && catEvents.length > 0) {
+      const groupMap = new Map();
+
+      catEvents.forEach((ev) => {
+        let subName = ev.subcategoryName || ev.subCategory;
+        if (!subName || subName === 'null' || subName === 'undefined') {
+          subName = inferEventGroup(ev.title || ev.eventName || '');
+        }
+        subName = (subName || 'General').trim();
+
+        if (!groupMap.has(subName)) {
+          const facultyCoord =
+            ev.coordinators?.faculty?.[0] ||
+            (Array.isArray(ev.coordinators) ? ev.coordinators[0] : null) ||
+            ev.coordinator ||
+            cat.coordinator ||
+            null;
+
+          groupMap.set(subName, {
+            _id: ev.subcategoryId || `derived-${catCode.toLowerCase()}-${subName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
+            name: subName,
+            code: subName.toUpperCase().replace(/[^A-Z0-9]/g, '_'),
+            isActive: true,
+            sortOrder: groupMap.size + 1,
+            banner: ev.banner || null,
+            Image: ev.banner?.url || ev.eventImage || null,
+            image: ev.banner?.url || ev.eventImage || null,
+            coordinator: facultyCoord,
+            coordinators: facultyCoord ? [facultyCoord] : (cat.coordinators || [])
+          });
+        }
+      });
+
+      subList = Array.from(groupMap.values());
+    }
+
+    // 3. If subcategories are still empty (e.g. pending event creation for this category),
+    // provide fallback from official fest catalog
+    if (subList.length === 0) {
       const fallbackList = SUBCATEGORY_ORDER[catName] || SUBCATEGORY_ORDER[catCode] || [];
       subList = fallbackList.map((subName, index) => ({
         _id: `fallback-${catCode.toLowerCase()}-${index}`,
@@ -341,7 +529,16 @@ function normalizeCategories(categories, allEvents = [], typeCode = 'COLORS') {
         }
         const evSub = (ev.subCategory || ev.subcategoryName || '').toLowerCase().trim();
         const curSub = (subName || '').toLowerCase().trim();
-        return evSub === curSub || evSub.includes(curSub) || curSub.includes(evSub);
+        const evGroup = inferEventGroup(ev.title || ev.eventName || '').toLowerCase().trim();
+        const evTitle = (ev.title || ev.eventName || '').toLowerCase().trim();
+
+        return (
+          evSub === curSub ||
+          (evSub && (evSub.includes(curSub) || curSub.includes(evSub))) ||
+          evGroup === curSub ||
+          (evGroup && (evGroup.includes(curSub) || curSub.includes(evGroup))) ||
+          (curSub.length > 3 && evTitle.includes(curSub))
+        );
       });
 
       return {
@@ -446,8 +643,18 @@ export async function fetchEventsInSubCategory(category, subCategory, subcategor
 
         const evSub = (ev.subCategory || ev.subcategoryName || '').toLowerCase().trim();
         const evCat = (ev.category || ev.categoryName || '').toLowerCase().trim();
+        const evTitle = (ev.title || ev.eventName || '').toLowerCase().trim();
+        const evGroup = inferEventGroup(ev.title || ev.eventName || '').toLowerCase().trim();
 
-        const subMatches = evSub === normSub || (normSub && evSub.includes(normSub)) || (evSub && normSub.includes(evSub));
+        const subMatches =
+          (evSub && (evSub === normSub || evSub.includes(normSub) || normSub.includes(evSub))) ||
+          evGroup === normSub ||
+          (evGroup && (evGroup.includes(normSub) || normSub.includes(evGroup))) ||
+          (normSub.length > 3 && evTitle.includes(normSub)) ||
+          normSub === 'general' ||
+          normSub === 'all' ||
+          normSub === normCat;
+
         if (subMatches) {
           // If category is provided, verify category matches too
           if (normCat) {
@@ -505,9 +712,9 @@ export function mapBackendEvent(ev, category = '', subCategory = '') {
     ? `Team (${minSize}${maxSize && maxSize !== minSize ? `-${maxSize}` : ''})`
     : 'Solo';
 
-  // In database, registration fee is stored in paise (amount * 100). Convert to Rupees for display.
+  // In database, registration fee is stored in paise (amount * 100) or directly in rupees.
   const rawPrice = ev.fee?.amount ?? 0;
-  const rupeePrice = rawPrice >= 100 ? Math.round(rawPrice / 100) : rawPrice;
+  const rupeePrice = rawPrice >= 1000 ? Math.round(rawPrice / 100) : rawPrice;
 
   const venueName =
     typeof ev.venue === 'object' && ev.venue !== null
@@ -551,7 +758,9 @@ export function mapBackendEvent(ev, category = '', subCategory = '') {
     subcategoryName: resolvedSub,
     categoryId: ev.categoryId,
     subcategoryId: ev.subcategoryId,
-    typeCode: ev.typeCode || 'COLORS'
+    typeCode: ev.typeCode || 'COLORS',
+    academicYear: ev.academicYear || ev.academic_year || EVENT_ACADEMIC_YEAR,
+    academic_year: ev.academic_year || ev.academicYear || EVENT_ACADEMIC_YEAR
   };
 }
 
@@ -880,6 +1089,44 @@ export async function fetchFacultyCoordinators(category, subCategory, eventName,
   try {
     const code = (typeCode || 'COLORS').toUpperCase();
 
+    // 1. Check matching event directly from allEvents if eventName provided
+    let allEvents = cachedEventsByType[code];
+    if (!allEvents || allEvents.length === 0) {
+      allEvents = await fetchAllEvents(code);
+    }
+
+    if (eventName && Array.isArray(allEvents)) {
+      const qLower = eventName.toLowerCase();
+      const ev = allEvents.find((e) => {
+        const evSlug = (e.slug || '').toLowerCase();
+        const evTitle = (e.title || e.eventName || '').toLowerCase();
+        return evSlug === qLower || evTitle === qLower || evTitle.includes(qLower) || qLower.includes(evTitle);
+      });
+
+      if (ev) {
+        const facultyArr = Array.isArray(ev.coordinators?.faculty)
+          ? ev.coordinators.faculty
+          : Array.isArray(ev.coordinators)
+          ? ev.coordinators
+          : ev.coordinator ? [ev.coordinator] : [];
+
+        if (facultyArr.length > 0) {
+          return facultyArr.map((c) => {
+            const instId = c.institutionId || c.empId || c.employeeId || '';
+            return {
+              cordinatorName: c.name || 'Coordinator',
+              cordinatorDesignation: c.designation || 'Faculty Coordinator',
+              cordinatorPhone: c.phone || '',
+              cordinatorEmail: c.email || '',
+              empId: instId,
+              institutionId: instId,
+              cordinatorImage: instId ? `${instId}.jpg` : ''
+            };
+          });
+        }
+      }
+    }
+
     // Check cached categories from backend
     let cats = cachedCategories;
     if (!cats || cats.length === 0) {
@@ -1031,6 +1278,30 @@ export async function fetchFacultyCoordinators(category, subCategory, eventName,
  */
 export async function fetchStudentCoordinators(category, subCategory, eventName) {
   try {
+    const code = 'COLORS';
+    let allEvents = cachedEventsByType[code];
+    if (!allEvents || allEvents.length === 0) {
+      allEvents = await fetchAllEvents(code);
+    }
+
+    if (eventName && Array.isArray(allEvents)) {
+      const qLower = eventName.toLowerCase();
+      const ev = allEvents.find((e) => {
+        const evSlug = (e.slug || '').toLowerCase();
+        const evTitle = (e.title || e.eventName || '').toLowerCase();
+        return evSlug === qLower || evTitle === qLower || evTitle.includes(qLower) || qLower.includes(evTitle);
+      });
+
+      if (ev && Array.isArray(ev.coordinators?.student) && ev.coordinators.student.length > 0) {
+        return ev.coordinators.student.map((s) => ({
+          studentCordinatorName: s.name || 'Student Coordinator',
+          studentCordinatorId: s.rollNo || s.studentId || '',
+          studentCordinatorCollege: s.branch ? `Aditya University - ${s.branch}` : 'Aditya University',
+          studentCordinatorPhone: s.phone || ''
+        }));
+      }
+    }
+
     return [
       {
         studentCordinatorName: 'P. SAI TEJA',
@@ -1638,7 +1909,7 @@ export function saveLocalRegistration(record) {
  */
 export async function initiateEventRegistration(payload) {
   const randomDigits = Math.floor(100000 + Math.random() * 900000);
-  const localRegId = `CLR27-COLORS-${randomDigits}`;
+  const localRegId = formatRegistrationId(randomDigits);
 
   const feeAmount = Number(payload.amount !== undefined ? payload.amount : payload.price || 0);
   const teamSize = payload.teamSize || (payload.isTeam && Array.isArray(payload.teamMembers) ? payload.teamMembers.length + 1 : 1);
@@ -1647,7 +1918,7 @@ export async function initiateEventRegistration(payload) {
     eventId: payload.eventId || payload.rawId,
     eventSlug: payload.eventSlug || payload.slug,
     eventTitle: payload.eventName || payload.title,
-    typeCode: 'COLORS',
+    typeCode: EVENT_TYPE,
     participant: {
       name: payload.studentName,
       rollNumber: payload.studentRoll,
@@ -1665,7 +1936,7 @@ export async function initiateEventRegistration(payload) {
       amount: feeAmount,
       currency: 'INR'
     },
-    academicYear: '2026-27'
+    academicYear: normalizeAcademicYear(EVENT_ACADEMIC_YEAR) || '2026-2027'
   };
 
   const res = await apiFetch('/api/central-event-registrations', {
@@ -1681,7 +1952,7 @@ export async function initiateEventRegistration(payload) {
 
   const backendData = json.data || {};
   const registrationNumber = backendData.registrationNumber || localRegId;
-  const paymentReference = backendData.paymentReference || `PAY-${registrationNumber}`;
+  const paymentReference = backendData.paymentReference || formatPaymentReference(registrationNumber);
   const orderId = backendData.orderId || null;
   const keyId = backendData.keyId || null;
   const isFree = backendData.isFree || feeAmount === 0;

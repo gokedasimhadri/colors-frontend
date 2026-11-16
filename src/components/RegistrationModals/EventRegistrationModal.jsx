@@ -8,7 +8,9 @@ import {
   fetchStudentByRollNumber,
   fetchEventDepartments,
   matchDepartmentByBranch,
-  FALLBACK_EVENT_DEPARTMENTS
+  FALLBACK_EVENT_DEPARTMENTS,
+  formatRegistrationId,
+  formatPaymentReference
 } from '../../services/api';
 import './RegistrationModals.css';
 
@@ -799,21 +801,21 @@ export default function EventRegistrationModal({
                 <div className="reg-ticket-header">
                   <div className="reg-ticket-fest-tag">COLOURS 2027 • OFFICIAL PASS</div>
                   <div className="reg-ticket-id">
-                    ID: {activeRecord.registrationNumber || activeRecord.registrationId}
+                    ID: {formatRegistrationId(activeRecord.registrationNumber || activeRecord.registrationId)}
                   </div>
                 </div>
 
                 <div className="reg-ticket-row">
                   <span className="reg-ticket-label">Registration ID</span>
                   <span className="reg-ticket-val code">
-                    {activeRecord.registrationNumber || activeRecord.registrationId}
+                    {formatRegistrationId(activeRecord.registrationNumber || activeRecord.registrationId)}
                   </span>
                 </div>
                 {activeRecord.paymentReference && (
                   <div className="reg-ticket-row">
                     <span className="reg-ticket-label">Payment Ref</span>
                     <span className="reg-ticket-val code" style={{ color: '#0284c7' }}>
-                      {activeRecord.paymentReference}
+                      {formatPaymentReference(activeRecord.paymentReference || activeRecord.registrationNumber)}
                     </span>
                   </div>
                 )}

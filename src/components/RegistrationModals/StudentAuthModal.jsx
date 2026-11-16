@@ -4,7 +4,9 @@ import {
   loginStudentAccount,
   checkStudentExists,
   fetchStudentByRollNumber,
-  submitEventRegistration
+  submitEventRegistration,
+  formatRegistrationId,
+  formatPaymentReference
 } from '../../services/api';
 import './RegistrationModals.css';
 
@@ -307,14 +309,14 @@ export default function StudentAuthModal({
                 <div className="reg-ticket-row">
                   <span className="reg-ticket-label">Registration ID</span>
                   <span className="reg-ticket-val code">
-                    {confirmedRecord.registrationNumber || confirmedRecord.registrationId}
+                    {formatRegistrationId(confirmedRecord.registrationNumber || confirmedRecord.registrationId)}
                   </span>
                 </div>
                 {confirmedRecord.paymentReference && (
                   <div className="reg-ticket-row">
                     <span className="reg-ticket-label">Payment Ref</span>
                     <span className="reg-ticket-val code" style={{ color: '#0284c7' }}>
-                      {confirmedRecord.paymentReference}
+                      {formatPaymentReference(confirmedRecord.paymentReference || confirmedRecord.registrationNumber)}
                     </span>
                   </div>
                 )}
