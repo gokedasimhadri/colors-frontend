@@ -182,7 +182,50 @@ export const LogOut = createIcon('LogOut', (
   </>
 ));
 
+export const Tag = createIcon('Tag', (
+  <>
+    <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
+    <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
+  </>
+));
+
+export const Users = createIcon('Users', (
+  <>
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </>
+));
+
+export const RotateCcw = createIcon('RotateCcw', (
+  <>
+    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+    <path d="M3 3v5h5" />
+  </>
+));
+
+export const Target = createIcon('Target', (
+  <>
+    <circle cx="12" cy="12" r="10" />
+    <circle cx="12" cy="12" r="6" />
+    <circle cx="12" cy="12" r="2" />
+  </>
+));
+
+export const Landmark = createIcon('Landmark', (
+  <>
+    <line x1="3" x2="21" y1="22" y2="22" />
+    <line x1="6" x2="6" y1="18" y2="11" />
+    <line x1="10" x2="10" y1="18" y2="11" />
+    <line x1="14" x2="14" y1="18" y2="11" />
+    <line x1="18" x2="18" y1="18" y2="11" />
+    <polygon points="12 2 20 7 4 7" />
+  </>
+));
+
 export default {
+  Landmark,
   MapPin,
   Mail,
   Phone,
@@ -206,4 +249,8 @@ export default {
   Search,
   Download,
   LogOut,
+  Tag,
+  Users,
+  RotateCcw,
+  Target,
 };

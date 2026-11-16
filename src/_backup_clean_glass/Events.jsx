@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { User, Phone, Mail, ArrowLeft } from 'lucide-react';
+import { User, Phone, Mail, ArrowLeft, Tag, Users, MapPin, Calendar, RotateCcw, Target, Landmark } from 'lucide-react';
 import {
   EVENT_TYPE,
   fetchCategoriesWithSubCategories,
@@ -23,6 +23,7 @@ import SplitBackground from '../../components/ThemeComponents/backgrounds/SplitB
 import SplitColorText from '../../components/ThemeComponents/SplitColor/SplitColorText';
 import ThemeButton from '../../components/ThemeComponents/ThemeButton/ThemeButton';
 import ThemeTab from '../../components/ThemeComponents/ThemeTabDesign/ThemeTab';
+import CardScrollAnimation from '../../components/ThemeComponents/CardScrollAnimation/CardScrollAnimation';
 import './Events.css';
 
 const FEST_TYPE = EVENT_TYPE || 'COLORS';
@@ -127,6 +128,19 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
   useEffect(() => {
     loadData();
   }, [themeCode]);
+
+  // Synchronize SplitColorText immediately whenever active category tab, search or viewMode changes without page refresh
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('split-color-sync'));
+      const t1 = setTimeout(() => window.dispatchEvent(new CustomEvent('split-color-sync')), 50);
+      const t2 = setTimeout(() => window.dispatchEvent(new CustomEvent('split-color-sync')), 160);
+      return () => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+      };
+    }
+  }, [activeTab, searchQuery, viewMode]);
 
   // Filtered categories based on active category tab & search query
   const filteredCategories = useMemo(() => {
@@ -313,6 +327,7 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                 <div className="category-header-row">
                   <div className="category-title-area">
                     <SplitColorText
+                      key={`cat-heading-${cat.name || cat.code || cat._id}-${activeTab}`}
                       as="h2"
                       className="category-heading"
                       screenSync={true}
@@ -332,7 +347,7 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
 
                   {/* Category Coordinator Pill with Liquid Glass Design & Lucide Icons */}
                   {catCoordinator && catCoordinator.name && (
-                    <div className="category-coord-pill">
+                    <div className="category-coord-pill" key={`coord-pill-${catCoordinator.name || ''}-${activeTab}`}>
                       <div className="coord-icon-badge" aria-hidden="true">
                         <SplitColorText
                           as="span"
@@ -347,8 +362,8 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                       </div>
                       <div className="coord-info-col">
                         <SplitColorText
+                          key={`coord-role-${catCoordinator.name || ''}`}
                           as="span"
-                          mode="fallback"
                           screenSync={true}
                           leftColor="#0f172a"
                           rightColor="#ffffff"
@@ -358,8 +373,8 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                         </SplitColorText>
 
                         <SplitColorText
+                          key={`coord-name-${catCoordinator.name || ''}`}
                           as="span"
-                          mode="fallback"
                           screenSync={true}
                           leftColor="#0f172a"
                           rightColor="#ffffff"
@@ -376,10 +391,19 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                               screenSync={true}
                               leftColor="#0f172a"
                               rightColor="#ffffff"
-                              className="coord-phone-split"
+                              className="coord-phone-icon-wrap"
                             >
-                              <Phone size={12} strokeWidth={2.5} className="coord-phone-lucide" />
-                              <span className="coord-phone-number">{catCoordinator.phone}</span>
+                              <Phone size={13} strokeWidth={2.4} className="coord-phone-lucide" />
+                            </SplitColorText>
+                            <SplitColorText
+                              key={`coord-phone-${catCoordinator.phone}`}
+                              as="span"
+                              screenSync={true}
+                              leftColor="#0f172a"
+                              rightColor="#ffffff"
+                              className="coord-phone-number"
+                            >
+                              {catCoordinator.phone}
                             </SplitColorText>
                           </a>
                         )}
@@ -388,9 +412,9 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                   )}
                 </div>
 
-                {/* Subcategory Grid (When Subcategories Exist) */}
+                {/* Subcategory Grid with Reusable Stacking Card Scroll Animation on Mobile */}
                 {Array.isArray(cat.data) && cat.data.length > 0 && (
-                  <div className="subcat-grid">
+                  <CardScrollAnimation className="subcat-grid">
                     {cat.data.map((item, idx) => {
                       const subCatTitle = item.SubCatogory || item.name;
                       const bannerVal = item.banner || item.Image || item.image;
@@ -460,142 +484,138 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                         </div>
                       );
                     })}
-                  </div>
+                  </CardScrollAnimation>
                 )}
 
                 {/* Direct Events Grid (When Category has Direct Events and no Subcategories) */}
                 {(!cat.data || cat.data.length === 0) && Array.isArray(cat.events) && cat.events.length > 0 && (
-                  <div className="events-cards-grid">
+                  <CardScrollAnimation className="events-cards-grid">
                     {cat.events.map((ev, idx) => {
                       const eventImg = getEventImageUrl(ev.eventImage || ev.banner?.url, ev.title || ev.eventName);
 
                       return (
                         <div key={ev._id || idx} className="event-sub-card">
-                          <SplitColorText
-                            as="div"
-                            className="event-sub-title-bar"
-                            screenSync={true}
-                            leftColor="#0f172a"
-                            rightColor="#ffffff"
-                          >
-                            {ev.title || ev.eventName}
-                          </SplitColorText>
-                          <div className="event-sub-body">
-                            <div className="event-sub-table-col">
-                              <div className="event-table-row">
-                                <div className="table-pill-label">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#475569"
-                                    rightColor="#cbd5e1"
-                                  >
-                                    Category
-                                  </SplitColorText>
-                                </div>
-                                <div className="table-pill-value">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#0f172a"
-                                    rightColor="#ffffff"
-                                  >
-                                    {cat.name}
-                                  </SplitColorText>
-                                </div>
+                          {/* Top Full-Width Image Banner with Small Right-Aligned Title Badge */}
+                          <div className="event-sub-image-banner">
+                            <img
+                              src={eventImg}
+                              alt={ev.title || ev.eventName}
+                              className="event-sub-banner-img"
+                              onError={(e) => {
+                                e.currentTarget.onerror = null;
+                                e.currentTarget.src = '/hero_bg.png';
+                              }}
+                            />
+                            <div className="event-sub-img-badge">
+                              <SplitColorText
+                                as="span"
+                                screenSync={true}
+                                leftColor="#0f172a"
+                                rightColor="#ffffff"
+                              >
+                                {formatTitleCase(ev.title || ev.eventName)}
+                              </SplitColorText>
+                            </div>
+                          </div>
+
+                          {/* Details / Rows below the image */}
+                          <div className="event-sub-details">
+                            <div className="event-table-row">
+                              <div className="table-pill-label">
+                                <SplitColorText
+                                  as="span"
+                                  screenSync={true}
+                                  leftColor="#475569"
+                                  rightColor="#cbd5e1"
+                                >
+                                  Category :
+                                </SplitColorText>
                               </div>
-                              <div className="event-table-row">
-                                <div className="table-pill-label">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#475569"
-                                    rightColor="#cbd5e1"
-                                  >
-                                    Participation
-                                  </SplitColorText>
-                                </div>
-                                <div className="table-pill-value">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#0f172a"
-                                    rightColor="#ffffff"
-                                  >
-                                    {ev.eventType || 'Solo'}
-                                  </SplitColorText>
-                                </div>
-                              </div>
-                              <div className="event-table-row">
-                                <div className="table-pill-label">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#475569"
-                                    rightColor="#cbd5e1"
-                                  >
-                                    Registration Fee
-                                  </SplitColorText>
-                                </div>
-                                <div className="table-pill-value fee-highlight">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#be123c"
-                                    rightColor="#fb7185"
-                                  >
-                                    {ev.price ? `₹ ${ev.price}/-` : 'Free Entry'}
-                                  </SplitColorText>
-                                </div>
-                              </div>
-                              <div className="event-table-row">
-                                <div className="table-pill-label">
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#475569"
-                                    rightColor="#cbd5e1"
-                                  >
-                                    Venue
-                                  </SplitColorText>
-                                </div>
-                                <div className="table-pill-value" style={{ fontSize: '0.82rem', whiteSpace: 'normal' }}>
-                                  <SplitColorText
-                                    as="span"
-                                    mode="fallback"
-                                    screenSync={true}
-                                    leftColor="#0f172a"
-                                    rightColor="#ffffff"
-                                  >
-                                    {ev.venue || 'Aditya University Campus'}
-                                  </SplitColorText>
-                                </div>
+                              <div className="table-pill-value">
+                                <SplitColorText
+                                  as="span"
+                                  screenSync={true}
+                                  leftColor="#0f172a"
+                                  rightColor="#ffffff"
+                                >
+                                  {formatTitleCase(cat.name)}
+                                </SplitColorText>
                               </div>
                             </div>
-
-                            <div className="event-sub-image-col">
-                              <img
-                                src={eventImg}
-                                alt={ev.title || ev.eventName}
-                                className="event-sub-img"
-                                onError={(e) => {
-                                  e.currentTarget.onerror = null;
-                                  e.currentTarget.src = '/hero_bg.png';
-                                }}
-                              />
+                            <div className="event-table-row">
+                              <div className="table-pill-label">
+                                <SplitColorText
+                                  as="span"
+                                  screenSync={true}
+                                  leftColor="#0f172a"
+                                  rightColor="#ffffff"
+                                >
+                                  Participation :
+                                </SplitColorText>
+                              </div>
+                              <div className="table-pill-value">
+                                <SplitColorText
+                                  as="span"
+                                  screenSync={true}
+                                  leftColor="#0f172a"
+                                  rightColor="#ffffff"
+                                >
+                                  {formatTitleCase(ev.eventType || 'Solo')}
+                                </SplitColorText>
+                              </div>
+                            </div>
+                            <div className="event-table-row">
+                              <div className="table-pill-label">
+                                <SplitColorText
+                                  as="span"
+                                  screenSync={true}
+                                  leftColor="#0f172a"
+                                  rightColor="#ffffff"
+                                >
+                                  Registration Fee :
+                                </SplitColorText>
+                              </div>
+                              <div className="table-pill-value fee-highlight">
+                                <SplitColorText
+                                  as="span"
+                                  screenSync={true}
+                                  leftColor="#0f172a"
+                                  rightColor="#ffffff"
+                                >
+                                  {ev.price ? `₹ ${ev.price}/-` : 'Free Entry'}
+                                </SplitColorText>
+                              </div>
+                            </div>
+                            <div className="event-table-row">
+                              <div className="table-pill-label">
+                                <SplitColorText
+                                  as="span"
+                                  screenSync={true}
+                                  leftColor="#0f172a"
+                                  rightColor="#ffffff"
+                                >
+                                  Venue :
+                                </SplitColorText>
+                              </div>
+                              <div className="table-pill-value" style={{ fontSize: '0.82rem', whiteSpace: 'normal' }}>
+                                <SplitColorText
+                                  as="span"
+                                  screenSync={true}
+                                  leftColor="#0f172a"
+                                  rightColor="#ffffff"
+                                >
+                                  {formatTitleCase(ev.venue || 'Aditya University Campus')}
+                                </SplitColorText>
+                              </div>
                             </div>
                           </div>
 
                           <div className="event-sub-footer">
-                            <button
-                              className="btn-checkout-primary"
+                            <ThemeButton
+                              as="button"
+                              type="button"
+                              borderRadius={9999}
+                              className="btn-event-checkout-theme"
                               onClick={() =>
                                 onSelectEvent(
                                   cat.code || cat.name || cat._id,
@@ -604,13 +624,20 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                                 )
                               }
                             >
-                              Check Out Details →
-                            </button>
+                              <SplitColorText
+                                as="span"
+                                screenSync={true}
+                                leftColor="#0f172a"
+                                rightColor="#ffffff"
+                              >
+                                Check Out Details →
+                              </SplitColorText>
+                            </ThemeButton>
                           </div>
                         </div>
                       );
                     })}
-                  </div>
+                  </CardScrollAnimation>
                 )}
               </section>
             );
@@ -644,137 +671,133 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                   </div>
                 </div>
 
-                <div className="events-cards-grid">
+                <CardScrollAnimation className="events-cards-grid">
                   {events.map((ev, idx) => {
                     const eventImg = getEventImageUrl(ev.eventImage || ev.banner?.url, ev.title || ev.eventName);
 
                     return (
                       <div key={ev._id || idx} className="event-sub-card">
-                        <SplitColorText
-                          as="div"
-                          className="event-sub-title-bar"
-                          screenSync={true}
-                          leftColor="#0f172a"
-                          rightColor="#ffffff"
-                        >
-                          {ev.title || ev.eventName}
-                        </SplitColorText>
-                        <div className="event-sub-body">
-                          <div className="event-sub-table-col">
-                            <div className="event-table-row">
-                              <div className="table-pill-label">
-                                <SplitColorText
-                                  as="span"
-                                  mode="fallback"
-                                  screenSync={true}
-                                  leftColor="#475569"
-                                  rightColor="#cbd5e1"
-                                >
-                                  Main Event
-                                </SplitColorText>
-                              </div>
-                              <div className="table-pill-value">
-                                <SplitColorText
-                                  as="span"
-                                  mode="fallback"
-                                  screenSync={true}
-                                  leftColor="#0f172a"
-                                  rightColor="#ffffff"
-                                >
-                                  {ev.subcategoryName || ev.subCategory || cat.name}
-                                </SplitColorText>
-                              </div>
+                        {/* Top Full-Width Image Banner with Small Right-Aligned Title Badge */}
+                        <div className="event-sub-image-banner">
+                          <img
+                            src={eventImg}
+                            alt={ev.title || ev.eventName}
+                            className="event-sub-banner-img"
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = '/hero_bg.png';
+                            }}
+                          />
+                          <div className="event-sub-img-badge">
+                            <SplitColorText
+                              as="span"
+                              screenSync={true}
+                              leftColor="#0f172a"
+                              rightColor="#ffffff"
+                            >
+                              {formatTitleCase(ev.title || ev.eventName)}
+                            </SplitColorText>
+                          </div>
+                        </div>
+
+                        {/* Details / Rows below the image */}
+                        <div className="event-sub-details">
+                          <div className="event-table-row">
+                            <div className="table-pill-label">
+                              <SplitColorText
+                                as="span"
+                                screenSync={true}
+                                leftColor="#475569"
+                                rightColor="#cbd5e1"
+                              >
+                                Main Event :
+                              </SplitColorText>
                             </div>
-                            <div className="event-table-row">
-                              <div className="table-pill-label">
-                                <SplitColorText
-                                  as="span"
-                                  mode="fallback"
-                                  screenSync={true}
-                                  leftColor="#475569"
-                                  rightColor="#cbd5e1"
-                                >
-                                  Participation
-                                </SplitColorText>
-                              </div>
-                              <div className="table-pill-value">
-                                <SplitColorText
-                                  as="span"
-                                  mode="fallback"
-                                  screenSync={true}
-                                  leftColor="#0f172a"
-                                  rightColor="#ffffff"
-                                >
-                                  {ev.eventType || 'Solo'}
-                                </SplitColorText>
-                              </div>
-                            </div>
-                            <div className="event-table-row">
-                              <div className="table-pill-label">
-                                <SplitColorText
-                                  as="span"
-                                  mode="fallback"
-                                  screenSync={true}
-                                  leftColor="#475569"
-                                  rightColor="#cbd5e1"
-                                >
-                                  Registration Fee
-                                </SplitColorText>
-                              </div>
-                              <div className="table-pill-value fee-highlight">
-                                <SplitColorText
-                                  as="span"
-                                  mode="fallback"
-                                  screenSync={true}
-                                  leftColor="#be123c"
-                                  rightColor="#fb7185"
-                                >
-                                  {ev.price ? `₹ ${ev.price}/-` : 'Free Entry'}
-                                </SplitColorText>
-                              </div>
-                            </div>
-                            <div className="event-table-row">
-                              <div className="table-pill-label">
-                                <SplitColorText
-                                  as="span"
-                                  mode="fallback"
-                                  screenSync={true}
-                                  leftColor="#475569"
-                                  rightColor="#cbd5e1"
-                                >
-                                  Venue
-                                </SplitColorText>
-                              </div>
-                              <div className="table-pill-value" style={{ fontSize: '0.82rem', whiteSpace: 'normal' }}>
-                                <SplitColorText
-                                  as="span"
-                                  mode="fallback"
-                                  screenSync={true}
-                                  leftColor="#0f172a"
-                                  rightColor="#ffffff"
-                                >
-                                  {ev.venue || 'Aditya University Campus'}
-                                </SplitColorText>
-                              </div>
+                            <div className="table-pill-value">
+                              <SplitColorText
+                                as="span"
+                                screenSync={true}
+                                leftColor="#0f172a"
+                                rightColor="#ffffff"
+                              >
+                                {formatTitleCase(ev.subcategoryName || ev.subCategory || cat.name)}
+                              </SplitColorText>
                             </div>
                           </div>
-
-                          <div className="event-sub-image-col">
-                            <img
-                              src={eventImg}
-                              alt={ev.title || ev.eventName}
-                              className="event-sub-img"
-                              onError={(e) => {
-                                e.currentTarget.onerror = null;
-                                e.currentTarget.src = '/hero_bg.png';
-                              }}
-                            />
+                          <div className="event-table-row">
+                            <div className="table-pill-label">
+                              <SplitColorText
+                                as="span"
+                                screenSync={true}
+                                leftColor="#0f172a"
+                                rightColor="#ffffff"
+                              >
+                                Participation :
+                              </SplitColorText>
+                            </div>
+                            <div className="table-pill-value">
+                              <SplitColorText
+                                as="span"
+                                screenSync={true}
+                                leftColor="#0f172a"
+                                rightColor="#ffffff"
+                              >
+                                {formatTitleCase(ev.eventType || 'Solo')}
+                              </SplitColorText>
+                            </div>
+                          </div>
+                          <div className="event-table-row">
+                            <div className="table-pill-label">
+                              <SplitColorText
+                                as="span"
+                                screenSync={true}
+                                leftColor="#0f172a"
+                                rightColor="#ffffff"
+                              >
+                                Registration Fee :
+                              </SplitColorText>
+                            </div>
+                            <div className="table-pill-value fee-highlight">
+                              <SplitColorText
+                                as="span"
+                                screenSync={true}
+                                leftColor="#0f172a"
+                                rightColor="#ffffff"
+                              >
+                                {ev.price ? `₹ ${ev.price}/-` : 'Free Entry'}
+                              </SplitColorText>
+                            </div>
+                          </div>
+                          <div className="event-table-row">
+                            <div className="table-pill-label">
+                              <SplitColorText
+                                as="span"
+                                screenSync={true}
+                                leftColor="#0f172a"
+                                rightColor="#ffffff"
+                              >
+                                Venue :
+                              </SplitColorText>
+                            </div>
+                            <div className="table-pill-value" style={{ fontSize: '0.82rem', whiteSpace: 'normal' }}>
+                              <SplitColorText
+                                as="span"
+                                screenSync={true}
+                                leftColor="#0f172a"
+                                rightColor="#ffffff"
+                              >
+                                {formatTitleCase(ev.venue || 'Aditya University Campus')}
+                              </SplitColorText>
+                            </div>
                           </div>
                         </div>
 
                         <div className="event-sub-footer">
-                          <button
-                            className="btn-checkout-primary"
+                          <ThemeButton
+                            as="button"
+                            type="button"
+                            borderRadius={9999}
+                            className="btn-event-checkout-theme"
                             onClick={() =>
                               onSelectEvent(
                                 cat.code || cat.name || cat._id,
@@ -783,13 +806,20 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
                               )
                             }
                           >
-                            Check Out Details →
-                          </button>
+                            <SplitColorText
+                              as="span"
+                              screenSync={true}
+                              leftColor="#0f172a"
+                              rightColor="#ffffff"
+                            >
+                              Check Out Details →
+                            </SplitColorText>
+                          </ThemeButton>
                         </div>
                       </div>
                     );
                   })}
-                </div>
+                </CardScrollAnimation>
               </section>
             );
           })
@@ -973,8 +1003,8 @@ function SubCategoryEventsView({ category, subCategory, themeCode, onBack, onSel
                 as="p"
                 className="subcat-hero-desc"
                 screenSync={true}
-                leftColor="#475569"
-                rightColor="#cbd5e1"
+                leftColor="#0f172a"
+                rightColor="#ffffff"
               >
                 Official competitive championships under {subCategory}. Browse individual event rules, team
                 regulations, entry fees, and coordinator details below.
@@ -983,10 +1013,16 @@ function SubCategoryEventsView({ category, subCategory, themeCode, onBack, onSel
 
             {/* Coordinator Card snippet if available */}
             {coordinator && coordinator.name && (
-              <div className="subcat-coord-card">
-                <div className="coord-card-header">
+              <div className="subcat-coord-card" key={`subcat-coord-${coordinator.name}`}>
+                <SplitColorText
+                  as="div"
+                  className="coord-card-header"
+                  screenSync={true}
+                  leftColor="#0f172a"
+                  rightColor="#ffffff"
+                >
                   Faculty In-charge
-                </div>
+                </SplitColorText>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                   {(coordinator.institutionId || coordinator.empId) && (
                     <div style={{ width: '56px', height: '56px', borderRadius: '50%', overflow: 'hidden', border: '2px solid rgba(255,255,255,0.4)', flexShrink: 0, boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
@@ -1002,17 +1038,26 @@ function SubCategoryEventsView({ category, subCategory, themeCode, onBack, onSel
                   <div className="coord-card-body" style={{ flex: 1 }}>
                     <SplitColorText
                       as="div"
-                      mode="fallback"
                       screenSync={true}
                       leftColor="#0f172a"
                       rightColor="#ffffff"
                       className="coord-card-name"
+                      key={`subcat-coord-name-${coordinator.name}`}
                     >
                       {formatTitleCase(coordinator.name)}
                     </SplitColorText>
-                    <div className="coord-card-designation">
+
+                    <SplitColorText
+                      as="div"
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                      className="coord-card-designation"
+                      key={`subcat-coord-desig-${coordinator.name}`}
+                    >
                       {formatTitleCase(coordinator.designation || 'Coordinator')}
-                    </div>
+                    </SplitColorText>
+
                     {coordinator.phone && (
                       <a href={`tel:${coordinator.phone}`} className="coord-card-contact">
                         <SplitColorText
@@ -1021,10 +1066,19 @@ function SubCategoryEventsView({ category, subCategory, themeCode, onBack, onSel
                           screenSync={true}
                           leftColor="#0f172a"
                           rightColor="#ffffff"
-                          className="coord-contact-split"
+                          className="coord-contact-icon-wrap"
                         >
                           <Phone size={13} strokeWidth={2.3} className="coord-contact-icon" />
-                          <span>{coordinator.phone}</span>
+                        </SplitColorText>
+                        <SplitColorText
+                          as="span"
+                          screenSync={true}
+                          leftColor="#0f172a"
+                          rightColor="#ffffff"
+                          className="coord-contact-text"
+                          key={`subcat-coord-phone-${coordinator.phone}`}
+                        >
+                          {coordinator.phone}
                         </SplitColorText>
                       </a>
                     )}
@@ -1036,10 +1090,19 @@ function SubCategoryEventsView({ category, subCategory, themeCode, onBack, onSel
                           screenSync={true}
                           leftColor="#0f172a"
                           rightColor="#ffffff"
-                          className="coord-contact-split"
+                          className="coord-contact-icon-wrap"
                         >
                           <Mail size={13} strokeWidth={2.3} className="coord-contact-icon" />
-                          <span>{coordinator.email}</span>
+                        </SplitColorText>
+                        <SplitColorText
+                          as="span"
+                          screenSync={true}
+                          leftColor="#0f172a"
+                          rightColor="#ffffff"
+                          className="coord-contact-text"
+                          key={`subcat-coord-email-${coordinator.email}`}
+                        >
+                          {coordinator.email}
                         </SplitColorText>
                       </a>
                     )}
@@ -1078,152 +1141,504 @@ function SubCategoryEventsView({ category, subCategory, themeCode, onBack, onSel
           )}
 
           {!loading && !error && events.length > 0 && (
-            <div className="events-cards-grid">
+            <CardScrollAnimation className="events-cards-grid">
               {events.map((ev, idx) => {
                 const eventImg = getEventImageUrl(ev.eventImage || ev.banner?.url, ev.eventName || ev.title);
 
                 return (
                   <div key={ev._id || idx} className="event-sub-card">
-                    {/* Title Bar */}
-                    <SplitColorText
-                      as="div"
-                      className="event-sub-title-bar"
-                      screenSync={true}
-                      leftColor="#0f172a"
-                      rightColor="#ffffff"
-                    >
-                      {ev.eventName || ev.title}
-                    </SplitColorText>
-
-                    {/* Body with Key-Value Pills & Image */}
-                    <div className="event-sub-body">
-                      <div className="event-sub-table-col">
-                        <div className="event-table-row">
-                          <div className="table-pill-label">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#475569"
-                              rightColor="#cbd5e1"
-                            >
-                              Participation
-                            </SplitColorText>
-                          </div>
-                          <div className="table-pill-value">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#0f172a"
-                              rightColor="#ffffff"
-                            >
-                              {ev.eventType || 'Solo'}
-                            </SplitColorText>
-                          </div>
-                        </div>
-                        <div className="event-table-row">
-                          <div className="table-pill-label">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#475569"
-                              rightColor="#cbd5e1"
-                            >
-                              Registration Fee
-                            </SplitColorText>
-                          </div>
-                          <div className="table-pill-value fee-highlight">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#be123c"
-                              rightColor="#fb7185"
-                            >
-                              {ev.price ? `₹ ${ev.price}/-` : 'Free Entry'}
-                            </SplitColorText>
-                          </div>
-                        </div>
-                        <div className="event-table-row">
-                          <div className="table-pill-label">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#475569"
-                              rightColor="#cbd5e1"
-                            >
-                              Venue
-                            </SplitColorText>
-                          </div>
-                          <div className="table-pill-value" style={{ fontSize: '0.82rem', whiteSpace: 'normal' }}>
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#0f172a"
-                              rightColor="#ffffff"
-                            >
-                              {ev.venue || 'Aditya University Campus'}
-                            </SplitColorText>
-                          </div>
-                        </div>
-                        <div className="event-table-row">
-                          <div className="table-pill-label">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#475569"
-                              rightColor="#cbd5e1"
-                            >
-                              Mode / Rounds
-                            </SplitColorText>
-                          </div>
-                          <div className="table-pill-value">
-                            <SplitColorText
-                              as="span"
-                              mode="fallback"
-                              screenSync={true}
-                              leftColor="#0f172a"
-                              rightColor="#ffffff"
-                            >
-                              {ev.mode || 'OFFLINE'} • {ev.rounds || 1} {ev.rounds === 1 ? 'Round' : 'Rounds'}
-                            </SplitColorText>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="event-sub-image-col">
-                        <img
-                          src={eventImg}
-                          alt={ev.eventName || ev.title}
-                          className="event-sub-img"
-                          onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = '/hero_bg.png';
-                          }}
-                        />
+                    {/* Top Full-Width Image Banner with Small Right-Aligned Title Badge */}
+                    <div className="event-sub-image-banner">
+                      <img
+                        src={eventImg}
+                        alt={ev.eventName || ev.title}
+                        className="event-sub-banner-img"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = '/hero_bg.png';
+                        }}
+                      />
+                      <div className="event-sub-img-badge">
+                        <SplitColorText
+                          as="span"
+                          screenSync={true}
+                          leftColor="#0f172a"
+                          rightColor="#ffffff"
+                        >
+                          {formatTitleCase(ev.eventName || ev.title)}
+                        </SplitColorText>
                       </div>
                     </div>
 
-                    {/* Bottom Checkout Button */}
+                    {/* Details / Rows below the image */}
+                    <div className="event-sub-details">
+                      <div className="event-table-row">
+                        <div className="table-pill-label">
+                          <SplitColorText
+                            as="span"
+                            screenSync={true}
+                            leftColor="#0f172a"
+                            rightColor="#ffffff"
+                          >
+                            Participation :
+                          </SplitColorText>
+                        </div>
+                        <div className="table-pill-value">
+                          <SplitColorText
+                            as="span"
+                            screenSync={true}
+                            leftColor="#0f172a"
+                            rightColor="#ffffff"
+                          >
+                            {formatTitleCase(ev.eventType || 'Solo')}
+                          </SplitColorText>
+                        </div>
+                      </div>
+                      <div className="event-table-row">
+                        <div className="table-pill-label">
+                          <SplitColorText
+                            as="span"
+                            screenSync={true}
+                            leftColor="#0f172a"
+                            rightColor="#ffffff"
+                          >
+                            Registration Fee :
+                          </SplitColorText>
+                        </div>
+                        <div className="table-pill-value fee-highlight">
+                          <SplitColorText
+                            as="span"
+                            screenSync={true}
+                            leftColor="#0f172a"
+                            rightColor="#ffffff"
+                          >
+                            {ev.price ? `₹ ${ev.price}/-` : 'Free Entry'}
+                          </SplitColorText>
+                        </div>
+                      </div>
+                      <div className="event-table-row">
+                        <div className="table-pill-label">
+                          <SplitColorText
+                            as="span"
+                            screenSync={true}
+                            leftColor="#0f172a"
+                            rightColor="#ffffff"
+                          >
+                            Venue :
+                          </SplitColorText>
+                        </div>
+                        <div className="table-pill-value" style={{ fontSize: '0.82rem', whiteSpace: 'normal' }}>
+                          <SplitColorText
+                            as="span"
+                            screenSync={true}
+                            leftColor="#0f172a"
+                            rightColor="#ffffff"
+                          >
+                            {formatTitleCase(ev.venue || 'Aditya University Campus')}
+                          </SplitColorText>
+                        </div>
+                      </div>
+                      <div className="event-table-row">
+                        <div className="table-pill-label">
+                          <SplitColorText
+                            as="span"
+                            screenSync={true}
+                            leftColor="#0f172a"
+                            rightColor="#ffffff"
+                          >
+                            Mode / Rounds :
+                          </SplitColorText>
+                        </div>
+                        <div className="table-pill-value">
+                          <SplitColorText
+                            as="span"
+                            screenSync={true}
+                            leftColor="#0f172a"
+                            rightColor="#ffffff"
+                          >
+                            {formatTitleCase(ev.mode || 'Offline')} • {ev.rounds || 1} {ev.rounds === 1 ? 'Round' : 'Rounds'}
+                          </SplitColorText>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom Checkout Button with ThemeButton */}
                     <div className="event-sub-footer">
-                      <button
-                        className="btn-checkout-primary"
+                      <ThemeButton
+                        as="button"
+                        type="button"
+                        borderRadius={9999}
+                        className="btn-event-checkout-theme"
                         onClick={() => onSelectEvent(ev.slug || ev.eventName || ev.title)}
                       >
-                        Check Out Details →
-                      </button>
+                        <SplitColorText
+                          as="span"
+                          screenSync={true}
+                          leftColor="#0f172a"
+                          rightColor="#ffffff"
+                        >
+                          Check Out Details →
+                        </SplitColorText>
+                      </ThemeButton>
                     </div>
                   </div>
                 );
               })}
-            </div>
+            </CardScrollAnimation>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// COMPONENT: Coordinators Hierarchy with Dynamic Flowchart Connector Lines
+// ─────────────────────────────────────────────────────────────
+function CoordinatorsHierarchyFlow({ faculty = [], students = [], title = '' }) {
+  const containerRef = useRef(null);
+  const facultyRefs = useRef([]);
+  const studentRefs = useRef([]);
+  const [flowCoords, setFlowCoords] = useState(null);
+
+  const updateCoords = useCallback(() => {
+    if (!containerRef.current) return;
+    const containerRect = containerRef.current.getBoundingClientRect();
+    if (containerRect.width === 0 || containerRect.height === 0) return;
+
+    const facPoints = [];
+    facultyRefs.current.forEach((el) => {
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        facPoints.push({
+          x: rect.left + rect.width / 2 - containerRect.left,
+          y: rect.bottom - containerRect.top
+        });
+      }
+    });
+
+    const stuPoints = [];
+    studentRefs.current.forEach((el) => {
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        stuPoints.push({
+          x: rect.left + rect.width / 2 - containerRect.left,
+          y: rect.top - containerRect.top
+        });
+      }
+    });
+
+    if (facPoints.length === 0 || stuPoints.length === 0) {
+      setFlowCoords(null);
+      return;
+    }
+
+    const maxFacY = Math.max(...facPoints.map((p) => p.y));
+    const minStuY = Math.min(...stuPoints.map((p) => p.y));
+
+    if (minStuY > maxFacY) {
+      const yMid = (maxFacY + minStuY) / 2;
+      const allX = [...facPoints.map((p) => p.x), ...stuPoints.map((p) => p.x)];
+      const minX = Math.min(...allX);
+      const maxX = Math.max(...allX);
+
+      setFlowCoords({
+        facPoints,
+        stuPoints,
+        yMid,
+        busMinX: minX,
+        busMaxX: maxX,
+        width: containerRect.width,
+        height: containerRect.height
+      });
+    } else {
+      setFlowCoords(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    updateCoords();
+
+    const timer1 = setTimeout(updateCoords, 60);
+    const timer2 = setTimeout(updateCoords, 250);
+    const timer3 = setTimeout(updateCoords, 600);
+    const timer4 = setTimeout(updateCoords, 1200);
+
+    const handleResize = () => updateCoords();
+    window.addEventListener('resize', handleResize);
+
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
+      ro = new ResizeObserver(() => {
+        updateCoords();
+      });
+      ro.observe(containerRef.current);
+      facultyRefs.current.forEach((el) => el && ro.observe(el));
+      studentRefs.current.forEach((el) => el && ro.observe(el));
+    }
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      clearTimeout(timer4);
+      window.removeEventListener('resize', handleResize);
+      if (ro) ro.disconnect();
+    };
+  }, [faculty, students, updateCoords]);
+
+  if (faculty.length === 0 && students.length === 0) {
+    return null;
+  }
+
+  const hasFlow = faculty.length > 0 && students.length > 0;
+
+  return (
+    <div className="coordinators-hierarchy-container">
+      {/* Center-aligned Dynamic Section Heading with SplitColorText */}
+      {title && (
+        <div className="coordinators-flow-heading-wrap">
+          <SplitColorText
+            as="h2"
+            className="coordinators-flow-title"
+            screenSync={true}
+            leftColor="#0f172a"
+            rightColor="#ffffff"
+          >
+            {title}
+          </SplitColorText>
+        </div>
+      )}
+
+      <div className="coordinators-flow-wrapper" ref={containerRef}>
+      {/* Dynamic SVG Flowchart Connection Lines */}
+      {hasFlow && flowCoords && (
+        <svg
+          className="coordinators-flow-svg"
+          viewBox={`0 0 ${flowCoords.width} ${flowCoords.height}`}
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          {/* Horizontal Connector Bus Bar */}
+          {flowCoords.busMinX !== flowCoords.busMaxX && (
+            <g className="flow-bus-bar-group">
+              <line
+                x1={flowCoords.busMinX}
+                y1={flowCoords.yMid}
+                x2={flowCoords.busMaxX}
+                y2={flowCoords.yMid}
+                className="flow-path-glow"
+              />
+              <line
+                x1={flowCoords.busMinX}
+                y1={flowCoords.yMid}
+                x2={flowCoords.busMaxX}
+                y2={flowCoords.yMid}
+                className="flow-path-core"
+              />
+              <line
+                x1={flowCoords.busMinX}
+                y1={flowCoords.yMid}
+                x2={flowCoords.busMaxX}
+                y2={flowCoords.yMid}
+                className="flow-path-pulse"
+              />
+            </g>
+          )}
+
+          {/* Vertical Drops from each Faculty Coordinator to yMid */}
+          {flowCoords.facPoints.map((fac, idx) => (
+            <g key={`fac-line-${idx}`}>
+              <line
+                x1={fac.x}
+                y1={fac.y}
+                x2={fac.x}
+                y2={flowCoords.yMid}
+                className="flow-path-glow"
+              />
+              <line
+                x1={fac.x}
+                y1={fac.y}
+                x2={fac.x}
+                y2={flowCoords.yMid}
+                className="flow-path-core"
+              />
+              <line
+                x1={fac.x}
+                y1={fac.y}
+                x2={fac.x}
+                y2={flowCoords.yMid}
+                className="flow-path-pulse"
+              />
+              {/* Junction Dots at the Bus Bar intersection */}
+              <circle cx={fac.x} cy={flowCoords.yMid} r={4.5} className="flow-junction-dot" />
+              <circle cx={fac.x} cy={flowCoords.yMid} r={7} className="flow-junction-ring" />
+            </g>
+          ))}
+
+          {/* Vertical Drops from yMid to each Student Coordinator with Arrowhead */}
+          {flowCoords.stuPoints.map((stu, idx) => (
+            <g key={`stu-line-${idx}`}>
+              <line
+                x1={stu.x}
+                y1={flowCoords.yMid}
+                x2={stu.x}
+                y2={stu.y - 7}
+                className="flow-path-glow"
+              />
+              <line
+                x1={stu.x}
+                y1={flowCoords.yMid}
+                x2={stu.x}
+                y2={stu.y - 7}
+                className="flow-path-core"
+              />
+              <line
+                x1={stu.x}
+                y1={flowCoords.yMid}
+                x2={stu.x}
+                y2={stu.y - 7}
+                className="flow-path-pulse"
+              />
+              {/* Junction Dots at the Bus Bar intersection */}
+              <circle cx={stu.x} cy={flowCoords.yMid} r={4.5} className="flow-junction-dot" />
+              <circle cx={stu.x} cy={flowCoords.yMid} r={7} className="flow-junction-ring" />
+
+              {/* Crisp Flowchart Arrowhead */}
+              <polygon
+                points={`${stu.x - 6},${stu.y - 8} ${stu.x + 6},${stu.y - 8} ${stu.x},${stu.y}`}
+                className="flow-arrowhead"
+              />
+            </g>
+          ))}
+        </svg>
+      )}
+
+      {/* Tier 1: Faculty Coordinators */}
+      {faculty.length > 0 && (
+        <div className="coordinators-tier coordinators-tier-faculty">
+          <div className="coordinators-grid">
+            {faculty.map((fc, idx) => (
+              <div
+                key={`faculty-${idx}`}
+                ref={(el) => (facultyRefs.current[idx] = el)}
+                className="coordinator-card"
+              >
+                <div className="coordinator-photo-container">
+                  <FacultyCoordinatorPhoto
+                    coordinator={fc}
+                    index={idx}
+                    alt={fc.cordinatorName}
+                    className="coordinator-photo"
+                  />
+                  <span className="coordinator-badge">
+                    <SplitColorText as="span" screenSync={true} leftColor="#ffffff" rightColor="#ffffff">
+                      Faculty Coordinator
+                    </SplitColorText>
+                  </span>
+                </div>
+                <div className="coordinator-card-body">
+                  <SplitColorText as="div" className="coordinator-name" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                    {formatTitleCase(fc.cordinatorName)}
+                  </SplitColorText>
+                  <div className="coordinator-dept">
+                    <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#fbbf24">
+                      {formatTitleCase(fc.cordinatorDesignation || fc.departmentName || fc.cordinatorCollege || 'Coordinator')}
+                    </SplitColorText>
+                  </div>
+                  <div className="coordinator-contacts-list">
+                    {fc.cordinatorPhone && (
+                      <a href={`tel:${fc.cordinatorPhone}`} className="coordinator-contact-item">
+                        <Phone size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
+                        <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                          {fc.cordinatorPhone}
+                        </SplitColorText>
+                      </a>
+                    )}
+                    {fc.cordinatorEmail && (
+                      <a href={`mailto:${fc.cordinatorEmail}`} className="coordinator-contact-item">
+                        <Mail size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
+                        <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                          {fc.cordinatorEmail}
+                        </SplitColorText>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Spacer separating the tiers for the flowchart lines */}
+      {hasFlow && <div className="coordinators-flow-spacer" aria-hidden="true" />}
+
+      {/* Tier 2: Student Coordinators */}
+      {students.length > 0 && (
+        <div className="coordinators-tier coordinators-tier-student">
+          <div className="coordinators-grid">
+            {students.map((sc, idx) => {
+              const photoUrl = sc.studentCordinatorId
+                ? `https://info.aec.edu.in/adityacentral/studentphotos/${sc.studentCordinatorId.toString().trim().toUpperCase()}.jpg`
+                : `/img/person/${(idx % 8) + 2}.jpg`;
+
+              return (
+                <div
+                  key={`student-${idx}`}
+                  ref={(el) => (studentRefs.current[idx] = el)}
+                  className="coordinator-card"
+                >
+                  <div className="coordinator-photo-container">
+                    <img
+                      src={photoUrl}
+                      alt={sc.studentCordinatorName}
+                      className="coordinator-photo"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = `/img/person/${(idx % 8) + 2}.jpg`;
+                      }}
+                    />
+                    <span className="coordinator-badge">
+                      <SplitColorText as="span" screenSync={true} leftColor="#ffffff" rightColor="#ffffff">
+                        Student Coordinator
+                      </SplitColorText>
+                    </span>
+                  </div>
+                  <div className="coordinator-card-body">
+                    <SplitColorText as="div" className="coordinator-name" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                      {formatTitleCase(sc.studentCordinatorName)}
+                    </SplitColorText>
+                    <div className="coordinator-dept">
+                      <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#fbbf24">
+                        {formatTitleCase(sc.studentCordinatorCollege || sc.departmentName || 'Student Coordinator')}
+                      </SplitColorText>
+                    </div>
+                    <div className="coordinator-contacts-list">
+                      {sc.studentCordinatorPhone && (
+                        <a href={`tel:${sc.studentCordinatorPhone}`} className="coordinator-contact-item">
+                          <Phone size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
+                          <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                            {sc.studentCordinatorPhone}
+                          </SplitColorText>
+                        </a>
+                      )}
+                      {sc.studentCordinatorEmail && (
+                        <a href={`mailto:${sc.studentCordinatorEmail}`} className="coordinator-contact-item">
+                          <Mail size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
+                          <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                            {sc.studentCordinatorEmail}
+                          </SplitColorText>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );
@@ -1308,26 +1723,13 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
     ? getEventImageUrl(eventData.eventImage || eventData.banner?.url, eventData.eventName || eventData.title)
     : '/hero_bg.png';
 
+  const rawOverview = eventData?.overview || eventData?.description || 'Official competitive event at Aditya University.';
+  const cleanOverview = typeof rawOverview === 'string' ? rawOverview.replace(/<[^>]*>/g, '').trim() : rawOverview;
+
   return (
     <div className="events-page-wrapper">
       <div className="event-detail-wrapper">
         <div className="categories-container" style={{ position: 'relative', zIndex: 2 }}>
-          {/* Back Navigation Bar */}
-          <div className="breadcrumb-nav">
-            <button onClick={onBack} className="btn-back-breadcrumb">
-              ← Back to {subCategory}
-            </button>
-            <span className="detail-breadcrumb-path">
-              <span className="breadcrumb-link" onClick={onNavigateHome}>Events</span>
-              {' / '}
-              <span>{category}</span>
-              {' / '}
-              <span className="breadcrumb-link" onClick={onBack}>{subCategory}</span>
-              {' / '}
-              <span className="breadcrumb-current">{eventData?.eventName || eventData?.title || eventName}</span>
-            </span>
-          </div>
-
           {loading && (
             <div className="events-loading">
               <div className="events-spinner" />
@@ -1347,45 +1749,104 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
 
           {!loading && !error && eventData && (
             <>
-              {/* Event Main Banner Hero */}
+              {/* Event Main Banner Hero - Liquid Glass & SplitColorText */}
               <div className="detail-hero-banner">
-                <div className="detail-hero-img-col">
-                  <img
-                    src={bannerImg}
-                    alt={eventData.eventName || eventData.title}
-                    className="detail-hero-img"
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = '/hero_bg.png';
-                    }}
-                  />
-                </div>
-                <div className="detail-hero-info-col">
-                  <div className="detail-badges-row">
-                    <span className="detail-tag-badge">{category}</span>
-                    <span className="detail-tag-badge badge-sub">{subCategory}</span>
-                    <span className="detail-tag-badge badge-mode">{eventData.mode || 'OFFLINE'}</span>
-                  </div>
-                  <h1 className="detail-main-title">{eventData.eventName || eventData.title}</h1>
-                  <p className="detail-short-desc">
-                    {eventData.overview || eventData.description || 'Official competitive event at Aditya University.'}
-                  </p>
-                  <div className="detail-cta-row">
-                    <button
-                      type="button"
-                      className="btn-register-now-hero"
-                      onClick={handleRegisterButtonClick}
+                {/* Back Button & Event Badges Row - Positioned ABOVE the image */}
+                <div className="detail-hero-top-row">
+                  <button
+                    type="button"
+                    onClick={onBack}
+                    className="subcat-circle-back-btn"
+                    title={`Back to ${subCategory}`}
+                    aria-label={`Back to ${subCategory}`}
+                  >
+                    <SplitColorText
+                      as="span"
+                      mode="fallback"
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                      className="subcat-circle-back-split"
                     >
-                      ★ Register for this Competition
-                    </button>
-                    <span className="detail-fee-callout">
-                      Entry Fee: <strong>{eventData.price ? `₹ ${eventData.price}/-` : 'Free'}</strong>
-                    </span>
-                    {currentStudent && (
-                      <span className="detail-logged-student-pill" title="Logged in as student">
-                        👤 {currentStudent.name} ({currentStudent.roll})
-                      </span>
-                    )}
+                      <ArrowLeft size={16} strokeWidth={2.6} />
+                    </SplitColorText>
+                  </button>
+                  <span className="detail-tag-badge">
+                    <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                      {category}
+                    </SplitColorText>
+                  </span>
+                  <span className="detail-tag-badge badge-sub">
+                    <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#fbbf24">
+                      {subCategory}
+                    </SplitColorText>
+                  </span>
+                  <span className="detail-tag-badge badge-mode">
+                    <SplitColorText as="span" screenSync={true} leftColor="#059669" rightColor="#34d399">
+                      {eventData.mode || 'OFFLINE'}
+                    </SplitColorText>
+                  </span>
+                </div>
+
+                <div className="detail-hero-main-grid">
+                  <div className="detail-hero-img-col">
+                    <img
+                      src={bannerImg}
+                      alt={eventData.eventName || eventData.title}
+                      className="detail-hero-img"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = '/hero_bg.png';
+                      }}
+                    />
+                  </div>
+                  <div className="detail-hero-info-col">
+                    <SplitColorText
+                      as="h1"
+                      className="detail-main-title"
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      {eventData.eventName || eventData.title}
+                    </SplitColorText>
+                    <SplitColorText
+                      as="p"
+                      className="detail-short-desc"
+                      screenSync={true}
+                      leftColor="#475569"
+                      rightColor="#cbd5e1"
+                    >
+                      {cleanOverview}
+                    </SplitColorText>
+                    <div className="detail-cta-row">
+                      <div className="detail-fee-group">
+                        <span className="detail-fee-callout">
+                          <SplitColorText as="span" screenSync={true} leftColor="#475569" rightColor="#94a3b8">
+                            Entry Fee:
+                          </SplitColorText>{' '}
+                          <strong className="detail-fee-amount">
+                            <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#be9337">
+                              {eventData.price ? `₹ ${eventData.price}/-` : 'Free'}
+                            </SplitColorText>
+                          </strong>
+                        </span>
+                        {currentStudent && (
+                          <span className="detail-logged-student-pill" title="Logged in as student">
+                            👤 {currentStudent.name} ({currentStudent.roll})
+                          </span>
+                        )}
+                      </div>
+
+                      <ThemeButton
+                        onClick={handleRegisterButtonClick}
+                        className="btn-register-hero-theme"
+                      >
+                        <SplitColorText leftColor="#0f172a" rightColor="#ffffff">
+                          Register
+                        </SplitColorText>
+                      </ThemeButton>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1393,67 +1854,137 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
               {/* Key Event Parameters Grid */}
               <div className="detail-stats-grid">
                 <div className="detail-stat-card">
-                  <div className="stat-card-icon">🏷️</div>
-                  <div className="stat-card-label">Registration Fee</div>
+                  <div className="stat-card-icon-box">
+                    <Tag className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
+                  </div>
+                  <div className="stat-card-label">
+                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
+                      Registration Fee
+                    </SplitColorText>
+                  </div>
                   <div className="stat-card-value">
-                    {eventData.price ? `₹ ${eventData.price}/-` : 'Free Entry'}
+                    <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#be9337">
+                      {eventData.price ? `₹ ${eventData.price}/-` : 'Free Entry'}
+                    </SplitColorText>
                   </div>
                 </div>
 
                 <div className="detail-stat-card">
-                  <div className="stat-card-icon">👥</div>
-                  <div className="stat-card-label">Participation Type</div>
-                  <div className="stat-card-value">{eventData.eventType || 'Solo'}</div>
+                  <div className="stat-card-icon-box">
+                    <Users className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
+                  </div>
+                  <div className="stat-card-label">
+                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
+                      Participation Type
+                    </SplitColorText>
+                  </div>
+                  <div className="stat-card-value">
+                    <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                      {eventData.eventType || 'Solo'}
+                    </SplitColorText>
+                  </div>
                 </div>
 
                 <div className="detail-stat-card">
-                  <div className="stat-card-icon">📍</div>
-                  <div className="stat-card-label">Venue Location</div>
-                  <div className="stat-card-value stat-small">{eventData.venue}</div>
-                </div>
-
-                <div className="detail-stat-card">
-                  <div className="stat-card-icon">📅</div>
-                  <div className="stat-card-label">Festival Schedule</div>
+                  <div className="stat-card-icon-box">
+                    <MapPin className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
+                  </div>
+                  <div className="stat-card-label">
+                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
+                      Venue Location
+                    </SplitColorText>
+                  </div>
                   <div className="stat-card-value stat-small">
-                    {eventData.schedule?.fromDate
-                      ? new Date(eventData.schedule.fromDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                      : 'Jan 7 - 9, 2027'}
+                    <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                      {eventData.venue}
+                    </SplitColorText>
                   </div>
                 </div>
 
                 <div className="detail-stat-card">
-                  <div className="stat-card-icon">🔄</div>
-                  <div className="stat-card-label">Competition Rounds</div>
+                  <div className="stat-card-icon-box">
+                    <Calendar className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
+                  </div>
+                  <div className="stat-card-label">
+                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
+                      Festival Schedule
+                    </SplitColorText>
+                  </div>
+                  <div className="stat-card-value stat-small">
+                    <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                      {eventData.schedule?.fromDate
+                        ? new Date(eventData.schedule.fromDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                        : 'Jan 7 - 9, 2027'}
+                    </SplitColorText>
+                  </div>
+                </div>
+
+                <div className="detail-stat-card">
+                  <div className="stat-card-icon-box">
+                    <RotateCcw className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
+                  </div>
+                  <div className="stat-card-label">
+                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
+                      Competition Rounds
+                    </SplitColorText>
+                  </div>
                   <div className="stat-card-value">
-                    {eventData.rounds || 1} {eventData.rounds === 1 ? 'Round' : 'Rounds'}
+                    <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                      {eventData.rounds || 1} {eventData.rounds === 1 ? 'Round' : 'Rounds'}
+                    </SplitColorText>
                   </div>
                 </div>
 
                 <div className="detail-stat-card">
-                  <div className="stat-card-icon">🎯</div>
-                  <div className="stat-card-label">Event Capacity</div>
-                  <div className="stat-card-value">{eventData.capacity || 100} Participants</div>
+                  <div className="stat-card-icon-box">
+                    <Target className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
+                  </div>
+                  <div className="stat-card-label">
+                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
+                      Event Capacity
+                    </SplitColorText>
+                  </div>
+                  <div className="stat-card-value">
+                    <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                      {eventData.capacity || 100} Participants
+                    </SplitColorText>
+                  </div>
                 </div>
               </div>
 
               {/* Overview Section */}
               <div className="detail-section">
-                <div className="detail-pill-badge">Overview & Description</div>
-                <p className="detail-overview-text">
-                  {eventData.overview || eventData.description || 'Official competitive event at Aditya University fest.'}
-                </p>
+                <div className="detail-pill-badge">
+                  <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                    Overview & Description
+                  </SplitColorText>
+                </div>
+                <SplitColorText
+                  as="p"
+                  className="detail-overview-text"
+                  screenSync={true}
+                  leftColor="#334155"
+                  rightColor="#e2e8f0"
+                >
+                  {cleanOverview}
+                </SplitColorText>
               </div>
 
               {/* Event Rules Section */}
               {Array.isArray(eventData.regulations) && eventData.regulations.length > 0 && (
                 <div className="detail-section">
-                  <div className="detail-pill-badge">Official Rules & Regulations</div>
+                  <div className="detail-pill-badge">
+                    <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                      Official Rules & Regulations
+                    </SplitColorText>
+                  </div>
                   <ul className="detail-rules-list">
                     {eventData.regulations.map((rule, idx) => (
                       <li key={idx}>
                         <span className="rule-number">{idx + 1}</span>
-                        <span className="rule-content">{rule}</span>
+                        <SplitColorText as="span" className="rule-content" screenSync={true} leftColor="#1e293b" rightColor="#ffffff">
+                          {rule}
+                        </SplitColorText>
                       </li>
                     ))}
                   </ul>
@@ -1463,95 +1994,48 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
               {/* Venue Details Section */}
               {eventData.venueObj && (eventData.venueObj.name || eventData.venueObj.roomNo) && (
                 <div className="detail-section">
-                  <div className="detail-pill-badge">Venue Information</div>
+                  <div className="detail-pill-badge">
+                    <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                      Venue Information
+                    </SplitColorText>
+                  </div>
                   <div className="detail-venue-box">
                     <p className="detail-venue-text">
-                      🏛️ <strong>Hall/Ground:</strong> {eventData.venueObj.name || eventData.venue}
+                      <Landmark size={18} strokeWidth={2.2} className="venue-lucide-icon" />
+                      <SplitColorText as="span" screenSync={true} leftColor="#475569" rightColor="#cbd5e1">
+                        <strong>Hall/Ground:</strong>{' '}
+                      </SplitColorText>
+                      <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                        {eventData.venueObj.name || eventData.venue}
+                      </SplitColorText>
                     </p>
                     {eventData.venueObj.roomNo && (
                       <p className="detail-venue-subtext">
-                        📍 <strong>Room Number:</strong> {eventData.venueObj.roomNo} • {eventData.venueObj.venueType || 'Indoor'}
+                        <MapPin size={18} strokeWidth={2.2} className="venue-lucide-icon" />
+                        <SplitColorText as="span" screenSync={true} leftColor="#475569" rightColor="#cbd5e1">
+                          <strong>Room Number:</strong>{' '}
+                          {eventData.venueObj.roomNo} • {eventData.venueObj.venueType || 'Indoor'}
+                        </SplitColorText>
                       </p>
                     )}
                   </div>
                 </div>
               )}
 
-              {/* Faculty Coordinators Section */}
-              {faculty.length > 0 && (
-                <div className="coordinators-section">
-                  <h2 className="coordinators-heading">Faculty Coordinators</h2>
-                  <div className="coordinators-grid">
-                    {faculty.map((fc, idx) => {
-                      return (
-                        <div key={idx} className="coordinator-card">
-                          <div className="coordinator-photo-container">
-                            <FacultyCoordinatorPhoto
-                              coordinator={fc}
-                              index={idx}
-                              alt={fc.cordinatorName}
-                              className="coordinator-photo"
-                            />
-                          </div>
-                          <div className="coordinator-name">{formatTitleCase(fc.cordinatorName)}</div>
-                          <div className="coordinator-dept">
-                            {formatTitleCase(fc.cordinatorDesignation || fc.departmentName || fc.cordinatorCollege || 'Coordinator')}
-                          </div>
-                          {fc.cordinatorPhone && (
-                            <a href={`tel:${fc.cordinatorPhone}`} className="coordinator-phone">
-                              📞 {fc.cordinatorPhone}
-                            </a>
-                          )}
-                          {fc.cordinatorEmail && (
-                            <a href={`mailto:${fc.cordinatorEmail}`} className="coordinator-email">
-                              ✉️ {fc.cordinatorEmail}
-                            </a>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
+              {/* Coordinators Hierarchy with Dynamic Flowchart Connector Lines */}
+              {(faculty.length > 0 || students.length > 0) && (() => {
+                const rawEventName = eventData?.eventName || eventData?.title || subCategory || eventName || 'Event';
+                const cleanEventName = rawEventName.replace(/\s*\([^)]*\)/g, '').trim() || rawEventName;
+                const coordinatorsHeading = `${formatTitleCase(cleanEventName)} Coordinators`;
 
-              {/* Student Coordinators Section */}
-              {students.length > 0 && (
-                <div className="coordinators-section">
-                  <h2 className="coordinators-heading">Student Coordinators</h2>
-                  <div className="coordinators-grid">
-                    {students.map((sc, idx) => {
-                      const photoUrl = sc.studentCordinatorId
-                        ? `https://info.aec.edu.in/adityacentral/studentphotos/${sc.studentCordinatorId.toString().trim().toUpperCase()}.jpg`
-                        : `/img/person/${(idx % 8) + 2}.jpg`;
-
-                      return (
-                        <div key={idx} className="coordinator-card">
-                          <div className="coordinator-photo-container">
-                            <img
-                              src={photoUrl}
-                              alt={sc.studentCordinatorName}
-                              className="coordinator-photo"
-                              onError={(e) => {
-                                e.currentTarget.onerror = null;
-                                e.currentTarget.src = `/img/person/${(idx % 8) + 2}.jpg`;
-                              }}
-                            />
-                          </div>
-                          <div className="coordinator-name">{formatTitleCase(sc.studentCordinatorName)}</div>
-                          <div className="coordinator-dept">
-                            {formatTitleCase(sc.studentCordinatorCollege || sc.departmentName || 'Student Coordinator')}
-                          </div>
-                          {sc.studentCordinatorPhone && (
-                            <a href={`tel:${sc.studentCordinatorPhone}`} className="coordinator-phone">
-                              📞 {sc.studentCordinatorPhone}
-                            </a>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
+                return (
+                  <CoordinatorsHierarchyFlow
+                    faculty={faculty}
+                    students={students}
+                    title={coordinatorsHeading}
+                  />
+                );
+              })()}
             </>
           )}
 

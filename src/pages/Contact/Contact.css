@@ -366,7 +366,8 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
-  max-width: 1200px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -431,7 +432,8 @@
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 3.5rem;
-  max-width: 1200px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -727,7 +729,8 @@
 }
 
 .transit-box {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   background: #ffffff;
   border: 1.5px solid #e2e8f0;

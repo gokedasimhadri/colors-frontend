@@ -1,6 +1,8 @@
-import React, { forwardRef, useRef, useState, useEffect } from 'react';
+import React, { forwardRef, useRef, useState, useEffect, useLayoutEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import './SplitColorText.css';
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 /**
  * SplitColorText - Advanced Scroll-Aware Inverted & Split Color Text Component
@@ -74,6 +76,21 @@ export const SplitColorText = forwardRef(function SplitColorText(
     return !isSplitPage ? 'light' : 'dark';
   });
 
+  // Extract a reliable key representation of children to detect dynamic text changes
+  const childrenKey = useMemo(() => {
+    if (children === null || children === undefined) return '';
+    if (typeof children === 'string' || typeof children === 'number') return String(children);
+    if (React.isValidElement(children)) {
+      return children.key || children.props?.children?.toString() || children.type?.name || 'element';
+    }
+    if (Array.isArray(children)) {
+      return children
+        .map((c) => (typeof c === 'string' || typeof c === 'number' ? String(c) : 'node'))
+        .join('-');
+    }
+    return '';
+  }, [children]);
+
   // Helper: Detect actual effective background luminance under (x, y)
   const detectEffectiveLuminanceAt = (x, y, targetEl, splitX) => {
     if (typeof document === 'undefined') return x < splitX ? 1 : 0;
@@ -87,15 +104,25 @@ export const SplitColorText = forwardRef(function SplitColorText(
 
     for (const item of elements) {
       if (!item) continue;
-      // Skip navbar, menu, buttons, and self
+      // Skip target element itself and its subtree
+      if (item === targetEl || targetEl?.contains(item) || item.contains(targetEl)) {
+        continue;
+      }
+
+      // Skip liquid glass containers, navbar, menu, buttons, tabs, pills
       if (
-        item === targetEl ||
         item.closest('.navbar') ||
         item.closest('.navbar-links') ||
         item.closest('.theme-glass-btn') ||
         item.closest('.mobile-menu') ||
         item.closest('.theme-tab-container') ||
-        item.closest('.theme-tab-item')
+        item.closest('.theme-tab-item') ||
+        item.closest('.theme-tab-mobile-stepper') ||
+        item.closest('.category-coord-pill') ||
+        item.closest('.subcat-hero-card') ||
+        item.closest('.subcat-badge') ||
+        item.closest('.detail-pill-badge') ||
+        item.closest('.coordinator-badge')
       ) {
         continue;
       }
@@ -152,16 +179,24 @@ export const SplitColorText = forwardRef(function SplitColorText(
           return 1; // Light footer canvas
         }
 
-        const bg = window.getComputedStyle(curr).backgroundColor;
-        if (bg && bg !== 'transparent' && !bg.includes('rgba(0, 0, 0, 0)')) {
-          const match = bg.match(/\d+/g);
-          if (match && match.length >= 3) {
-            const r = Number(match[0]);
-            const g = Number(match[1]);
-            const b = Number(match[2]);
-            const a = match[3] !== undefined ? Number(match[3]) : 1;
-            if (a > 0.4) {
-              return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        // Ignore translucent frosted glass surfaces
+        const comp = window.getComputedStyle(curr);
+        const hasBackdrop =
+          (comp.backdropFilter && comp.backdropFilter !== 'none') ||
+          (comp.webkitBackdropFilter && comp.webkitBackdropFilter !== 'none');
+
+        if (!hasBackdrop) {
+          const bg = comp.backgroundColor;
+          if (bg && bg !== 'transparent' && !bg.includes('rgba(0, 0, 0, 0)')) {
+            const match = bg.match(/\d+/g);
+            if (match && match.length >= 3) {
+              const r = Number(match[0]);
+              const g = Number(match[1]);
+              const b = Number(match[2]);
+              const a = match[3] !== undefined ? Number(match[3]) : 1;
+              if (a >= 0.75) {
+                return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+              }
             }
           }
         }
@@ -175,24 +210,27 @@ export const SplitColorText = forwardRef(function SplitColorText(
     return cx < splitX ? 1 : 0;
   };
 
-  // 1. ScreenSync Split Calculation (for mode === 'split' or 'fallback' with dynamic scroll luminance detection)
-  useEffect(() => {
+  // 1. ScreenSync Split Calculation (for mode === 'split' or 'fallback' with dynamic luminance & position tracking)
+  useIsomorphicLayoutEffect(() => {
     if ((resolvedMode !== 'split' && resolvedMode !== 'fallback') || splitPercent !== undefined || !screenSync) return;
     const el = internalRef.current;
     if (!el) return;
 
     let ticking = false;
     const calculateSplit = () => {
-      const rect = el.getBoundingClientRect();
+      const currentEl = internalRef.current;
+      if (!currentEl) {
+        ticking = false;
+        return;
+      }
+
+      const rect = currentEl.getBoundingClientRect();
       if (rect.width <= 0) {
         ticking = false;
         return;
       }
 
       if (!isSplitPage) {
-        // Non-split pages (Events, Invitation, Sponsors, Contact, etc.):
-        // All subpages have light backgrounds (#fff / #fffbeb / #f8fafc).
-        // Immediately set 100% leftColor (#0f172a - dark navy) so all text is crystal clear!
         setSyncedPercent(100);
         setDetectedTheme('light');
         ticking = false;
@@ -209,28 +247,35 @@ export const SplitColorText = forwardRef(function SplitColorText(
       const rightX = rect.right - 2;
       const centerX = rect.left + rect.width / 2;
 
-      const lumLeft = detectEffectiveLuminanceAt(leftX, cy, el, splitX);
-      const lumRight = detectEffectiveLuminanceAt(rightX, cy, el, splitX);
-      const lumCenter = detectEffectiveLuminanceAt(centerX, cy, el, splitX);
+      const lumLeft = detectEffectiveLuminanceAt(leftX, cy, currentEl, splitX);
+      const lumRight = detectEffectiveLuminanceAt(rightX, cy, currentEl, splitX);
 
-      // If both left and right edges sit over a LIGHT surface (lum > 0.5):
-      // Force 100% leftColor (#0f172a - dark navy) so text is bold & visible!
-      if (lumLeft > 0.5 && lumRight > 0.5) {
+      // 1. If element sits entirely to the left of the split seam (over light canvas):
+      if (rightX <= splitX) {
         setSyncedPercent(100);
         setDetectedTheme('light');
       }
-      // If both left and right edges sit over a DARK surface (lum <= 0.5):
-      // Force 0% leftColor (100% rightColor #ffffff - pure white)
+      // 2. If element sits entirely to the right of the split seam (over dark canvas):
+      else if (leftX >= splitX) {
+        setSyncedPercent(0);
+        setDetectedTheme('dark');
+      }
+      // 3. If element sits inside a solid light container (even on the right side):
+      else if (lumLeft > 0.5 && lumRight > 0.5) {
+        setSyncedPercent(100);
+        setDetectedTheme('light');
+      }
+      // 4. If element sits inside a solid dark container (even on the left side):
       else if (lumLeft <= 0.5 && lumRight <= 0.5) {
         setSyncedPercent(0);
         setDetectedTheme('dark');
       }
-      // If element spans across a seam (one side light, other dark):
+      // 5. Element spans across the split seam (left half is light, right half is dark):
       else {
         const offset = splitX - rect.left;
         const percent = (offset / rect.width) * 100;
         setSyncedPercent(Math.min(100, Math.max(0, percent)));
-        setDetectedTheme(lumCenter > 0.5 ? 'light' : 'dark');
+        setDetectedTheme(centerX < splitX ? 'light' : 'dark');
       }
 
       ticking = false;
@@ -243,14 +288,49 @@ export const SplitColorText = forwardRef(function SplitColorText(
       }
     };
 
+    // Immediate calculation
     calculateSplit();
+
+    // Multi-frame scheduling to catch layout shifts, font loads, or dynamic tab transitions
+    const raf1 = window.requestAnimationFrame(calculateSplit);
+    const t1 = setTimeout(calculateSplit, 40);
+    const t2 = setTimeout(calculateSplit, 120);
+    const t3 = setTimeout(calculateSplit, 260);
+
+    // Dynamic DOM ResizeObserver
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(() => {
+        calculateSplit();
+      });
+      ro.observe(el);
+    }
+
+    // Dynamic DOM MutationObserver for text/child mutations
+    let mo = null;
+    if (typeof MutationObserver !== 'undefined') {
+      mo = new MutationObserver(() => {
+        calculateSplit();
+      });
+      mo.observe(el, { childList: true, characterData: true, subtree: true });
+    }
+
     window.addEventListener('resize', onScrollOrResize);
     window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('split-color-sync', onScrollOrResize);
+
     return () => {
+      window.cancelAnimationFrame(raf1);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      if (ro) ro.disconnect();
+      if (mo) mo.disconnect();
       window.removeEventListener('resize', onScrollOrResize);
       window.removeEventListener('scroll', onScrollOrResize);
+      window.removeEventListener('split-color-sync', onScrollOrResize);
     };
-  }, [resolvedMode, splitPercent, screenSync, pathname, isSplitPage]);
+  }, [resolvedMode, splitPercent, screenSync, pathname, isSplitPage, childrenKey, leftColor, rightColor, className]);
 
   // 2. IntersectionObserver Fallback Background Luminance Tracker
   useEffect(() => {

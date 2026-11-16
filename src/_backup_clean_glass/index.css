@@ -222,6 +222,7 @@
 
   /* ── Layout & Radii ── */
   --navbar-height: 98px;
+  --page-gutter: clamp(1.5rem, 8vw, 2in);
   --radius-xs: 6px;
   --radius-sm: 10px;
   --radius-md: 16px;
@@ -435,34 +436,32 @@ body::before {
   position: relative;
 }
 
-/* Layout Utilities */
-.container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+/* ==========================================================================
+   MASTER REUSABLE & DYNAMIC PAGE LAYOUT SYSTEM
+   Guarantees all page content (Home, Events, Invitation, Sponsors, Contact, Dashboard)
+   has the exact same horizontal boundaries as the Navbar's Logo & Login Button.
+   ========================================================================== */
+.container,
+.categories-container,
+.pillars-container,
+.dashboard-container,
+.events-hero-header-inner,
+.events-page-wrapper .categories-container,
+.subcat-view-wrapper .categories-container,
+.event-detail-wrapper .categories-container,
+.page-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: var(--page-gutter) !important;
+  padding-right: var(--page-gutter) !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
 }
 
-/* ── Mobile Layout Master Spacing (16px left & right on all parent containers across every page) ── */
 @media (max-width: 900px) {
-  .container,
-  .pillars-container,
-  .categories-container,
-  .dashboard-container {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    box-sizing: border-box !important;
-  }
-}
-
-/* ── Mobile Layout Master Spacing (16px left & right on all parent containers across every page) ── */
-@media (max-width: 900px) {
-  .container,
-  .pillars-container,
-  .categories-container,
-  .dashboard-container {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    box-sizing: border-box !important;
+  :root {
+    --page-gutter: 16px;
   }
 }
 
