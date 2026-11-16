@@ -48,7 +48,7 @@ function App() {
       <div className="app">
         {/* Colorful powder blast animations: page load & user clicks */}
         <MouseAnimation autoPlay={true} />
-        <ColourBlast enabled={true} particleCount={420} duration={900} size={0.42} spread={0.36} />
+        <ColourBlast enabled={true} duration={1250} />
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />

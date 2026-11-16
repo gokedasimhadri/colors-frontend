@@ -1,5 +1,15 @@
 import * as THREE from 'three';
 
+// Pre-warm browser image cache for instant, zero-delay rendering on first user click
+if (typeof window !== 'undefined') {
+  try {
+    const preloader = new Image();
+    preloader.src = '/blast.png';
+  } catch (e) {
+    // Ignore preloader error in non-standard environments
+  }
+}
+
 // ─── Default Festival Color Palette (Rich, Vibrant Holi Pigments) ───────────
 export const DEFAULT_COLORS = [
   '#e11d48', // Vibrant Rose Pink
@@ -179,16 +189,60 @@ class BlastEngine {
     this.refCount = 0;
     this.isInitialized = false;
 
+    // Powder blast reference image texture & geometry assets
+    this.blastTexture = null;
+    this.sharedPlaneGeometry = null;
+
     // Bind event handlers
     this.handleResize = this.handleResize.bind(this);
     this.animate = this.animate.bind(this);
+
+    // Eagerly initialize texture on startup
+    if (typeof window !== 'undefined') {
+      this.initTexture();
+    }
+  }
+
+  // Pre-load and prepare blast.png texture and shared unit plane geometry
+  initTexture() {
+    if (typeof window === 'undefined') return;
+
+    if (!this.sharedPlaneGeometry) {
+      // Shared unit geometry with 1280:1229 aspect ratio of blast.png
+      this.sharedPlaneGeometry = new THREE.PlaneGeometry(1.0415, 1.0);
+    }
+
+    if (!this.blastTexture) {
+      try {
+        const loader = new THREE.TextureLoader();
+        this.blastTexture = loader.load(
+          '/blast.png',
+          (tex) => {
+            tex.colorSpace = THREE.SRGBColorSpace;
+            tex.generateMipmaps = true;
+            tex.minFilter = THREE.LinearMipmapLinearFilter;
+            tex.magFilter = THREE.LinearFilter;
+            tex.needsUpdate = true;
+          },
+          undefined,
+          (err) => {
+            console.warn('[BlastEngine] Could not load /blast.png texture:', err);
+          }
+        );
+      } catch (e) {
+        console.warn('[BlastEngine] Error initializing texture:', e);
+      }
+    }
   }
 
   // Initializes the shared WebGL context and full-screen canvas
   init() {
     if (this.isInitialized || typeof window === 'undefined') return;
 
-    // 1. Create fixed full-screen canvas
+    // 1. Initialize texture assets
+    this.initTexture();
+
+    // 2. Create fixed full-screen canvas
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'blast-engine-canvas';
     this.canvas.setAttribute('aria-hidden', 'true');
@@ -206,9 +260,9 @@ class BlastEngine {
     });
     document.body.appendChild(this.canvas);
 
-    // 2. Setup Three.js Renderer
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    // 3. Setup Three.js Renderer
+    const width = window.innerWidth || 1024;
+    const height = window.innerHeight || 768;
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
     this.renderer = new THREE.WebGLRenderer({
@@ -216,13 +270,13 @@ class BlastEngine {
       alpha: true,
       antialias: true,
       powerPreference: 'high-performance',
-      premultipliedAlpha: true,
+      premultipliedAlpha: false,
     });
     this.renderer.setSize(width, height, false);
     this.renderer.setPixelRatio(pixelRatio);
     this.renderer.setClearColor(0x000000, 0);
 
-    // 3. Setup Scene & Orthographic Camera (maps 1:1 to screen pixels)
+    // 4. Setup Scene & Orthographic Camera (maps 1:1 to screen pixels)
     this.scene = new THREE.Scene();
     this.camera = new THREE.OrthographicCamera(0, width, 0, height, -1000, 1000);
     this.camera.position.z = 100;
@@ -246,14 +300,21 @@ class BlastEngine {
 
     // Update pixel ratio uniform across active explosions
     for (const exp of this.explosions) {
-      if (exp.material && exp.material.uniforms.uPixelRatio) {
+      if (exp.material && exp.material.uniforms && exp.material.uniforms.uPixelRatio) {
         exp.material.uniforms.uPixelRatio.value = pixelRatio;
       }
     }
   }
 
   /**
-   * Triggers a realistic color powder blast (Omnidirectional or Directional Cannon)
+   * Triggers a realistic color powder blast
+   *
+   * For omnidirectional mouse clicks (direction === null), it renders:
+   * 1. The rich, multicolored radial explosion texture from blast.png with explosive expansion,
+   *    randomized rotation, and soft organic dissipation.
+   * 2. Synchronized outward powder particle dispersion (filaments, clouds, sparkling dust motes).
+   *
+   * For directional cannons (e.g. entrance dual-corner cannons), it preserves high-pressure jet streams.
    *
    * @param {Object} options
    * @param {number} options.x - Screen X coordinate in pixels
@@ -269,12 +330,14 @@ class BlastEngine {
    * @param {number} [options.speedMultiplier=1.0] - Velocity multiplier for high-velocity cannons
    * @param {number} [options.drag=2.8] - Air drag coefficient
    * @param {number} [options.cannonOriginJitter=8] - Origin jitter in px
+   * @param {boolean} [options.showTexture] - Explicitly enable/disable blast.png texture (defaults to !isDirectional)
+   * @param {number} [options.blastSize] - Explicit target diameter for blast.png texture in px
    */
   triggerBlast({
     x = window.innerWidth / 2,
     y = window.innerHeight / 2,
-    particleCount = 2500,
-    duration = 2200,
+    particleCount = 500,
+    duration = 1250,
     colors = DEFAULT_COLORS,
     size = 1.0,
     spread = 1.0,
@@ -284,18 +347,21 @@ class BlastEngine {
     speedMultiplier = 1.0,
     drag = 2.8,
     cannonOriginJitter = 8,
+    showTexture = null,
+    blastSize = null,
   } = {}) {
     if (!this.isInitialized) {
       this.init();
     }
+    this.initTexture();
 
     // Check user preference for reduced motion
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const actualCount = prefersReducedMotion ? Math.min(particleCount, 500) : particleCount;
-    const actualDuration = prefersReducedMotion ? Math.min(duration, 1200) : duration;
+    const actualCount = prefersReducedMotion ? Math.min(particleCount, 250) : particleCount;
+    const actualDuration = prefersReducedMotion ? Math.min(duration, 950) : duration;
 
     // Convert hex colors to THREE.Color instances
     const palette = (colors && colors.length > 0 ? colors : DEFAULT_COLORS).map(
@@ -305,151 +371,191 @@ class BlastEngine {
     const isDirectional = direction !== null && Number.isFinite(direction);
     const halfCone = (coneSpread !== null ? coneSpread : Math.PI / 4) / 2;
 
-    // Number of angular color lobes (simulating multi-color powder packet explosion)
-    const numPlumes = Math.min(palette.length, 8);
-    const plumeAngles = [];
-    for (let i = 0; i < numPlumes; i++) {
-      plumeAngles.push((i / numPlumes) * Math.PI * 2);
+    // Whether to render the visual blast.png texture (default true for radial mouse clicks)
+    const renderTexture = showTexture !== null ? Boolean(showTexture) : !isDirectional;
+
+    // ── 1. Create blast.png Explosion Mesh for Mouse Clicks ───────────────────
+    let blastMesh = null;
+    let blastTargetSize = 0;
+
+    if (renderTexture && this.blastTexture && this.sharedPlaneGeometry) {
+      const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+      // Target diameter ~75px desktop, ~55px mobile (small, refined & compact)
+      const baseBlast = (isMobile ? 55 : 75) * (0.95 + Math.random() * 0.1);
+      blastTargetSize = blastSize || baseBlast;
+      if (prefersReducedMotion) blastTargetSize *= 0.65;
+
+      const blastMaterial = new THREE.MeshBasicMaterial({
+        map: this.blastTexture,
+        transparent: true,
+        opacity: 1.0,
+        depthTest: false,
+        depthWrite: false,
+        side: THREE.DoubleSide, // Essential for Y-inverted orthographic projection
+        blending: THREE.NormalBlending,
+      });
+
+      blastMesh = new THREE.Mesh(this.sharedPlaneGeometry, blastMaterial);
+      blastMesh.position.set(x, y, 10);
+
+      // Start small (~6% of target size) so it punches outward explosively
+      const initScale = blastTargetSize * 0.06;
+      blastMesh.scale.set(initScale * 1.0415, initScale, 1);
+
+      // Random initial rotation (0 to 360 deg) gives every click a unique radial footprint
+      const initialRotation = Math.random() * Math.PI * 2;
+      blastMesh.rotation.z = initialRotation;
+
+      this.scene.add(blastMesh);
     }
 
-    // Number of high-speed directional streaks / filaments
-    const numStreaks = 20;
-    const streakAngles = [];
-    for (let i = 0; i < numStreaks; i++) {
-      streakAngles.push((i / numStreaks) * Math.PI * 2 + (Math.random() - 0.5) * 0.25);
-    }
+    // ── 2. Particle Dispersion System (Only for Directional Cannons, omitted for clean mouse clicks) ──
+    let points = null;
+    let geometry = null;
+    let material = null;
 
-    // Buffer arrays
-    const positions = new Float32Array(actualCount * 3);
-    const velocities = new Float32Array(actualCount * 3);
-    const colorAttr = new Float32Array(actualCount * 3);
-    const sizes = new Float32Array(actualCount);
-    const types = new Float32Array(actualCount);
-    const seeds = new Float32Array(actualCount);
-    const lifes = new Float32Array(actualCount);
-    const delays = new Float32Array(actualCount);
-
-    for (let i = 0; i < actualCount; i++) {
-      const i3 = i * 3;
-      // Particles start clustered tightly around the explosion / cannon nozzle origin
-      const originJitter = Math.random() * cannonOriginJitter;
-      const originAngle = Math.random() * Math.PI * 2;
-      positions[i3] = x + Math.cos(originAngle) * originJitter;
-      positions[i3 + 1] = y + Math.sin(originAngle) * originJitter;
-      positions[i3 + 2] = (Math.random() - 0.5) * 12;
-
-      // Classify particle into 1 of 3 physical tiers:
-      // ~25% Volumetric Clouds, ~35% High-Velocity Radial Streaks, ~40% Fine Dust Motes
-      const rand = Math.random();
-      let type, baseSpeed, pSize, lifeMult, delay;
-      let angle;
-
-      if (rand < 0.25) {
-        // ── 0.0 = Volumetric Cloud Puff ──
-        type = 0.0;
-        pSize = (22 + Math.random() * 26) * size; // 22px - 48px
-        baseSpeed = (110 + Math.random() * 230) * speedMultiplier; // Billows outward
-        lifeMult = 0.9 + Math.random() * 0.4;
-        delay = Math.random() * 0.05;
-
-        if (isDirectional) {
-          const bell = Math.random() + Math.random() - 1.0;
-          angle = direction + bell * (halfCone * 0.85);
-        } else {
-          angle = Math.random() * Math.PI * 2;
-        }
-      } else if (rand < 0.60) {
-        // ── 1.0 = High-Velocity Radial Streak Filament (Core Jet) ──
-        type = 1.0;
-        pSize = (9 + Math.random() * 13) * size;  // 9px - 22px
-        baseSpeed = (480 + Math.random() * 640) * speedMultiplier; // High-power jets
-        lifeMult = 0.8 + Math.random() * 0.35;
-        delay = Math.random() * 0.025;
-
-        if (isDirectional) {
-          const bell = Math.random() + Math.random() - 1.0;
-          angle = direction + bell * (halfCone * 0.5); // Tightly focused in nozzle core
-        } else {
-          const streakIdx = Math.floor(Math.random() * numStreaks);
-          angle = streakAngles[streakIdx] + (Math.random() - 0.5) * 0.08;
-        }
-      } else {
-        // ── 2.0 = Fine Powder Dust & Sparkle Motes ──
-        type = 2.0;
-        pSize = (3.2 + Math.random() * 4.8) * size; // 3.2px - 8px
-        baseSpeed = (160 + Math.random() * 700) * speedMultiplier; // Wide dispersal
-        lifeMult = 0.95 + Math.random() * 0.45;
-        delay = Math.random() * 0.07;
-
-        if (isDirectional) {
-          const bell = Math.random() + Math.random() - 1.0;
-          angle = direction + bell * halfCone + (Math.random() - 0.5) * 0.14;
-        } else {
-          angle = Math.random() * Math.PI * 2;
-        }
+    if (!renderTexture) {
+      const numPlumes = Math.min(palette.length, 8);
+      const numStreaks = 20;
+      const streakAngles = [];
+      for (let i = 0; i < numStreaks; i++) {
+        streakAngles.push((i / numStreaks) * Math.PI * 2 + (Math.random() - 0.5) * 0.25);
       }
 
-      // Assign color according to angular sector or plume
-      let normAngle = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-      let closestPlume = Math.floor((normAngle / (Math.PI * 2)) * numPlumes);
-      if (Math.random() < 0.18) {
-        // 18% random scatter of other festival colors
-        closestPlume = Math.floor(Math.random() * palette.length);
+      // Buffer arrays
+      const positions = new Float32Array(actualCount * 3);
+      const velocities = new Float32Array(actualCount * 3);
+      const colorAttr = new Float32Array(actualCount * 3);
+      const sizes = new Float32Array(actualCount);
+      const types = new Float32Array(actualCount);
+      const seeds = new Float32Array(actualCount);
+      const lifes = new Float32Array(actualCount);
+      const delays = new Float32Array(actualCount);
+
+      const effectiveSpread = Math.max(0.85, spread);
+      const effectiveSize = Math.max(0.8, size);
+
+      for (let i = 0; i < actualCount; i++) {
+        const i3 = i * 3;
+        const originJitter = Math.random() * cannonOriginJitter;
+        const originAngle = Math.random() * Math.PI * 2;
+        positions[i3] = x + Math.cos(originAngle) * originJitter;
+        positions[i3 + 1] = y + Math.sin(originAngle) * originJitter;
+        positions[i3 + 2] = (Math.random() - 0.5) * 12;
+
+        const rand = Math.random();
+        let type, baseSpeed, pSize, lifeMult, delay;
+        let angle;
+
+        if (rand < 0.25) {
+          // ── 0.0 = Volumetric Cloud Puff ──
+          type = 0.0;
+          pSize = (22 + Math.random() * 26) * effectiveSize;
+          baseSpeed = (140 + Math.random() * 240) * speedMultiplier;
+          lifeMult = 0.9 + Math.random() * 0.4;
+          delay = Math.random() * 0.05;
+
+          if (isDirectional) {
+            const bell = Math.random() + Math.random() - 1.0;
+            angle = direction + bell * (halfCone * 0.85);
+          } else {
+            angle = Math.random() * Math.PI * 2;
+          }
+        } else if (rand < 0.60) {
+          // ── 1.0 = High-Velocity Radial Streak Filament (Core Jet) ──
+          type = 1.0;
+          pSize = (10 + Math.random() * 14) * effectiveSize;
+          baseSpeed = (480 + Math.random() * 640) * speedMultiplier;
+          lifeMult = 0.8 + Math.random() * 0.35;
+          delay = Math.random() * 0.025;
+
+          if (isDirectional) {
+            const bell = Math.random() + Math.random() - 1.0;
+            angle = direction + bell * (halfCone * 0.5);
+          } else {
+            const streakIdx = Math.floor(Math.random() * numStreaks);
+            angle = streakAngles[streakIdx] + (Math.random() - 0.5) * 0.08;
+          }
+        } else {
+          // ── 2.0 = Fine Powder Dust & Sparkle Motes ──
+          type = 2.0;
+          pSize = (4.0 + Math.random() * 6.5) * effectiveSize;
+          baseSpeed = (200 + Math.random() * 700) * speedMultiplier;
+          lifeMult = 0.95 + Math.random() * 0.45;
+          delay = Math.random() * 0.07;
+
+          if (isDirectional) {
+            const bell = Math.random() + Math.random() - 1.0;
+            angle = direction + bell * halfCone + (Math.random() - 0.5) * 0.14;
+          } else {
+            angle = Math.random() * Math.PI * 2;
+          }
+        }
+
+        // Assign color according to angular sector or plume
+        let normAngle = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+        let closestPlume = Math.floor((normAngle / (Math.PI * 2)) * numPlumes);
+        if (Math.random() < 0.18) {
+          closestPlume = Math.floor(Math.random() * palette.length);
+        }
+        const c = palette[closestPlume % palette.length];
+
+        const speed = baseSpeed * (0.8 + Math.random() * 0.4);
+        velocities[i3] = Math.cos(angle) * speed;
+        velocities[i3 + 1] = Math.sin(angle) * speed;
+        velocities[i3 + 2] = (Math.random() - 0.5) * (speed * 0.25);
+
+        colorAttr[i3] = c.r;
+        colorAttr[i3 + 1] = c.g;
+        colorAttr[i3 + 2] = c.b;
+
+        sizes[i] = pSize;
+        types[i] = type;
+        seeds[i] = Math.random();
+        lifes[i] = lifeMult;
+        delays[i] = delay;
       }
-      const c = palette[closestPlume % palette.length];
 
-      // Velocity in 3D (Z gives subtle 3D parallax depth)
-      const speed = baseSpeed * (0.8 + Math.random() * 0.4);
-      velocities[i3] = Math.cos(angle) * speed;
-      velocities[i3 + 1] = Math.sin(angle) * speed;
-      velocities[i3 + 2] = (Math.random() - 0.5) * (speed * 0.25);
+      geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('aVelocity', new THREE.BufferAttribute(velocities, 3));
+      geometry.setAttribute('aColor', new THREE.BufferAttribute(colorAttr, 3));
+      geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+      geometry.setAttribute('aType', new THREE.BufferAttribute(types, 1));
+      geometry.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 1));
+      geometry.setAttribute('aLife', new THREE.BufferAttribute(lifes, 1));
+      geometry.setAttribute('aDelay', new THREE.BufferAttribute(delays, 1));
 
-      colorAttr[i3] = c.r;
-      colorAttr[i3 + 1] = c.g;
-      colorAttr[i3 + 2] = c.b;
+      material = new THREE.ShaderMaterial({
+        vertexShader: VERTEX_SHADER,
+        fragmentShader: FRAGMENT_SHADER,
+        uniforms: {
+          uTime: { value: 0.0 },
+          uDuration: { value: actualDuration / 1000.0 },
+          uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
+          uDrag: { value: drag },
+          uGravity: { value: gravity },
+          uSpread: { value: effectiveSpread },
+          uTurbulence: { value: 38.0 },
+        },
+        transparent: true,
+        depthTest: false,
+        depthWrite: false,
+        blending: THREE.NormalBlending,
+      });
 
-      sizes[i] = pSize;
-      types[i] = type;
-      seeds[i] = Math.random();
-      lifes[i] = lifeMult;
-      delays[i] = delay;
+      points = new THREE.Points(geometry, material);
+      this.scene.add(points);
     }
-
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('aVelocity', new THREE.BufferAttribute(velocities, 3));
-    geometry.setAttribute('aColor', new THREE.BufferAttribute(colorAttr, 3));
-    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
-    geometry.setAttribute('aType', new THREE.BufferAttribute(types, 1));
-    geometry.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 1));
-    geometry.setAttribute('aLife', new THREE.BufferAttribute(lifes, 1));
-    geometry.setAttribute('aDelay', new THREE.BufferAttribute(delays, 1));
-
-    const material = new THREE.ShaderMaterial({
-      vertexShader: VERTEX_SHADER,
-      fragmentShader: FRAGMENT_SHADER,
-      uniforms: {
-        uTime: { value: 0.0 },
-        uDuration: { value: actualDuration / 1000.0 },
-        uPixelRatio: { value: Math.min(window.devicePixelRatio || 1, 2) },
-        uDrag: { value: drag },
-        uGravity: { value: gravity },
-        uSpread: { value: spread },
-        uTurbulence: { value: 38.0 },
-      },
-      transparent: true,
-      depthTest: false,
-      depthWrite: false,
-      blending: THREE.NormalBlending,
-    });
-
-    const points = new THREE.Points(geometry, material);
-    this.scene.add(points);
 
     const explosion = {
       points,
       geometry,
       material,
+      blastMesh,
+      blastTargetSize,
+      initialRotation: blastMesh ? blastMesh.rotation.z : 0,
+      rotationDrift: prefersReducedMotion ? 0 : (Math.random() - 0.5) * 0.25,
       startTime: performance.now(),
       duration: actualDuration,
     };
@@ -484,20 +590,16 @@ class BlastEngine {
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    // Calculate dynamic distance and speed multiplier based on viewport size
     const screenDiagonal = Math.hypot(w, h);
-    // Baseline is 1150px diagonal -> scales naturally across mobile and high-res desktop
     const speedMult = Math.min(1.85, Math.max(0.95, screenDiagonal / 1050));
 
-    // Aim cannons at upper-middle portion of the screen (golden ratio elevation)
     const targetY = h * 0.32;
     const leftTargetX = w * 0.45;
     const rightTargetX = w * 0.55;
 
-    const leftAngle = -Math.atan2(h - targetY, leftTargetX); // ~ -50 deg (upward-right)
-    const rightAngle = -Math.PI + Math.atan2(h - targetY, w - rightTargetX); // ~ -130 deg (upward-left)
+    const leftAngle = -Math.atan2(h - targetY, leftTargetX);
+    const rightAngle = -Math.PI + Math.atan2(h - targetY, w - rightTargetX);
 
-    // Rich festival pigments: Left fires cool & electric hues, Right fires warm & radiant hues
     const leftColors = [
       '#8b00ff', // Deep Violet
       '#7c3aed', // Purple
@@ -529,10 +631,11 @@ class BlastEngine {
       spread,
       gravity,
       direction: leftAngle,
-      coneSpread: 0.58, // ~33 degree nozzle cone
+      coneSpread: 0.58,
       speedMultiplier: speedMult,
-      drag: 1.85, // Lower drag so powder shoots high into upper canvas
+      drag: 1.85,
       cannonOriginJitter: 24,
+      showTexture: false,
     });
 
     // Right cannon: Bottom-Right corner (w, h)
@@ -546,10 +649,11 @@ class BlastEngine {
       spread,
       gravity,
       direction: rightAngle,
-      coneSpread: 0.58, // ~33 degree nozzle cone
+      coneSpread: 0.58,
       speedMultiplier: speedMult,
       drag: 1.85,
       cannonOriginJitter: 24,
+      showTexture: false,
     });
   }
 
@@ -571,18 +675,64 @@ class BlastEngine {
       if (elapsed >= exp.duration) {
         completed.push(i);
       } else {
-        exp.material.uniforms.uTime.value = elapsed / 1000.0;
+        // 1. Advance shader particle simulation clock
+        if (exp.material && exp.material.uniforms && exp.material.uniforms.uTime) {
+          exp.material.uniforms.uTime.value = elapsed / 1000.0;
+        }
+
+        // 2. Animate the blast.png explosion mesh
+        if (exp.blastMesh) {
+          const progress = Math.min(1.0, elapsed / exp.duration);
+
+          // Explosive scale expansion: rapid emergence to peak in ~220ms, then gentle settling
+          let scaleNorm;
+          if (progress < 0.20) {
+            // Rapid explosive emergence (0 -> 1.0) with ease-out cubic
+            const t1 = progress / 0.20;
+            scaleNorm = 1.0 - Math.pow(1.0 - t1, 3);
+          } else {
+            // Gentle subtle float and expansion (1.0 -> 1.05)
+            const t2 = (progress - 0.20) / 0.80;
+            scaleNorm = 1.0 + 0.05 * Math.sin(t2 * Math.PI * 0.5);
+          }
+          const currentSize = exp.blastTargetSize * scaleNorm;
+          exp.blastMesh.scale.set(currentSize * 1.0415, currentSize, 1);
+
+          // Subtle organic rotation swirl
+          exp.blastMesh.rotation.z = exp.initialRotation + progress * exp.rotationDrift;
+
+          // Slow dissipation fade-out curve: stays solid and visible up to 48%, then softly and slowly dissipates
+          let opacity;
+          if (progress < 0.48) {
+            opacity = 1.0;
+          } else {
+            const fadeProgress = (progress - 0.48) / 0.52;
+            opacity = Math.max(0, Math.pow(1.0 - fadeProgress, 1.25));
+          }
+          exp.blastMesh.material.opacity = opacity;
+        }
       }
     }
 
-    // Remove and dispose completed explosions in reverse order
+    // Remove and dispose completed explosions in reverse order to keep indices intact
     if (completed.length > 0) {
       for (let j = completed.length - 1; j >= 0; j--) {
         const idx = completed[j];
         const exp = this.explosions[idx];
-        this.scene.remove(exp.points);
-        exp.geometry.dispose();
-        exp.material.dispose();
+
+        if (exp.blastMesh) {
+          this.scene.remove(exp.blastMesh);
+          if (exp.blastMesh.material) {
+            exp.blastMesh.material.dispose();
+          }
+        }
+
+        if (exp.points) {
+          this.scene.remove(exp.points);
+          if (exp.geometry) exp.geometry.dispose();
+          if (exp.material) exp.material.dispose();
+        }
+
         this.explosions.splice(idx, 1);
       }
     }
@@ -626,11 +776,27 @@ class BlastEngine {
     window.removeEventListener('resize', this.handleResize);
 
     for (const exp of this.explosions) {
-      this.scene.remove(exp.points);
-      exp.geometry.dispose();
-      exp.material.dispose();
+      if (exp.blastMesh) {
+        this.scene.remove(exp.blastMesh);
+        if (exp.blastMesh.material) exp.blastMesh.material.dispose();
+      }
+      if (exp.points) {
+        this.scene.remove(exp.points);
+        if (exp.geometry) exp.geometry.dispose();
+        if (exp.material) exp.material.dispose();
+      }
     }
     this.explosions = [];
+
+    if (this.sharedPlaneGeometry) {
+      this.sharedPlaneGeometry.dispose();
+      this.sharedPlaneGeometry = null;
+    }
+
+    if (this.blastTexture) {
+      this.blastTexture.dispose();
+      this.blastTexture = null;
+    }
 
     if (this.renderer) {
       this.renderer.dispose();
@@ -659,4 +825,3 @@ export function getBlastEngine() {
 }
 
 export default BlastEngine;
-

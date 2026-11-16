@@ -1,0 +1,507 @@
+/* ==========================================================================
+   ThemeTab Component - Liquid Glass Segmented Tab Bar & Merging Search Bar
+   Full transparency, white-tinted glass on active, VIBGYOR rainbow text,
+   and smooth morphing search bar of exact same size
+   ========================================================================== */
+
+@keyframes vibgyorRainbowFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* Outer Row Wrapper aligning Tabs and Round Search Circle */
+.theme-tab-outer-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+/* ── 1. Liquid Glass Segmented Tab Track ─────────────────────────────────── */
+.theme-tab-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: auto;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  padding: 4px;
+  height: 48px;
+  box-shadow:
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.35),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.12);
+  position: relative;
+  z-index: 5;
+  user-select: none;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.25s ease,
+              border-color 0.25s ease,
+              box-shadow 0.25s ease;
+}
+
+/* Dual border enhancement to ensure clean definition on both white and black backgrounds */
+.theme-tab-container::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 9999px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  pointer-events: none;
+}
+
+/* Active Search State: Container maintains exact same size while search is active */
+.theme-tab-container.search-active {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(22px) saturate(200%);
+  -webkit-backdrop-filter: blur(22px) saturate(200%);
+  border-color: rgba(255, 255, 255, 0.42);
+  box-shadow:
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.55),
+    0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+/* ── 1.A Tab Items List Row ─────────────────────────────────────────────── */
+.theme-tab-list {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: auto;
+  height: 100%;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: opacity 0.22s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.theme-tab-container.search-active .theme-tab-list {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.96) translateY(-2px);
+  position: absolute;
+  inset: 4px;
+}
+
+/* Size Variants */
+.theme-tab-container.size-sm {
+  height: 40px;
+  padding: 3px;
+}
+.theme-tab-container.size-sm .theme-tab-item {
+  padding: 5px 12px;
+  font-size: 0.78rem;
+}
+
+.theme-tab-container.size-lg {
+  height: 56px;
+  padding: 6px;
+}
+.theme-tab-container.size-lg .theme-tab-item {
+  padding: 10px 24px;
+  font-size: 0.92rem;
+}
+
+/* Tab Button Item */
+.theme-tab-item {
+  position: relative;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  padding: 8px 20px;
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+  outline: none;
+  white-space: nowrap;
+  text-decoration: none;
+  line-height: 1.3;
+}
+
+/* Hover State: Completely transparent */
+.theme-tab-item:hover:not(.active):not(.disabled) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  transform: none;
+}
+
+.theme-tab-item.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Active Tab: Pure white-tinted transparent glass */
+.theme-tab-item.active {
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow:
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.08),
+    0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* Tab Icon */
+.theme-tab-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+  line-height: 1;
+}
+
+/* Base Tab Label */
+.theme-tab-label {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  display: inline-block;
+  transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Continuous 7-Color VIBGYOR Wave on Active Selected Tab */
+.theme-tab-label.active {
+  background-image: linear-gradient(
+    90deg,
+    #8b00ff 0%,    /* V - Violet */
+    #4b0082 7.1%,  /* I - Indigo */
+    #0066ff 14.3%, /* B - Blue */
+    #00c853 21.4%, /* G - Green */
+    #ffd600 28.6%, /* Y - Yellow */
+    #ff6d00 35.7%, /* O - Orange */
+    #ff1744 42.8%, /* R - Red */
+    #8b00ff 50%,   /* V - Violet Loop */
+    #4b0082 57.1%, /* I - Indigo */
+    #0066ff 64.3%, /* B - Blue */
+    #00c853 71.4%, /* G - Green */
+    #ffd600 78.6%, /* Y - Yellow */
+    #ff6d00 85.7%, /* O - Orange */
+    #ff1744 92.8%, /* R - Red */
+    #8b00ff 100%   /* V - Violet End */
+  ) !important;
+  background-size: 200% 100% !important;
+  background-repeat: repeat-x !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  animation: vibgyorRainbowFlow 3s linear infinite !important;
+  text-shadow: none !important;
+  font-weight: 800;
+}
+
+/* Hover State: Continuous VIBGYOR Wave */
+.theme-tab-item:hover:not(.disabled) .theme-tab-label {
+  background-image: linear-gradient(
+    90deg,
+    #8b00ff 0%,    /* V - Violet */
+    #4b0082 7.1%,  /* I - Indigo */
+    #0066ff 14.3%, /* B - Blue */
+    #00c853 21.4%, /* G - Green */
+    #ffd600 28.6%, /* Y - Yellow */
+    #ff6d00 35.7%, /* O - Orange */
+    #ff1744 42.8%, /* R - Red */
+    #8b00ff 50%,   /* V - Violet Loop */
+    #4b0082 57.1%, /* I - Indigo */
+    #0066ff 64.3%, /* B - Blue */
+    #00c853 71.4%, /* G - Green */
+    #ffd600 78.6%, /* Y - Yellow */
+    #ff6d00 85.7%, /* O - Orange */
+    #ff1744 92.8%, /* R - Red */
+    #8b00ff 100%   /* V - Violet End */
+  ) !important;
+  background-size: 200% 100% !important;
+  background-repeat: repeat-x !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  animation: vibgyorRainbowFlow 2.4s linear infinite !important;
+  text-shadow: none !important;
+  font-weight: 800;
+  transform: scale(1.04);
+}
+
+/* ── 1.B Integrated Search Bar (Absolute Overlay in Tab Container) ───────── */
+.theme-tab-integrated-search {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 10px 0 14px;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.97);
+  transition: opacity 0.25s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-tab-container.search-active .theme-tab-integrated-search {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+/* Magnifier Icon at the Far Left Edge */
+.theme-tab-integrated-search-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  margin-right: 10px;
+  flex-shrink: 0;
+  color: #0f172a;
+}
+
+/* Search input taking full remaining width */
+.theme-tab-integrated-search-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+  padding: 0 4px;
+  line-height: 1.2;
+}
+
+@media (prefers-color-scheme: dark) {
+  .theme-tab-integrated-search-input {
+    color: #ffffff;
+  }
+}
+[data-theme='dark'] .theme-tab-integrated-search-input,
+.dark .theme-tab-integrated-search-input {
+  color: #ffffff;
+}
+
+.theme-tab-integrated-search-input::placeholder {
+  color: #64748b;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* Close / Clear Button at Far Right Edge */
+.theme-tab-integrated-search-close {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: 8px;
+  padding: 0;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.theme-tab-close-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  color: #ffffff;
+}
+
+.theme-tab-close-icon-wrap svg {
+  display: block;
+  stroke: #ffffff !important;
+  transition: transform 0.2s ease;
+}
+
+.theme-tab-integrated-search-close:hover {
+  background: rgba(225, 29, 72, 0.75);
+  border-color: rgba(255, 255, 255, 0.8);
+  color: #ffffff;
+  transform: scale(1.12);
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.5);
+}
+
+.theme-tab-integrated-search-close:hover .theme-tab-close-icon-wrap svg {
+  transform: rotate(90deg);
+}
+
+/* ── 2. Standalone Round Search Circle beside Tabs ────────────────────────── */
+.theme-tab-search-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  height: 48px;
+  width: 48px;
+  min-width: 48px;
+  padding: 3px;
+  box-shadow:
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.35),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.12);
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              min-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.25s ease,
+              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              margin 0.35s ease;
+  user-select: none;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 5;
+}
+
+/* Dual border enhancement to match tab track */
+.theme-tab-search-circle::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 9999px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  pointer-events: none;
+}
+
+.theme-tab-search-circle:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.38);
+  box-shadow:
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.45),
+    0 8px 32px rgba(0, 0, 0, 0.16);
+}
+
+/* When search opens, circle smoothly merges into the tabs track */
+.theme-tab-search-circle.merged {
+  width: 0 !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-width: 0 !important;
+  opacity: 0 !important;
+  transform: scale(0.4) translateX(-20px);
+  pointer-events: none;
+  box-shadow: none !important;
+}
+
+/* Magnifier Icon Button */
+.theme-tab-search-icon-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  color: #ffffff; /* Guarantees bright white on dark side */
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.theme-tab-search-icon-btn:hover {
+  transform: scale(1.12);
+}
+
+.theme-tab-search-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  color: inherit;
+}
+
+.theme-tab-search-svg {
+  display: block;
+  stroke: currentColor;
+  transition: stroke 0.25s ease, filter 0.25s ease;
+}
+
+.theme-tab-search-circle:hover .theme-tab-search-svg {
+  filter: drop-shadow(0 0 5px rgba(225, 29, 72, 0.5));
+}
+
+/* Contrast styling for fallback SplitColorText SVG */
+.split-color-text.theme-dark .theme-tab-search-svg,
+.theme-tab-search-icon-wrap.theme-dark .theme-tab-search-svg {
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+}
+.split-color-text.theme-light .theme-tab-search-svg,
+.theme-tab-search-icon-wrap.theme-light .theme-tab-search-svg {
+  stroke: #0f172a !important;
+  color: #0f172a !important;
+}
+
+/* Mobile & Small Screen Responsive */
+@media (max-width: 640px) {
+  .theme-tab-outer-wrapper {
+    gap: 8px;
+    width: 100%;
+  }
+
+  .theme-tab-container {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .theme-tab-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .theme-tab-item {
+    padding: 6px 14px;
+    font-size: 0.8rem;
+  }
+
+  .theme-tab-search-circle {
+    height: 42px;
+    width: 42px;
+    min-width: 42px;
+  }
+  .theme-tab-search-icon-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+}
