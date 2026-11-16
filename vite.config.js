@@ -1,5 +1,10 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -11,6 +16,11 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    resolve: {
+      alias: {
+        'lucide-react': path.resolve(__dirname, 'src/components/Icons/LucideIcons.jsx')
+      }
+    },
     define: {
       'import.meta.env.VITE_API_URL': JSON.stringify(target),
       'import.meta.env.EVENT_TYPE': JSON.stringify(eventType),
@@ -18,13 +28,13 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.EVENT_YEAR': JSON.stringify(eventYear),
       'import.meta.env.VITE_EVENT_YEAR': JSON.stringify(eventYear),
       'import.meta.env.VITE_EVENT_ACADEMIC_YEAR': JSON.stringify(eventAcademicYear),
-      'import.meta.env.EVENT_ACADEMIC_YEAR': JSON.stringify(eventAcademicYear),
+      'import.meta.env.VITE_EVENT_ACADEMIC_YEAR': JSON.stringify(eventAcademicYear),
       'process.env.EVENT_TYPE': JSON.stringify(eventType),
       'process.env.VITE_EVENT_TYPE': JSON.stringify(eventType),
       'process.env.EVENT_YEAR': JSON.stringify(eventYear),
       'process.env.VITE_EVENT_YEAR': JSON.stringify(eventYear),
       'process.env.VITE_EVENT_ACADEMIC_YEAR': JSON.stringify(eventAcademicYear),
-      'process.env.EVENT_ACADEMIC_YEAR': JSON.stringify(eventAcademicYear),
+      'process.env.VITE_EVENT_ACADEMIC_YEAR': JSON.stringify(eventAcademicYear),
       'process.env.VITE_API_URL': JSON.stringify(target)
     },
     server: {
