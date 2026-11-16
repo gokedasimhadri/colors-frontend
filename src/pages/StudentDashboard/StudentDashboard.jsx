@@ -469,7 +469,6 @@ export default function StudentDashboard() {
               Please sign in with your student credentials or register your account to view your enrolled events, download official fest passes, and manage account security.
             </p>
             <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-              {/* Commented out Sign In / Register Account button as requested
               <button
                 type="button"
                 className="btn-hero-action primary"
@@ -477,7 +476,6 @@ export default function StudentDashboard() {
               >
                 ✦ Sign In / Register Account
               </button>
-              */}
               <Link to="/events" className="btn-hero-action secondary">
                 Browse Events
               </Link>

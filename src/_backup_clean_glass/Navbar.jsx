@@ -17,9 +17,22 @@ const navItems = [
 
 function UniversityLogo() {
   const [imgError, setImgError] = useState(false);
+  const location = useLocation();
+
+  const handleLogoClick = (e) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <Link to="/" className="navbar-logo" aria-label="Aditya University – Colours 2027 Home">
+    <Link
+      to="/"
+      onClick={handleLogoClick}
+      className="navbar-logo"
+      aria-label="Aditya University – Colours 2027 Home"
+    >
       {!imgError ? (
         <img
           src="/aus-logo.svg"
@@ -41,25 +54,70 @@ export default function Navbar() {
   const location = useLocation();
   const isHome = location.pathname === '/';
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [student, setStudent] = useState(getLoggedStudent());
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
 
   useEffect(() => {
+    let lastScrollY = window.scrollY || window.pageYOffset || 0;
+    let ticking = false;
+
     const handleScroll = () => {
-      const scrollY = window.scrollY || window.pageYOffset || document.documentElement?.scrollTop || document.body?.scrollTop || 0;
-      setScrolled(scrollY > 15);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY =
+            window.scrollY ||
+            window.pageYOffset ||
+            document.documentElement?.scrollTop ||
+            document.body?.scrollTop ||
+            0;
+
+          setScrolled(currentScrollY > 15);
+
+          // If menu or auth modal is open, keep navbar visible
+          if (menuOpen || authModalOpen) {
+            setHidden(false);
+            lastScrollY = currentScrollY;
+            ticking = false;
+            return;
+          }
+
+          // At top of the page, always show navbar
+          if (currentScrollY <= 20) {
+            setHidden(false);
+          } else {
+            const diff = currentScrollY - lastScrollY;
+            // Scroll down past 70px threshold: hide navbar smoothly
+            if (diff > 6 && currentScrollY > 70) {
+              setHidden(true);
+            }
+            // Scroll up: show navbar smoothly
+            else if (diff < -6) {
+              setHidden(false);
+            }
+          }
+
+          lastScrollY = Math.max(0, currentScrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     document.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [menuOpen, authModalOpen]);
+
+  // Always show navbar on route navigation
+  useEffect(() => {
+    setHidden(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleAuth = () => setStudent(getLoggedStudent());
@@ -100,7 +158,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`navbar ${!isHome ? 'navbar-subpage' : ''} ${scrolled ? 'scrolled' : ''}`}
+        className={`navbar ${!isHome ? 'navbar-subpage' : ''} ${scrolled ? 'scrolled' : ''} ${hidden ? 'nav-hidden' : ''}`}
         role="navigation"
         aria-label="Main navigation"
       >
@@ -139,7 +197,6 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : (
-                /* Commented out Login button as requested
                 <ThemeButton
                   onClick={handleLoginClick}
                   id="navbar-login-btn"
@@ -149,8 +206,6 @@ export default function Navbar() {
                     Login
                   </SplitColorText>
                 </ThemeButton>
-                */
-                null
               )}
             </div>
           </div>
@@ -205,7 +260,6 @@ export default function Navbar() {
           onItemClick={closeMenu}
         />
 
-        {/* Commented out Mobile Login button as requested
         {!student && (
           <ThemeButton
             onClick={handleLoginClick}
@@ -216,7 +270,6 @@ export default function Navbar() {
             Login
           </ThemeButton>
         )}
-        */}
       </div>
 
       {/* Student Account Registration & Login Modal */}

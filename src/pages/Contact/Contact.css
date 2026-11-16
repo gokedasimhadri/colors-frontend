@@ -773,3 +773,16 @@
 .transit-card p strong {
   color: #0f172a;
 }
+
+/* ── Mobile View Container Spacing (16px Left & Right) ── */
+@media (max-width: 900px) {
+  .contact-hero .container,
+  .contact-poster-chairs-section .container,
+  .contact-page-wrapper .container,
+  .transit-guide-section .container,
+  .contact-support-channels .container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+}

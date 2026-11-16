@@ -478,3 +478,14 @@
 .form-success-banner p {
   color: #475569;
 }
+
+/* ── Mobile View Container Spacing (16px Left & Right) ── */
+@media (max-width: 900px) {
+  .sponsors-hero .container,
+  .sponsors-grid-section .container,
+  .sponsors-page-wrapper .container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    box-sizing: border-box !important;
+  }
+}

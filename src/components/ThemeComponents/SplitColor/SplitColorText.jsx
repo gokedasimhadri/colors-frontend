@@ -114,7 +114,10 @@ export const SplitColorText = forwardRef(function SplitColorText(
       if (themeAttr === 'dark') return 0;
 
       // 2. High-priority component checks (cards, hero elements, footer halves)
-      if (item.closest('.pillar-card') || item.closest('.final-cta-card') || item.closest('.hero-dates-card')) {
+      if (item.closest('.pillar-card') || item.closest('.final-cta-card')) {
+        return cx < splitX ? 1 : 0;
+      }
+      if (item.closest('.hero-dates-card')) {
         return 1; // Light card surface
       }
       if (item.closest('.uni-footer-left')) {
@@ -136,7 +139,7 @@ export const SplitColorText = forwardRef(function SplitColorText(
         !curr.classList.contains('app')
       ) {
         if (curr.classList.contains('pillar-card') || curr.classList.contains('final-cta-card')) {
-          return 1; // Light card surface
+          return cx < splitX ? 1 : 0;
         }
         if (curr.classList.contains('uni-footer-left')) {
           return 0; // Dark footer canvas
@@ -168,9 +171,9 @@ export const SplitColorText = forwardRef(function SplitColorText(
     return cx < splitX ? 1 : 0;
   };
 
-  // 1. ScreenSync Split Calculation (for mode === 'split' with dynamic scroll luminance detection)
+  // 1. ScreenSync Split Calculation (for mode === 'split' or 'fallback' with dynamic scroll luminance detection)
   useEffect(() => {
-    if (resolvedMode !== 'split' || splitPercent !== undefined || !screenSync) return;
+    if ((resolvedMode !== 'split' && resolvedMode !== 'fallback') || splitPercent !== undefined || !screenSync) return;
     const el = internalRef.current;
     if (!el) return;
 
@@ -334,6 +337,14 @@ export const SplitColorText = forwardRef(function SplitColorText(
       ...mergedStyle,
       backgroundImage: sharpSplitGradient,
       WebkitBackgroundImage: sharpSplitGradient,
+    };
+  } else if (resolvedMode === 'fallback') {
+    const activeColor = detectedTheme === 'light' ? leftColor : rightColor;
+    mergedStyle = {
+      ...mergedStyle,
+      color: activeColor,
+      WebkitTextFillColor: activeColor,
+      stroke: activeColor,
     };
   }
 

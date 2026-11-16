@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Home from './pages/Home/Home';
 import Events from './pages/Events/Events';
@@ -11,6 +11,17 @@ import MouseAnimation from './components/ThemeComponents/MouseAnimation/MouseAni
 import ColourBlast from './components/ThemeComponents/ColourBlast/ColourBlast';
 
 import Footer from './components/Footer/Footer';
+import MobileBottomBar from './components/MobileBottomBar/MobileBottomBar';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
+
+  return null;
+}
 
 function SchedulePdfRedirect() {
   useEffect(() => {
@@ -33,6 +44,7 @@ function SchedulePdfRedirect() {
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="app">
         {/* Colorful powder blast animations: page load & user clicks */}
         <MouseAnimation autoPlay={true} />
@@ -51,6 +63,7 @@ function App() {
           <Route path="/account" element={<StudentDashboard />} />
         </Routes>
         <Footer />
+        <MobileBottomBar />
       </div>
     </Router>
   );

@@ -3,6 +3,15 @@
    Crisp White Frosted Glass, Metallic Gold Accents & Spectrum Highlights
    ========================================================================== */
 
+@keyframes vibgyorRainbowFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
 .navbar {
   position: fixed;
   top: 0;
@@ -16,6 +25,15 @@
   border-bottom: none;
   box-shadow: none;
   isolation: auto !important;
+  transform: translateY(0);
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.25s ease;
+  will-change: transform;
+}
+
+.navbar.nav-hidden {
+  transform: translateY(-100%) !important;
+  pointer-events: none !important;
 }
 
 /* Dedicated Frosted Glass Layer (Preserves non-isolating stacking for mix-blend-mode text) */
@@ -218,24 +236,98 @@
 .navbar-theme-btn .split-color-text {
   font-size: 14px !important;
   font-weight: 500 !important;
-  letter-spacing: 0.03em;
-  line-height: 1.2;
+  letter-spacing: var(--ls-wide);
+  line-height: var(--lh-snug);
 }
 
-/* Active Nav Route (Rose accent highlight) */
-.navbar-theme-btn.active {
+/* Active Nav Route & Login Button Hover (Animated 7 VIBGYOR colors + Scaled Text) */
+.navbar-theme-btn.active,
+#navbar-login-btn.active {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
 }
 
-.navbar-theme-btn.active .split-color-text {
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  background-clip: unset !important;
-  -webkit-text-fill-color: #e11d48 !important;
-  color: #e11d48 !important;
-  font-weight: 800 !important;
+.navbar-theme-btn:hover .split-color-text,
+.navbar-theme-btn.active .split-color-text,
+.navbar.navbar-subpage .navbar-theme-btn:hover .split-color-text,
+.navbar.navbar-subpage .navbar-theme-btn.active .split-color-text,
+#navbar-login-btn:hover .split-color-text,
+.navbar.navbar-subpage #navbar-login-btn:hover .split-color-text {
+  background-image: linear-gradient(
+    90deg,
+    #8b00ff 0%,    /* V - Violet */
+    #4b0082 7.1%,  /* I - Indigo */
+    #0066ff 14.3%, /* B - Blue */
+    #00c853 21.4%, /* G - Green */
+    #ffd600 28.6%, /* Y - Yellow */
+    #ff6d00 35.7%, /* O - Orange */
+    #ff1744 42.8%, /* R - Red */
+    #8b00ff 50%,   /* V - Violet loop */
+    #4b0082 57.1%, /* I - Indigo */
+    #0066ff 64.3%, /* B - Blue */
+    #00c853 71.4%, /* G - Green */
+    #ffd600 78.6%, /* Y - Yellow */
+    #ff6d00 85.7%, /* O - Orange */
+    #ff1744 92.8%, /* R - Red */
+    #8b00ff 100%   /* V - Violet end */
+  ) !important;
+  background-size: 200% 100% !important;
+  background-repeat: repeat-x !important;
+  background-position: 0% 50%;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  animation: vibgyorRainbowFlow 2s linear infinite !important;
+  transform: scale(1.08) !important;
+  transform-origin: center center !important;
+  display: inline-block !important;
+  text-align: center !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  will-change: transform, background-position;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+#mobile-navbar-login-btn:hover .theme-glass-btn-content {
+  background-image: linear-gradient(
+    90deg,
+    #8b00ff 0%,    /* V - Violet */
+    #4b0082 7.1%,  /* I - Indigo */
+    #0066ff 14.3%, /* B - Blue */
+    #00c853 21.4%, /* G - Green */
+    #ffd600 28.6%, /* Y - Yellow */
+    #ff6d00 35.7%, /* O - Orange */
+    #ff1744 42.8%, /* R - Red */
+    #8b00ff 50%,   /* V - Violet loop */
+    #4b0082 57.1%, /* I - Indigo */
+    #0066ff 64.3%, /* B - Blue */
+    #00c853 71.4%, /* G - Green */
+    #ffd600 78.6%, /* Y - Yellow */
+    #ff6d00 85.7%, /* O - Orange */
+    #ff1744 92.8%, /* R - Red */
+    #8b00ff 100%   /* V - Violet end */
+  ) !important;
+  background-size: 200% 100% !important;
+  background-repeat: repeat-x !important;
+  background-position: 0% 50%;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  animation: vibgyorRainbowFlow 2s linear infinite !important;
+  transform: scale(1.08) !important;
+  transform-origin: center center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  width: 100% !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  will-change: transform, background-position;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 /* ── Right Cluster: Cash Prize Pill & Login ── */
@@ -292,19 +384,14 @@
 }
 
 /* ── Subpages (Non-home pages have solid light backgrounds) ── */
-.navbar.navbar-subpage .navbar-theme-btn .split-color-text,
-.navbar.navbar-subpage #navbar-login-btn .split-color-text {
-  background: none !important;
-  -webkit-background-clip: unset !important;
-  background-clip: unset !important;
-  -webkit-text-fill-color: #0f172a !important;
-  color: #0f172a !important;
-}
-
-.navbar.navbar-subpage .navbar-theme-btn.active .split-color-text {
-  -webkit-text-fill-color: #e11d48 !important;
-  color: #e11d48 !important;
-  font-weight: 700 !important;
+.navbar.navbar-subpage .navbar-theme-btn:not(:hover):not(.active) .split-color-text,
+.navbar.navbar-subpage #navbar-login-btn:not(:hover) .split-color-text {
+  background: none;
+  background-image: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  -webkit-text-fill-color: #0f172a;
+  color: #0f172a;
 }
 
 .navbar.navbar-subpage #navbar-login-btn {
@@ -567,5 +654,77 @@
 
   .hamburger {
     display: flex;
+  }
+}
+
+/* ── Mobile View: Only Logo Center in Top Bar, Menus in Bottom Bar ── */
+@media (max-width: 900px) {
+  .navbar {
+    height: var(--navbar-height, 72px) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .navbar-inner {
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 0.15rem 16px !important;
+    box-sizing: border-box !important;
+    height: 100% !important;
+    margin: 0 !important;
+    gap: 0 !important;
+  }
+
+  .navbar-logo {
+    margin: 0 auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 0 !important;
+  }
+
+  .navbar-logo-img {
+    height: clamp(54px, 14vw, 64px) !important;
+    max-width: min(85vw, 300px) !important;
+    width: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+
+  .navbar-right-cluster {
+    display: none !important;
+  }
+
+  .hamburger {
+    display: none !important;
+  }
+
+  .mobile-menu {
+    display: none !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .navbar {
+    height: var(--navbar-height, 66px) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .navbar-inner {
+    padding: 0.1rem 16px !important;
+    box-sizing: border-box !important;
+    height: 100% !important;
+  }
+
+  .navbar-logo {
+    padding: 0 !important;
+    margin: 0 auto !important;
+  }
+
+  .navbar-logo-img {
+    height: clamp(54px, 15vw, 62px) !important;
+    max-width: min(90vw, 290px) !important;
   }
 }

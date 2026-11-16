@@ -8,6 +8,7 @@ import SplitColorText from '../../components/ThemeComponents/SplitColor/SplitCol
 import SplitBackground from '../../components/ThemeComponents/backgrounds/SplitBackground';
 import ThemeButton from '../../components/ThemeComponents/ThemeButton';
 import { LiquidGlass } from '../../components/ThemeComponents/LiquidGlass';
+import { Phone } from 'lucide-react';
 import './Home.css';
 
 const EVENT_DATE = EVENT_START_DATE;
@@ -15,18 +16,18 @@ const EVENT_DATE = EVENT_START_DATE;
 // ─── The Festival Arenas (Culturals, Sports, Creo, Fete) ───────────────────
 const FEST_PILLARS = [
   {
-    code: 'CULTURALS',
+    // code: 'Colours',
     name: 'Culturals',
     tagline: 'Music, Dance, Theatre & Expressions',
-    coordinator: 'Mr. P. Raju',
-    phone: '8374245400',
+    coordinator: 'Dr. N. Rambabu',
+    phone: '8473917384',
     color: '#e11d48',
     icon: '🎭',
     events: ['Dance Solo & Group', 'Classical & Western Singing', 'Mime Championship', 'Mono Action', 'Battle of Bands'],
     bgImage: '/culturals_bg.png'
   },
   {
-    code: 'SPORTS',
+    // code: 'Colours',
     name: 'Sports',
     tagline: 'Athletics, Team Championships & Glory',
     coordinator: 'Dr. N. Ravi',
@@ -37,7 +38,7 @@ const FEST_PILLARS = [
     bgImage: '/sports_bg.png'
   },
   {
-    code: 'CREO',
+    // code: 'Colours',
     name: 'Creo',
     tagline: 'Fine Arts, Media, Fashion & Innovation',
     coordinator: 'Dr. B. Srinivas',
@@ -48,7 +49,7 @@ const FEST_PILLARS = [
     bgImage: '/creo_bg.png'
   },
   {
-    code: 'FETE',
+    // code: 'Colours',
     name: 'Fete',
     tagline: 'Food Carnival, Fun Fiesta, Games & Stalls',
     coordinator: 'Mr. J. D. Venkatesh',
@@ -112,39 +113,38 @@ function Home() {
           </div>
         </div>
 
-        {/* ROW 2 (MIDDLE): Dates on Left (White), ₹10 Lakhs on Right (Black) in ONE Even Row */}
-        <div className="hero-split-container hero-split-middle-row">
-
-          {/* LEFT HALF: Pure White Canvas */}
-          <div className="hero-half hero-half-light">
-            {/* Save the Dates Block from Poster */}
-            <div className="hero-dates-card">
-              <span className="save-dates-label">SAVE THE DATES</span>
-              <div className="dates-display">
-                <span className="dates-highlight">7 • 8 • 9</span>
-                <span className="month-highlight">JANUARY</span>
-              </div>
+        {/* ROW 2 (MIDDLE): Dates & Month (2 Lines: #be9337 Rounded Squares for Dates + SplitColorText for Month) */}
+        <div className="hero-dates-center-section">
+          {/* Line 1: Dates (7, 8, 9) in #be9337 Rounded Corner Squares (No Dots) */}
+          <div className="dates-squares-row">
+            <div className="date-square-tile">
+              <span className="date-digit">7</span>
+            </div>
+            <div className="date-square-tile">
+              <span className="date-digit">8</span>
+            </div>
+            <div className="date-square-tile">
+              <span className="date-digit">9</span>
             </div>
           </div>
 
-          {/* RIGHT HALF: Deep Midnight Black Canvas */}
-          <div className="hero-half hero-half-dark">
-            {/* ₹10 Lakhs In Cash Prizes Text Heading (Transparent & Borderless) */}
-            <div className="hero-prize-heading-block">
-              <div className="prize-amount-title">
-                <span className="prize-rupee">₹</span>
-                <span className="prize-val">10 Lakhs</span>
-              </div>
-              <span className="prize-tagline">IN CASH PRIZES</span>
-            </div>
+          {/* Line 2: Month (JANUARY) Centered with SplitColorText */}
+          <div className="dates-month-row">
+            <SplitColorText
+              as="h2"
+              className="month-split-heading"
+              splitPercent={50}
+              leftColor="#0d1536"
+              rightColor="#ffffff"
+            >
+              JANUARY
+            </SplitColorText>
           </div>
-
         </div>
 
         {/* ROW 3 (BOTTOM): Centered Action CTAs */}
         <div className="hero-bottom-actions-section">
           <div className="hero-center-actions">
-            {/* Commented out Register button as requested
             {!student ? (
               <ThemeButton
                 onClick={() => {
@@ -163,7 +163,6 @@ function Home() {
                 <SplitColorText>Student Dashboard</SplitColorText>
               </ThemeButton>
             )}
-            */}
 
             <ThemeButton
               as={Link}
@@ -232,7 +231,7 @@ function Home() {
           <div className="pillars-grid">
             {FEST_PILLARS.map((pillar, index) => (
               <LiquidGlass
-                key={pillar.code}
+                key={pillar.code || pillar.name}
                 className="pillar-card"
                 theme={index < 2 ? 'light' : 'dark'}
               >
@@ -241,29 +240,104 @@ function Home() {
                     <span className="pillar-icon">{pillar.icon}</span>
                   </div>
                   <div className="pillar-title-group">
-                    <span className="pillar-code">{pillar.code}</span>
-                    <h3 className="pillar-name">{pillar.name}</h3>
+                    {pillar.code && (
+                      <SplitColorText
+                        as="span"
+                        className="pillar-code"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                      >
+                        {pillar.code}
+                      </SplitColorText>
+                    )}
+                    <SplitColorText
+                      as="h3"
+                      className="pillar-name"
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      {pillar.name}
+                    </SplitColorText>
                   </div>
                 </div>
 
-                <p className="pillar-tagline">{pillar.tagline}</p>
+                <SplitColorText
+                  as="p"
+                  className="pillar-tagline"
+                  screenSync={true}
+                  leftColor="#334155"
+                  rightColor="#e2e8f0"
+                >
+                  {pillar.tagline}
+                </SplitColorText>
 
                 <div className="pillar-events-snippet">
-                  <span className="events-snippet-label">Key Competitions:</span>
+                  <SplitColorText
+                    as="span"
+                    className="events-snippet-label"
+                    screenSync={true}
+                    leftColor="#475569"
+                    rightColor="#cbd5e1"
+                  >
+                    Key Competitions:
+                  </SplitColorText>
                   <ul className="snippet-list">
                     {pillar.events.map((ev, i) => (
-                      <li key={i}>{ev}</li>
+                      <li key={i}>
+                        <SplitColorText
+                          as="span"
+                          screenSync={true}
+                          leftColor="#0f172a"
+                          rightColor="#ffffff"
+                        >
+                          {ev}
+                        </SplitColorText>
+                      </li>
                     ))}
                   </ul>
                 </div>
 
-                {/* Coordinator pill with telephone link matching poster */}
                 <div className="pillar-coordinator-box">
-                  <span className="coord-chip-label">Domain In-charge:</span>
+                  <SplitColorText
+                    as="span"
+                    className="coord-chip-label"
+                    screenSync={true}
+                    leftColor="#475569"
+                    rightColor="#cbd5e1"
+                  >
+                    Domain In-charge:
+                  </SplitColorText>
                   <div className="coord-person-row">
-                    <span className="coord-name">{pillar.coordinator}</span>
+                    <SplitColorText
+                      as="span"
+                      className="coord-name"
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      {pillar.coordinator}
+                    </SplitColorText>
                     <a href={`tel:${pillar.phone}`} className="coord-phone-pill">
-                      📞 {pillar.phone}
+                      <SplitColorText
+                        as="span"
+                        mode="fallback"
+                        className="coord-phone-icon-box"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                      >
+                        <Phone size={13} className="coord-phone-icon" strokeWidth={2} />
+                      </SplitColorText>
+                      <SplitColorText
+                        as="span"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                      >
+                        {pillar.phone}
+                      </SplitColorText>
                     </a>
                   </div>
                 </div>
@@ -277,7 +351,13 @@ function Home() {
                     width="100%"
                     color={index < 2 ? '#0f172a' : '#ffffff'}
                   >
-                    Check Out {pillar.name} Events
+                    <SplitColorText
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      Check Out {pillar.name} Events
+                    </SplitColorText>
                   </ThemeButton>
                 </div>
               </LiquidGlass>
@@ -291,65 +371,88 @@ function Home() {
           ───────────────────────────────────────────────────────────── */}
       <section className="fest-final-cta" id="register">
         <div className="container">
-          <div className="final-cta-card">
+          <LiquidGlass className="final-cta-card" theme="light" borderRadius={16} enableShader={false}>
             <div className="cta-left-details">
-              <span className="section-tag">JOIN THE CELEBRATION</span>
-              <h2 className="cta-title">
-                Be Part of <span>Colours 2027</span>
-              </h2>
-              <p className="cta-desc">
-                Don't miss the biggest national collegiate festival of 2027. Secure your student participation,
-                represent your college contingent, and battle for the grand ₹10,00,000 prize pool!
-              </p>
-
-              <div className="cta-location-block">
-                <span className="loc-icon">📍</span>
-                <div className="loc-info">
-                  <strong>Aditya University</strong>
-                  <span>Aditya Nagar, ADB Road, Surampalem – 533437, Kakinada Dist., AP</span>
-                </div>
-              </div>
+              <span className="cta-celebration-tag">Join The Celebration</span>
+              <SplitColorText
+                as="h2"
+                className="cta-title"
+                screenSync={true}
+                leftColor="#0f172a"
+                rightColor="#ffffff"
+              >
+                Be Part of Colours 2027
+              </SplitColorText>
+              <SplitColorText
+                as="p"
+                className="cta-desc"
+                screenSync={true}
+                leftColor="#334155"
+                rightColor="#ffffff"
+              >
+                Don't pass up 2027's largest national college event. Secure student participation, compete for the ₹10,000,000 prize pool, and represent your campus contingent!
+              </SplitColorText>
 
               <div className="cta-buttons-row">
-                {/* Commented out Register Online Now button as requested
                 {!student ? (
-                  <button
-                    type="button"
-                    className="btn-hero-primary"
+                  <ThemeButton
                     onClick={() => {
                       window.dispatchEvent(new CustomEvent('fest-open-auth-modal', { detail: { mode: 'register' } }));
                     }}
+                    borderRadius={12}
+                    className="cta-theme-btn"
                   >
-                    ✦ Register Online Now
-                  </button>
+                    <SplitColorText
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      Register Now
+                    </SplitColorText>
+                  </ThemeButton>
                 ) : (
-                  <Link to="/events" className="btn-hero-primary">
-                    ✦ Browse & Enter Events
-                  </Link>
+                  <ThemeButton
+                    as={Link}
+                    to="/events"
+                    borderRadius={12}
+                    className="cta-theme-btn"
+                  >
+                    <SplitColorText
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      Browse Events
+                    </SplitColorText>
+                  </ThemeButton>
                 )}
-                */}
-                <Link to="/contact" className="btn-hero-secondary">
-                  ✉️ Hospitality & Support Desk
-                </Link>
+                <ThemeButton
+                  as={Link}
+                  to="/contact"
+                  borderRadius={12}
+                  className="cta-theme-btn"
+                >
+                  <SplitColorText
+                    screenSync={true}
+                    leftColor="#0f172a"
+                    rightColor="#ffffff"
+                  >
+                    Support & Help Desk
+                  </SplitColorText>
+                </ThemeButton>
               </div>
             </div>
 
-            {/* QR Code and Poster Card matching Poster Bottom */}
             <div className="cta-qr-card">
               <div className="poster-thumbnail-wrapper">
                 <img
-                  src="/colours_poster_theme.png"
+                  src="/colours_poster_theme.webp"
                   alt="Colours 2027 Official Festival Poster"
                   className="poster-thumbnail-img"
                 />
               </div>
-              <div className="qr-info-block">
-                <span className="qr-headline">SCAN OR VISIT</span>
-                <span className="qr-url">adityauniversity.in/colours2027</span>
-                <span className="qr-dates">7 • 8 • 9 JANUARY 2027</span>
-              </div>
             </div>
-          </div>
+          </LiquidGlass>
         </div>
       </section>
     </SplitBackground>
