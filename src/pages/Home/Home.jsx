@@ -19,7 +19,7 @@ const FEST_PILLARS = [
     // code: 'Colours',
     name: 'Culturals',
     tagline: 'Music, Dance, Theatre & Expressions',
-    coordinator: 'Dr. N. Rambabu',
+    coordinator: 'Dr. N. Ram Babu',
     phone: '8473917384',
     color: '#e11d48',
     icon: '🎭',

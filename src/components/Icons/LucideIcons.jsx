@@ -126,6 +126,13 @@ export const ChevronRight = createIcon('ChevronRight', (
   <path d="m9 18 6-6-6-6" />
 ));
 
+export const ArrowLeft = createIcon('ArrowLeft', (
+  <>
+    <line x1="19" x2="5" y1="12" y2="12" />
+    <polyline points="12 19 5 12 12 5" />
+  </>
+));
+
 export const Check = createIcon('Check', (
   <path d="M20 6 9 17l-5-5" />
 ));
@@ -191,6 +198,7 @@ export default {
   ChevronUp,
   ChevronLeft,
   ChevronRight,
+  ArrowLeft,
   Check,
   CheckCircle,
   AlertCircle,

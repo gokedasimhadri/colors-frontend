@@ -22,12 +22,13 @@ import './ColourBlast.css';
  */
 export default function ColourBlast({
   enabled = true,
-  particleCount = 420,
-  duration = 900,
+  particleCount = 500,
+  duration = 1250,
   colors = DEFAULT_COLORS,
-  size = 0.42,
-  spread = 0.36,
-  gravity = 65,
+  size = 1.0,
+  spread = 1.0,
+  gravity = 60,
+  blastSize = null,
   targetRef = null,
   className = '',
   style = {},
@@ -53,8 +54,9 @@ export default function ColourBlast({
     if (!enabled) return;
 
     const triggerAt = (clientX, clientY) => {
-      if (!engineRef.current) return;
-      engineRef.current.triggerBlast({
+      const engine = engineRef.current || getBlastEngine();
+      if (!engine) return;
+      engine.triggerBlast({
         x: clientX,
         y: clientY,
         particleCount,
@@ -63,6 +65,7 @@ export default function ColourBlast({
         size,
         spread,
         gravity,
+        blastSize,
       });
     };
 
@@ -79,17 +82,17 @@ export default function ColourBlast({
       triggerAt(touch.clientX, touch.clientY);
     };
 
-    // Attach to target element if targetRef provided, otherwise window
+    // Attach in capture phase to guarantee interception before stopPropagation
     const target = (targetRef && targetRef.current) ? targetRef.current : window;
 
-    target.addEventListener('click', handleClick, { passive: true });
-    target.addEventListener('touchstart', handleTouchStart, { passive: true });
+    target.addEventListener('click', handleClick, { passive: true, capture: true });
+    target.addEventListener('touchstart', handleTouchStart, { passive: true, capture: true });
 
     return () => {
-      target.removeEventListener('click', handleClick);
-      target.removeEventListener('touchstart', handleTouchStart);
+      target.removeEventListener('click', handleClick, { capture: true });
+      target.removeEventListener('touchstart', handleTouchStart, { capture: true });
     };
-  }, [enabled, particleCount, duration, colors, size, spread, gravity, targetRef]);
+  }, [enabled, particleCount, duration, colors, size, spread, gravity, blastSize, targetRef]);
 
   return (
     <div

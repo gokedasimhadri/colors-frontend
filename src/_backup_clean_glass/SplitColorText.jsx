@@ -93,7 +93,9 @@ export const SplitColorText = forwardRef(function SplitColorText(
         item.closest('.navbar') ||
         item.closest('.navbar-links') ||
         item.closest('.theme-glass-btn') ||
-        item.closest('.mobile-menu')
+        item.closest('.mobile-menu') ||
+        item.closest('.theme-tab-container') ||
+        item.closest('.theme-tab-item')
       ) {
         continue;
       }
@@ -135,6 +137,8 @@ export const SplitColorText = forwardRef(function SplitColorText(
         curr !== document.body &&
         !curr.classList.contains('split-background') &&
         !curr.classList.contains('colours-home-main') &&
+        !curr.classList.contains('colours-events-main') &&
+        !curr.classList.contains('events-page-wrapper') &&
         !curr.classList.contains('home-page') &&
         !curr.classList.contains('app')
       ) {

@@ -467,6 +467,41 @@ body::before {
 }
 
 /* ── Typography Utilities ── */
+/* ══════════════════════════════════════════════════════════════════════
+   GLOBAL TEXT CAPITALIZATION CONTROL (Master Typography Rule)
+   Enforces clean Title Case (each word capitalized) across all cards,
+   headers, badges, labels, and coordinator blocks instead of all-caps.
+   ══════════════════════════════════════════════════════════════════════ */
+.coord-card-header,
+.coord-card-name,
+.coord-card-designation,
+.coordinator-name,
+.coordinator-dept,
+.coordinator-role-badge,
+.subcat-hero-badge,
+.subcat-badge,
+.subcat-title,
+.subcat-coordinator-snippet,
+.category-heading,
+.category-count-badge,
+.category-coord-name,
+.section-tag,
+.breadcrumb-subtitle,
+.stat-card-label,
+.event-sub-title-bar,
+.table-pill-label,
+.table-pill-value,
+.detail-stat-card-badge,
+.rule-badge,
+.btn-checkout-primary,
+.btn-checkout-subcat,
+.events-badge-top,
+.detail-badge-top,
+.capitalize-text,
+.capitalize-words {
+  text-transform: capitalize !important;
+}
+
 .gold-text {
   color: var(--clr-gold);
 }
@@ -495,8 +530,8 @@ body::before {
   gap: 0.5rem;
   font-size: 0.76rem;
   font-weight: 800;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-transform: capitalize;
   color: #b45309;
   background: #fffbeb;
   border: 1px solid #fcd34d;
