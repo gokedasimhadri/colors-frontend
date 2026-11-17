@@ -1260,9 +1260,9 @@ export default function StudentDashboard() {
                             <span className="event-category-pill">
                               {payment.typeCode || EVENT_TYPE || 'COLORS'}
                             </span>
-                            <span className={`event-status-pill ${String(payment.status || '').toLowerCase() === 'paid' ? 'paid' : 'pending'}`}>
+                            <span className={`event-status-pill ${String(payment.status || '').toLowerCase() === 'paid' || String(payment.status || '').toLowerCase() === 'confirmed' ? 'paid' : 'pending'}`}>
                               <span className="receipt-status-wrap">
-                                <Check size={12} strokeWidth={3} /> {payment.status || 'PAID'}
+                                <Check size={12} strokeWidth={3} /> {payment.status === 'CONFIRMED' ? 'CONFIRMED & PAID' : (payment.status || 'PAID')}
                               </span>
                             </span>
                           </div>
@@ -1314,7 +1314,7 @@ export default function StudentDashboard() {
                         <div className="detail-col">
                           <span className="label">Razorpay Payment ID</span>
                           <span className="val code">
-                            {payment.razorpay?.paymentId || payment.paymentId || 'Verified Gateway'}
+                            {payment.razorpay?.paymentId || payment.payment?.paymentId || payment.paymentId || 'Verified Gateway'}
                           </span>
                         </div>
                         <div className="detail-col">
