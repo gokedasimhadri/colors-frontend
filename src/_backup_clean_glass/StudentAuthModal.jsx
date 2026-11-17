@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { LiquidGlass } from '../ThemeComponents/LiquidGlass';
 import ThemeButton from '../ThemeComponents/ThemeButton';
@@ -280,7 +281,7 @@ export default function StudentAuthModal({
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="fest-modal-backdrop" onClick={onClose}>
       <LiquidGlass
         className={`fest-modal-card fest-auth-liquid-modal ${
@@ -700,6 +701,7 @@ export default function StudentAuthModal({
           </div>
         )}
       </LiquidGlass>
-    </div>
+    </div>,
+    document.body
   );
 }

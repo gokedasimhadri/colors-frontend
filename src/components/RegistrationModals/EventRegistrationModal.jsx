@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   initiateEventRegistration,
   verifyEventPaymentGateway,
@@ -920,7 +921,7 @@ export default function EventRegistrationModal({
     );
   };
 
-  return (
+  return createPortal(
     <div className="fest-modal-backdrop" onClick={onClose}>
       <div className="fest-modal-card event-reg-card" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
@@ -1257,6 +1258,7 @@ export default function EventRegistrationModal({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
