@@ -6,15 +6,14 @@ import {
   fetchStudentByRollNumber,
   submitEventRegistration,
   formatRegistrationId,
-  formatPaymentReference
+  formatPaymentReference,
+  isValidOtherCollege
 } from '../../services/api';
 import './RegistrationModals.css';
 
 const COLLEGE_OPTIONS = [
-  'Aditya University',
-  'Aditya Engineering College (AEC)',
-  'Aditya College of Engineering & Technology (ACET)',
-  'Aditya College of Engineering (ACOE)',
+  'AUS',
+  'ACET',
   'Other Institution'
 ];
 
@@ -47,7 +46,7 @@ export default function StudentAuthModal({
   const [regForm, setRegForm] = useState({
     name: '',
     roll: '',
-    college: 'Aditya University',
+    college: 'AUS',
     otherCollege: '',
     gender: 'Male',
     mobile: '',
@@ -61,14 +60,32 @@ export default function StudentAuthModal({
     password: ''
   });
 
+  const [otherCollegeError, setOtherCollegeError] = useState(null);
+
   const handleRegisterChange = (e) => {
     const { name, value } = e.target;
     setRegForm((prev) => ({ ...prev, [name]: value }));
     if (error) setError(null);
 
+    if (name === 'otherCollege' && otherCollegeError && isValidOtherCollege(value)) {
+      setOtherCollegeError(null);
+    }
+    if (name === 'college' && value !== 'Other Institution') {
+      setOtherCollegeError(null);
+    }
+
     // Reset status if user changes roll
     if (name === 'roll') {
       setStudentStatus(null);
+    }
+  };
+
+  const handleOtherCollegeBlur = (val) => {
+    const trimmed = (val || '').trim();
+    if (trimmed && !isValidOtherCollege(trimmed)) {
+      setOtherCollegeError('⚠️ College name must contain "University" or "Engineering"');
+    } else {
+      setOtherCollegeError(null);
     }
   };
 
@@ -100,10 +117,16 @@ export default function StudentAuthModal({
       const ecapData = await fetchStudentByRollNumber(roll).catch(() => null);
       setCheckingRoll(false);
       if (ecapData) {
-        let collegeName = ecapData.college || 'Aditya University';
-        if (collegeName === 'AEC') collegeName = 'Aditya Engineering College (AEC)';
-        else if (collegeName === 'ACET') collegeName = 'Aditya College of Engineering & Technology (ACET)';
-        else if (collegeName === 'ACOE') collegeName = 'Aditya College of Engineering (ACOE)';
+        let collegeName = 'AUS';
+        const cleanRoll = roll.toUpperCase();
+        const rawCollege = (ecapData.college || '').toUpperCase();
+        if (cleanRoll.includes('P3') || rawCollege.includes('ACET')) {
+          collegeName = 'ACET';
+        } else if (ecapData.college === 'Other Institution') {
+          collegeName = 'Other Institution';
+        } else {
+          collegeName = 'AUS';
+        }
 
         setRegForm((prev) => ({
           ...prev,
@@ -139,8 +162,12 @@ export default function StudentAuthModal({
     // Validation
     if (!regForm.name.trim()) return setError('Please enter your full name');
     if (!regForm.roll.trim()) return setError('Please enter your student Roll Number (e.g. 22A91A0501)');
-    if (regForm.college === 'Other Institution' && !regForm.otherCollege.trim()) {
-      return setError('Please specify your institution/college name');
+    if (regForm.college === 'Other Institution') {
+      const col = regForm.otherCollege.trim();
+      if (!col) return setError('Please specify your institution/college name');
+      if (!isValidOtherCollege(col)) {
+        return setError('Institution/college name must contain "University" or "Engineering" to be accepted.');
+      }
     }
     if (!regForm.mobile.trim() || regForm.mobile.trim().length < 10) {
       return setError('Please enter a valid 10-digit mobile number');
@@ -548,10 +575,38 @@ export default function StudentAuthModal({
                       name="otherCollege"
                       value={regForm.otherCollege}
                       onChange={handleRegisterChange}
-                      placeholder="Enter your college or university full name"
+                      onBlur={(e) => handleOtherCollegeBlur(e.target.value)}
+                      placeholder="e.g. JNTU University / ABC Engineering"
                       className="fest-form-input"
+                      style={{
+                        borderColor: otherCollegeError
+                          ? '#ef4444'
+                          : regForm.otherCollege && isValidOtherCollege(regForm.otherCollege)
+                            ? '#10b981'
+                            : '#cbd5e1',
+                        backgroundColor: otherCollegeError
+                          ? '#fef2f2'
+                          : regForm.otherCollege && isValidOtherCollege(regForm.otherCollege)
+                            ? '#f0fdf4'
+                            : '#ffffff'
+                      }}
                       required
                     />
+                    {otherCollegeError ? (
+                      <span
+                        className="fest-form-hint"
+                        style={{ color: '#dc2626', fontWeight: 600, marginTop: '4px', display: 'block' }}
+                      >
+                        {otherCollegeError}
+                      </span>
+                    ) : regForm.otherCollege && isValidOtherCollege(regForm.otherCollege) ? (
+                      <span
+                        className="fest-form-hint"
+                        style={{ color: '#0284c7', fontWeight: 600, marginTop: '4px', display: 'block' }}
+                      >
+                        ℹ️ College ID Card is required for entry and verification.
+                      </span>
+                    ) : null}
                   </div>
                 )}
 

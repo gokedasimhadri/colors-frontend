@@ -1391,3 +1391,18 @@
   border-color: #d97706;
   color: #78350f;
 }
+
+/* Other College input field styling and validation states */
+.pattern-other-college-field {
+  animation: festFadeIn 0.2s ease-in-out;
+}
+
+.pattern-input.college-valid {
+  border-color: #10b981 !important;
+  background-color: #f0fdf4 !important;
+}
+
+.pattern-input.college-invalid {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+}
