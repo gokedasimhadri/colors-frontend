@@ -10,15 +10,14 @@ import {
   matchDepartmentByBranch,
   FALLBACK_EVENT_DEPARTMENTS,
   formatRegistrationId,
-  formatPaymentReference
+  formatPaymentReference,
+  isValidOtherCollege
 } from '../../services/api';
 import './RegistrationModals.css';
 
 const COLLEGE_OPTIONS = [
+  'AUS',
   'ACET',
-  'AEC',
-  'ACOE',
-  'Aditya University',
   'Other Institution'
 ];
 
@@ -48,7 +47,8 @@ export default function EventRegistrationModal({
   const [leadParticipant, setLeadParticipant] = useState({
     rollNumber: '',
     name: '',
-    college: 'ACET',
+    college: 'AUS',
+    otherCollege: '',
     gender: 'Male',
     mobile: '',
     email: '',
@@ -67,6 +67,7 @@ export default function EventRegistrationModal({
   // Live Auto-fetch statuses per participant index (0 for lead, 1+ for members)
   const [fetchingStatus, setFetchingStatus] = useState({});
   const [verifiedStatus, setVerifiedStatus] = useState({});
+  const [otherCollegeErrors, setOtherCollegeErrors] = useState({});
 
   // Fetch live departments from backend on mount
   useEffect(() => {
@@ -76,12 +77,12 @@ export default function EventRegistrationModal({
           setDepartmentsList(depts);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Pre-warm Razorpay SDK
   useEffect(() => {
-    loadRazorpayScript().catch(() => {});
+    loadRazorpayScript().catch(() => { });
   }, []);
 
   const eventTitle = eventData?.eventName || eventData?.title || 'Competition';
@@ -106,10 +107,16 @@ export default function EventRegistrationModal({
   useEffect(() => {
     if (student) {
       const cleanRoll = (student.roll || '').toUpperCase();
-      let detectedCollege = student.college || 'ACET';
-      if (cleanRoll.includes('A9')) detectedCollege = 'AEC';
-      else if (cleanRoll.includes('P3')) detectedCollege = 'ACET';
-      else if (cleanRoll.includes('MH')) detectedCollege = 'ACOE';
+      let detectedCollege = 'AUS';
+      if (cleanRoll.includes('P3')) {
+        detectedCollege = 'ACET';
+      } else if (student.college === 'Other Institution') {
+        detectedCollege = 'Other Institution';
+      } else if (student.college && student.college.toUpperCase().includes('ACET')) {
+        detectedCollege = 'ACET';
+      } else {
+        detectedCollege = 'AUS';
+      }
 
       const rawBranch = student.branch || student.department || '';
       const matchedDept = matchDepartmentByBranch(rawBranch, departmentsList) || student.department || 'Select';
@@ -118,6 +125,7 @@ export default function EventRegistrationModal({
         rollNumber: cleanRoll,
         name: student.name || '',
         college: detectedCollege,
+        otherCollege: student.otherCollege || (detectedCollege === 'Other Institution' && student.college !== 'Other Institution' ? student.college : ''),
         gender: student.gender || 'Male',
         mobile: student.mobile || '',
         email: student.email || '',
@@ -151,7 +159,7 @@ export default function EventRegistrationModal({
               }));
             }
           })
-          .catch(() => {});
+          .catch(() => { });
       }
     }
   }, [student, departmentsList]);
@@ -182,6 +190,23 @@ export default function EventRegistrationModal({
       return;
     }
 
+    if (field === 'otherCollege') {
+      if (otherCollegeErrors[index] && isValidOtherCollege(value)) {
+        setOtherCollegeErrors((prev) => {
+          const next = { ...prev };
+          delete next[index];
+          return next;
+        });
+      }
+    }
+    if (field === 'college' && value !== 'Other Institution') {
+      setOtherCollegeErrors((prev) => {
+        const next = { ...prev };
+        delete next[index];
+        return next;
+      });
+    }
+
     if (index === 0) {
       setLeadParticipant((prev) => ({ ...prev, [field]: value }));
     } else {
@@ -192,6 +217,23 @@ export default function EventRegistrationModal({
       });
     }
     if (error) setError(null);
+  };
+
+  // Validate otherCollege on blur (when tabbing out of the input)
+  const handleOtherCollegeBlur = (index, val) => {
+    const trimmed = (val || '').trim();
+    if (trimmed && !isValidOtherCollege(trimmed)) {
+      setOtherCollegeErrors((prev) => ({
+        ...prev,
+        [index]: '⚠️ College name must contain "University" or "Engineering"'
+      }));
+    } else {
+      setOtherCollegeErrors((prev) => {
+        const next = { ...prev };
+        delete next[index];
+        return next;
+      });
+    }
   };
 
   // Trigger roll number auto-fetch from ECAP API
@@ -293,7 +335,8 @@ export default function EventRegistrationModal({
       {
         rollNumber: '',
         name: '',
-        college: leadParticipant.college || 'ACET',
+        college: leadParticipant.college || 'AUS',
+        otherCollege: '',
         gender: 'Male',
         mobile: '',
         email: '',
@@ -319,6 +362,10 @@ export default function EventRegistrationModal({
   // Formulate complete participants array based on team size
   const allParticipants = useMemo(() => {
     const list = [];
+    const resolvedLeadCollege = leadParticipant.college === 'Other Institution'
+      ? (leadParticipant.otherCollege?.trim() || 'Other Institution')
+      : (leadParticipant.college || 'AUS');
+
     // Participant 1 (Team Leader or Solo)
     list.push({
       participantNumber: 1,
@@ -326,7 +373,9 @@ export default function EventRegistrationModal({
       name: leadParticipant.name || student?.name || 'Participant 1',
       rollNumber: (leadParticipant.rollNumber || student?.roll || '').toUpperCase(),
       roll: (leadParticipant.rollNumber || student?.roll || '').toUpperCase(),
-      college: leadParticipant.college || student?.college || 'Aditya University',
+      college: resolvedLeadCollege,
+      institution: resolvedLeadCollege,
+      otherCollege: leadParticipant.otherCollege || '',
       gender: leadParticipant.gender || 'Male',
       mobile: leadParticipant.mobile || student?.mobile || '',
       phone: leadParticipant.mobile || student?.mobile || '',
@@ -341,13 +390,19 @@ export default function EventRegistrationModal({
 
     if (isTeam && Array.isArray(teamMembers)) {
       teamMembers.forEach((m, idx) => {
+        const resolvedMemberCollege = m.college === 'Other Institution'
+          ? (m.otherCollege?.trim() || 'Other Institution')
+          : (m.college || 'AUS');
+
         list.push({
           participantNumber: idx + 2,
           isLeader: false,
           name: m.name || '',
           rollNumber: (m.rollNumber || '').toUpperCase(),
           roll: (m.rollNumber || '').toUpperCase(),
-          college: m.college || 'Aditya University',
+          college: resolvedMemberCollege,
+          institution: resolvedMemberCollege,
+          otherCollege: m.otherCollege || '',
           gender: m.gender || 'Male',
           mobile: m.mobile || '',
           phone: m.mobile || '',
@@ -388,6 +443,25 @@ export default function EventRegistrationModal({
       return setError('Please fill Roll Number and Name for Participant 1.');
     }
 
+    // Validate Participant 1 College Name if Other Institution is selected
+    if (leadParticipant.college === 'Other Institution') {
+      const col = (leadParticipant.otherCollege || '').trim();
+      if (!col) {
+        setOtherCollegeErrors((prev) => ({
+          ...prev,
+          0: '⚠️ Please enter college name'
+        }));
+        return setError('Please enter college name for Participant 1.');
+      }
+      if (!isValidOtherCollege(col)) {
+        setOtherCollegeErrors((prev) => ({
+          ...prev,
+          0: '⚠️ Must contain "University" or "Engineering"'
+        }));
+        return setError('Participant 1: College name must contain "University" or "Engineering" to be accepted.');
+      }
+    }
+
     // Only validate additional team members if they were added and started
     const validTeamMembers = isTeam
       ? teamMembers.filter((m) => (m.rollNumber && m.rollNumber.trim()) || (m.name && m.name.trim()))
@@ -398,6 +472,23 @@ export default function EventRegistrationModal({
         const m = validTeamMembers[i];
         if (!m.name?.trim() || !m.rollNumber?.trim()) {
           return setError(`Please enter both Roll Number and Name for Participant #${i + 2}, or remove the empty participant box.`);
+        }
+        if (m.college === 'Other Institution') {
+          const col = (m.otherCollege || '').trim();
+          if (!col) {
+            setOtherCollegeErrors((prev) => ({
+              ...prev,
+              [i + 1]: '⚠️ Please enter college name'
+            }));
+            return setError(`Please enter college name for Participant #${i + 2}.`);
+          }
+          if (!isValidOtherCollege(col)) {
+            setOtherCollegeErrors((prev) => ({
+              ...prev,
+              [i + 1]: '⚠️ Must contain "University" or "Engineering"'
+            }));
+            return setError(`Participant #${i + 2}: College name must contain "University" or "Engineering" to be accepted.`);
+          }
         }
       }
     }
@@ -412,6 +503,10 @@ export default function EventRegistrationModal({
         (p) => p.isLeader || (p.rollNumber && p.rollNumber.trim() && p.name && p.name.trim())
       );
 
+      const resolvedStudentCollege = leadParticipant.college === 'Other Institution'
+        ? (leadParticipant.otherCollege?.trim() || 'Other Institution')
+        : (leadParticipant.college || student.college);
+
       const payload = {
         eventId: eventData._id || eventData.rawId || eventData.id,
         eventSlug: eventData.slug || eventData.eventSlug || '',
@@ -424,7 +519,8 @@ export default function EventRegistrationModal({
         studentId: student._id || student.id,
         studentName: leadParticipant.name || student.name,
         studentRoll: leadParticipant.rollNumber || student.roll,
-        studentCollege: leadParticipant.college || student.college,
+        studentCollege: resolvedStudentCollege,
+        otherCollege: leadParticipant.otherCollege || '',
         studentEmail: leadParticipant.email || student.email,
         studentMobile: leadParticipant.mobile || student.mobile,
         studentDepartment: leadParticipant.department || 'General',
@@ -621,9 +717,8 @@ export default function EventRegistrationModal({
             </div>
             {vStatus && (
               <div
-                className={`pattern-verified-hint ${
-                  vStatus.startsWith('✓') ? 'success' : 'info'
-                }`}
+                className={`pattern-verified-hint ${vStatus.startsWith('✓') ? 'success' : 'info'
+                  }`}
               >
                 {vStatus}
               </div>
@@ -656,6 +751,68 @@ export default function EventRegistrationModal({
               ))}
             </select>
           </div>
+
+          {data.college === 'Other Institution' && (
+            <div className="pattern-field-col pattern-other-college-field">
+              <label className="pattern-label">
+                College Name <span style={{ color: '#e11d48' }}>*</span>
+              </label>
+              <div className="pattern-input-with-action">
+                <input
+                  type="text"
+                  className={`pattern-input ${
+                    otherCollegeErrors[index]
+                      ? 'college-invalid'
+                      : data.otherCollege && isValidOtherCollege(data.otherCollege)
+                        ? 'college-valid'
+                        : ''
+                  }`}
+                  placeholder="e.g. JNTU University / ABC Engineering"
+                  value={data.otherCollege || ''}
+                  onChange={(e) => handleFieldChange(index, 'otherCollege', e.target.value)}
+                  onBlur={(e) => handleOtherCollegeBlur(index, e.target.value)}
+                  style={{
+                    borderColor: otherCollegeErrors[index]
+                      ? '#ef4444'
+                      : data.otherCollege && isValidOtherCollege(data.otherCollege)
+                        ? '#10b981'
+                        : '#cbd5e1',
+                    backgroundColor: otherCollegeErrors[index]
+                      ? '#fef2f2'
+                      : data.otherCollege && isValidOtherCollege(data.otherCollege)
+                        ? '#f0fdf4'
+                        : '#ffffff'
+                  }}
+                  required
+                />
+              </div>
+              {otherCollegeErrors[index] ? (
+                <div
+                  className="pattern-verified-hint error"
+                  style={{
+                    color: '#dc2626',
+                    fontSize: '0.74rem',
+                    fontWeight: 600,
+                    marginTop: '4px'
+                  }}
+                >
+                  {otherCollegeErrors[index]}
+                </div>
+              ) : data.otherCollege && isValidOtherCollege(data.otherCollege) ? (
+                <div
+                  className="pattern-verified-hint info"
+                  style={{
+                    color: '#0284c7',
+                    fontSize: '0.74rem',
+                    fontWeight: 600,
+                    marginTop: '4px'
+                  }}
+                >
+                  ℹ️ College ID Card is required for entry and verification.
+                </div>
+              ) : null}
+            </div>
+          )}
 
           <div className="pattern-field-col">
             <label className="pattern-label">Gender</label>
@@ -867,8 +1024,8 @@ export default function EventRegistrationModal({
                     {activeRecord.paymentStatus === 'PAID' || activeRecord.paymentId
                       ? `₹ ${eventData.price}/- (Paid Online via Razorpay)`
                       : eventData.price
-                      ? `₹ ${eventData.price}/-`
-                      : 'Free Entry'}
+                        ? `₹ ${eventData.price}/-`
+                        : 'Free Entry'}
                   </span>
                 </div>
                 <div className="reg-ticket-row">
@@ -919,7 +1076,7 @@ export default function EventRegistrationModal({
                               <td className="col-roll">
                                 <span className="roll-tag">{p.rollNumber || p.roll}</span>
                               </td>
-                              <td className="col-college">{p.college || 'Aditya University'}</td>
+                              <td className="col-college">{p.college || 'AUS'}</td>
                               <td className="col-dept">{p.department || p.branch || '—'}</td>
                               <td className="col-role">
                                 {p.isLeader ? (
@@ -1087,12 +1244,12 @@ export default function EventRegistrationModal({
                   {paymentStage === 'VERIFYING'
                     ? 'Verifying Payment on Server...'
                     : paymentStage === 'AWAITING_PAYMENT'
-                    ? 'Awaiting Payment Completion...'
-                    : loading
-                    ? 'Processing...'
-                    : eventData.price
-                    ? `Pay ₹ ${eventData.price}/- & Register via Razorpay ★`
-                    : 'Confirm Free Registration ★'}
+                      ? 'Awaiting Payment Completion...'
+                      : loading
+                        ? 'Processing...'
+                        : eventData.price
+                          ? `Pay ₹ ${eventData.price}/- & Register via Razorpay ★`
+                          : 'Confirm Free Registration ★'}
                 </button>
               </div>
             </form>

@@ -1533,18 +1533,48 @@ export function matchDepartmentByBranch(branch, deptList = []) {
   return cleanBranch;
 }
 
+export const COLLEGE_OPTIONS = [
+  'AUS',
+  'ACET',
+  'Other Institution'
+];
+
+export function normalizeCollegeName(name = '') {
+  if (!name) return 'AUS';
+  const clean = name.toString().trim();
+  const upper = clean.toUpperCase();
+  if (upper === 'OTHER INSTITUTION' || upper === 'OTHER' || clean.toLowerCase().includes('other institution')) {
+    return 'Other Institution';
+  }
+  if (upper.includes('ACET') || upper.includes('ENGINEERING & TECHNOLOGY')) {
+    return 'ACET';
+  }
+  return 'AUS';
+}
+
+/**
+ * Validates whether a custom college name contains either "university" or "engineering" (case-insensitive).
+ * Required when "Other Institution" is selected.
+ */
+export function isValidOtherCollege(name) {
+  if (!name || typeof name !== 'string') return false;
+  const lower = name.trim().toLowerCase();
+  return lower.includes('university') || lower.includes('engineering');
+}
+
 export function normalizeEcapStudent(data, fallbackRoll = '', deptList = []) {
   if (!data) return null;
   const roll = (data.rollno || data.RollNo || data.roll || fallbackRoll).toUpperCase().trim();
 
-  // College detection
-  let college = data.college || 'Aditya University';
-  if (roll.includes('A9')) {
-    college = 'AEC';
-  } else if (roll.includes('P3')) {
+  // College detection strictly among: AUS, ACET, Other Institution
+  let college = 'AUS';
+  const rawCol = (data.college || '').toString().trim().toUpperCase();
+  if (rawCol === 'OTHER INSTITUTION' || rawCol === 'OTHER' || data.college === 'Other Institution') {
+    college = 'Other Institution';
+  } else if (roll.includes('P3') || rawCol.includes('ACET')) {
     college = 'ACET';
-  } else if (roll.includes('MH')) {
-    college = 'ACOE';
+  } else {
+    college = 'AUS';
   }
 
   // Year detection
