@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import {
   getLoggedStudent,
   logoutStudent,
@@ -173,12 +173,24 @@ export function isSportsAndGamesEvent(item, catalogEvents = []) {
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [student, setStudent] = useState(getLoggedStudent());
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [catalogEvents, setCatalogEvents] = useState([]);
 
   // Active tab: 'profile' | 'security' | 'events'
-  const [activeTab, setActiveTab] = useState('profile');
+  const tabParam = searchParams.get('tab') || location.state?.tab;
+  const [activeTab, setActiveTab] = useState(
+    tabParam && ['profile', 'security', 'events'].includes(tabParam) ? tabParam : 'events'
+  );
+
+  useEffect(() => {
+    const tab = searchParams.get('tab') || location.state?.tab;
+    if (tab && ['profile', 'security', 'events'].includes(tab)) {
+      setActiveTab(tab);
+    }
+  }, [location.search, location.state]);
 
   // Dashboard live data from backend
   const [loading, setLoading] = useState(true);

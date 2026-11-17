@@ -1,5 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import {
+  ChevronDown,
+  LogOut,
+  LayoutDashboard,
+  User,
+  ChevronRight
+} from 'lucide-react';
 import { getLoggedStudent, logoutStudent } from '../../services/api';
 import StudentAuthModal from '../RegistrationModals/StudentAuthModal';
 import ThemeButton from '../ThemeComponents/ThemeButton';
@@ -60,6 +67,8 @@ export default function Navbar() {
   const [student, setStudent] = useState(getLoggedStudent());
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
+  const [profilePopoverOpen, setProfilePopoverOpen] = useState(false);
+  const profilePopoverRef = useRef(null);
 
   useEffect(() => {
     let lastScrollY = window.scrollY || window.pageYOffset || 0;
@@ -77,8 +86,8 @@ export default function Navbar() {
 
           setScrolled(currentScrollY > 15);
 
-          // If menu or auth modal is open, keep navbar visible
-          if (menuOpen || authModalOpen) {
+          // If menu, popover, or auth modal is open, keep navbar visible
+          if (menuOpen || authModalOpen || profilePopoverOpen) {
             setHidden(false);
             lastScrollY = currentScrollY;
             ticking = false;
@@ -113,12 +122,36 @@ export default function Navbar() {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('scroll', handleScroll);
     };
-  }, [menuOpen, authModalOpen]);
+  }, [menuOpen, authModalOpen, profilePopoverOpen]);
 
-  // Always show navbar on route navigation
+  // Always show navbar and close popover on route navigation
   useEffect(() => {
     setHidden(false);
+    setProfilePopoverOpen(false);
   }, [location.pathname]);
+
+  // Close profile popover when clicking outside or pressing Escape
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profilePopoverRef.current && !profilePopoverRef.current.contains(event.target)) {
+        setProfilePopoverOpen(false);
+      }
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setProfilePopoverOpen(false);
+      }
+    };
+
+    if (profilePopoverOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [profilePopoverOpen]);
 
   useEffect(() => {
     const handleAuth = () => setStudent(getLoggedStudent());
@@ -156,6 +189,25 @@ export default function Navbar() {
     }
   };
 
+  const handleLogout = () => {
+    setProfilePopoverOpen(false);
+    logoutStudent();
+    if (location.pathname === '/dashboard') {
+      navigate('/');
+    }
+  };
+
+  const studentInitial = student?.name
+    ? student.name.trim().charAt(0).toUpperCase()
+    : (student?.rollNumber ? student.rollNumber.trim().charAt(0).toUpperCase() : 'S');
+
+  const studentAvatar =
+    student?.photo ||
+    student?.avatar ||
+    student?.profilePic ||
+    student?.imageUrl ||
+    '/student-avatar.png';
+
   return (
     <>
       <nav
@@ -175,27 +227,108 @@ export default function Navbar() {
           <div className="navbar-right-cluster">
             <div className="navbar-cta">
               {student ? (
-                <div className="student-logged-box">
-                  <Link
-                    to="/dashboard"
-                    className="student-pill-link"
-                    title="Go to Student Dashboard & Account"
-                  >
-                    <span className="student-name-text">
-                      👤 {student.name ? student.name.split(' ')[0] : 'Student'}
-                    </span>
-                    <span className="student-badge-dash">
-                      Dashboard
-                    </span>
-                  </Link>
+                <div className="navbar-profile-wrapper" ref={profilePopoverRef}>
                   <button
                     type="button"
-                    onClick={() => logoutStudent()}
-                    className="btn-logout"
-                    title="Log out student account"
+                    onClick={() => setProfilePopoverOpen((prev) => !prev)}
+                    className={`navbar-profile-circle-btn ${profilePopoverOpen ? 'active' : ''}`}
+                    aria-expanded={profilePopoverOpen}
+                    aria-haspopup="true"
+                    aria-label="Student Profile & Account Menu"
+                    title={student?.name || 'Student Account'}
                   >
-                    Logout
+                    <div className="navbar-profile-circle-ring">
+                      <div className="navbar-profile-circle-glass">
+                        <span className="navbar-profile-circle-initial">
+                          {studentInitial}
+                        </span>
+                      </div>
+                    </div>
                   </button>
+
+                  {profilePopoverOpen && (
+                    <div className="profile-popover-card" role="dialog" aria-label="User Profile Menu">
+                      {/* 1. Profile Header */}
+                      <div className="profile-popover-header">
+                        <div className="profile-popover-avatar-wrap">
+                          <div className="profile-popover-avatar">
+                            <span className="profile-popover-avatar-initial">
+                              {studentInitial}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="profile-popover-meta">
+                          <div className="profile-popover-name" title={student?.name || 'User Account'}>
+                            {student?.name || 'User Account'}
+                          </div>
+                          <div className="profile-popover-role-row">
+                            <span className="profile-popover-role-badge">
+                              {student?.role || (student?.rollNumber ? 'Student' : 'User')}
+                            </span>
+                          </div>
+                          <div
+                            className="profile-popover-email"
+                            title={student?.email || (student?.rollNumber ? `${student.rollNumber.toLowerCase()}@adityauniversity.in` : 'user@adityauniversity.in')}
+                          >
+                            {student?.email || (student?.rollNumber ? `${student.rollNumber.toLowerCase()}@adityauniversity.in` : 'user@adityauniversity.in')}
+                          </div>
+                          <div
+                            className="profile-popover-org"
+                            title={student?.college || student?.department || (student?.rollNumber ? `ID: ${student.rollNumber}` : 'Aditya University')}
+                          >
+                            {student?.college || student?.department || (student?.rollNumber ? `ID: ${student.rollNumber}` : 'Aditya University')}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="profile-popover-divider" />
+
+                      {/* 2. Menu Items (Dashboard & Profile) */}
+                      <div className="profile-popover-nav">
+                        {/* My Dashboard */}
+                        <Link
+                          to="/dashboard?tab=events"
+                          className="profile-popover-nav-item"
+                          onClick={() => setProfilePopoverOpen(false)}
+                        >
+                          <span className="popover-nav-icon">
+                            <LayoutDashboard size={16} strokeWidth={1.8} />
+                          </span>
+                          <span className="popover-nav-title">My Dashboard</span>
+                          <ChevronRight size={14} className="popover-nav-chevron" />
+                        </Link>
+
+                        {/* My Profile */}
+                        <Link
+                          to="/dashboard?tab=profile"
+                          className="profile-popover-nav-item"
+                          onClick={() => setProfilePopoverOpen(false)}
+                        >
+                          <span className="popover-nav-icon">
+                            <User size={16} strokeWidth={1.8} />
+                          </span>
+                          <span className="popover-nav-title">My Profile</span>
+                          <ChevronRight size={14} className="popover-nav-chevron" />
+                        </Link>
+                      </div>
+
+                      <div className="profile-popover-divider" />
+
+                      {/* 3. Logout Section */}
+                      <div className="profile-popover-footer">
+                        <button
+                          type="button"
+                          onClick={handleLogout}
+                          className="profile-popover-logout-btn"
+                          title="Sign out of account"
+                        >
+                          <LogOut size={15} strokeWidth={2} />
+                          <span>Logout</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <ThemeButton
@@ -204,7 +337,7 @@ export default function Navbar() {
                   key={location.pathname}
                 >
                   <SplitColorText leftColor="#0f172a" rightColor="#ffffff">
-                    Login
+                    Register  |  Sign In
                   </SplitColorText>
                 </ThemeButton>
               )}
@@ -233,24 +366,53 @@ export default function Navbar() {
 
         {student ? (
           <div className="mobile-student-card">
-            <Link
-              to="/dashboard"
-              onClick={closeMenu}
-              className="mobile-student-link"
-            >
-              <span className="mobile-student-name">👤 {student.name}</span>
-              <span className="mobile-student-action">Open Student Dashboard →</span>
-            </Link>
-            <button
-              type="button"
-              onClick={() => {
-                logoutStudent();
-                closeMenu();
-              }}
-              className="btn-logout-mobile"
-            >
-              Logout
-            </button>
+            <div className="mobile-student-card-header">
+              <div className="mobile-student-avatar">
+                <img
+                  src={studentAvatar}
+                  alt={student.name || 'Student'}
+                  className="mobile-student-avatar-img"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    if (e.target.nextElementSibling) {
+                      e.target.nextElementSibling.style.display = 'flex';
+                    }
+                  }}
+                />
+                <span className="mobile-student-avatar-fallback" style={{ display: 'none' }}>
+                  {student.name ? student.name.charAt(0).toUpperCase() : 'S'}
+                </span>
+              </div>
+              <div className="mobile-student-details">
+                <span className="mobile-student-name">{student.name}</span>
+                <span className="mobile-student-roll">{student.rollNumber || student.roll || 'Aditya Student'}</span>
+              </div>
+            </div>
+
+            <div className="mobile-student-actions">
+              <Link
+                to="/dashboard"
+                onClick={closeMenu}
+                className="mobile-student-btn-dash"
+              >
+                <LayoutDashboard size={15} />
+                <span>Student Dashboard</span>
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  logoutStudent();
+                  closeMenu();
+                  if (location.pathname === '/dashboard') {
+                    navigate('/');
+                  }
+                }}
+                className="btn-logout-mobile"
+              >
+                <LogOut size={14} />
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
         ) : null}
 
