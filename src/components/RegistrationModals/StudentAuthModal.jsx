@@ -1,4 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
+import { LiquidGlass } from '../ThemeComponents/LiquidGlass';
+import ThemeButton from '../ThemeComponents/ThemeButton';
+import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
 import {
   registerStudentAccount,
   loginStudentAccount,
@@ -234,27 +237,29 @@ export default function StudentAuthModal({
 
   return (
     <div className="fest-modal-backdrop" onClick={onClose}>
-      <div className="fest-modal-card" onClick={(e) => e.stopPropagation()}>
+      <LiquidGlass
+        className="fest-modal-card fest-auth-liquid-modal"
+        theme="light"
+        borderRadius={24}
+        enableShader={true}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="fest-modal-header">
           <div className="fest-modal-header-banner">
-            <div>
-              <div className="fest-modal-badge">ADITYA UNIVERSITY FEST • COLOURS 2027</div>
-              <h2 className="fest-modal-title">
-                {confirmedRecord
-                  ? 'Event Registration Confirmation'
-                  : mode === 'register'
-                    ? 'Register Student Account'
-                    : 'Student Account Login'}
-              </h2>
-              <p className="fest-modal-subtitle">
-                {confirmedRecord
-                  ? `You are enrolled for ${displayEventTitle} at Colours 2027.`
-                  : displayEventTitle
-                    ? `Please sign in or register to join the ${displayEventTitle} competition.`
-                    : 'Access official Colours 2027 event registrations, certificates & passes.'}
-              </p>
-            </div>
+            <SplitColorText
+              as="h2"
+              className="fest-modal-title"
+              splitPercent={50}
+              leftColor="#0f172a"
+              rightColor="#be9337"
+            >
+              {confirmedRecord
+                ? 'Event Registration Confirmation'
+                : mode === 'register'
+                  ? 'Student Registration'
+                  : 'Student Login'}
+            </SplitColorText>
             <button className="fest-modal-close-btn" onClick={onClose} aria-label="Close modal">
               ✕
             </button>
@@ -264,26 +269,38 @@ export default function StudentAuthModal({
         {/* Mode Switch Tabs (hidden on confirmation view) */}
         {!confirmedRecord && (
           <div className="fest-modal-tabs">
-            <button
+            <ThemeButton
               type="button"
               className={`fest-tab-btn ${mode === 'register' ? 'active' : ''}`}
+              borderRadius={10}
               onClick={() => {
                 setMode('register');
                 setError(null);
               }}
             >
-              ✦ New Student? Register Here
-            </button>
-            <button
+              <SplitColorText
+                leftColor={mode === 'register' ? '#ffffff' : '#0f172a'}
+                rightColor={mode === 'register' ? '#ffffff' : '#475569'}
+              >
+                ✦ New Student? Register Here
+              </SplitColorText>
+            </ThemeButton>
+            <ThemeButton
               type="button"
               className={`fest-tab-btn ${mode === 'login' ? 'active' : ''}`}
+              borderRadius={10}
               onClick={() => {
                 setMode('login');
                 setError(null);
               }}
             >
-              🔑 Existing Student? Sign In
-            </button>
+              <SplitColorText
+                leftColor={mode === 'login' ? '#ffffff' : '#0f172a'}
+                rightColor={mode === 'login' ? '#ffffff' : '#475569'}
+              >
+                🔑 Existing Student? Sign In
+              </SplitColorText>
+            </ThemeButton>
           </div>
         )}
 
@@ -409,12 +426,16 @@ export default function StudentAuthModal({
               </div>
 
               <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', marginTop: '1.25rem' }}>
-                <button type="button" className="btn-fest-secondary" onClick={handlePrint}>
-                  🖨️ Print Slip
-                </button>
-                <button type="button" className="btn-fest-primary" onClick={onClose}>
-                  Done & Explore More Events
-                </button>
+                <ThemeButton type="button" className="btn-fest-secondary" onClick={handlePrint} borderRadius={10}>
+                  <SplitColorText leftColor="#334155" rightColor="#64748b">
+                    🖨️ Print Slip
+                  </SplitColorText>
+                </ThemeButton>
+                <ThemeButton type="button" className="btn-fest-primary" onClick={onClose} borderRadius={10}>
+                  <SplitColorText leftColor="#ffffff" rightColor="#ffffff">
+                    Done & Explore More Events
+                  </SplitColorText>
+                </ThemeButton>
               </div>
             </div>
           ) : mode === 'register' ? (
@@ -425,7 +446,10 @@ export default function StudentAuthModal({
                 {/* Roll Number (with existence check) */}
                 <div className="fest-form-group col-span-2">
                   <label className="fest-form-label">
-                    Roll / Reg. Number <span className="required">*</span>
+                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
+                      Roll / Reg. Number
+                    </SplitColorText>{' '}
+                    <span className="required">*</span>
                   </label>
                   <div style={{ position: 'relative' }}>
                     <input
@@ -488,7 +512,10 @@ export default function StudentAuthModal({
                 {/* Full Name */}
                 <div className="fest-form-group col-span-2">
                   <label className="fest-form-label">
-                    Student Full Name <span className="required">*</span>
+                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
+                      Student Full Name
+                    </SplitColorText>{' '}
+                    <span className="required">*</span>
                   </label>
                   <input
                     type="text"
@@ -504,7 +531,10 @@ export default function StudentAuthModal({
                 {/* Gender */}
                 <div className="fest-form-group">
                   <label className="fest-form-label">
-                    Gender <span className="required">*</span>
+                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
+                      Gender
+                    </SplitColorText>{' '}
+                    <span className="required">*</span>
                   </label>
                   <select
                     name="gender"
@@ -521,7 +551,10 @@ export default function StudentAuthModal({
                 {/* College / Institution */}
                 <div className="fest-form-group">
                   <label className="fest-form-label">
-                    College / Institution <span className="required">*</span>
+                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
+                      College / Institution
+                    </SplitColorText>{' '}
+                    <span className="required">*</span>
                   </label>
                   <select
                     name="college"
@@ -541,7 +574,10 @@ export default function StudentAuthModal({
                 {regForm.college === 'Other Institution' && (
                   <div className="fest-form-group col-span-2">
                     <label className="fest-form-label">
-                      Institution Name <span className="required">*</span>
+                      <SplitColorText leftColor="#0f172a" rightColor="#b45309">
+                        Institution Name
+                      </SplitColorText>{' '}
+                      <span className="required">*</span>
                     </label>
                     <input
                       type="text"
@@ -558,7 +594,10 @@ export default function StudentAuthModal({
                 {/* Mobile */}
                 <div className="fest-form-group">
                   <label className="fest-form-label">
-                    Mobile Number <span className="required">*</span>
+                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
+                      Mobile Number
+                    </SplitColorText>{' '}
+                    <span className="required">*</span>
                   </label>
                   <input
                     type="tel"
@@ -575,7 +614,10 @@ export default function StudentAuthModal({
                 {/* Email */}
                 <div className="fest-form-group">
                   <label className="fest-form-label">
-                    Email Address <span className="required">*</span>
+                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
+                      Email Address
+                    </SplitColorText>{' '}
+                    <span className="required">*</span>
                   </label>
                   <input
                     type="email"
@@ -590,7 +632,11 @@ export default function StudentAuthModal({
 
                 {/* Password */}
                 <div className="fest-form-group col-span-2">
-                  <label className="fest-form-label">Create Password (Optional)</label>
+                  <label className="fest-form-label">
+                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
+                      Create Password (Optional)
+                    </SplitColorText>
+                  </label>
                   <input
                     type="password"
                     name="password"
@@ -609,7 +655,10 @@ export default function StudentAuthModal({
               <div className="fest-form-grid">
                 <div className="fest-form-group col-span-2">
                   <label className="fest-form-label">
-                    Registered Email or Roll Number <span className="required">*</span>
+                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
+                      Registered Email or Roll Number
+                    </SplitColorText>{' '}
+                    <span className="required">*</span>
                   </label>
                   <input
                     type="text"
@@ -624,7 +673,10 @@ export default function StudentAuthModal({
 
                 <div className="fest-form-group col-span-2">
                   <label className="fest-form-label">
-                    Password <span className="required">*</span>
+                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
+                      Password
+                    </SplitColorText>{' '}
+                    <span className="required">*</span>
                   </label>
                   <input
                     type="password"
@@ -644,35 +696,49 @@ export default function StudentAuthModal({
         {/* Footer (hidden on confirmation view) */}
         {!confirmedRecord && (
           <div className="fest-modal-footer">
-            <button type="button" className="btn-fest-secondary" onClick={onClose} disabled={loading}>
-              Cancel
-            </button>
+            <ThemeButton
+              type="button"
+              className="btn-fest-secondary"
+              onClick={onClose}
+              disabled={loading}
+              borderRadius={10}
+            >
+              <SplitColorText leftColor="#334155" rightColor="#64748b">
+                Cancel
+              </SplitColorText>
+            </ThemeButton>
             {mode === 'register' ? (
-              <button
+              <ThemeButton
                 type="submit"
                 form="student-register-form"
                 className="btn-fest-primary"
                 disabled={loading}
+                borderRadius={10}
               >
-                {loading
-                  ? 'Processing Registration...'
-                  : studentStatus?.alreadyRegisteredForEvent
-                    ? 'View Registration Slip'
-                    : 'Register & Continue →'}
-              </button>
+                <SplitColorText leftColor="#ffffff" rightColor="#ffffff">
+                  {loading
+                    ? 'Processing Registration...'
+                    : studentStatus?.alreadyRegisteredForEvent
+                      ? 'View Registration Slip'
+                      : 'Register & Continue →'}
+                </SplitColorText>
+              </ThemeButton>
             ) : (
-              <button
+              <ThemeButton
                 type="submit"
                 form="student-login-form"
                 className="btn-fest-primary"
                 disabled={loading}
+                borderRadius={10}
               >
-                {loading ? 'Signing In...' : 'Sign In & Continue →'}
-              </button>
+                <SplitColorText leftColor="#ffffff" rightColor="#ffffff">
+                  {loading ? 'Signing In...' : 'Sign In & Continue →'}
+                </SplitColorText>
+              </ThemeButton>
             )}
           </div>
         )}
-      </div>
+      </LiquidGlass>
     </div>
   );
 }

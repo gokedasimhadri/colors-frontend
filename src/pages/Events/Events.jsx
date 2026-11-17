@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { User, Phone, Mail, ArrowLeft, Tag, Users, MapPin, Calendar, RotateCcw, Target, Landmark } from 'lucide-react';
 import {
   EVENT_TYPE,
@@ -40,6 +40,15 @@ export function formatTitleCase(str) {
 export default function Events() {
   const { eventCategory, eventSubCategory, eventName } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  const initialTab =
+    searchParams.get('tab') ||
+    searchParams.get('category') ||
+    location.state?.tab ||
+    location.state?.category ||
+    'ALL';
 
   // ─────────────────────────────────────────────────────────────
   // RENDER BASED ON URL PARAMS:
@@ -76,6 +85,7 @@ export default function Events() {
     content = (
       <AllCategoriesView
         themeCode={FEST_TYPE}
+        initialTab={initialTab}
         onSelectSubCategory={(catName, subCatName) =>
           navigate(`/events/${encodeURIComponent(catName)}/${encodeURIComponent(subCatName)}`)
         }
@@ -96,12 +106,12 @@ export default function Events() {
 // ─────────────────────────────────────────────────────────────
 // VIEW 1: All Categories, Subcategories & Events (COLORS)
 // ─────────────────────────────────────────────────────────────
-function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
+function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent, initialTab = 'ALL' }) {
   const [categories, setCategories] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('ALL');
+  const [activeTab, setActiveTab] = useState(() => (initialTab ? initialTab.toUpperCase() : 'ALL'));
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState('subcategories'); // 'subcategories' | 'events'
 
@@ -215,6 +225,29 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
         return { id, label, count: cat.totalEventsCount || (cat.data || []).length };
       });
   }, [categories]);
+
+  // Sync activeTab when initialTab prop is provided or changes (e.g. from Home View More button)
+  useEffect(() => {
+    if (initialTab && initialTab !== 'ALL') {
+      const target = initialTab.toUpperCase();
+      if (categoryTabs && categoryTabs.length > 0) {
+        const match = categoryTabs.find(
+          (t) =>
+            t.id.toUpperCase() === target ||
+            t.id.toUpperCase().includes(target) ||
+            target.includes(t.id.toUpperCase()) ||
+            t.label.toUpperCase().includes(target)
+        );
+        if (match) {
+          setActiveTab(match.id);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+      }
+      setActiveTab('ALL');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [initialTab, categoryTabs]);
 
   // Total metrics across COLORS
   const totalEventsCount = useMemo(() => {

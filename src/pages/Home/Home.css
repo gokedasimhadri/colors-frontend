@@ -292,6 +292,7 @@
   letter-spacing: var(--ls-wider);
   text-transform: uppercase;
   text-align: center;
+  white-space: nowrap;
   width: 100%;
   margin: 0;
   padding: 0 0.5rem;
@@ -328,7 +329,7 @@
   border: none;
   padding: 0;
   margin: 0 auto;
-  max-width: 480px;
+  max-width: 90vw;
   width: fit-content;
   box-shadow: none;
   display: flex;
@@ -1085,6 +1086,14 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
+  .pillar-events-snippet {
+    height: auto;
+    min-height: 250px;
+    max-height: none;
+  }
+  .snippet-list li {
+    white-space: normal;
+  }
 }
 
 /* ── Festival Domain Pillar Cards with Liquid Glass Physics ── */
@@ -1096,6 +1105,12 @@
   height: 100%;
   border: none !important;
   outline: none !important;
+  cursor: pointer;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
+}
+
+.pillar-card:hover {
+  transform: translateY(-4px);
 }
 
 /* ── Light Variant (Left 50%: Culturals & Sports over White Canvas) ── */
@@ -1260,16 +1275,24 @@
 .pillar-tagline {
   font-size: var(--fs-caption);
   font-weight: var(--fw-medium);
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.15rem;
+  min-height: 2.2rem;
+  display: flex;
+  align-items: center;
   line-height: var(--lh-snug);
 }
 
 .pillar-events-snippet {
   position: relative;
   border-radius: 12px;
-  padding: 1.15rem 1.25rem;
-  margin-bottom: 1.4rem;
-  flex: 1;
+  padding: 1.15rem 1.25rem 1rem;
+  margin-bottom: 1.25rem;
+  height: 260px;
+  min-height: 260px;
+  max-height: 260px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
   -webkit-backdrop-filter: blur(14px) saturate(180%);
   backdrop-filter: blur(14px) saturate(180%);
   transition: all 0.25s ease;
@@ -1281,7 +1304,8 @@
   letter-spacing: 0.14em;
   text-transform: uppercase;
   display: block;
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.6rem;
+  flex-shrink: 0;
 }
 
 .snippet-list {
@@ -1291,14 +1315,18 @@
   gap: 0.45rem;
   margin: 0;
   padding: 0;
+  flex: 1;
 }
 
 .snippet-list li {
-  font-size: 0.86rem;
+  font-size: 0.83rem;
   position: relative;
-  padding-left: 1.2rem;
+  padding-left: 1.15rem;
   font-weight: 400;
-  line-height: 1.4;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .snippet-list li::before {
@@ -1306,17 +1334,63 @@
   position: absolute;
   left: 0;
   font-weight: 400;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   line-height: 1;
   top: 1px;
   opacity: 0.6;
+}
+
+/* View More button inside Key Competitions snippet */
+.pillar-snippet-view-more {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-shrink: 0;
+  padding-top: 0.5rem;
+}
+
+.btn-snippet-view-more {
+  padding: 6px 22px !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.03em !important;
+  border-radius: 10px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.btn-snippet-view-more:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+  transform: translateY(-1px) !important;
+}
+
+.pillar-card.lg-card-light .btn-snippet-view-more {
+  background: rgba(15, 23, 42, 0.06) !important;
+  border: 1px solid rgba(15, 23, 42, 0.16) !important;
+}
+
+.pillar-card.lg-card-light .btn-snippet-view-more:hover {
+  background: rgba(15, 23, 42, 0.12) !important;
+  border-color: rgba(15, 23, 42, 0.3) !important;
 }
 
 .pillar-coordinator-box {
   position: relative;
   border-radius: 12px;
   padding: 0.95rem 1.15rem;
-  margin-bottom: 1.4rem;
+  margin-bottom: 0;
+  margin-top: auto;
   -webkit-backdrop-filter: blur(14px) saturate(180%);
   backdrop-filter: blur(14px) saturate(180%);
   transition: all 0.25s ease;
@@ -1909,10 +1983,11 @@
   }
 
   .month-split-heading {
-    font-size: clamp(2.6rem, 11.5vw, 3.6rem) !important;
-    letter-spacing: 0.09em !important;
+    font-size: clamp(1.85rem, 8.2vw, 3.2rem) !important;
+    letter-spacing: 0.06em !important;
     line-height: 1.05 !important;
     text-align: center !important;
+    white-space: nowrap !important;
   }
 
   .dates-split-heading {
@@ -2068,8 +2143,9 @@
   }
 
   .month-split-heading {
-    font-size: 2.3rem !important;
-    letter-spacing: 0.07em !important;
+    font-size: clamp(1.45rem, 7.2vw, 2.1rem) !important;
+    letter-spacing: 0.05em !important;
+    white-space: nowrap !important;
   }
 
   .dates-split-heading {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { User, Phone, Mail, ArrowLeft, Tag, Users, MapPin, Calendar, RotateCcw, Target, Landmark } from 'lucide-react';
 import {
   EVENT_TYPE,
@@ -40,6 +40,15 @@ export function formatTitleCase(str) {
 export default function Events() {
   const { eventCategory, eventSubCategory, eventName } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  const initialTab =
+    searchParams.get('tab') ||
+    searchParams.get('category') ||
+    location.state?.tab ||
+    location.state?.category ||
+    'ALL';
 
   // ─────────────────────────────────────────────────────────────
   // RENDER BASED ON URL PARAMS:
@@ -76,6 +85,7 @@ export default function Events() {
     content = (
       <AllCategoriesView
         themeCode={FEST_TYPE}
+        initialTab={initialTab}
         onSelectSubCategory={(catName, subCatName) =>
           navigate(`/events/${encodeURIComponent(catName)}/${encodeURIComponent(subCatName)}`)
         }
@@ -96,12 +106,12 @@ export default function Events() {
 // ─────────────────────────────────────────────────────────────
 // VIEW 1: All Categories, Subcategories & Events (COLORS)
 // ─────────────────────────────────────────────────────────────
-function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
+function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent, initialTab = 'ALL' }) {
   const [categories, setCategories] = useState([]);
   const [allEvents, setAllEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState('ALL');
+  const [activeTab, setActiveTab] = useState(() => (initialTab ? initialTab.toUpperCase() : 'ALL'));
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState('subcategories'); // 'subcategories' | 'events'
 
@@ -215,6 +225,29 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent }) {
         return { id, label, count: cat.totalEventsCount || (cat.data || []).length };
       });
   }, [categories]);
+
+  // Sync activeTab when initialTab prop is provided or changes (e.g. from Home View More button)
+  useEffect(() => {
+    if (initialTab && initialTab !== 'ALL') {
+      const target = initialTab.toUpperCase();
+      if (categoryTabs && categoryTabs.length > 0) {
+        const match = categoryTabs.find(
+          (t) =>
+            t.id.toUpperCase() === target ||
+            t.id.toUpperCase().includes(target) ||
+            target.includes(t.id.toUpperCase()) ||
+            t.label.toUpperCase().includes(target)
+        );
+        if (match) {
+          setActiveTab(match.id);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          return;
+        }
+      }
+      setActiveTab('ALL');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [initialTab, categoryTabs]);
 
   // Total metrics across COLORS
   const totalEventsCount = useMemo(() => {
@@ -1411,234 +1444,234 @@ function CoordinatorsHierarchyFlow({ faculty = [], students = [], title = '' }) 
       )}
 
       <div className="coordinators-flow-wrapper" ref={containerRef}>
-      {/* Dynamic SVG Flowchart Connection Lines */}
-      {hasFlow && flowCoords && (
-        <svg
-          className="coordinators-flow-svg"
-          viewBox={`0 0 ${flowCoords.width} ${flowCoords.height}`}
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          {/* Horizontal Connector Bus Bar */}
-          {flowCoords.busMinX !== flowCoords.busMaxX && (
-            <g className="flow-bus-bar-group">
-              <line
-                x1={flowCoords.busMinX}
-                y1={flowCoords.yMid}
-                x2={flowCoords.busMaxX}
-                y2={flowCoords.yMid}
-                className="flow-path-glow"
-              />
-              <line
-                x1={flowCoords.busMinX}
-                y1={flowCoords.yMid}
-                x2={flowCoords.busMaxX}
-                y2={flowCoords.yMid}
-                className="flow-path-core"
-              />
-              <line
-                x1={flowCoords.busMinX}
-                y1={flowCoords.yMid}
-                x2={flowCoords.busMaxX}
-                y2={flowCoords.yMid}
-                className="flow-path-pulse"
-              />
-            </g>
-          )}
+        {/* Dynamic SVG Flowchart Connection Lines */}
+        {hasFlow && flowCoords && (
+          <svg
+            className="coordinators-flow-svg"
+            viewBox={`0 0 ${flowCoords.width} ${flowCoords.height}`}
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            {/* Horizontal Connector Bus Bar */}
+            {flowCoords.busMinX !== flowCoords.busMaxX && (
+              <g className="flow-bus-bar-group">
+                <line
+                  x1={flowCoords.busMinX}
+                  y1={flowCoords.yMid}
+                  x2={flowCoords.busMaxX}
+                  y2={flowCoords.yMid}
+                  className="flow-path-glow"
+                />
+                <line
+                  x1={flowCoords.busMinX}
+                  y1={flowCoords.yMid}
+                  x2={flowCoords.busMaxX}
+                  y2={flowCoords.yMid}
+                  className="flow-path-core"
+                />
+                <line
+                  x1={flowCoords.busMinX}
+                  y1={flowCoords.yMid}
+                  x2={flowCoords.busMaxX}
+                  y2={flowCoords.yMid}
+                  className="flow-path-pulse"
+                />
+              </g>
+            )}
 
-          {/* Vertical Drops from each Faculty Coordinator to yMid */}
-          {flowCoords.facPoints.map((fac, idx) => (
-            <g key={`fac-line-${idx}`}>
-              <line
-                x1={fac.x}
-                y1={fac.y}
-                x2={fac.x}
-                y2={flowCoords.yMid}
-                className="flow-path-glow"
-              />
-              <line
-                x1={fac.x}
-                y1={fac.y}
-                x2={fac.x}
-                y2={flowCoords.yMid}
-                className="flow-path-core"
-              />
-              <line
-                x1={fac.x}
-                y1={fac.y}
-                x2={fac.x}
-                y2={flowCoords.yMid}
-                className="flow-path-pulse"
-              />
-              {/* Junction Dots at the Bus Bar intersection */}
-              <circle cx={fac.x} cy={flowCoords.yMid} r={4.5} className="flow-junction-dot" />
-              <circle cx={fac.x} cy={flowCoords.yMid} r={7} className="flow-junction-ring" />
-            </g>
-          ))}
-
-          {/* Vertical Drops from yMid to each Student Coordinator with Arrowhead */}
-          {flowCoords.stuPoints.map((stu, idx) => (
-            <g key={`stu-line-${idx}`}>
-              <line
-                x1={stu.x}
-                y1={flowCoords.yMid}
-                x2={stu.x}
-                y2={stu.y - 7}
-                className="flow-path-glow"
-              />
-              <line
-                x1={stu.x}
-                y1={flowCoords.yMid}
-                x2={stu.x}
-                y2={stu.y - 7}
-                className="flow-path-core"
-              />
-              <line
-                x1={stu.x}
-                y1={flowCoords.yMid}
-                x2={stu.x}
-                y2={stu.y - 7}
-                className="flow-path-pulse"
-              />
-              {/* Junction Dots at the Bus Bar intersection */}
-              <circle cx={stu.x} cy={flowCoords.yMid} r={4.5} className="flow-junction-dot" />
-              <circle cx={stu.x} cy={flowCoords.yMid} r={7} className="flow-junction-ring" />
-
-              {/* Crisp Flowchart Arrowhead */}
-              <polygon
-                points={`${stu.x - 6},${stu.y - 8} ${stu.x + 6},${stu.y - 8} ${stu.x},${stu.y}`}
-                className="flow-arrowhead"
-              />
-            </g>
-          ))}
-        </svg>
-      )}
-
-      {/* Tier 1: Faculty Coordinators */}
-      {faculty.length > 0 && (
-        <div className="coordinators-tier coordinators-tier-faculty">
-          <div className="coordinators-grid">
-            {faculty.map((fc, idx) => (
-              <div
-                key={`faculty-${idx}`}
-                ref={(el) => (facultyRefs.current[idx] = el)}
-                className="coordinator-card"
-              >
-                <div className="coordinator-photo-container">
-                  <FacultyCoordinatorPhoto
-                    coordinator={fc}
-                    index={idx}
-                    alt={fc.cordinatorName}
-                    className="coordinator-photo"
-                  />
-                  <span className="coordinator-badge">
-                    <SplitColorText as="span" screenSync={true} leftColor="#ffffff" rightColor="#ffffff">
-                      Faculty Coordinator
-                    </SplitColorText>
-                  </span>
-                </div>
-                <div className="coordinator-card-body">
-                  <SplitColorText as="div" className="coordinator-name" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                    {formatTitleCase(fc.cordinatorName)}
-                  </SplitColorText>
-                  <div className="coordinator-dept">
-                    <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#fbbf24">
-                      {formatTitleCase(fc.cordinatorDesignation || fc.departmentName || fc.cordinatorCollege || 'Coordinator')}
-                    </SplitColorText>
-                  </div>
-                  <div className="coordinator-contacts-list">
-                    {fc.cordinatorPhone && (
-                      <a href={`tel:${fc.cordinatorPhone}`} className="coordinator-contact-item">
-                        <Phone size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
-                        <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                          {fc.cordinatorPhone}
-                        </SplitColorText>
-                      </a>
-                    )}
-                    {fc.cordinatorEmail && (
-                      <a href={`mailto:${fc.cordinatorEmail}`} className="coordinator-contact-item">
-                        <Mail size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
-                        <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                          {fc.cordinatorEmail}
-                        </SplitColorText>
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
+            {/* Vertical Drops from each Faculty Coordinator to yMid */}
+            {flowCoords.facPoints.map((fac, idx) => (
+              <g key={`fac-line-${idx}`}>
+                <line
+                  x1={fac.x}
+                  y1={fac.y}
+                  x2={fac.x}
+                  y2={flowCoords.yMid}
+                  className="flow-path-glow"
+                />
+                <line
+                  x1={fac.x}
+                  y1={fac.y}
+                  x2={fac.x}
+                  y2={flowCoords.yMid}
+                  className="flow-path-core"
+                />
+                <line
+                  x1={fac.x}
+                  y1={fac.y}
+                  x2={fac.x}
+                  y2={flowCoords.yMid}
+                  className="flow-path-pulse"
+                />
+                {/* Junction Dots at the Bus Bar intersection */}
+                <circle cx={fac.x} cy={flowCoords.yMid} r={4.5} className="flow-junction-dot" />
+                <circle cx={fac.x} cy={flowCoords.yMid} r={7} className="flow-junction-ring" />
+              </g>
             ))}
-          </div>
-        </div>
-      )}
 
-      {/* Spacer separating the tiers for the flowchart lines */}
-      {hasFlow && <div className="coordinators-flow-spacer" aria-hidden="true" />}
+            {/* Vertical Drops from yMid to each Student Coordinator with Arrowhead */}
+            {flowCoords.stuPoints.map((stu, idx) => (
+              <g key={`stu-line-${idx}`}>
+                <line
+                  x1={stu.x}
+                  y1={flowCoords.yMid}
+                  x2={stu.x}
+                  y2={stu.y - 7}
+                  className="flow-path-glow"
+                />
+                <line
+                  x1={stu.x}
+                  y1={flowCoords.yMid}
+                  x2={stu.x}
+                  y2={stu.y - 7}
+                  className="flow-path-core"
+                />
+                <line
+                  x1={stu.x}
+                  y1={flowCoords.yMid}
+                  x2={stu.x}
+                  y2={stu.y - 7}
+                  className="flow-path-pulse"
+                />
+                {/* Junction Dots at the Bus Bar intersection */}
+                <circle cx={stu.x} cy={flowCoords.yMid} r={4.5} className="flow-junction-dot" />
+                <circle cx={stu.x} cy={flowCoords.yMid} r={7} className="flow-junction-ring" />
 
-      {/* Tier 2: Student Coordinators */}
-      {students.length > 0 && (
-        <div className="coordinators-tier coordinators-tier-student">
-          <div className="coordinators-grid">
-            {students.map((sc, idx) => {
-              const photoUrl = sc.studentCordinatorId
-                ? `https://info.aec.edu.in/adityacentral/studentphotos/${sc.studentCordinatorId.toString().trim().toUpperCase()}.jpg`
-                : `/img/person/${(idx % 8) + 2}.jpg`;
+                {/* Crisp Flowchart Arrowhead */}
+                <polygon
+                  points={`${stu.x - 6},${stu.y - 8} ${stu.x + 6},${stu.y - 8} ${stu.x},${stu.y}`}
+                  className="flow-arrowhead"
+                />
+              </g>
+            ))}
+          </svg>
+        )}
 
-              return (
+        {/* Tier 1: Faculty Coordinators */}
+        {faculty.length > 0 && (
+          <div className="coordinators-tier coordinators-tier-faculty">
+            <div className="coordinators-grid">
+              {faculty.map((fc, idx) => (
                 <div
-                  key={`student-${idx}`}
-                  ref={(el) => (studentRefs.current[idx] = el)}
+                  key={`faculty-${idx}`}
+                  ref={(el) => (facultyRefs.current[idx] = el)}
                   className="coordinator-card"
                 >
                   <div className="coordinator-photo-container">
-                    <img
-                      src={photoUrl}
-                      alt={sc.studentCordinatorName}
+                    <FacultyCoordinatorPhoto
+                      coordinator={fc}
+                      index={idx}
+                      alt={fc.cordinatorName}
                       className="coordinator-photo"
-                      onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = `/img/person/${(idx % 8) + 2}.jpg`;
-                      }}
                     />
                     <span className="coordinator-badge">
                       <SplitColorText as="span" screenSync={true} leftColor="#ffffff" rightColor="#ffffff">
-                        Student Coordinator
+                        Faculty Coordinator
                       </SplitColorText>
                     </span>
                   </div>
                   <div className="coordinator-card-body">
                     <SplitColorText as="div" className="coordinator-name" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                      {formatTitleCase(sc.studentCordinatorName)}
+                      {formatTitleCase(fc.cordinatorName)}
                     </SplitColorText>
                     <div className="coordinator-dept">
                       <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#fbbf24">
-                        {formatTitleCase(sc.studentCordinatorCollege || sc.departmentName || 'Student Coordinator')}
+                        {formatTitleCase(fc.cordinatorDesignation || fc.departmentName || fc.cordinatorCollege || 'Coordinator')}
                       </SplitColorText>
                     </div>
                     <div className="coordinator-contacts-list">
-                      {sc.studentCordinatorPhone && (
-                        <a href={`tel:${sc.studentCordinatorPhone}`} className="coordinator-contact-item">
+                      {fc.cordinatorPhone && (
+                        <a href={`tel:${fc.cordinatorPhone}`} className="coordinator-contact-item">
                           <Phone size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
                           <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                            {sc.studentCordinatorPhone}
+                            {fc.cordinatorPhone}
                           </SplitColorText>
                         </a>
                       )}
-                      {sc.studentCordinatorEmail && (
-                        <a href={`mailto:${sc.studentCordinatorEmail}`} className="coordinator-contact-item">
+                      {fc.cordinatorEmail && (
+                        <a href={`mailto:${fc.cordinatorEmail}`} className="coordinator-contact-item">
                           <Mail size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
                           <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                            {sc.studentCordinatorEmail}
+                            {fc.cordinatorEmail}
                           </SplitColorText>
                         </a>
                       )}
                     </div>
                   </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Spacer separating the tiers for the flowchart lines */}
+        {hasFlow && <div className="coordinators-flow-spacer" aria-hidden="true" />}
+
+        {/* Tier 2: Student Coordinators */}
+        {students.length > 0 && (
+          <div className="coordinators-tier coordinators-tier-student">
+            <div className="coordinators-grid">
+              {students.map((sc, idx) => {
+                const photoUrl = sc.studentCordinatorId
+                  ? `https://info.aec.edu.in/adityacentral/studentphotos/${sc.studentCordinatorId.toString().trim().toUpperCase()}.jpg`
+                  : `/img/person/${(idx % 8) + 2}.jpg`;
+
+                return (
+                  <div
+                    key={`student-${idx}`}
+                    ref={(el) => (studentRefs.current[idx] = el)}
+                    className="coordinator-card"
+                  >
+                    <div className="coordinator-photo-container">
+                      <img
+                        src={photoUrl}
+                        alt={sc.studentCordinatorName}
+                        className="coordinator-photo"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = `/img/person/${(idx % 8) + 2}.jpg`;
+                        }}
+                      />
+                      <span className="coordinator-badge">
+                        <SplitColorText as="span" screenSync={true} leftColor="#ffffff" rightColor="#ffffff">
+                          Student Coordinator
+                        </SplitColorText>
+                      </span>
+                    </div>
+                    <div className="coordinator-card-body">
+                      <SplitColorText as="div" className="coordinator-name" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                        {formatTitleCase(sc.studentCordinatorName)}
+                      </SplitColorText>
+                      <div className="coordinator-dept">
+                        <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#fbbf24">
+                          {formatTitleCase(sc.studentCordinatorCollege || sc.departmentName || 'Student Coordinator')}
+                        </SplitColorText>
+                      </div>
+                      <div className="coordinator-contacts-list">
+                        {sc.studentCordinatorPhone && (
+                          <a href={`tel:${sc.studentCordinatorPhone}`} className="coordinator-contact-item">
+                            <Phone size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
+                            <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                              {sc.studentCordinatorPhone}
+                            </SplitColorText>
+                          </a>
+                        )}
+                        {sc.studentCordinatorEmail && (
+                          <a href={`mailto:${sc.studentCordinatorEmail}`} className="coordinator-contact-item">
+                            <Mail size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
+                            <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                              {sc.studentCordinatorEmail}
+                            </SplitColorText>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

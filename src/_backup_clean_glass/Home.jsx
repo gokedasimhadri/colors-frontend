@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getLoggedStudent } from '../../services/api';
 import { EVENT_START_DATE } from '../../utils/eventDate';
 import FlipClockCountdown from '@leenguyen/react-flip-clock-countdown';
@@ -16,53 +16,85 @@ const EVENT_DATE = EVENT_START_DATE;
 // ─── The Festival Arenas (Culturals, Sports, Creo, Fete) ───────────────────
 const FEST_PILLARS = [
   {
-    // code: 'Colours',
+    code: 'CULTURALS',
     name: 'Culturals',
     tagline: 'Music, Dance, Theatre & Expressions',
-    coordinator: 'Dr. N. Rambabu',
+    coordinator: 'Dr. N. Ram Babu',
     phone: '8473917384',
     color: '#e11d48',
     icon: '🎭',
-    events: ['Dance Solo & Group', 'Classical & Western Singing', 'Mime Championship', 'Mono Action', 'Battle of Bands'],
+    events: [
+      'Dance: Classical (Solo & Group)',
+      'Dance: Western, Hip Hop & Folk',
+      'Music: Vocal Singing & Duet',
+      'Drama: Skit, Mime & Stage Play',
+      'Comedy: Stand-up & Mono Action'
+    ],
     bgImage: '/culturals_bg.png'
   },
   {
-    // code: 'Colours',
+    code: 'SPORTS',
     name: 'Sports',
-    tagline: 'Athletics, Team Championships & Glory',
+    tagline: 'Athletics, Track & Field Championships',
     coordinator: 'Dr. N. Ravi',
     phone: '9912393905',
     color: '#0284c7',
     icon: '🏆',
-    events: ['100m / 200m Sprint', 'Volleyball Tournament', 'Basketball League', 'Relay 4x100m', 'Badminton Singles'],
+    events: [
+      'Running: 100M, 200M, 400M & 800M',
+      'Distance: 1500M & 5K Marathon',
+      'Relay: 4x100M & 4x400M Relay',
+      'Jumping: Long, High & Triple Jump',
+      'Throwing: Shotput & Discus Throw'
+    ],
     bgImage: '/sports_bg.png'
   },
   {
-    // code: 'Colours',
+    code: 'CREO',
     name: 'Creo',
     tagline: 'Fine Arts, Media, Fashion & Innovation',
     coordinator: 'Dr. B. Srinivas',
     phone: '9866732745',
     color: '#d97706',
     icon: '🎨',
-    events: ['Ethnic & Modern Runway', 'Spot Painting Contest', 'Treasure Quest', 'Short Film Making', 'Mobile Photography'],
+    events: [
+      'Visual: Spot Photography & Clicks',
+      'Fine Arts: Spot Painting & Rangoli',
+      'Cinema: Movie & Short Film Making',
+      'Fashion: Modern & Ethnic Runway',
+      'Literary: Sahityam, Charades & Hunt'
+    ],
     bgImage: '/creo_bg.png'
   },
   {
-    // code: 'Colours',
+    code: 'FETE',
     name: 'Fete',
     tagline: 'Food Carnival, Fun Fiesta, Games & Stalls',
     coordinator: 'Mr. J. D. Venkatesh',
     phone: '7036266661',
     color: '#059669',
     icon: '🎪',
-    events: ['Master Chef & Cookery', 'Carnival & Fun Games', 'Youth Flea Market', 'Live Acoustic & DJ Arena', 'Flash Mob & Open Mic'],
+    events: [
+      'Culinary: Master Chef & Cookery',
+      'Fiesta: Carnival & Fun Games',
+      'Bazaar: Youth Flea Market',
+      'Acoustic: Live Band & DJ Arena',
+      'Entertainment: Open Mic & VR Arena'
+    ],
     bgImage: '/hero_bg.png'
   }
 ];
 
 function Home() {
+  const navigate = useNavigate();
   const [student, setStudent] = useState(getLoggedStudent());
+
+  const handlePillarClick = (pillar) => {
+    const tabId = (pillar.code || pillar.name || '').toUpperCase();
+    navigate(`/events?tab=${encodeURIComponent(tabId)}`, {
+      state: { tab: tabId, category: pillar.name }
+    });
+  };
 
   useEffect(() => {
     const handleAuth = () => setStudent(getLoggedStudent());
@@ -128,7 +160,7 @@ function Home() {
             </div>
           </div>
 
-          {/* Line 2: Month (JANUARY) Centered with SplitColorText */}
+          {/* Line 2: Month (JANUARY 2027) Centered with SplitColorText */}
           <div className="dates-month-row">
             <SplitColorText
               as="h2"
@@ -137,12 +169,13 @@ function Home() {
               leftColor="#0d1536"
               rightColor="#ffffff"
             >
-              JANUARY
+              JANUARY 2027
             </SplitColorText>
           </div>
         </div>
 
-        {/* ROW 3 (BOTTOM): Centered Action CTAs */}
+        {/* ROW 3 (BOTTOM): Centered Action CTAs - Commented out as requested */}
+        {/*
         <div className="hero-bottom-actions-section">
           <div className="hero-center-actions">
             {!student ? (
@@ -193,6 +226,7 @@ function Home() {
             </ThemeButton>
           </div>
         </div>
+        */}
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
@@ -229,75 +263,115 @@ function Home() {
           </div>
 
           <div className="pillars-grid">
-            {FEST_PILLARS.map((pillar, index) => (
-              <LiquidGlass
-                key={pillar.code || pillar.name}
-                className="pillar-card"
-                theme={index < 2 ? 'light' : 'dark'}
-              >
-                <div className="pillar-header">
-                  <div className="pillar-icon-box">
-                    <span className="pillar-icon">{pillar.icon}</span>
-                  </div>
-                  <div className="pillar-title-group">
-                    {pillar.code && (
-                      <SplitColorText
-                        as="span"
-                        className="pillar-code"
-                        screenSync={true}
-                        leftColor="#0f172a"
-                        rightColor="#ffffff"
-                      >
-                        {pillar.code}
-                      </SplitColorText>
-                    )}
-                    <SplitColorText
-                      as="h3"
-                      className="pillar-name"
-                      screenSync={true}
-                      leftColor="#0f172a"
-                      rightColor="#ffffff"
-                    >
-                      {pillar.name}
-                    </SplitColorText>
-                  </div>
-                </div>
-
-                <SplitColorText
-                  as="p"
-                  className="pillar-tagline"
-                  screenSync={true}
-                  leftColor="#334155"
-                  rightColor="#e2e8f0"
+            {FEST_PILLARS.map((pillar, index) => {
+              return (
+                <LiquidGlass
+                  key={pillar.code || pillar.name}
+                  className="pillar-card"
+                  theme={index < 2 ? 'light' : 'dark'}
+                  onClick={() => handlePillarClick(pillar)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handlePillarClick(pillar);
+                    }
+                  }}
+                  title={`View all ${pillar.name} events`}
                 >
-                  {pillar.tagline}
-                </SplitColorText>
-
-                <div className="pillar-events-snippet">
-                  <SplitColorText
-                    as="span"
-                    className="events-snippet-label"
-                    screenSync={true}
-                    leftColor="#475569"
-                    rightColor="#cbd5e1"
+                  <div
+                    className="pillar-header"
+                    title={`View ${pillar.name} Events in Events Page`}
                   >
-                    Key Competitions:
-                  </SplitColorText>
-                  <ul className="snippet-list">
-                    {pillar.events.map((ev, i) => (
-                      <li key={i}>
+                    <div className="pillar-icon-box">
+                      <span className="pillar-icon">{pillar.icon}</span>
+                    </div>
+                    <div className="pillar-title-group">
+                      {pillar.code && (
                         <SplitColorText
                           as="span"
+                          className="pillar-code"
                           screenSync={true}
                           leftColor="#0f172a"
                           rightColor="#ffffff"
                         >
-                          {ev}
+                          {pillar.code}
                         </SplitColorText>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                      )}
+                      <SplitColorText
+                        as="h3"
+                        className="pillar-name"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                      >
+                        {pillar.name}
+                      </SplitColorText>
+                    </div>
+                  </div>
+
+                  <SplitColorText
+                    as="p"
+                    className="pillar-tagline"
+                    screenSync={true}
+                    leftColor="#334155"
+                    rightColor="#e2e8f0"
+                  >
+                    {pillar.tagline}
+                  </SplitColorText>
+
+                  <div className="pillar-events-snippet">
+                    <SplitColorText
+                      as="span"
+                      className="events-snippet-label"
+                      screenSync={true}
+                      leftColor="#475569"
+                      rightColor="#cbd5e1"
+                    >
+                      Key Competitions:
+                    </SplitColorText>
+                    <ul className="snippet-list">
+                      {(pillar.events || []).map((ev, i) => {
+                        const colonIdx = ev.indexOf(':');
+                        return (
+                          <li key={i}>
+                            <SplitColorText
+                              as="span"
+                              screenSync={true}
+                              leftColor="#0f172a"
+                              rightColor="#ffffff"
+                            >
+                              {colonIdx !== -1 ? (
+                                <>
+                                  <strong style={{ fontWeight: 600 }}>{ev.substring(0, colonIdx + 1)}</strong>
+                                  {ev.substring(colonIdx + 1)}
+                                </>
+                              ) : (
+                                ev
+                              )}
+                            </SplitColorText>
+                          </li>
+                        );
+                      })}
+                    </ul>
+
+                    {/* View More Button at bottom center of Key Competitions card */}
+                    <div className="pillar-snippet-view-more">
+                      <ThemeButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePillarClick(pillar);
+                        }}
+                        className="btn-snippet-view-more"
+                        borderRadius={10}
+                        title={`Explore All ${pillar.name} Events`}
+                      >
+                        <SplitColorText leftColor="#0f172a" rightColor="#ffffff">
+                          View More
+                        </SplitColorText>
+                      </ThemeButton>
+                    </div>
+                  </div>
 
                 <div className="pillar-coordinator-box">
                   <SplitColorText
@@ -319,7 +393,11 @@ function Home() {
                     >
                       {pillar.coordinator}
                     </SplitColorText>
-                    <a href={`tel:${pillar.phone}`} className="coord-phone-pill">
+                    <a
+                      href={`tel:${pillar.phone}`}
+                      className="coord-phone-pill"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <SplitColorText
                         as="span"
                         mode="fallback"
@@ -342,26 +420,9 @@ function Home() {
                   </div>
                 </div>
 
-                <div className="pillar-card-footer">
-                  <ThemeButton
-                    as={Link}
-                    to="/events"
-                    className="btn-pillar-explore"
-                    borderRadius={12}
-                    width="100%"
-                    color={index < 2 ? '#0f172a' : '#ffffff'}
-                  >
-                    <SplitColorText
-                      screenSync={true}
-                      leftColor="#0f172a"
-                      rightColor="#ffffff"
-                    >
-                      Check Out {pillar.name} Events
-                    </SplitColorText>
-                  </ThemeButton>
-                </div>
-              </LiquidGlass>
-            ))}
+                </LiquidGlass>
+              );
+            })}
           </div>
         </div>
       </section>
