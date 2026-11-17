@@ -568,14 +568,30 @@ export default function EventRegistrationModal({
         return setError('Unable to initialize Razorpay checkout gateway. Please verify your internet connection.');
       }
 
+      const resolvedKey =
+        initData.keyId ||
+        initData.razorpay?.keyId ||
+        (typeof import.meta !== 'undefined' && import.meta.env?.VITE_RAZORPAY_KEY_ID) ||
+        'rzp_live_Kmh34Xa4jArEXT';
+
+      const resolvedOrderId = initData.orderId || initData.razorpay?.orderId;
+      const resolvedAmount = initData.amountInPaise || initData.razorpay?.amount || feeAmount * 100;
+      const resolvedCurrency = initData.currency || initData.razorpay?.currency || 'INR';
+
+      if (!resolvedKey) {
+        setLoading(false);
+        setPaymentStage('IDLE');
+        return setError('Unable to initialize Razorpay checkout. Payment gateway key is missing.');
+      }
+
       const rzpOptions = {
-        key: initData.keyId,
-        amount: initData.amountInPaise,
-        currency: initData.currency || 'INR',
+        key: resolvedKey,
+        amount: resolvedAmount,
+        currency: resolvedCurrency,
         name: 'Aditya University • Colours 2027',
         description: `${eventTitle} Registration Fee`,
         image: '/favicon.svg',
-        order_id: initData.orderId,
+        order_id: resolvedOrderId,
         prefill: {
           name: leadParticipant.name || student.name || '',
           email: leadParticipant.email || student.email || '',
