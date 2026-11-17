@@ -10,7 +10,8 @@ import {
   formatRegistrationId,
   formatPaymentReference,
   EVENT_ACADEMIC_YEAR,
-  matchesAcademicYear
+  matchesAcademicYear,
+  isValidOtherCollege
 } from '../../services/api';
 import {
   Ticket,
@@ -51,12 +52,18 @@ import SplitColorText from '../../components/ThemeComponents/SplitColor/SplitCol
 import './StudentDashboard.css';
 
 const COLLEGE_OPTIONS = [
-  'Aditya University',
-  'Aditya Engineering College (AEC)',
-  'Aditya College of Engineering & Technology (ACET)',
-  'Aditya College of Engineering (ACOE)',
+  'AUS',
+  'ACET',
   'Other Institution'
 ];
+
+function normalizeCollege(col) {
+  if (!col) return 'AUS';
+  const c = col.toString().trim();
+  if (c.toUpperCase().includes('ACET')) return 'ACET';
+  if (c === 'Other Institution' || c.toUpperCase().includes('OTHER')) return 'Other Institution';
+  return 'AUS';
+}
 
 const YEAR_OPTIONS = [
   '1st Year',
@@ -300,7 +307,7 @@ export default function StudentDashboard() {
       setProfileForm({
         name: st.name || '',
         roll: st.roll || '',
-        college: st.college || 'Aditya University',
+        college: normalizeCollege(st.college),
         otherCollege: st.otherCollege || '',
         department: st.department || '',
         year: st.year || '3rd Year',
@@ -319,7 +326,7 @@ export default function StudentDashboard() {
       setProfileForm({
         name: current.name || '',
         roll: current.roll || '',
-        college: current.college || 'Aditya University',
+        college: normalizeCollege(current.college),
         otherCollege: current.otherCollege || '',
         department: current.department || '',
         year: current.year || '3rd Year',
@@ -340,11 +347,29 @@ export default function StudentDashboard() {
     }
   }, [student]);
 
+  const [otherCollegeError, setOtherCollegeError] = useState(null);
+
   // Handle Profile Form Change
   const handleProfileChange = (e) => {
     const { name, value } = e.target;
     setProfileForm((prev) => ({ ...prev, [name]: value }));
     if (profileAlert) setProfileAlert(null);
+
+    if (name === 'otherCollege' && otherCollegeError && isValidOtherCollege(value)) {
+      setOtherCollegeError(null);
+    }
+    if (name === 'college' && value !== 'Other Institution') {
+      setOtherCollegeError(null);
+    }
+  };
+
+  const handleOtherCollegeBlur = (val) => {
+    const trimmed = (val || '').trim();
+    if (trimmed && !isValidOtherCollege(trimmed)) {
+      setOtherCollegeError('⚠️ College name must contain "University" or "Engineering"');
+    } else {
+      setOtherCollegeError(null);
+    }
   };
 
   // Save Profile Changes
@@ -359,6 +384,20 @@ export default function StudentDashboard() {
     if (!profileForm.mobile.trim() || profileForm.mobile.trim().length < 10) {
       setProfileAlert({ type: 'error', message: 'Valid 10-digit mobile number is required' });
       return;
+    }
+    if (profileForm.college === 'Other Institution') {
+      const col = (profileForm.otherCollege || '').trim();
+      if (!col) {
+        setProfileAlert({ type: 'error', message: 'Please specify your institution name' });
+        return;
+      }
+      if (!isValidOtherCollege(col)) {
+        setProfileAlert({
+          type: 'error',
+          message: 'Institution name must contain "University" or "Engineering" to be accepted'
+        });
+        return;
+      }
     }
 
     try {
@@ -661,7 +700,7 @@ export default function StudentDashboard() {
               <div className="hero-college-name">
                 <Landmark size={15} className="hero-icon" /> {activeStudent.college === 'Other Institution' && activeStudent.otherCollege
                   ? activeStudent.otherCollege
-                  : activeStudent.college || 'Aditya University'}
+                  : normalizeCollege(activeStudent.college)}
               </div>
               <div className="hero-contact-chips">
                 <span className="hero-contact-pill">
@@ -819,7 +858,7 @@ export default function StudentDashboard() {
                       <span className="info-value">
                         {activeStudent.college === 'Other Institution' && activeStudent.otherCollege
                           ? activeStudent.otherCollege
-                          : activeStudent.college || '—'}
+                          : normalizeCollege(activeStudent.college)}
                       </span>
                     </div>
 
@@ -886,8 +925,15 @@ export default function StudentDashboard() {
                         id="edit-otherCollege"
                         value={profileForm.otherCollege}
                         onChange={handleProfileChange}
+                        onBlur={(e) => handleOtherCollegeBlur(e.target.value)}
                         placeholder="Enter your college/university name"
                         className="full-width"
+                        error={otherCollegeError || ''}
+                        hint={
+                          !otherCollegeError && profileForm.otherCollege && isValidOtherCollege(profileForm.otherCollege)
+                            ? 'ℹ️ College ID Card is required for entry and verification.'
+                            : ''
+                        }
                         required
                       />
                     )}
