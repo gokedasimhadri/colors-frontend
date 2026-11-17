@@ -1,0 +1,1470 @@
+/* ─────────────────────────────────────────────────────────────
+   Colours 2027 Event Registration & Student Auth Modals Styling
+   Light Theme: Crisp White Surfaces, Warm Gold Accents & Slate Text
+   ───────────────────────────────────────────────────────────── */
+
+.fest-modal-backdrop,
+.fest-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(10, 15, 30, 0.65) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow-y: auto;
+  animation: festFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes festFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fest-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  background: rgba(255, 255, 255, 0.90) !important;
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+  border-radius: 24px !important;
+  box-shadow:
+    0 30px 80px -15px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.4),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.9) !important;
+  color: #0f172a;
+  overflow: hidden;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.03) !important;
+  backdrop-filter: blur(28px) saturate(190%) brightness(1.03) !important;
+  animation: festScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.fest-modal-card.liquid-glass-card {
+  background: rgba(255, 255, 255, 0.90) !important;
+  border-radius: 24px !important;
+}
+
+.fest-modal-card .lg-card-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.fest-modal-card.event-reg-card {
+  max-width: 1040px;
+}
+
+@keyframes festScaleUp {
+  from {
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal Header */
+.fest-modal-header {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 251, 235, 0.85) 0%, rgba(255, 255, 255, 0.65) 100%) !important;
+  backdrop-filter: blur(14px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
+  color: #0f172a;
+  padding: 1.75rem 2rem 1.4rem 2rem;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.fest-modal-header-banner {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.fest-modal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(245, 158, 11, 0.12) !important;
+  border: 1px solid rgba(217, 119, 6, 0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 14px;
+  border-radius: 50px;
+  margin-bottom: 0.6rem;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.12) !important;
+}
+
+.fest-modal-title {
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+}
+
+/* Centered Header for Student Auth Modal */
+.fest-auth-liquid-modal .fest-modal-header {
+  padding: 1.35rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.fest-auth-liquid-modal .fest-modal-header-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+.fest-auth-liquid-modal .fest-modal-title {
+  font-size: 1.65rem;
+  font-weight: 900;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.fest-auth-liquid-modal .fest-modal-title .split-color-text {
+  display: inline-block;
+  text-align: center;
+}
+
+.fest-auth-liquid-modal .fest-modal-close-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.fest-modal-subtitle {
+  font-size: 0.88rem;
+  color: #475569;
+  margin: 0.35rem 0 0 0;
+  line-height: 1.4;
+}
+
+.fest-modal-close-btn,
+.fest-modal-close {
+  background: rgba(15, 23, 42, 0.05) !important;
+  border: 1px solid rgba(15, 23, 42, 0.14) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  color: #334155;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.fest-modal-close-btn:hover,
+.fest-modal-close:hover {
+  background: #e11d48 !important;
+  color: #ffffff !important;
+  border-color: #e11d48 !important;
+  transform: rotate(90deg);
+}
+
+/* Modal Tabs */
+.fest-modal-tabs {
+  display: flex;
+  background: rgba(15, 23, 42, 0.03) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  padding: 8px 14px !important;
+  gap: 8px;
+  backdrop-filter: blur(10px) !important;
+}
+
+.fest-tab-btn {
+  flex: 1;
+  padding: 0.7rem 1rem !important;
+  border: none;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  cursor: pointer;
+  border-radius: 10px !important;
+  transition: all 0.2s ease;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.6) !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+}
+
+.fest-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(217, 119, 6, 0.3) !important;
+}
+
+.fest-tab-btn.active {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  border: 1px solid rgba(217, 119, 6, 0.5) !important;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3) !important;
+}
+
+/* Modal Body */
+.fest-modal-body {
+  padding: 1.75rem 2rem;
+  overflow-y: auto;
+  flex: 1;
+  color: #0f172a;
+  background: transparent !important;
+}
+
+/* Notice / Alert Box */
+.fest-alert-box,
+.fest-modal-alert {
+  padding: 0.9rem 1.1rem;
+  border-radius: 14px;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.fest-alert-box.info,
+.fest-modal-alert.info {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+
+.fest-alert-box.warning,
+.fest-modal-alert.warning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+}
+
+.fest-alert-box.error,
+.fest-modal-alert.error {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #be123c;
+}
+
+.fest-alert-box.success,
+.fest-modal-alert.success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+/* Form Groups & Inputs */
+.fest-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem 1.25rem;
+}
+
+.fest-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.fest-form-group.col-span-2 {
+  grid-column: span 2;
+}
+
+.fest-form-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #b45309;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.fest-form-label .required {
+  color: #e11d48;
+  margin-left: 2px;
+}
+
+.fest-form-input,
+.fest-form-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1.5px solid rgba(203, 213, 225, 0.8) !important;
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  font-size: 0.95rem;
+  color: #0f172a;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  box-sizing: border-box;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.fest-form-select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.fest-form-input:focus,
+.fest-form-select:focus {
+  border-color: #d97706 !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.18), inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+}
+
+.fest-form-input::placeholder {
+  color: #94a3b8;
+}
+
+.fest-form-input:disabled {
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: not-allowed;
+  border-color: #e2e8f0;
+}
+
+.fest-form-hint {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+/* Event Summary Card inside Reg Modal */
+.event-reg-summary-box {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.event-reg-summary-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.event-reg-event-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.event-reg-meta-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.event-meta-pill-item {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+}
+
+.event-meta-pill-item.pill-category {
+  background: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
+}
+
+.event-meta-pill-item.pill-fee {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.event-reg-fee-box {
+  text-align: right;
+  padding-left: 1rem;
+  border-left: 2px dashed #cbd5e1;
+}
+
+.event-reg-fee-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #b45309;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.event-reg-fee-amount {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+/* Student Profile Card in Modal */
+.student-profile-strip {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.student-strip-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.student-avatar-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(217, 119, 6, 0.25);
+}
+
+.student-strip-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.student-strip-name {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.student-strip-roll {
+  font-size: 0.82rem;
+  color: #b45309;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+.student-strip-college {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.btn-switch-account {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #b45309;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-switch-account:hover {
+  background: #fffbeb;
+  border-color: #d97706;
+  color: #92400e;
+}
+
+/* Team Members Section */
+.team-section-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.team-section-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #b45309;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.team-member-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.btn-remove-member {
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  color: #be123c;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.btn-remove-member:hover {
+  background: #e11d48;
+  color: #ffffff;
+}
+
+.btn-add-member {
+  background: #fffbeb;
+  border: 1px dashed #fcd34d;
+  color: #92400e;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+  margin-top: 0.25rem;
+}
+
+.btn-add-member:hover {
+  background: #fef3c7;
+  color: #78350f;
+}
+
+/* Agreement Checkbox */
+.fest-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+  color: #334155;
+  line-height: 1.4;
+  cursor: pointer;
+  margin-bottom: 1.25rem;
+}
+
+.fest-checkbox-label input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: #d97706;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+/* Modal Footer */
+.fest-modal-footer {
+  padding: 1.25rem 2rem;
+  background: rgba(255, 255, 255, 0.65) !important;
+  border-top: 1px solid rgba(226, 232, 240, 0.8) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn-fest-secondary,
+.fest-btn-secondary {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1.5px solid rgba(203, 213, 225, 0.9) !important;
+  color: #334155;
+  padding: 0.65rem 1.4rem !important;
+  border-radius: 10px !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  transition: all 0.2s ease;
+}
+
+.btn-fest-secondary:hover,
+.fest-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: #d97706 !important;
+  color: #92400e;
+}
+
+.btn-fest-primary,
+.fest-btn-primary {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  border: 1px solid rgba(217, 119, 6, 0.4) !important;
+  color: #ffffff;
+  padding: 0.65rem 1.75rem !important;
+  border-radius: 10px !important;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.28) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.btn-fest-primary:hover:not(:disabled),
+.fest-btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px) !important;
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4) !important;
+}
+
+.btn-fest-primary:disabled,
+.fest-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Success Card */
+.reg-success-view,
+.reg-confirmed-view {
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+.reg-success-icon-wrap {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #ecfdf5;
+  color: #059669;
+  border: 2px solid #6ee7b7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  margin: 0 auto 1.25rem auto;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.16);
+  animation: bounceIn 0.5s ease forwards;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+.reg-success-title {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 0.35rem;
+}
+
+.reg-success-sub {
+  font-size: 0.95rem;
+  color: #475569;
+  margin-bottom: 1.5rem;
+}
+
+.reg-ticket-card {
+  background: #f8fafc;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 18px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.reg-ticket-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-bottom: 1rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1.5px dashed #cbd5e1;
+}
+
+.reg-ticket-fest-tag {
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  padding: 4px 12px;
+  border-radius: 50px;
+}
+
+.reg-ticket-id {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.reg-ticket-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.9rem;
+}
+
+.reg-ticket-row:last-child {
+  border-bottom: none;
+}
+
+.reg-ticket-label {
+  color: #475569;
+  font-weight: 700;
+}
+
+.reg-ticket-val {
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.reg-ticket-val.code {
+  font-family: monospace;
+  color: #b45309;
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .fest-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .fest-form-group.col-span-2 {
+    grid-column: span 1;
+  }
+  .team-member-row {
+    grid-template-columns: 1fr;
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem;
+    border-radius: 10px;
+    background: #ffffff;
+  }
+  .event-reg-summary-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .event-reg-fee-box {
+    border-left: none;
+    border-top: 2px dashed #cbd5e1;
+    padding-left: 0;
+    padding-top: 0.75rem;
+    width: 100%;
+    text-align: left;
+  }
+  .fest-modal-header,
+  .fest-modal-body,
+  .fest-modal-footer {
+    padding: 1.25rem 1.25rem;
+  }
+}
+
+/* Student Check Badges */
+.student-check-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-top: 0.4rem;
+  line-height: 1.3;
+}
+.student-check-badge.found {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+.student-check-badge.new {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+.student-check-badge.checking {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Participants UI Section (Step 3: Display Participants at UI)
+   ───────────────────────────────────────────────────────────── */
+.reg-participants-section {
+  margin-top: 1.25rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.reg-participants-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.reg-participants-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.reg-participants-badge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 50px;
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.reg-participants-table-wrap {
+  overflow-x: auto;
+}
+
+.reg-participants-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  text-align: left;
+}
+
+.reg-participants-table th {
+  background: #f8fafc;
+  color: #b45309;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.reg-participants-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.reg-participants-table tr:last-child td {
+  border-bottom: none;
+}
+
+.reg-participants-table tr.is-leader td {
+  background: #fffbeb;
+}
+
+.col-idx {
+  font-weight: 800;
+  color: #b45309;
+  width: 32px;
+  text-align: center;
+}
+
+.col-name strong {
+  display: block;
+  color: #0f172a;
+}
+
+.col-phone {
+  display: block;
+  font-size: 0.74rem;
+  color: #64748b;
+}
+
+.col-roll .roll-tag {
+  display: inline-block;
+  background: #fffbeb;
+  color: #92400e;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  border: 1px solid #fcd34d;
+}
+
+.col-college {
+  color: #475569;
+  font-size: 0.8rem;
+}
+
+.role-badge,
+.badge-role-leader,
+.badge-role-member {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 50px;
+}
+
+.role-badge.leader,
+.badge-role-leader {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.role-badge.member,
+.badge-role-member {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+/* Roster live chips preview */
+.roster-preview-box {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.roster-preview-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #b45309;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.roster-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.roster-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: #0f172a;
+}
+
+.roster-chip.leader {
+  border-color: #fcd34d;
+  background: #fffbeb;
+}
+
+.roster-chip-num {
+  font-weight: 800;
+  color: #b45309;
+}
+
+.roster-chip-name {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.roster-chip-roll {
+  font-family: monospace;
+  color: #92400e;
+  font-size: 0.75rem;
+}
+
+.roster-chip-role {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.roster-chip-role.leader {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Solo participant preview card */
+.solo-participant-preview {
+  margin-top: 0.75rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+}
+
+.solo-preview-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.solo-preview-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #b45309;
+  text-transform: uppercase;
+}
+
+.solo-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 50px;
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.solo-preview-body {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.solo-preview-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.solo-preview-name {
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 0.92rem;
+}
+
+.solo-preview-meta {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Payment Processing & Loading States
+   ───────────────────────────────────────────────────────────── */
+.fest-payment-loader-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3.5rem 2rem;
+  background: #f8fafc;
+  border-radius: 20px;
+  border: 1.5px dashed #cbd5e1;
+  animation: festFadeIn 0.3s ease forwards;
+}
+
+.fest-loader-spinner {
+  width: 54px;
+  height: 54px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #d97706;
+  border-right: 4px solid #e11d48;
+  border-radius: 50%;
+  animation: festSpin 0.9s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.16);
+}
+
+@keyframes festSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.fest-loader-title {
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+}
+
+.fest-loader-sub {
+  font-size: 0.92rem;
+  color: #475569;
+  max-width: 440px;
+  margin: 0 0 1.25rem 0;
+  line-height: 1.5;
+}
+
+.fest-loader-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #065f46;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 6px 14px;
+  border-radius: 9999px;
+}
+
+.fest-awaiting-payment-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  padding: 0.85rem 1.15rem;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  animation: festFadeIn 0.25s ease;
+}
+
+.fest-pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d97706;
+  display: inline-block;
+  margin-right: 6px;
+  animation: festPulse 1.5s infinite;
+}
+
+@keyframes festPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.55); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(217, 119, 6, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
+}
+
+/* Print Styling */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .fest-modal-backdrop,
+  .fest-modal-overlay,
+  .fest-modal-card {
+    position: static !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .reg-ticket-card,
+  .reg-ticket-card * {
+    visibility: visible !important;
+  }
+  .reg-ticket-card {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 1.5rem;
+    border: 2px solid #000000;
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .fest-modal-header,
+  .fest-modal-footer,
+  .fest-modal-close-btn,
+  .fest-modal-close,
+  .btn-fest-secondary,
+  .fest-btn-secondary,
+  .btn-fest-primary,
+  .fest-btn-primary {
+    display: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Participant Data Pattern (Image 1 Layout)
+   4-Column Responsive Grid with Auto-populate Indicators
+   ───────────────────────────────────────────────────────────── */
+
+.participant-pattern-block {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.participant-pattern-block:hover {
+  border-color: #d97706;
+  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.1);
+}
+
+.participant-pattern-block.leader-block {
+  border-left: 4px solid #d97706;
+}
+
+.participant-pattern-header {
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.participant-main-heading {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0 0 0.4rem 0;
+  letter-spacing: 0.01em;
+}
+
+.participant-sub-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.participant-sub-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #334155;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.participant-badge-leader {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.btn-remove-participant {
+  background: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
+  padding: 0.35rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-remove-participant:hover {
+  background: #e11d48;
+  color: #ffffff;
+}
+
+.participant-pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.15rem 1.35rem;
+}
+
+@media (max-width: 960px) {
+  .participant-pattern-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 580px) {
+  .participant-pattern-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pattern-field-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.pattern-label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #b45309;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.pattern-input-with-action {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pattern-input,
+.pattern-select {
+  width: 100%;
+  padding: 0.72rem 0.95rem;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.95rem;
+  font-weight: 500;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.pattern-select option {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.pattern-input:focus,
+.pattern-select:focus {
+  border-color: #d97706;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.16);
+  background: #ffffff;
+}
+
+.pattern-input:disabled {
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.pattern-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.pattern-select {
+  cursor: pointer;
+}
+
+.pattern-fetch-spinner {
+  position: absolute;
+  right: 10px;
+  font-size: 0.9rem;
+  animation: festPulse 1s infinite;
+}
+
+.pattern-verified-hint {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.pattern-verified-hint.success {
+  color: #059669;
+}
+
+.pattern-verified-hint.info {
+  color: #64748b;
+}
+
+.btn-add-team-participant {
+  width: 100%;
+  padding: 0.9rem 1.25rem;
+  background: #fffbeb;
+  border: 2px dashed #fcd34d;
+  border-radius: 14px;
+  color: #92400e;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-add-team-participant:hover {
+  background: #fef3c7;
+  border-color: #d97706;
+  color: #78350f;
+}
