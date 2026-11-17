@@ -11,7 +11,8 @@ import {
   FALLBACK_EVENT_DEPARTMENTS,
   formatRegistrationId,
   formatPaymentReference,
-  isValidOtherCollege
+  isValidOtherCollege,
+  parseEventFeeInRupees
 } from '../../services/api';
 import './RegistrationModals.css';
 
@@ -496,7 +497,7 @@ export default function EventRegistrationModal({
     setLoading(true);
     try {
       const feeAmount = Number(
-        eventData.price !== undefined ? eventData.price : (eventData.fee?.amount || 0)
+        eventData.price !== undefined ? eventData.price : parseEventFeeInRupees(eventData.fee || 0)
       );
 
       const activeParticipants = allParticipants.filter(

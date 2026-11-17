@@ -9,9 +9,13 @@ import {
   fetchAllEvents,
   formatRegistrationId,
   formatPaymentReference,
+  EVENT_TYPE,
   EVENT_ACADEMIC_YEAR,
   matchesAcademicYear,
-  isValidOtherCollege
+  matchesTypeCode,
+  isPaidPayment,
+  isValidOtherCollege,
+  parseEventFeeInRupees
 } from '../../services/api';
 import {
   Ticket,
@@ -295,7 +299,7 @@ export default function StudentDashboard() {
 
     try {
       setLoading(true);
-      const data = await fetchStudentDashboard(current.roll);
+      const data = await fetchStudentDashboard(current.roll, EVENT_TYPE, EVENT_ACADEMIC_YEAR);
       setDashboardData({
         student: data.student || current,
         registrations: data.registrations || [],
@@ -504,7 +508,7 @@ export default function StudentDashboard() {
           ...reg,
           eventTitle: reg.eventTitle || reg.eventName || reg.event_name || reg.event_title || 'Colours 2027 Event',
           paymentReference: reg.paymentReference || (regNo ? `PAY-${regNo}` : 'N/A'),
-          amount: reg.amount !== undefined ? reg.amount : (reg.fee?.amount !== undefined ? reg.fee.amount : (reg.price || 0)),
+          amount: reg.amount !== undefined ? reg.amount : (reg.fee?.amount !== undefined ? parseEventFeeInRupees(reg.fee.amount) : (reg.price || 0)),
           status: reg.payment?.status === 'PAID' ? 'PAID' : (reg.status || 'CONFIRMED'),
           participants: Array.isArray(reg.participants) && reg.participants.length > 0
             ? reg.participants
@@ -514,14 +518,20 @@ export default function StudentDashboard() {
       }
     });
 
-    // Filter records matching EVENT_ACADEMIC_YEAR (VITE_EVENT_ACADEMIC_YEAR) from .env
-    const academicYearFiltered = list.filter((item) => {
+    // Filter records strictly by:
+    // 1. EVENT_TYPE (VITE_EVENT_TYPE in .env, default 'COLORS')
+    // 2. Payment status === 'PAID'
+    // 3. EVENT_ACADEMIC_YEAR (VITE_EVENT_ACADEMIC_YEAR in .env, default '2026-2027')
+    const filteredEvents = list.filter((item) => {
+      const typeOk = matchesTypeCode(item, EVENT_TYPE);
+      const paidOk = isPaidPayment(item);
       const itemYear = item.academicYear || item.academic_year;
-      return matchesAcademicYear(itemYear, EVENT_ACADEMIC_YEAR);
+      const yearOk = matchesAcademicYear(itemYear, EVENT_ACADEMIC_YEAR);
+      return typeOk && paidOk && yearOk;
     });
 
     // Enrich each registered event with catalog metadata (category, subCategory, participationType)
-    return academicYearFiltered.map((item) => {
+    return filteredEvents.map((item) => {
       const itemTitle = (item.eventTitle || item.eventName || '').toLowerCase();
       const matched = catalogEvents.find((ev) => {
         const evTitle = (ev.eventName || ev.title || '').toLowerCase();
@@ -650,13 +660,11 @@ export default function StudentDashboard() {
     );
   }
 
-  // Compute stats
+  // Compute stats strictly for COLORS paid events
   const totalRegistrations = displayEventsList.length;
-  const paidCount = displayEventsList.filter(
-    (p) => p.status === 'PAID' || p.payment?.status === 'PAID' || p.paymentStatus === 'PAID' || p.status === 'CONFIRMED'
-  ).length;
+  const paidCount = displayEventsList.filter((p) => isPaidPayment(p)).length;
   const totalAmountPaid = displayEventsList.reduce(
-    (acc, p) => acc + (Number(p.amount) || Number(p.fee?.amount) || 0),
+    (acc, p) => acc + (Number(p.amount) || parseEventFeeInRupees(p.fee?.amount) || 0),
     0
   );
 
@@ -1250,7 +1258,7 @@ export default function StudentDashboard() {
                         <div>
                           <div className="event-badge-group">
                             <span className="event-category-pill">
-                              {payment.typeCode || 'COLORS'}
+                              {payment.typeCode || EVENT_TYPE || 'COLORS'}
                             </span>
                             <span className={`event-status-pill ${String(payment.status || '').toLowerCase() === 'paid' ? 'paid' : 'pending'}`}>
                               <span className="receipt-status-wrap">
@@ -1474,7 +1482,7 @@ export default function StudentDashboard() {
                   <tr>
                     <td className="lbl">Amount Paid:</td>
                     <td className="val" style={{ color: '#15803d', fontSize: '1.05rem' }}>
-                      ₹ {selectedReceipt.amount !== undefined ? selectedReceipt.amount : (selectedReceipt.fee?.amount || 0)}/-
+                      ₹ {selectedReceipt.amount !== undefined ? selectedReceipt.amount : parseEventFeeInRupees(selectedReceipt.fee?.amount || 0)}/-
                     </td>
                   </tr>
                   <tr>

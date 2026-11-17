@@ -117,6 +117,68 @@ export function matchesAcademicYear(recordYear, targetYear = EVENT_ACADEMIC_YEAR
   );
 }
 
+/**
+ * Check if a record matches the target EVENT_TYPE (e.g. 'COLORS') from .env
+ */
+export function matchesTypeCode(item, targetType = EVENT_TYPE) {
+  if (!item) return false;
+  const currentFest = (targetType || EVENT_TYPE || 'COLORS').toString().trim().toUpperCase();
+  const itemType = (
+    item.typeCode ||
+    item.type_code ||
+    item.eventType ||
+    item.event_type ||
+    item.festType ||
+    item.categoryType ||
+    item.backendRegistration?.typeCode ||
+    item.backendRegistration?.eventType ||
+    item.backendPayment?.typeCode ||
+    item.registration?.typeCode ||
+    ''
+  ).toString().trim().toUpperCase();
+
+  if (itemType) {
+    if (currentFest === 'COLORS' || currentFest === 'COLOURS' || currentFest === 'CLR') {
+      return itemType === 'COLORS' || itemType === 'COLOURS' || itemType === 'CLR';
+    }
+    return itemType === currentFest;
+  }
+
+  // Fallback check against ID / paymentReference prefix
+  const ref = (
+    item.registrationNumber ||
+    item.registrationId ||
+    item.paymentReference ||
+    item.payment_reference ||
+    ''
+  ).toString().toUpperCase();
+
+  if (ref.includes('VEDA')) {
+    return currentFest === 'VEDA';
+  }
+  if (ref.includes('CLR') || ref.includes('COLOR')) {
+    return currentFest === 'COLORS' || currentFest === 'COLOURS' || currentFest === 'CLR';
+  }
+
+  return true;
+}
+
+/**
+ * Check if a record has completed PAID payment status
+ */
+export function isPaidPayment(item) {
+  if (!item) return false;
+  const st = (
+    item.paymentStatus ||
+    item.status ||
+    item.payment?.status ||
+    item.backendPayment?.status ||
+    ''
+  ).toString().trim().toUpperCase();
+
+  return st === 'PAID' || st === 'SUCCESS' || st === 'COMPLETED';
+}
+
 export const API_BASE = (
   (typeof import.meta !== 'undefined' && (import.meta.env?.VITE_API_URL || import.meta.env?.API_URL)) ||
   (typeof process !== 'undefined' && (process.env?.VITE_API_URL || process.env?.API_URL)) ||
@@ -465,6 +527,28 @@ export async function fetchEventsInSubCategory(category, subCategory, subcategor
 }
 
 /**
+ * Convert backend event fee (which is stored in paise, e.g. 100 paise = ₹1, 100000 paise = ₹1000)
+ * into rupees.
+ */
+export function parseEventFeeInRupees(feeObjOrNumber) {
+  if (feeObjOrNumber === null || feeObjOrNumber === undefined) return 0;
+  let raw = 0;
+  if (typeof feeObjOrNumber === 'number') {
+    raw = feeObjOrNumber;
+  } else if (typeof feeObjOrNumber === 'object') {
+    raw = feeObjOrNumber.amount !== undefined ? feeObjOrNumber.amount : (feeObjOrNumber.price ?? 0);
+  }
+  raw = Number(raw) || 0;
+  if (raw <= 0) return 0;
+
+  // In database, registration fee is stored in paise (1 rupee = 100 paise, e.g. 100 -> ₹1, 30000 -> ₹300, 100000 -> ₹1000)
+  if (raw >= 100) {
+    return Math.round(raw / 100);
+  }
+  return raw;
+}
+
+/**
  * Map backend CentralEvent schema to frontend event card structure
  */
 export function mapBackendEvent(ev, category = '', subCategory = '') {
@@ -475,9 +559,9 @@ export function mapBackendEvent(ev, category = '', subCategory = '') {
     ? `Team (${minSize}${maxSize && maxSize !== minSize ? `-${maxSize}` : ''})`
     : 'Solo';
 
-  // In database, registration fee is stored in paise (amount * 100) or directly in rupees.
-  const rawPrice = ev.fee?.amount ?? 0;
-  const rupeePrice = rawPrice >= 1000 ? Math.round(rawPrice / 100) : rawPrice;
+  // In database, registration fee is stored in paise (amount * 100).
+  const rupeePrice = parseEventFeeInRupees(ev.fee ?? ev.price);
+  const rawPrice = ev.fee?.amount ?? ev.price ?? 0;
 
   const venueName =
     typeof ev.venue === 'object' && ev.venue !== null
@@ -1709,11 +1793,16 @@ export async function changeStudentPassword(payload) {
 
 /**
  * Fetch complete student dashboard (profile, registrations, payments)
+ * Filtered by EVENT_TYPE ('COLORS') and PAID payment status
  */
-export async function fetchStudentDashboard(roll) {
+export async function fetchStudentDashboard(roll, typeCode = EVENT_TYPE, academicYear = EVENT_ACADEMIC_YEAR) {
   if (!roll) throw new Error('Student roll number is required');
   const cleanRoll = encodeURIComponent(roll.trim().toUpperCase());
-  const endpoint = `/api/event-students/dashboard/${cleanRoll}`;
+  const queryParams = new URLSearchParams();
+  if (typeCode) queryParams.set('typeCode', typeCode);
+  if (academicYear) queryParams.set('academicYear', academicYear);
+  const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+  const endpoint = `/api/event-students/dashboard/${cleanRoll}${queryString}`;
   const res = await apiFetch(endpoint);
 
   if (!res.ok) {
@@ -1722,7 +1811,22 @@ export async function fetchStudentDashboard(roll) {
   }
 
   const json = await res.json();
-  return json.data || json;
+  const rawData = json.data || json;
+
+  // Filter registrations & payments strictly by EVENT_TYPE and PAID status
+  const filteredRegistrations = (rawData.registrations || []).filter(
+    (reg) => matchesTypeCode(reg, typeCode) && isPaidPayment(reg) && matchesAcademicYear(reg.academicYear || reg.academic_year, academicYear)
+  );
+
+  const filteredPayments = (rawData.payments || []).filter(
+    (pay) => matchesTypeCode(pay, typeCode) && isPaidPayment(pay) && matchesAcademicYear(pay.academicYear || pay.academic_year, academicYear)
+  );
+
+  return {
+    ...rawData,
+    registrations: filteredRegistrations,
+    payments: filteredPayments
+  };
 }
 
 /**
@@ -1914,15 +2018,22 @@ export async function submitEventRegistration(payload) {
 
 /**
  * Fetch registrations from backend central_event_student_registrations for a student
+ * Filtered by EVENT_TYPE ('COLORS') and PAID payment status
  */
-export async function syncStudentRegistrations(studentRoll) {
+export async function syncStudentRegistrations(studentRoll, typeCode = EVENT_TYPE, academicYear = EVENT_ACADEMIC_YEAR) {
   if (!studentRoll) return [];
   try {
-    const res = await apiFetch(`/api/central-event-registrations/student/${studentRoll}`);
+    const queryParams = new URLSearchParams();
+    if (typeCode) queryParams.set('typeCode', typeCode);
+    if (academicYear) queryParams.set('academicYear', academicYear);
+    const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+    const res = await apiFetch(`/api/central-event-registrations/student/${studentRoll}${queryString}`);
     if (res.ok) {
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
-        return json.data;
+        return json.data.filter(
+          (reg) => matchesTypeCode(reg, typeCode) && isPaidPayment(reg) && matchesAcademicYear(reg.academicYear || reg.academic_year, academicYear)
+        );
       }
     }
   } catch {
