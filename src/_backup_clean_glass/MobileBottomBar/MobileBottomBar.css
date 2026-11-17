@@ -6,7 +6,9 @@
 /* Hidden on Desktop & Large Tablets (> 900px) */
 .mobile-bottom-bar,
 .mobile-bottom-drawer,
-.mobile-bottom-drawer-backdrop {
+.mobile-bottom-drawer-backdrop,
+.mobile-popover-backdrop,
+.mobile-popover-container {
   display: none;
 }
 
@@ -114,7 +116,7 @@
     transition: color 0.2s ease;
   }
 
-  /* Active Tab State: No surrounding box/capsule shape, pure VIBGYOR continuous rainbow animation */
+  /* Active Tab State: No surrounding box/capsule shape, slow VIBGYOR continuous rainbow animation without glow */
   .bottom-tab.active {
     background: transparent !important;
     border: 1px solid transparent !important;
@@ -123,14 +125,14 @@
 
   .bottom-tab.active .bottom-tab-icon {
     transform: translateY(-2px);
-    animation: vibgyorColorFlow 2.5s linear infinite !important;
+    animation: vibgyorColorFlow 6s linear infinite !important;
+    filter: none !important;
   }
 
   .bottom-tab.active .bottom-tab-icon svg {
     stroke: currentColor !important;
-    fill: currentColor !important;
-    fill-opacity: 0.22 !important;
-    filter: drop-shadow(0 2px 8px currentColor);
+    fill: none !important;
+    filter: none !important;
   }
 
   .bottom-tab.active .bottom-tab-label {
@@ -162,12 +164,12 @@
     background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     color: transparent !important;
-    animation: vibgyorRainbowFlow 2.5s linear infinite !important;
+    animation: vibgyorRainbowFlow 6s linear infinite !important;
     font-weight: 700 !important;
     letter-spacing: 0.03em;
     text-shadow: none !important;
     transform: scale(1.06);
-    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+    filter: none !important;
   }
 
   .bottom-tab:not(.active):hover {
@@ -469,9 +471,137 @@
     font-size: 0.72rem;
     color: #94a3b8;
   }
+
+  /* ── 5. Mobile Tab Profile Avatar (Spinning VIBGYOR Ring + Initial) ── */
+  .mobile-tab-avatar-ring {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    box-shadow: 
+      0 0 10px rgba(0, 210, 255, 0.4),
+      0 0 16px rgba(249, 115, 22, 0.35);
+    margin-bottom: 2px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .mobile-tab-avatar-ring::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 140deg,
+      #8b5cf6 0%,
+      #4f46e5 14%,
+      #00d2ff 28%,
+      #10b981 44%,
+      #facc15 62%,
+      #ff6d00 78%,
+      #ef4444 92%,
+      #8b5cf6 100%
+    );
+    animation: vibgyorSpin 8s linear infinite;
+    z-index: 0;
+  }
+
+  .mobile-tab-avatar-glass {
+    position: relative;
+    z-index: 1;
+    width: calc(100% - 3.5px);
+    height: calc(100% - 3.5px);
+    border-radius: 50%;
+    background: rgba(15, 23, 42, 0.72);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .mobile-tab-avatar-initial {
+    font-family: var(--font-brand);
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .bottom-tab:active .mobile-tab-avatar-ring,
+  .bottom-tab.active .mobile-tab-avatar-ring {
+    transform: scale(1.08);
+    box-shadow: 
+      0 0 14px rgba(0, 210, 255, 0.65),
+      0 0 22px rgba(249, 115, 22, 0.55);
+  }
+
+  /* ── 6. Mobile Profile Popover (Liquid Glass Above Tab 5) ── */
+  .mobile-popover-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(13, 35, 59, 0.4);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    z-index: 10003;
+    animation: popoverFadeIn 0.18s ease;
+  }
+
+  .mobile-popover-container {
+    display: block;
+    position: fixed;
+    bottom: calc(max(14px, env(safe-area-inset-bottom) + 8px) + 72px);
+    right: 0.85rem;
+    width: 295px;
+    max-width: calc(100vw - 1.7rem);
+    z-index: 10004;
+    animation: mobilePopoverSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 460px) {
+    .mobile-popover-container {
+      right: calc(50% - 210px);
+    }
+  }
+
+  @keyframes mobilePopoverSlideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(12px) scale(0.96);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .mobile-popover-card {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
 }
 
 /* ── Global VIBGYOR Rainbow & Color Animations for Mobile Bottom Bar ── */
+@keyframes vibgyorSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 @keyframes vibgyorRainbowFlow {
   0% {
     background-position: 0% 50%;
