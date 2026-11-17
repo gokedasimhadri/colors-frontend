@@ -151,12 +151,12 @@
   pointer-events: none;
 }
 
-/* Active Tab: Pure white-tinted transparent glass */
+/* Active Tab: Pure white-tinted transparent glass or custom activeBg */
 .theme-tab-item.active {
-  background: rgba(255, 255, 255, 0.22);
+  background: var(--theme-tab-active-bg, rgba(255, 255, 255, 0.22));
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-color: rgba(255, 255, 255, 0.45);
+  border-color: var(--theme-tab-active-border, var(--theme-tab-active-bg, rgba(255, 255, 255, 0.45)));
   box-shadow:
     inset 0 1px 1.5px rgba(255, 255, 255, 0.55),
     inset 0 -1px 1px rgba(0, 0, 0, 0.08),

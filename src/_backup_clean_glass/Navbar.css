@@ -499,41 +499,76 @@
   transform: scale(0.96);
 }
 
-/* Neon Gradient Ring (Cyan to Purple/Magenta as per image) */
+/* VIBGYOR Rainbow Gradient Ring */
 .navbar-profile-circle-ring {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  padding: 2px;
-  background: linear-gradient(135deg, #00d2ff 0%, #38bdf8 30%, #818cf8 65%, #c084fc 100%);
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
-    0 0 12px rgba(0, 210, 255, 0.45),
-    0 0 22px rgba(192, 132, 252, 0.35);
-  transition: all 0.25s ease;
-  overflow: hidden;
   box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 
+    0 0 14px rgba(0, 210, 255, 0.4),
+    0 0 22px rgba(249, 115, 22, 0.3),
+    0 0 30px rgba(139, 92, 246, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.navbar-profile-circle-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 140deg,
+    #8b5cf6 0%,   /* Violet */
+    #4f46e5 14%,  /* Indigo */
+    #00d2ff 28%,  /* Blue */
+    #10b981 44%,  /* Green */
+    #facc15 62%,  /* Yellow */
+    #f97316 78%,  /* Orange */
+    #ef4444 92%,  /* Red */
+    #8b5cf6 100%  /* Violet loop */
+  );
+  animation: vibgyorSpin 8s linear infinite;
+  z-index: 0;
+}
+
+@keyframes vibgyorSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .navbar-profile-circle-btn:hover .navbar-profile-circle-ring,
 .navbar-profile-circle-btn.active .navbar-profile-circle-ring {
-  background: linear-gradient(135deg, #00f0ff 0%, #60a5fa 30%, #a855f7 70%, #f43f5e 100%);
   box-shadow: 
-    0 0 18px rgba(0, 210, 255, 0.75),
-    0 0 32px rgba(192, 132, 252, 0.6);
+    0 0 20px rgba(0, 210, 255, 0.7),
+    0 0 32px rgba(249, 115, 22, 0.55),
+    0 0 42px rgba(139, 92, 246, 0.65);
+}
+
+.navbar-profile-circle-btn:hover .navbar-profile-circle-ring::before {
+  animation-duration: 4s;
 }
 
 /* Glass Center with Blur & Transparency */
 .navbar-profile-circle-glass {
-  width: 100%;
-  height: 100%;
+  position: relative;
+  z-index: 1;
+  width: calc(100% - 4.5px);
+  height: calc(100% - 4.5px);
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.52);
+  background: rgba(15, 23, 42, 0.55);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 
     inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35),
     inset 0 -1px 2px 0 rgba(0, 0, 0, 0.45);
@@ -541,10 +576,11 @@
   align-items: center;
   justify-content: center;
   transition: all 0.22s ease;
+  box-sizing: border-box;
 }
 
 .navbar-profile-circle-btn:hover .navbar-profile-circle-glass {
-  background: rgba(15, 23, 42, 0.35);
+  background: rgba(15, 23, 42, 0.4);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -563,27 +599,42 @@
   letter-spacing: -0.01em;
 }
 
-/* ── Floating Profile Popover Card (Pure White Clean Minimal) ── */
+/* ── Floating Profile Popover Card (Liquid Glass with Full Transparent Blur) ── */
 .profile-popover-card {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  width: 295px;
-  max-width: calc(100vw - 1.5rem);
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 14px;
+  position: absolute !important;
+  top: calc(100% + 10px) !important;
+  right: 0 !important;
+  width: 295px !important;
+  max-width: calc(100vw - 1.5rem) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(210%) brightness(1.08) !important;
+  backdrop-filter: blur(32px) saturate(210%) brightness(1.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: 16px !important;
   box-shadow: 
-    0 12px 30px -4px rgba(15, 23, 42, 0.1),
-    0 4px 10px -2px rgba(15, 23, 42, 0.04);
+    0 20px 50px rgba(0, 0, 0, 0.22),
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
   z-index: 1050;
   transform-origin: top right;
   animation: popoverFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-  color: #0f172a !important;
   font-family: var(--font-body);
-  padding: 0;
+  padding: 0 !important;
   overflow: hidden;
   box-sizing: border-box;
+}
+
+.profile-popover-card:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 
+    0 24px 60px rgba(0, 0, 0, 0.28),
+    0 6px 20px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+.profile-popover-card.liquid-glass-card::before,
+.profile-popover-card::before {
+  display: none !important;
 }
 
 @keyframes popoverFadeIn {
@@ -597,28 +648,12 @@
   }
 }
 
-/* Popover Pointer Notch: aligned to the center of 42px avatar */
-.profile-popover-card::before {
-  content: '';
-  position: absolute;
-  top: -5px;
-  right: 16px;
-  width: 10px;
-  height: 10px;
-  background: #ffffff !important;
-  border-top: 1px solid #e2e8f0;
-  border-left: 1px solid #e2e8f0;
-  transform: rotate(45deg);
-  pointer-events: none;
-  z-index: 2;
-}
-
 .profile-popover-header {
   display: flex;
   align-items: flex-start;
   gap: 0.85rem;
   padding: 1.15rem 1.15rem 0.95rem;
-  background: #ffffff;
+  background: transparent !important;
 }
 
 .profile-popover-avatar-wrap {
@@ -630,13 +665,25 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #00d2ff 0%, #818cf8 50%, #c084fc 100%);
-  padding: 2px;
+  background: conic-gradient(
+    from 140deg,
+    #8b5cf6 0%,   /* Violet */
+    #4f46e5 14%,  /* Indigo */
+    #00d2ff 28%,  /* Blue */
+    #10b981 44%,  /* Green */
+    #facc15 62%,  /* Yellow */
+    #f97316 78%,  /* Orange */
+    #ef4444 92%,  /* Red */
+    #8b5cf6 100%  /* Violet loop */
+  );
+  padding: 2.2px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+  box-shadow: 
+    0 0 12px rgba(0, 210, 255, 0.35),
+    0 0 20px rgba(249, 115, 22, 0.25);
   box-sizing: border-box;
   flex-shrink: 0;
 }
@@ -687,17 +734,18 @@
   display: inline-block;
   font-size: 0.68rem;
   font-weight: 600;
-  color: #475569;
-  background: #f1f5f9;
-  padding: 1px 7px;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  padding: 1.5px 8px;
+  border-radius: 6px;
   letter-spacing: 0.02em;
   white-space: nowrap;
 }
 
 .profile-popover-email {
   font-size: 0.76rem;
-  color: #64748b;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -707,7 +755,6 @@
 
 .profile-popover-org {
   font-size: 0.72rem;
-  color: #94a3b8;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -716,7 +763,7 @@
 
 .profile-popover-divider {
   height: 1px;
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.2) !important;
   margin: 0;
   border: none;
 }
@@ -726,17 +773,16 @@
   flex-direction: column;
   padding: 0.45rem 0.55rem;
   gap: 2px;
-  background: #ffffff;
+  background: transparent !important;
 }
 
 .profile-popover-nav-item {
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  padding: 0.55rem 0.75rem;
-  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
   text-decoration: none !important;
-  color: #1e293b !important;
   background: transparent;
   border: none !important;
   transition: all 0.16s ease;
@@ -745,31 +791,31 @@
 }
 
 .profile-popover-nav-item:hover {
-  background: #f5f6f8 !important;
-  color: #0f172a !important;
-  transform: none !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  transform: translateX(2px) !important;
 }
 
 .popover-nav-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #475569;
+  color: #f59e0b; /* Golden accent */
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  transition: color 0.16s ease;
+  transition: transform 0.16s ease;
 }
 
 .profile-popover-nav-item:hover .popover-nav-icon {
-  color: #0f172a;
+  transform: scale(1.1);
 }
 
 .popover-nav-title {
   flex: 1;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
   letter-spacing: 0.01em;
 }
 
@@ -786,18 +832,20 @@
 
 .popover-nav-chevron {
   color: #94a3b8;
+  opacity: 0.75;
   flex-shrink: 0;
-  transition: transform 0.16s ease, color 0.16s ease;
+  transition: transform 0.16s ease, opacity 0.16s ease, color 0.16s ease;
 }
 
 .profile-popover-nav-item:hover .popover-nav-chevron {
-  color: #475569;
-  transform: translateX(2px);
+  opacity: 1;
+  transform: translateX(3px);
+  color: #f59e0b;
 }
 
 .profile-popover-footer {
   padding: 0.45rem 0.55rem 0.55rem;
-  background: #ffffff;
+  background: transparent !important;
 }
 
 .profile-popover-logout-btn {
@@ -806,11 +854,13 @@
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  padding: 0.52rem 0.85rem;
-  background: #ffffff;
-  border: 1px solid #fee2e2;
-  color: #dc2626;
-  border-radius: 8px;
+  padding: 0.55rem 0.85rem;
+  background: rgba(239, 68, 68, 0.12) !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  color: #ef4444;
+  border-radius: 10px;
   font-weight: 600;
   font-size: 0.84rem;
   cursor: pointer;
@@ -819,10 +869,10 @@
 }
 
 .profile-popover-logout-btn:hover {
-  background: #fef2f2 !important;
-  border-color: #fecaca !important;
-  color: #b91c1c !important;
-  transform: none !important;
+  background: rgba(239, 68, 68, 0.25) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+  color: #dc2626 !important;
+  transform: translateY(-1px) !important;
 }
 
 /* ── Hamburger ── */

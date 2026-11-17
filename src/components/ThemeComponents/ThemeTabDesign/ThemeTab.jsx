@@ -58,7 +58,9 @@ export default function ThemeTab({
   showSearch = true,
   className = '',
   style = {},
-  ariaLabel = 'Filter Tabs'
+  ariaLabel = 'Filter Tabs',
+  activeBg,
+  activeColor
 }) {
   const currentActive = activeTab !== undefined ? activeTab : value;
   const [isSearchOpen, setIsSearchOpen] = useState(Boolean(searchQuery));
@@ -231,7 +233,11 @@ export default function ThemeTab({
       <div
         ref={containerRef}
         className={`theme-tab-container size-${size} ${isSearchOpen ? 'search-active' : ''}`}
-        style={isSearchOpen && tabsWidth && !isMobile ? { width: `${tabsWidth}px` } : {}}
+        style={{
+          ...(activeBg ? { '--theme-tab-active-bg': activeBg } : {}),
+          ...(activeColor ? { '--theme-tab-active-color': activeColor } : {}),
+          ...(isSearchOpen && tabsWidth && !isMobile ? { width: `${tabsWidth}px` } : {})
+        }}
         role={isSearchOpen ? 'search' : 'tablist'}
         aria-label={ariaLabel}
       >
@@ -253,7 +259,11 @@ export default function ThemeTab({
               >
                 {tab.icon && <span className="theme-tab-icon">{tab.icon}</span>}
 
-                {isActive ? (
+                {React.isValidElement(tab.label) ? (
+                  <span className={`theme-tab-label ${isActive ? 'active' : ''}`}>
+                    {tab.label}
+                  </span>
+                ) : isActive ? (
                   <span className="theme-tab-label active">{tab.label}</span>
                 ) : (
                   <SplitColorText

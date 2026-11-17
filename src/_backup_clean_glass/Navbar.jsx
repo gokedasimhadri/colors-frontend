@@ -4,13 +4,13 @@ import {
   ChevronDown,
   LogOut,
   LayoutDashboard,
-  User,
   ChevronRight
 } from 'lucide-react';
 import { getLoggedStudent, logoutStudent } from '../../services/api';
 import StudentAuthModal from '../RegistrationModals/StudentAuthModal';
 import ThemeButton from '../ThemeComponents/ThemeButton';
 import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
+import LiquidGlass from '../ThemeComponents/LiquidGlass/LiquidGlass';
 import NavbarMenu from './NavbarMenu';
 import './Navbar.css';
 
@@ -247,7 +247,14 @@ export default function Navbar() {
                   </button>
 
                   {profilePopoverOpen && (
-                    <div className="profile-popover-card" role="dialog" aria-label="User Profile Menu">
+                    <LiquidGlass
+                      as="div"
+                      className="profile-popover-card"
+                      role="dialog"
+                      aria-label="User Profile Menu"
+                      borderRadius={16}
+                      enableShader={false}
+                    >
                       {/* 1. Profile Header */}
                       <div className="profile-popover-header">
                         <div className="profile-popover-avatar-wrap">
@@ -260,31 +267,39 @@ export default function Navbar() {
 
                         <div className="profile-popover-meta">
                           <div className="profile-popover-name" title={student?.name || 'User Account'}>
-                            {student?.name || 'User Account'}
+                            <SplitColorText leftColor="#0f172a" rightColor="#ffffff">
+                              {student?.name || 'User Account'}
+                            </SplitColorText>
                           </div>
                           <div className="profile-popover-role-row">
                             <span className="profile-popover-role-badge">
-                              {student?.role || (student?.rollNumber ? 'Student' : 'User')}
+                              <SplitColorText leftColor="#334155" rightColor="#f8fafc">
+                                {student?.role || (student?.rollNumber ? 'Student' : 'User')}
+                              </SplitColorText>
                             </span>
                           </div>
                           <div
                             className="profile-popover-email"
                             title={student?.email || (student?.rollNumber ? `${student.rollNumber.toLowerCase()}@adityauniversity.in` : 'user@adityauniversity.in')}
                           >
-                            {student?.email || (student?.rollNumber ? `${student.rollNumber.toLowerCase()}@adityauniversity.in` : 'user@adityauniversity.in')}
+                            <SplitColorText leftColor="#475569" rightColor="#cbd5e1">
+                              {student?.email || (student?.rollNumber ? `${student.rollNumber.toLowerCase()}@adityauniversity.in` : 'user@adityauniversity.in')}
+                            </SplitColorText>
                           </div>
                           <div
                             className="profile-popover-org"
                             title={student?.college || student?.department || (student?.rollNumber ? `ID: ${student.rollNumber}` : 'Aditya University')}
                           >
-                            {student?.college || student?.department || (student?.rollNumber ? `ID: ${student.rollNumber}` : 'Aditya University')}
+                            <SplitColorText leftColor="#64748b" rightColor="#94a3b8">
+                              {student?.college || student?.department || (student?.rollNumber ? `ID: ${student.rollNumber}` : 'Aditya University')}
+                            </SplitColorText>
                           </div>
                         </div>
                       </div>
 
                       <div className="profile-popover-divider" />
 
-                      {/* 2. Menu Items (Dashboard & Profile) */}
+                      {/* 2. Menu Items (Dashboard) */}
                       <div className="profile-popover-nav">
                         {/* My Dashboard */}
                         <Link
@@ -295,20 +310,11 @@ export default function Navbar() {
                           <span className="popover-nav-icon">
                             <LayoutDashboard size={16} strokeWidth={1.8} />
                           </span>
-                          <span className="popover-nav-title">My Dashboard</span>
-                          <ChevronRight size={14} className="popover-nav-chevron" />
-                        </Link>
-
-                        {/* My Profile */}
-                        <Link
-                          to="/dashboard?tab=profile"
-                          className="profile-popover-nav-item"
-                          onClick={() => setProfilePopoverOpen(false)}
-                        >
-                          <span className="popover-nav-icon">
-                            <User size={16} strokeWidth={1.8} />
+                          <span className="popover-nav-title">
+                            <SplitColorText leftColor="#0f172a" rightColor="#ffffff">
+                              My Dashboard
+                            </SplitColorText>
                           </span>
-                          <span className="popover-nav-title">My Profile</span>
                           <ChevronRight size={14} className="popover-nav-chevron" />
                         </Link>
                       </div>
@@ -324,10 +330,12 @@ export default function Navbar() {
                           title="Sign out of account"
                         >
                           <LogOut size={15} strokeWidth={2} />
-                          <span>Logout</span>
+                          <SplitColorText leftColor="#dc2626" rightColor="#fca5a5">
+                            Logout
+                          </SplitColorText>
                         </button>
                       </div>
-                    </div>
+                    </LiquidGlass>
                   )}
                 </div>
               ) : (
@@ -442,6 +450,7 @@ export default function Navbar() {
         onSuccess={(loggedStudent) => {
           setStudent(loggedStudent);
           setAuthModalOpen(false);
+          navigate('/dashboard');
         }}
         initialMode={authMode}
       />

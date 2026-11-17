@@ -263,7 +263,144 @@ export const Info = createIcon('Info', (
   </>
 ));
 
+export const Eye = createIcon('Eye', (
+  <>
+    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+    <circle cx="12" cy="12" r="3" />
+  </>
+));
+
+export const EyeOff = createIcon('EyeOff', (
+  <>
+    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+    <line x1="2" x2="22" y1="2" y2="22" />
+  </>
+));
+
+export const Ticket = createIcon('Ticket', (
+  <>
+    <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+    <path d="M13 5v2" />
+    <path d="M13 17v2" />
+    <path d="M13 11v2" />
+  </>
+));
+
+export const Lock = createIcon('Lock', (
+  <>
+    <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </>
+));
+
+export const KeyRound = createIcon('KeyRound', (
+  <>
+    <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
+    <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
+  </>
+));
+
+export const CheckCircle2 = createIcon('CheckCircle2', (
+  <>
+    <circle cx="12" cy="12" r="10" />
+    <path d="m9 12 2 2 4-4" />
+  </>
+));
+
+export const AlertTriangle = createIcon('AlertTriangle', (
+  <>
+    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+    <line x1="12" x2="12" y1="9" y2="13" />
+    <line x1="12" x2="12.01" y1="17" y2="17" />
+  </>
+));
+
+export const GraduationCap = createIcon('GraduationCap', (
+  <>
+    <path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" />
+    <path d="M22 10v6" />
+    <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" />
+  </>
+));
+
+export const CreditCard = createIcon('CreditCard', (
+  <>
+    <rect width="20" height="14" x="2" y="5" rx="2" />
+    <line x1="2" x2="22" y1="10" y2="10" />
+  </>
+));
+
+export const Zap = createIcon('Zap', (
+  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+));
+
+export const Printer = createIcon('Printer', (
+  <>
+    <polyline points="6 9 6 2 18 2 18 9" />
+    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+    <rect width="12" height="8" x="6" y="14" />
+  </>
+));
+
+export const Edit3 = createIcon('Edit3', (
+  <>
+    <path d="M12 20h9" />
+    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+  </>
+));
+
+export const ShieldCheck = createIcon('ShieldCheck', (
+  <>
+    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+    <path d="m9 12 2 2 4-4" />
+  </>
+));
+
+export const CalendarX2 = createIcon('CalendarX2', (
+  <>
+    <rect width="18" height="18" x="3" y="4" rx="2" />
+    <path d="M8 2v4" />
+    <path d="M16 2v4" />
+    <path d="M3 10h18" />
+    <path d="m14 14-4 4" />
+    <path d="m10 14 4 4" />
+  </>
+));
+
+export const UserPlus = createIcon('UserPlus', (
+  <>
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <line x1="19" x2="19" y1="8" y2="14" />
+    <line x1="22" x2="16" y1="11" y2="11" />
+  </>
+));
+
+export const Crown = createIcon('Crown', (
+  <>
+    <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14" />
+  </>
+));
+
 export default {
+  Ticket,
+  Lock,
+  KeyRound,
+  CheckCircle2,
+  AlertTriangle,
+  GraduationCap,
+  CreditCard,
+  Zap,
+  Printer,
+  Edit3,
+  ShieldCheck,
+  CalendarX2,
+  UserPlus,
+  Crown,
+  Eye,
+  EyeOff,
   LayoutDashboard,
   Settings,
   Bell,

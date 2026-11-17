@@ -17,8 +17,42 @@ import {
   isValidOtherCollege,
   parseEventFeeInRupees
 } from '../../services/api';
+import {
+  Ticket,
+  User,
+  Lock,
+  KeyRound,
+  Check,
+  CheckCircle2,
+  AlertTriangle,
+  Landmark,
+  Mail,
+  Phone,
+  GraduationCap,
+  Calendar,
+  Target,
+  CreditCard,
+  Sparkles,
+  Zap,
+  Printer,
+  Eye,
+  EyeOff,
+  Edit3,
+  X,
+  ShieldCheck,
+  CalendarX2,
+  Users,
+  FileText,
+  UserPlus,
+  Crown
+} from 'lucide-react';
 import StudentAuthModal from '../../components/RegistrationModals/StudentAuthModal';
 import ManageTeamModal from '../../components/RegistrationModals/ManageTeamModal';
+import { MuiTextField, MuiSelectField } from '../../components/RegistrationModals/MuiTextField';
+import LiquidGlass from '../../components/ThemeComponents/LiquidGlass/LiquidGlass';
+import ThemeButton from '../../components/ThemeComponents/ThemeButton/ThemeButton';
+import ThemeTab from '../../components/ThemeComponents/ThemeTabDesign/ThemeTab';
+import SplitColorText from '../../components/ThemeComponents/SplitColor/SplitColorText';
 import './StudentDashboard.css';
 
 const COLLEGE_OPTIONS = [
@@ -214,7 +248,7 @@ export default function StudentDashboard() {
           setCatalogEvents(evs);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Profile Edit State
@@ -239,9 +273,6 @@ export default function StudentDashboard() {
     newPassword: '',
     confirmPassword: ''
   });
-  const [showCurrentPw, setShowCurrentPw] = useState(false);
-  const [showNewPw, setShowNewPw] = useState(false);
-  const [showConfirmPw, setShowConfirmPw] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [passwordAlert, setPasswordAlert] = useState(null);
 
@@ -518,30 +549,103 @@ export default function StudentDashboard() {
     });
   }, [paymentsList, registrationsList, catalogEvents]);
 
+  // Navigation tabs definition
+  const dashboardTabs = useMemo(() => [
+    {
+      id: 'events',
+      label: (
+        <span className="dash-tab-pill-content">
+          <Ticket size={16} className="tab-lucide-icon" />
+          {activeTab === 'events' ? (
+            <span className="dash-tab-title active">Registered Events</span>
+          ) : (
+            <SplitColorText leftColor="#0f172a" rightColor="#be9337">
+              Registered Events
+            </SplitColorText>
+          )}
+          {displayEventsList.length > 0 && (
+            <span className="dash-tab-counter-badge">{displayEventsList.length}</span>
+          )}
+        </span>
+      )
+    },
+    {
+      id: 'profile',
+      label: (
+        <span className="dash-tab-pill-content">
+          <User size={16} className="tab-lucide-icon" />
+          {activeTab === 'profile' ? (
+            <span className="dash-tab-title active">Profile & ID</span>
+          ) : (
+            <SplitColorText leftColor="#0f172a" rightColor="#be9337">
+              Profile & ID
+            </SplitColorText>
+          )}
+        </span>
+      )
+    },
+    {
+      id: 'security',
+      label: (
+        <span className="dash-tab-pill-content">
+          <KeyRound size={16} className="tab-lucide-icon" />
+          {activeTab === 'security' ? (
+            <span className="dash-tab-title active">Change Password</span>
+          ) : (
+            <SplitColorText leftColor="#0f172a" rightColor="#be9337">
+              Change Password
+            </SplitColorText>
+          )}
+        </span>
+      )
+    }
+  ], [activeTab, displayEventsList.length]);
+
   // If not logged in, prompt state
   if (!student) {
     return (
       <div className="student-dashboard-page">
         <div className="dashboard-container">
-          <div className="empty-dash-card" style={{ padding: '5rem 2rem' }}>
-            <div className="empty-dash-icon">🔒</div>
-            <h2 className="empty-dash-title">Student Portal & Account Access</h2>
+          <LiquidGlass
+            className="empty-dash-card empty-glass-card"
+            theme="light"
+            borderRadius={24}
+            enableShader={true}
+            style={{ padding: '4.5rem 2rem' }}
+          >
+            <div className="empty-dash-icon">
+              <Lock size={44} strokeWidth={1.8} />
+            </div>
+            <SplitColorText as="h2" className="empty-dash-title" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+              Student Portal & Account Access
+            </SplitColorText>
             <p className="empty-dash-desc">
               Please sign in with your student credentials or register your account to view your enrolled events, download official fest passes, and manage account security.
             </p>
-            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-              <button
+            <div className="dash-empty-actions-row">
+              <ThemeButton
                 type="button"
-                className="btn-hero-action primary"
+                className="btn-dash-primary"
+                borderRadius={12}
+                height={46}
+                showBlast={false}
                 onClick={() => setAuthModalOpen(true)}
               >
-                ✦ Sign In / Register Account
-              </button>
-              <Link to="/events" className="btn-hero-action secondary">
+                <span className="btn-icon-label" style={{ color: '#ffffff' }}>
+                  <Sparkles size={16} /> Sign In / Register Account
+                </span>
+              </ThemeButton>
+              <ThemeButton
+                to="/events"
+                className="btn-dash-secondary"
+                borderRadius={12}
+                height={46}
+                showBlast={false}
+              >
                 Browse Events
-              </Link>
+              </ThemeButton>
             </div>
-          </div>
+          </LiquidGlass>
         </div>
 
         <StudentAuthModal
@@ -568,7 +672,13 @@ export default function StudentDashboard() {
     <div className="student-dashboard-page">
       <div className="dashboard-container">
         {/* ── Top Hero Card ── */}
-        <section className="dashboard-hero-card">
+        <LiquidGlass
+          as="section"
+          className="dashboard-hero-card dashboard-glass-card"
+          theme="light"
+          borderRadius={24}
+          enableShader={false}
+        >
           <div className="hero-profile-identity">
             <div className="hero-avatar-wrapper">
               {!photoError && studentPhotoUrl ? (
@@ -584,116 +694,121 @@ export default function StudentDashboard() {
                 </div>
               )}
               <span className="hero-avatar-badge" title="Verified Fest Delegate">
-                ✓
+                <Check size={14} strokeWidth={3} />
               </span>
             </div>
 
             <div className="hero-info-group">
               <div className="hero-title-row">
-                <h1 className="hero-student-name">{activeStudent.name}</h1>
+                <SplitColorText as="h1" className="hero-student-name" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                  {activeStudent.name}
+                </SplitColorText>
                 <span className="hero-roll-chip">{activeStudent.roll}</span>
               </div>
               <div className="hero-college-name">
-                🏛️ {activeStudent.college === 'Other Institution' && activeStudent.otherCollege
+                <Landmark size={15} className="hero-icon" /> {activeStudent.college === 'Other Institution' && activeStudent.otherCollege
                   ? activeStudent.otherCollege
                   : normalizeCollege(activeStudent.college)}
               </div>
               <div className="hero-contact-chips">
-                <span className="hero-contact-pill">📧 {activeStudent.email}</span>
-                <span className="hero-contact-pill">📱 {activeStudent.mobile}</span>
+                <span className="hero-contact-pill">
+                  <Mail size={13} className="hero-icon" /> {activeStudent.email}
+                </span>
+                <span className="hero-contact-pill">
+                  <Phone size={13} className="hero-icon" /> {activeStudent.mobile}
+                </span>
                 {activeStudent.department && (
-                  <span className="hero-contact-pill">🎓 {activeStudent.department}</span>
+                  <span className="hero-contact-pill">
+                    <GraduationCap size={13} className="hero-icon" /> {activeStudent.department}
+                  </span>
                 )}
                 {activeStudent.year && (
-                  <span className="hero-contact-pill">📅 {activeStudent.year}</span>
+                  <span className="hero-contact-pill">
+                    <Calendar size={13} className="hero-icon" /> {activeStudent.year}
+                  </span>
                 )}
               </div>
             </div>
           </div>
-
-          <div className="hero-actions">
-            <Link to="/events" className="btn-hero-action primary">
-              ✦ Register for Events
-            </Link>
-            <button
-              type="button"
-              className="btn-hero-action danger"
-              onClick={() => {
-                logoutStudent();
-                navigate('/events');
-              }}
-              title="Sign out of student account"
-            >
-              Sign Out
-            </button>
-          </div>
-        </section>
+        </LiquidGlass>
 
         {/* ── Stats Bar ── */}
         <section className="dashboard-metrics-grid">
-          <div className="metric-card">
-            <div className="metric-icon-box pink">🎯</div>
+          <LiquidGlass className="metric-card metric-glass-card" theme="light" borderRadius={18} enableShader={false}>
+            <div className="metric-icon-box pink">
+              <Target size={24} strokeWidth={2.2} />
+            </div>
             <div className="metric-content">
-              <span className="metric-value">{totalRegistrations}</span>
+              <SplitColorText as="span" className="metric-value" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                {totalRegistrations}
+              </SplitColorText>
               <span className="metric-label">Enrolled Events</span>
             </div>
-          </div>
+          </LiquidGlass>
 
-          <div className="metric-card">
-            <div className="metric-icon-box emerald">✅</div>
+          <LiquidGlass className="metric-card metric-glass-card" theme="light" borderRadius={18} enableShader={false}>
+            <div className="metric-icon-box emerald">
+              <CheckCircle2 size={24} strokeWidth={2.2} />
+            </div>
             <div className="metric-content">
-              <span className="metric-value">{paidCount}</span>
+              <SplitColorText as="span" className="metric-value" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                {paidCount}
+              </SplitColorText>
               <span className="metric-label">Confirmed Passes</span>
             </div>
-          </div>
+          </LiquidGlass>
 
-          <div className="metric-card">
-            <div className="metric-icon-box amber">💳</div>
+          <LiquidGlass className="metric-card metric-glass-card" theme="light" borderRadius={18} enableShader={false}>
+            <div className="metric-icon-box amber">
+              <CreditCard size={24} strokeWidth={2.2} />
+            </div>
             <div className="metric-content">
-              <span className="metric-value">₹ {totalAmountPaid}</span>
+              <SplitColorText as="span" className="metric-value" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                ₹ {totalAmountPaid}
+              </SplitColorText>
               <span className="metric-label">Total Fee Paid</span>
             </div>
-          </div>
+          </LiquidGlass>
 
-          <div className="metric-card">
-            <div className="metric-icon-box purple">🎟️</div>
+          <LiquidGlass className="metric-card metric-glass-card" theme="light" borderRadius={18} enableShader={false}>
+            <div className="metric-icon-box purple">
+              <Zap size={24} strokeWidth={2.2} />
+            </div>
             <div className="metric-content">
-              <span className="metric-value">ACTIVE</span>
+              <SplitColorText as="span" className="metric-value" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                ACTIVE
+              </SplitColorText>
               <span className="metric-label">Festival Status</span>
             </div>
-          </div>
+          </LiquidGlass>
         </section>
 
         {/* ── Navigation Tabs ── */}
-        <nav className="dashboard-tabs-nav" aria-label="Dashboard views">
-          <button
-            type="button"
-            className={`tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
-            onClick={() => setActiveTab('profile')}
-          >
-            👤 Student Profile & ID
-          </button>
-          <button
-            type="button"
-            className={`tab-btn ${activeTab === 'security' ? 'active' : ''}`}
-            onClick={() => setActiveTab('security')}
-          >
-            🔒 Change Password
-          </button>
-          <button
-            type="button"
-            className={`tab-btn ${activeTab === 'events' ? 'active' : ''}`}
-            onClick={() => setActiveTab('events')}
-          >
-            🎟️ Registered Events & Receipts
-            <span className="tab-badge">{displayEventsList.length}</span>
-          </button>
-        </nav>
+        <div className="dashboard-themetab-wrapper">
+          <ThemeTab
+            tabs={dashboardTabs}
+            activeTab={activeTab}
+            onChange={(tabId) => setActiveTab(typeof tabId === 'object' ? tabId.id : tabId)}
+            size="md"
+            showSearch={false}
+            leftColor="#0f172a"
+            rightColor="#be9337"
+            activeBg="#be9337"
+            activeColor="#ffffff"
+            className="dashboard-themetab-bar"
+            ariaLabel="Dashboard Navigation Tabs"
+          />
+        </div>
 
         {/* ── Global Alerts ── */}
         {profileAlert && (
           <div className={`dash-alert ${profileAlert.type}`}>
-            {profileAlert.type === 'success' ? '✅' : '⚠️'} {profileAlert.message}
+            {profileAlert.type === 'success' ? (
+              <CheckCircle2 size={16} className="alert-lucide-icon" />
+            ) : (
+              <AlertTriangle size={16} className="alert-lucide-icon" />
+            )}{' '}
+            <span>{profileAlert.message}</span>
           </div>
         )}
 
@@ -702,22 +817,35 @@ export default function StudentDashboard() {
           <div className="tab-content-panel">
             <div className="profile-panel-grid">
               {/* Profile Card */}
-              <div className="profile-card">
+              <LiquidGlass className="profile-card profile-glass-card" theme="light" borderRadius={22} enableShader={true}>
                 <div className="card-header-row">
                   <div className="card-title-group">
-                    <h3>Student Account Information</h3>
+                    <SplitColorText as="h3" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                      Student Account Information
+                    </SplitColorText>
                     <p>Verified profile details recorded in central festival register</p>
                   </div>
-                  <button
+                  <ThemeButton
                     type="button"
-                    className="btn-toggle-edit"
+                    className="btn-dash-outline"
+                    borderRadius={10}
+                    height={36}
+                    showBlast={false}
                     onClick={() => {
                       setIsEditingProfile(!isEditingProfile);
                       setProfileAlert(null);
                     }}
                   >
-                    {isEditingProfile ? '✕ Cancel' : '✎ Edit Details'}
-                  </button>
+                    {isEditingProfile ? (
+                      <span className="btn-icon-label">
+                        <X size={15} /> Cancel
+                      </span>
+                    ) : (
+                      <span className="btn-icon-label">
+                        <Edit3 size={15} /> Edit Details
+                      </span>
+                    )}
+                  </ThemeButton>
                 </div>
 
                 {!isEditingProfile ? (
@@ -770,197 +898,133 @@ export default function StudentDashboard() {
                 ) : (
                   /* Edit Mode */
                   <form onSubmit={handleSaveProfile} className="profile-form-grid">
-                    <div className="form-group-dash">
-                      <label htmlFor="edit-name">Full Name *</label>
-                      <input
-                        id="edit-name"
-                        type="text"
-                        name="name"
-                        className="form-input-dash"
-                        value={profileForm.name}
-                        onChange={handleProfileChange}
-                        required
-                      />
-                    </div>
+                    <MuiTextField
+                      label="Full Name"
+                      name="name"
+                      id="edit-name"
+                      value={profileForm.name}
+                      onChange={handleProfileChange}
+                      required
+                    />
 
-                    <div className="form-group-dash">
-                      <label htmlFor="edit-roll">Roll Number (Permanent)</label>
-                      <input
-                        id="edit-roll"
-                        type="text"
-                        name="roll"
-                        className="form-input-dash"
-                        value={profileForm.roll}
-                        disabled
-                        title="Roll number cannot be changed"
-                      />
-                    </div>
+                    <MuiTextField
+                      label="Roll Number (Permanent)"
+                      name="roll"
+                      id="edit-roll"
+                      value={profileForm.roll}
+                      disabled
+                      title="Roll number cannot be changed"
+                    />
 
-                    <div className="form-group-dash">
-                      <label htmlFor="edit-college">Institution *</label>
-                      <select
-                        id="edit-college"
-                        name="college"
-                        className="form-input-dash"
-                        value={profileForm.college}
-                        onChange={handleProfileChange}
-                      >
-                        {COLLEGE_OPTIONS.map((c) => (
-                          <option key={c} value={c}>
-                            {c}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    <MuiSelectField
+                      label="Institution"
+                      name="college"
+                      id="edit-college"
+                      value={profileForm.college}
+                      onChange={handleProfileChange}
+                      required
+                      options={COLLEGE_OPTIONS}
+                    />
 
                     {profileForm.college === 'Other Institution' && (
-                      <div className="form-group-dash">
-                        <label htmlFor="edit-otherCollege">Specify Institution Name *</label>
-                        <input
-                          id="edit-otherCollege"
-                          type="text"
-                          name="otherCollege"
-                          className="form-input-dash"
-                          value={profileForm.otherCollege}
-                          onChange={handleProfileChange}
-                          onBlur={(e) => handleOtherCollegeBlur(e.target.value)}
-                          placeholder="Enter your college/university name"
-                          style={{
-                            borderColor: otherCollegeError
-                              ? '#ef4444'
-                              : profileForm.otherCollege && isValidOtherCollege(profileForm.otherCollege)
-                                ? '#10b981'
-                                : '#cbd5e1',
-                            backgroundColor: otherCollegeError
-                              ? '#fef2f2'
-                              : profileForm.otherCollege && isValidOtherCollege(profileForm.otherCollege)
-                                ? '#f0fdf4'
-                                : '#ffffff'
-                          }}
-                          required
-                        />
-                        {otherCollegeError ? (
-                          <span
-                            style={{
-                              color: '#dc2626',
-                              fontWeight: 600,
-                              fontSize: '0.78rem',
-                              marginTop: '4px',
-                              display: 'block'
-                            }}
-                          >
-                            {otherCollegeError}
-                          </span>
-                        ) : profileForm.otherCollege && isValidOtherCollege(profileForm.otherCollege) ? (
-                          <span
-                            style={{
-                              color: '#0284c7',
-                              fontWeight: 600,
-                              fontSize: '0.78rem',
-                              marginTop: '4px',
-                              display: 'block'
-                            }}
-                          >
-                            ℹ️ College ID Card is required for entry and verification.
-                          </span>
-                        ) : null}
-                      </div>
+                      <MuiTextField
+                        label="Specify Institution Name"
+                        name="otherCollege"
+                        id="edit-otherCollege"
+                        value={profileForm.otherCollege}
+                        onChange={handleProfileChange}
+                        onBlur={(e) => handleOtherCollegeBlur(e.target.value)}
+                        placeholder="Enter your college/university name"
+                        className="full-width"
+                        error={otherCollegeError || ''}
+                        hint={
+                          !otherCollegeError && profileForm.otherCollege && isValidOtherCollege(profileForm.otherCollege)
+                            ? 'ℹ️ College ID Card is required for entry and verification.'
+                            : ''
+                        }
+                        required
+                      />
                     )}
 
-                    <div className="form-group-dash">
-                      <label htmlFor="edit-department">Department / Branch</label>
-                      <input
-                        id="edit-department"
-                        type="text"
-                        name="department"
-                        className="form-input-dash"
-                        value={profileForm.department}
-                        onChange={handleProfileChange}
-                        placeholder="e.g. CSE, ECE, EEE, Mechanical"
-                      />
-                    </div>
+                    <MuiTextField
+                      label="Department / Branch"
+                      name="department"
+                      id="edit-department"
+                      value={profileForm.department}
+                      onChange={handleProfileChange}
+                      placeholder="e.g. CSE, ECE, EEE, Mechanical"
+                    />
 
-                    <div className="form-group-dash">
-                      <label htmlFor="edit-year">Year of Study</label>
-                      <select
-                        id="edit-year"
-                        name="year"
-                        className="form-input-dash"
-                        value={profileForm.year}
-                        onChange={handleProfileChange}
-                      >
-                        {YEAR_OPTIONS.map((y) => (
-                          <option key={y} value={y}>
-                            {y}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    <MuiSelectField
+                      label="Year of Study"
+                      name="year"
+                      id="edit-year"
+                      value={profileForm.year}
+                      onChange={handleProfileChange}
+                      options={YEAR_OPTIONS}
+                    />
 
-                    <div className="form-group-dash">
-                      <label htmlFor="edit-gender">Gender *</label>
-                      <select
-                        id="edit-gender"
-                        name="gender"
-                        className="form-input-dash"
-                        value={profileForm.gender}
-                        onChange={handleProfileChange}
-                      >
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
+                    <MuiSelectField
+                      label="Gender"
+                      name="gender"
+                      id="edit-gender"
+                      value={profileForm.gender}
+                      onChange={handleProfileChange}
+                      required
+                      options={['Male', 'Female', 'Other']}
+                    />
 
-                    <div className="form-group-dash">
-                      <label htmlFor="edit-mobile">Mobile Number *</label>
-                      <input
-                        id="edit-mobile"
-                        type="tel"
-                        name="mobile"
-                        className="form-input-dash"
-                        value={profileForm.mobile}
-                        onChange={handleProfileChange}
-                        maxLength={10}
-                        required
-                      />
-                    </div>
+                    <MuiTextField
+                      label="Mobile Number"
+                      type="tel"
+                      name="mobile"
+                      id="edit-mobile"
+                      value={profileForm.mobile}
+                      onChange={handleProfileChange}
+                      maxLength={10}
+                      required
+                    />
 
-                    <div className="form-group-dash">
-                      <label htmlFor="edit-email">Email Address *</label>
-                      <input
-                        id="edit-email"
-                        type="email"
-                        name="email"
-                        className="form-input-dash"
-                        value={profileForm.email}
-                        onChange={handleProfileChange}
-                        required
-                      />
-                    </div>
+                    <MuiTextField
+                      label="Email Address"
+                      type="email"
+                      name="email"
+                      id="edit-email"
+                      value={profileForm.email}
+                      onChange={handleProfileChange}
+                      required
+                    />
 
                     <div className="form-actions-bar">
-                      <button
+                      <ThemeButton
                         type="button"
-                        className="btn-hero-action secondary"
+                        className="btn-dash-secondary"
+                        borderRadius={12}
+                        height={44}
+                        showBlast={false}
                         onClick={() => setIsEditingProfile(false)}
                       >
                         Cancel
-                      </button>
-                      <button
+                      </ThemeButton>
+                      <ThemeButton
                         type="submit"
-                        className="btn-save-profile"
+                        className="btn-dash-primary"
+                        borderRadius={12}
+                        height={44}
+                        showBlast={false}
                         disabled={profileSaving}
                       >
-                        {profileSaving ? 'Saving Changes...' : 'Save Profile Changes'}
-                      </button>
+                        <span className="btn-icon-label" style={{ color: '#ffffff' }}>
+                          {profileSaving ? 'Saving Changes...' : 'Save Profile Changes'}
+                        </span>
+                      </ThemeButton>
                     </div>
                   </form>
                 )}
-              </div>
+              </LiquidGlass>
 
               {/* Digital Fest Delegate Card */}
-              <div className="fest-pass-card">
+              <LiquidGlass className="fest-pass-card fest-pass-glass-card" theme="light" borderRadius={22} enableShader={true}>
                 <div className="pass-top-header">
                   <div className="pass-fest-badge">COLOURS 2027</div>
                   <span className="pass-chip-status">OFFICIAL DELEGATE</span>
@@ -996,14 +1060,20 @@ export default function StudentDashboard() {
                   <span className="pass-barcode-text">CLR27-{activeStudent.roll}</span>
                 </div>
 
-                <button
+                <ThemeButton
                   type="button"
-                  className="btn-print-pass"
+                  className="btn-dash-primary"
+                  borderRadius={12}
+                  height={44}
+                  showBlast={false}
                   onClick={() => window.print()}
+                  style={{ width: '100%', marginTop: '1rem' }}
                 >
-                  🖨️ Print Delegate Card
-                </button>
-              </div>
+                  <span className="btn-icon-label" style={{ color: '#ffffff' }}>
+                    <Printer size={16} /> Print Delegate Card
+                  </span>
+                </ThemeButton>
+              </LiquidGlass>
             </div>
           </div>
         )}
@@ -1012,120 +1082,104 @@ export default function StudentDashboard() {
         {activeTab === 'security' && (
           <div className="tab-content-panel">
             <div className="security-panel-grid">
-              <div className="password-card">
+              <LiquidGlass className="password-card password-glass-card" theme="light" borderRadius={22} enableShader={true}>
                 <div className="card-header-row">
                   <div className="card-title-group">
-                    <h3>Account Security & Password</h3>
+                    <SplitColorText as="h3" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                      Account Security & Password
+                    </SplitColorText>
                     <p>Update your portal access key to keep your festival account safe</p>
                   </div>
                 </div>
 
                 {passwordAlert && (
                   <div className={`dash-alert ${passwordAlert.type}`}>
-                    {passwordAlert.type === 'success' ? '✅' : '⚠️'} {passwordAlert.message}
+                    {passwordAlert.type === 'success' ? (
+                      <CheckCircle2 size={16} className="alert-lucide-icon" />
+                    ) : (
+                      <AlertTriangle size={16} className="alert-lucide-icon" />
+                    )}{' '}
+                    <span>{passwordAlert.message}</span>
                   </div>
                 )}
 
                 <form onSubmit={handleChangePassword} className="profile-form-grid">
-                  <div className="form-group-dash full-width">
-                    <label htmlFor="current-pw">Current Password *</label>
-                    <div className="password-input-wrapper">
-                      <input
-                        id="current-pw"
-                        type={showCurrentPw ? 'text' : 'password'}
-                        className="form-input-dash"
-                        placeholder="Enter current password"
-                        value={passwordForm.currentPassword}
-                        onChange={(e) =>
-                          setPasswordForm((prev) => ({
-                            ...prev,
-                            currentPassword: e.target.value
-                          }))
-                        }
-                        required
-                      />
-                      <button
-                        type="button"
-                        className="btn-eye-toggle"
-                        onClick={() => setShowCurrentPw(!showCurrentPw)}
-                        aria-label="Toggle Current Password Visibility"
-                      >
-                        {showCurrentPw ? '👁️' : '🔒'}
-                      </button>
-                    </div>
-                  </div>
+                  <MuiTextField
+                    label="Current Password"
+                    type="password"
+                    name="currentPassword"
+                    id="current-pw"
+                    value={passwordForm.currentPassword}
+                    onChange={(e) =>
+                      setPasswordForm((prev) => ({
+                        ...prev,
+                        currentPassword: e.target.value
+                      }))
+                    }
+                    placeholder="Enter current password"
+                    className="full-width"
+                    required
+                  />
 
-                  <div className="form-group-dash full-width">
-                    <label htmlFor="new-pw">New Password (minimum 6 characters) *</label>
-                    <div className="password-input-wrapper">
-                      <input
-                        id="new-pw"
-                        type={showNewPw ? 'text' : 'password'}
-                        className="form-input-dash"
-                        placeholder="Enter new strong password"
-                        value={passwordForm.newPassword}
-                        onChange={(e) =>
-                          setPasswordForm((prev) => ({
-                            ...prev,
-                            newPassword: e.target.value
-                          }))
-                        }
-                        required
-                      />
-                      <button
-                        type="button"
-                        className="btn-eye-toggle"
-                        onClick={() => setShowNewPw(!showNewPw)}
-                        aria-label="Toggle New Password Visibility"
-                      >
-                        {showNewPw ? '👁️' : '🔒'}
-                      </button>
-                    </div>
-                  </div>
+                  <MuiTextField
+                    label="New Password (minimum 6 characters)"
+                    type="password"
+                    name="newPassword"
+                    id="new-pw"
+                    value={passwordForm.newPassword}
+                    onChange={(e) =>
+                      setPasswordForm((prev) => ({
+                        ...prev,
+                        newPassword: e.target.value
+                      }))
+                    }
+                    placeholder="Enter new strong password"
+                    className="full-width"
+                    required
+                  />
 
-                  <div className="form-group-dash full-width">
-                    <label htmlFor="confirm-pw">Confirm New Password *</label>
-                    <div className="password-input-wrapper">
-                      <input
-                        id="confirm-pw"
-                        type={showConfirmPw ? 'text' : 'password'}
-                        className="form-input-dash"
-                        placeholder="Re-type new password"
-                        value={passwordForm.confirmPassword}
-                        onChange={(e) =>
-                          setPasswordForm((prev) => ({
-                            ...prev,
-                            confirmPassword: e.target.value
-                          }))
-                        }
-                        required
-                      />
-                      <button
-                        type="button"
-                        className="btn-eye-toggle"
-                        onClick={() => setShowConfirmPw(!showConfirmPw)}
-                        aria-label="Toggle Confirm Password Visibility"
-                      >
-                        {showConfirmPw ? '👁️' : '🔒'}
-                      </button>
-                    </div>
-                  </div>
+                  <MuiTextField
+                    label="Confirm New Password"
+                    type="password"
+                    name="confirmPassword"
+                    id="confirm-pw"
+                    value={passwordForm.confirmPassword}
+                    onChange={(e) =>
+                      setPasswordForm((prev) => ({
+                        ...prev,
+                        confirmPassword: e.target.value
+                      }))
+                    }
+                    placeholder="Re-type new password"
+                    className="full-width"
+                    required
+                  />
 
                   <div className="form-actions-bar">
-                    <button
+                    <ThemeButton
                       type="submit"
-                      className="btn-save-profile"
+                      className="btn-dash-primary"
+                      borderRadius={12}
+                      height={44}
+                      showBlast={false}
                       disabled={passwordLoading}
                     >
-                      {passwordLoading ? 'Updating Password...' : 'Update Password'}
-                    </button>
+                      <span className="btn-icon-label" style={{ color: '#ffffff' }}>
+                        {passwordLoading ? 'Updating Password...' : 'Update Password'}
+                      </span>
+                    </ThemeButton>
                   </div>
                 </form>
-              </div>
+              </LiquidGlass>
 
               {/* Safety Tips Card */}
-              <div className="security-tips-card">
-                <h4>🛡️ Password & Festival Guidelines</h4>
+              <LiquidGlass className="security-tips-card security-glass-card" theme="light" borderRadius={22} enableShader={false}>
+                <SplitColorText as="h4" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                  <span className="tips-header-wrap">
+                    <ShieldCheck size={20} className="security-tips-icon" />
+                    Password & Festival Guidelines
+                  </span>
+                </SplitColorText>
                 <p style={{ fontSize: '0.88rem', color: '#64748b' }}>
                   Your password protects your event participation slips, registered team details, and on-spot certificate verification.
                 </p>
@@ -1147,7 +1201,7 @@ export default function StudentDashboard() {
                     If you forget your password, contact the fest central registration desk with your college ID card.
                   </li>
                 </ul>
-              </div>
+              </LiquidGlass>
             </div>
           </div>
         )}
@@ -1156,16 +1210,28 @@ export default function StudentDashboard() {
         {activeTab === 'events' && (
           <div className="tab-content-panel">
             {displayEventsList.length === 0 ? (
-              <div className="empty-dash-card">
-                <div className="empty-dash-icon">🎪</div>
-                <h3 className="empty-dash-title">No Enrolled Events Found</h3>
+              <LiquidGlass className="empty-dash-card empty-glass-card" theme="light" borderRadius={22} enableShader={true}>
+                <div className="empty-dash-icon">
+                  <CalendarX2 size={44} strokeWidth={1.8} />
+                </div>
+                <SplitColorText as="h3" className="empty-dash-title" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                  No Enrolled Events Found
+                </SplitColorText>
                 <p className="empty-dash-desc">
                   You haven't registered for any events in Colours 2027 yet. Explore exciting competitions across Sports, Culturals, and Creo!
                 </p>
-                <Link to="/events" className="btn-hero-action primary">
-                  ✦ Explore & Register Events
-                </Link>
-              </div>
+                <ThemeButton
+                  to="/events"
+                  className="btn-dash-primary"
+                  borderRadius={12}
+                  height={44}
+                  showBlast={false}
+                >
+                  <span className="btn-icon-label" style={{ color: '#ffffff' }}>
+                    <Sparkles size={16} /> Explore & Register Events
+                  </span>
+                </ThemeButton>
+              </LiquidGlass>
             ) : (
               <div className="events-list-wrapper">
                 {displayEventsList.map((payment) => {
@@ -1180,7 +1246,14 @@ export default function StudentDashboard() {
                   const isSports = isSportsAndGamesEvent(payment, catalogEvents);
 
                   return (
-                    <article key={payment._id || payRef} className="event-receipt-card">
+                    <LiquidGlass
+                      as="article"
+                      key={payment._id || payRef}
+                      className="event-receipt-card event-glass-card"
+                      theme="light"
+                      borderRadius={20}
+                      enableShader={true}
+                    >
                       <div className="event-card-header">
                         <div>
                           <div className="event-badge-group">
@@ -1188,30 +1261,44 @@ export default function StudentDashboard() {
                               {payment.typeCode || EVENT_TYPE || 'COLORS'}
                             </span>
                             <span className={`event-status-pill ${String(payment.status || '').toLowerCase() === 'paid' ? 'paid' : 'pending'}`}>
-                              ✓ {payment.status || 'PAID'}
+                              <span className="receipt-status-wrap">
+                                <Check size={12} strokeWidth={3} /> {payment.status || 'PAID'}
+                              </span>
                             </span>
                           </div>
-                          <h4 className="event-main-title">{title}</h4>
+                          <SplitColorText as="h4" className="event-main-title" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                            {title}
+                          </SplitColorText>
                         </div>
 
-                        <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap' }}>
+                        <div className="event-header-actions-row">
                           {isSports && (
-                            <button
+                            <ThemeButton
                               type="button"
-                              className="btn-manage-team"
+                              className="btn-dash-outline"
+                              borderRadius={10}
+                              height={38}
+                              showBlast={false}
                               onClick={() => setEditingTeamReg(payment)}
                               title="Add or update your squad members for this event"
                             >
-                              👥 Manage Squad / Add Participants
-                            </button>
+                              <span className="btn-icon-label">
+                                <Users size={14} /> Manage Squad
+                              </span>
+                            </ThemeButton>
                           )}
-                          <button
+                          <ThemeButton
                             type="button"
-                            className="btn-print-receipt"
+                            className="btn-dash-primary"
+                            borderRadius={10}
+                            height={38}
+                            showBlast={false}
                             onClick={() => setSelectedReceipt(payment)}
                           >
-                            📄 View / Print Slip
-                          </button>
+                            <span className="btn-icon-label" style={{ color: '#ffffff' }}>
+                              <FileText size={15} /> View / Print Slip
+                            </span>
+                          </ThemeButton>
                         </div>
                       </div>
 
@@ -1239,12 +1326,12 @@ export default function StudentDashboard() {
                           <span className="val">
                             {payment.createdAt
                               ? new Date(payment.createdAt).toLocaleDateString('en-IN', {
-                                  day: 'numeric',
-                                  month: 'short',
-                                  year: 'numeric',
-                                  hour: '2-digit',
-                                  minute: '2-digit'
-                                })
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })
                               : 'Confirmed'}
                           </span>
                         </div>
@@ -1259,13 +1346,18 @@ export default function StudentDashboard() {
                                 : `Participant Details (${teamParticipants.length})`}
                             </h5>
                             {isSports && (
-                              <button
+                              <ThemeButton
                                 type="button"
-                                className="btn-add-squad-inline"
+                                className="btn-dash-outline-sm"
+                                borderRadius={8}
+                                height={32}
+                                showBlast={false}
                                 onClick={() => setEditingTeamReg(payment)}
                               >
-                                ✎ Edit / Add Participants
-                              </button>
+                                <span className="btn-icon-label">
+                                  <UserPlus size={14} /> Edit / Add Participants
+                                </span>
+                              </ThemeButton>
                             )}
                           </div>
                           <div className="participants-chips-wrap">
@@ -1274,7 +1366,11 @@ export default function StudentDashboard() {
                                 key={idx}
                                 className={`participant-chip ${p.isLeader ? 'leader' : ''}`}
                               >
-                                {p.isLeader ? (isSports ? '👑 ' : '👤 ') : '👤 '}
+                                {p.isLeader ? (
+                                  <Crown size={13} className="participant-crown" />
+                                ) : (
+                                  <User size={13} className="participant-user" />
+                                )}
                                 <strong>{p.name}</strong>
                                 <span className="roll">({p.rollNumber || p.roll})</span>
                               </div>
@@ -1282,26 +1378,37 @@ export default function StudentDashboard() {
                           </div>
                         </div>
                       ) : (
-                        <div className="team-participants-box" style={{ background: '#f8fafc', border: '1px dashed #cbd5e1', padding: '0.9rem 1.15rem', borderRadius: '12px' }}>
+                        <div className="team-participants-box empty-participants-box">
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.6rem' }}>
-                            <span style={{ fontSize: '0.86rem', color: '#64748b' }}>
-                              {isSports
-                                ? '👥 Only Team Leader registered so far. You can add the rest of your squad participants now!'
-                                : '👤 Registered Participant (Solo Entry)'}
+                            <span className="team-solo-label" style={{ fontSize: '0.86rem', color: '#64748b' }}>
+                              {isSports ? (
+                                <>
+                                  <Users size={15} /> Only Team Leader registered so far. You can add the rest of your squad participants now!
+                                </>
+                              ) : (
+                                <>
+                                  <User size={15} /> Registered Participant (Solo Entry)
+                                </>
+                              )}
                             </span>
                             {isSports && (
-                              <button
+                              <ThemeButton
                                 type="button"
-                                className="btn-add-squad-inline"
+                                className="btn-dash-outline-sm"
+                                borderRadius={8}
+                                height={32}
+                                showBlast={false}
                                 onClick={() => setEditingTeamReg(payment)}
                               >
-                                + Add Team Participants
-                              </button>
+                                <span className="btn-icon-label">
+                                  <UserPlus size={14} /> Add Team Participants
+                                </span>
+                              </ThemeButton>
                             )}
                           </div>
                         </div>
                       )}
-                    </article>
+                    </LiquidGlass>
                   );
                 })}
               </div>
@@ -1315,8 +1422,11 @@ export default function StudentDashboard() {
             className="receipt-modal-backdrop"
             onClick={() => setSelectedReceipt(null)}
           >
-            <div
-              className="printable-slip-card"
+            <LiquidGlass
+              className="printable-slip-card slip-glass-card"
+              theme="light"
+              borderRadius={22}
+              enableShader={true}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="slip-header">
@@ -1324,7 +1434,9 @@ export default function StudentDashboard() {
                 <div className="slip-subtitle">
                   Aditya University Youth Cultural & Sports Festival
                 </div>
-                <span className="slip-status-badge">✓ OFFICIAL PAYMENT RECEIPT</span>
+                <span className="slip-status-badge">
+                  <CheckCircle2 size={13} /> OFFICIAL PAYMENT RECEIPT
+                </span>
               </div>
 
               <table className="slip-table">
@@ -1390,22 +1502,34 @@ export default function StudentDashboard() {
               </div>
 
               <div className="slip-actions">
-                <button
+                <ThemeButton
                   type="button"
-                  className="btn-slip-print"
+                  className="btn-dash-primary"
+                  borderRadius={10}
+                  height={42}
+                  showBlast={false}
                   onClick={() => window.print()}
+                  style={{ flex: 1 }}
                 >
-                  🖨️ Print Receipt
-                </button>
-                <button
+                  <span className="btn-icon-label" style={{ color: '#ffffff' }}>
+                    <Printer size={15} /> Print Receipt
+                  </span>
+                </ThemeButton>
+                <ThemeButton
                   type="button"
-                  className="btn-slip-close"
+                  className="btn-dash-secondary"
+                  borderRadius={10}
+                  height={42}
+                  showBlast={false}
                   onClick={() => setSelectedReceipt(null)}
+                  style={{ flex: 1 }}
                 >
-                  Close
-                </button>
+                  <span className="btn-icon-label">
+                    <X size={15} /> Close
+                  </span>
+                </ThemeButton>
               </div>
-            </div>
+            </LiquidGlass>
           </div>
         )}
 

@@ -25,6 +25,17 @@
   width: 100%;
 }
 
+.uni-footer.dashboard-footer-only-bottom {
+  background: transparent !important;
+  border-top: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.uni-footer.dashboard-footer-only-bottom .uni-footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
 .uni-footer-top {
   padding: 4.5rem 0 3.5rem;
   position: relative;
