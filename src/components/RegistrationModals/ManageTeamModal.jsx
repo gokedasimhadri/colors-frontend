@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   fetchStudentByRollNumber,
   fetchEventDepartments,
@@ -329,7 +330,7 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
     }
   };
 
-  return (
+  return createPortal(
     <div className="fest-modal-overlay" onClick={onClose}>
       <div
         className="fest-modal-card"
@@ -692,6 +693,7 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

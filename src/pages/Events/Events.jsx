@@ -1864,11 +1864,6 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                             </SplitColorText>
                           </strong>
                         </span>
-                        {currentStudent && (
-                          <span className="detail-logged-student-pill" title="Logged in as student">
-                            👤 {currentStudent.name} ({currentStudent.roll})
-                          </span>
-                        )}
                       </div>
 
                       <ThemeButton
@@ -2071,33 +2066,33 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
               })()}
             </>
           )}
-
-          {/* Student Account Registration & Login Modal */}
-          <StudentAuthModal
-            isOpen={authModalOpen}
-            onClose={() => setAuthModalOpen(false)}
-            onSuccess={handleAuthSuccess}
-            eventTitle={eventData?.eventName || eventData?.title}
-            eventData={eventData}
-          />
-
-          {/* Event Registration Modal for this particular competition */}
-          {currentStudent && (
-            <EventRegistrationModal
-              isOpen={regModalOpen}
-              eventData={eventData}
-              student={currentStudent}
-              onClose={() => setRegModalOpen(false)}
-              onChangeStudent={() => {
-                logoutStudent();
-                setCurrentStudent(null);
-                setRegModalOpen(false);
-                setAuthModalOpen(true);
-              }}
-            />
-          )}
         </div>
       </div>
+
+      {/* Student Account Registration & Login Modal */}
+      <StudentAuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onSuccess={handleAuthSuccess}
+        eventTitle={eventData?.eventName || eventData?.title}
+        eventData={eventData}
+      />
+
+      {/* Event Registration Modal for this particular competition */}
+      {currentStudent && (
+        <EventRegistrationModal
+          isOpen={regModalOpen}
+          eventData={eventData}
+          student={currentStudent}
+          onClose={() => setRegModalOpen(false)}
+          onChangeStudent={() => {
+            logoutStudent();
+            setCurrentStudent(null);
+            setRegModalOpen(false);
+            setAuthModalOpen(true);
+          }}
+        />
+      )}
     </div>
   );
 }

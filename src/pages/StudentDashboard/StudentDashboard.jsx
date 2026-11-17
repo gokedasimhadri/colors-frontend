@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import {
   getLoggedStudent,
@@ -1417,7 +1418,7 @@ export default function StudentDashboard() {
         )}
 
         {/* ── Printable Slip / Receipt Modal ── */}
-        {selectedReceipt && (
+        {selectedReceipt && createPortal(
           <div
             className="receipt-modal-backdrop"
             onClick={() => setSelectedReceipt(null)}
@@ -1530,7 +1531,8 @@ export default function StudentDashboard() {
                 </ThemeButton>
               </div>
             </LiquidGlass>
-          </div>
+          </div>,
+          document.body
         )}
 
         {/* ── Manage Team Participants Modal (Sports & Games only) ── */}
