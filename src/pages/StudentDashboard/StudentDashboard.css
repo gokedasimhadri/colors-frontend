@@ -4,12 +4,15 @@
    ========================================================================== */
 
 .student-dashboard-page {
-  min-height: calc(100vh - var(--navbar-height));
-  background-color: #f8fafc;
-  padding: 2.5rem 0 5rem;
+  min-height: 100vh;
+  background-color: #f0f8ff !important;
+  /* aliceblue */
+  background: #f0f8ff !important;
+  padding: calc(var(--navbar-height, 98px) + 2rem) 0 5rem;
   color: #0f172a;
   font-family: var(--font-body), sans-serif;
   position: relative;
+  box-sizing: border-box;
 }
 
 .dashboard-container {
@@ -24,10 +27,9 @@
 /* ── Hero Profile Banner ── */
 .dashboard-hero-card {
   position: relative;
-  background: radial-gradient(circle at 10% 20%, rgba(217, 119, 6, 0.08) 0%, transparent 45%),
-    radial-gradient(circle at 90% 80%, rgba(225, 29, 72, 0.06) 0%, transparent 45%),
-    #ffffff;
-  border: 1.5px solid #e2e8f0;
+  background-color: #ffffff;
+  background: #ffffff;
+  border: none;
   border-radius: 24px;
   padding: 2.25rem;
   box-shadow: 0 12px 32px rgba(15, 23, 42, 0.07);
@@ -38,16 +40,6 @@
   gap: 2rem;
   margin-bottom: 2rem;
   overflow: hidden;
-}
-
-.dashboard-hero-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #f59e0b 0%, #e11d48 40%, #0284c7 70%, #f59e0b 100%);
 }
 
 .hero-profile-identity {
@@ -63,10 +55,17 @@
   width: 96px;
   height: 96px;
   border-radius: 50%;
-  padding: 3px;
-  background: linear-gradient(135deg, #f59e0b, #e11d48);
-  box-shadow: 0 8px 20px rgba(217, 119, 6, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  background: transparent;
+  border: none !important;
+}
+
+.hero-avatar-rainbow-ring {
+  display: none !important;
 }
 
 .hero-avatar-img {
@@ -75,22 +74,26 @@
   border-radius: 50%;
   object-fit: cover;
   background: #ffffff;
-  border: 2px solid #ffffff;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .hero-avatar-fallback {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  background: #be9337 !important;
   color: #ffffff;
   font-size: 2.25rem;
   font-weight: 900;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #ffffff;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
   text-transform: uppercase;
+  user-select: none;
 }
 
 .hero-avatar-badge {
@@ -176,10 +179,7 @@
 }
 
 .hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  display: none !important;
 }
 
 .btn-hero-action {
@@ -196,16 +196,16 @@
 }
 
 .btn-hero-action.primary {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #ffffff;
+  background: #be9337 !important;
+  color: #ffffff !important;
   border: none;
-  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
+  box-shadow: 0 4px 14px rgba(190, 147, 55, 0.35);
 }
 
 .btn-hero-action.primary:hover {
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #d97706, #b45309);
-  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35);
+  background: #a8802d !important;
+  box-shadow: 0 6px 20px rgba(190, 147, 55, 0.45);
 }
 
 .btn-hero-action.secondary {
@@ -242,19 +242,18 @@
 
 .metric-card {
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  border: none;
   border-radius: 18px;
   padding: 1.35rem 1.5rem;
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .metric-card:hover {
   transform: translateY(-2px);
-  border-color: #d97706;
   box-shadow: 0 10px 26px rgba(217, 119, 6, 0.14);
 }
 
@@ -352,10 +351,10 @@
 }
 
 .dashboard-tabs-nav .tab-btn.active {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #ffffff;
+  background: #be9337 !important;
+  color: #ffffff !important;
   font-weight: 800;
-  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
+  box-shadow: 0 4px 14px rgba(190, 147, 55, 0.35);
 }
 
 .dashboard-tabs-nav .tab-badge {
@@ -405,7 +404,7 @@
 
 .profile-card {
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  border: none;
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 8px 26px rgba(15, 23, 42, 0.05);
@@ -555,8 +554,8 @@
 }
 
 .btn-save-profile {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #ffffff;
+  background: #be9337 !important;
+  color: #ffffff !important;
   border: none;
   padding: 0.75rem 1.6rem;
   border-radius: 12px;
@@ -564,13 +563,19 @@
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
+  box-shadow: 0 4px 14px rgba(190, 147, 55, 0.35);
+}
+
+.btn-save-profile:hover {
+  background: #be9337 !important;
+  box-shadow: 0 4px 14px rgba(190, 147, 55, 0.35) !important;
+  transform: none !important;
 }
 
 .btn-save-profile:hover:not(:disabled) {
-  transform: translateY(-2px);
-  background: linear-gradient(135deg, #d97706, #b45309);
-  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35);
+  transform: none !important;
+  background: #be9337 !important;
+  box-shadow: 0 4px 14px rgba(190, 147, 55, 0.35) !important;
 }
 
 .btn-save-profile:disabled {
@@ -581,8 +586,9 @@
 /* ── Digital Fest Delegate ID Pass ── */
 .fest-pass-card {
   position: relative;
-  background: linear-gradient(145deg, #ffffff 0%, #fffbeb 100%);
-  border: 1.5px solid #fcd34d;
+  background-color: #ffffff;
+  background: #ffffff;
+  border: none;
   border-radius: 22px;
   padding: 2rem;
   color: #0f172a;
@@ -654,6 +660,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.pass-photo-frame .hero-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  border: none;
 }
 
 .pass-meta {
@@ -756,7 +769,7 @@
 
 .password-card {
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  border: none;
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 8px 26px rgba(15, 23, 42, 0.05);
@@ -793,7 +806,7 @@
 
 .security-tips-card {
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  border: none;
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 8px 26px rgba(15, 23, 42, 0.05);
@@ -841,15 +854,14 @@
 
 .event-receipt-card {
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  border: none;
   border-radius: 20px;
   padding: 1.8rem;
   box-shadow: 0 6px 22px rgba(15, 23, 42, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .event-receipt-card:hover {
-  border-color: #d97706;
   transform: translateY(-2px);
   box-shadow: 0 12px 30px rgba(217, 119, 6, 0.12);
 }
@@ -1042,8 +1054,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #ffffff;
+  background: #be9337 !important;
+  color: #ffffff !important;
   border: none;
   padding: 0.6rem 1.25rem;
   border-radius: 10px;
@@ -1051,12 +1063,12 @@
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(217, 119, 6, 0.25);
+  box-shadow: 0 4px 14px rgba(190, 147, 55, 0.35);
 }
 
 .btn-manage-team:hover {
-  background: linear-gradient(135deg, #d97706, #b45309);
-  box-shadow: 0 6px 18px rgba(217, 119, 6, 0.35);
+  background: #a8802d !important;
+  box-shadow: 0 6px 18px rgba(190, 147, 55, 0.45);
   transform: translateY(-1px);
 }
 
@@ -1157,7 +1169,7 @@
 
 .printable-slip-card {
   background: #ffffff;
-  border: 1.5px solid #e2e8f0;
+  border: none;
   border-radius: 22px;
   width: 100%;
   max-width: 580px;
@@ -1248,9 +1260,15 @@
 }
 
 .btn-slip-print {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #ffffff;
+  background: #be9337 !important;
+  color: #ffffff !important;
   border: none;
+  box-shadow: 0 4px 14px rgba(190, 147, 55, 0.35);
+}
+
+.btn-slip-print:hover {
+  background: #a8802d !important;
+  box-shadow: 0 6px 18px rgba(190, 147, 55, 0.45);
 }
 
 .btn-slip-close {
@@ -1298,6 +1316,7 @@
 /* ── Mobile View Container Spacing (16px Left & Right) ── */
 @media (max-width: 900px) {
   .student-dashboard-page {
+    padding-top: calc(var(--navbar-height, 72px) + 1.5rem) !important;
     padding-left: 16px !important;
     padding-right: 16px !important;
     box-sizing: border-box !important;
@@ -1307,5 +1326,867 @@
     padding-left: 0 !important;
     padding-right: 0 !important;
     box-sizing: border-box !important;
+  }
+}
+
+/* ==========================================================================
+   COLOURS 2027 – Theme Components Integration (LiquidGlass, ThemeTab, ThemeButton)
+   ========================================================================== */
+
+/* ── Dashboard Cards & Liquid Glass Overrides (Solid White, Truly Borderless on Alice Blue Canvas) ── */
+.student-dashboard-page .liquid-glass-card,
+.student-dashboard-page .dashboard-hero-card,
+.student-dashboard-page .metric-card,
+.student-dashboard-page .profile-card,
+.student-dashboard-page .fest-pass-card,
+.student-dashboard-page .password-card,
+.student-dashboard-page .security-tips-card,
+.student-dashboard-page .event-receipt-card,
+.student-dashboard-page .empty-dash-card,
+.student-dashboard-page .printable-slip-card {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.06) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.student-dashboard-page .liquid-glass-card:hover,
+.student-dashboard-page .dashboard-hero-card:hover,
+.student-dashboard-page .metric-card:hover,
+.student-dashboard-page .profile-card:hover,
+.student-dashboard-page .event-receipt-card:hover {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 16px 42px rgba(217, 119, 6, 0.12) !important;
+}
+
+/* ── Completely Eliminate All Liquid Glass Chamfer & Inset-Bevel Pseudo-Elements ── */
+.student-dashboard-page .liquid-glass-card::before,
+.student-dashboard-page .liquid-glass-card::after,
+.student-dashboard-page .dashboard-hero-card::before,
+.student-dashboard-page .dashboard-hero-card::after,
+.student-dashboard-page .metric-card::before,
+.student-dashboard-page .metric-card::after,
+.student-dashboard-page .profile-card::before,
+.student-dashboard-page .profile-card::after,
+.student-dashboard-page .fest-pass-card::before,
+.student-dashboard-page .fest-pass-card::after,
+.student-dashboard-page .event-receipt-card::before,
+.student-dashboard-page .event-receipt-card::after {
+  display: none !important;
+  content: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ── Hero Profile Card Liquid Glass Layout ── */
+.dashboard-hero-card.liquid-glass-card {
+  position: relative;
+  padding: 2.25rem;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  border-radius: 24px !important;
+}
+
+.dashboard-hero-card .lg-card-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  width: 100%;
+}
+
+/* ── Hero Avatar Rainbow Rotating Ring ── */
+.hero-avatar-wrapper {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  padding: 3.5px;
+  background: conic-gradient(from 0deg,
+      #8b00ff,
+      #4b0082,
+      #0066ff,
+      #00c853,
+      #ffd600,
+      #ff6d00,
+      #ff1744,
+      #8b00ff);
+  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.22);
+  flex-shrink: 0;
+  animation: heroAvatarRainbowRotate 8s linear infinite;
+}
+
+@keyframes heroAvatarRainbowRotate {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.hero-avatar-rainbow-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ── Metrics Stats Bar Liquid Glass ── */
+.metric-card.liquid-glass-card {
+  padding: 1.25rem 1.4rem;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+.metric-card.liquid-glass-card:hover {
+  transform: translateY(-2px);
+  border-color: #d97706 !important;
+  box-shadow: 0 10px 28px rgba(217, 119, 6, 0.14), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+}
+
+.metric-card .lg-card-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* ── ThemeTab Navigation Bar ── */
+.dashboard-themetab-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.dashboard-themetab-bar {
+  max-width: 100%;
+}
+
+.dashboard-themetab-bar .theme-tab-container {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06) !important;
+  padding: 6px !important;
+  border-radius: 9999px !important;
+}
+
+.dashboard-themetab-bar .theme-tab-item {
+  border-radius: 9999px !important;
+  padding: 8px 22px !important;
+  transition: all 0.22s ease !important;
+}
+
+/* ── ThemeTab Active State (#be9337 Background) ── */
+.dashboard-themetab-bar .theme-tab-item.active,
+.dashboard-themetab-bar .theme-tab-mobile-active-item {
+  background-color: #be9337 !important;
+  background: #be9337 !important;
+  border: 1px solid #be9337 !important;
+  box-shadow: 0 4px 14px rgba(190, 147, 55, 0.35) !important;
+  color: #ffffff !important;
+  border-radius: 9999px !important;
+}
+
+.dashboard-themetab-bar .theme-tab-item.active .theme-tab-label.active,
+.dashboard-themetab-bar .theme-tab-item.active .theme-tab-label,
+.dashboard-themetab-bar .theme-tab-item.active .dash-tab-pill-content,
+.dashboard-themetab-bar .theme-tab-item.active .dash-tab-title {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  color: #ffffff !important;
+  animation: none !important;
+  font-weight: 700 !important;
+}
+
+.dashboard-themetab-bar .theme-tab-item.active .dash-tab-pill-content .split-color-text,
+.dashboard-themetab-bar .theme-tab-item.active .dash-tab-pill-content .split-color-layer {
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  color: #ffffff !important;
+  mix-blend-mode: normal !important;
+}
+
+.dashboard-themetab-bar .theme-tab-item.active .dash-tab-counter-badge {
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+}
+
+/* Inactive Tab Styling */
+.dashboard-themetab-bar .theme-tab-item:not(.active) {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: #0f172a !important;
+}
+
+.dashboard-themetab-bar .theme-tab-item:not(.active):hover {
+  background: rgba(190, 147, 55, 0.08) !important;
+  border-color: transparent !important;
+}
+
+.dash-tab-pill-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+}
+
+.dash-tab-title {
+  color: inherit;
+  font-weight: 700;
+}
+
+.dash-tab-counter-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 158, 11, 0.18);
+  color: #b45309;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  line-height: 1;
+}
+
+/* ── Lucide Icons Dashboard Enhancements ── */
+.tab-lucide-icon {
+  flex-shrink: 0;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.dashboard-themetab-bar .theme-tab-item.active .tab-lucide-icon {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.dashboard-themetab-bar .theme-tab-item:not(.active) .tab-lucide-icon {
+  color: #be9337 !important;
+}
+
+.hero-icon {
+  flex-shrink: 0;
+  color: #be9337;
+  vertical-align: middle;
+}
+
+.hero-avatar-badge svg {
+  display: block;
+}
+
+.metric-icon-box svg {
+  display: block;
+  stroke-width: 2.2;
+}
+
+.alert-lucide-icon {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.btn-icon-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.tips-header-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.security-tips-icon {
+  color: #be9337;
+  flex-shrink: 0;
+}
+
+.participant-crown {
+  color: #f59e0b;
+  margin-right: 4px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.participant-user {
+  color: #64748b;
+  margin-right: 4px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.team-solo-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.receipt-status-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* ── ThemeButton Dashboard Presets (#be9337 Background - No Hover Shift) ── */
+.btn-dash-primary,
+.student-dashboard-page .btn-dash-primary,
+.student-dashboard-page .btn-hero-action.primary,
+.student-dashboard-page .btn-primary-dash,
+.student-dashboard-page .btn-save-dash,
+.student-dashboard-page .btn-slip-view,
+.student-dashboard-page .btn-slip-print,
+.student-dashboard-page .btn-save-profile {
+  --tb-bg: #be9337 !important;
+  --tb-color: #ffffff !important;
+  --tb-border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  --tb-shadow: 0 4px 16px rgba(190, 147, 55, 0.35) !important;
+  background-color: #be9337 !important;
+  background: #be9337 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 16px rgba(190, 147, 55, 0.35) !important;
+}
+
+.btn-dash-primary:hover,
+.student-dashboard-page .btn-dash-primary:hover,
+.student-dashboard-page .btn-hero-action.primary:hover,
+.student-dashboard-page .btn-primary-dash:hover,
+.student-dashboard-page .btn-save-dash:hover,
+.student-dashboard-page .btn-slip-view:hover,
+.student-dashboard-page .btn-slip-print:hover,
+.student-dashboard-page .btn-save-profile:hover {
+  --tb-bg: #be9337 !important;
+  --tb-color: #ffffff !important;
+  --tb-shadow: 0 4px 16px rgba(190, 147, 55, 0.35) !important;
+  background-color: #be9337 !important;
+  background: #be9337 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(190, 147, 55, 0.35) !important;
+  transform: none !important;
+}
+
+/* ==========================================================================
+   COLOURS 2027 – Disable All Hover Effects on User Dashboard Buttons
+   ========================================================================== */
+.student-dashboard-page .theme-glass-btn:hover,
+.student-dashboard-page .theme-glass-btn:active,
+.student-dashboard-page .theme-glass-btn:focus,
+.student-dashboard-page button:hover,
+.student-dashboard-page a.theme-glass-btn:hover {
+  transform: none !important;
+  animation: none !important;
+}
+
+/* Strictly Kill Rainbow VIBGYOR Text / Gradient Hover Animation */
+.student-dashboard-page .theme-glass-btn:hover .theme-glass-btn-content,
+.student-dashboard-page .theme-glass-btn:active .theme-glass-btn-content,
+.student-dashboard-page .theme-glass-btn:hover .split-color-text,
+.student-dashboard-page .theme-glass-btn.active .split-color-text,
+.student-dashboard-page .theme-glass-btn:not(:has(.split-color-text)):hover .theme-glass-btn-content,
+.student-dashboard-page .theme-glass-btn:not(:has(.split-color-text)):active .theme-glass-btn-content,
+.student-dashboard-page .theme-glass-btn:hover .btn-icon-label,
+.student-dashboard-page .theme-glass-btn:hover span,
+.student-dashboard-page .theme-glass-btn:hover * {
+  background-image: none !important;
+  background: transparent !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: initial !important;
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Primary Buttons: Force Stable White Text on Hover */
+.student-dashboard-page .btn-dash-primary:hover *,
+.student-dashboard-page .btn-dash-primary:active *,
+.student-dashboard-page .btn-dash-primary:hover span,
+.student-dashboard-page .btn-dash-primary:hover .btn-icon-label,
+.student-dashboard-page .btn-dash-primary:hover svg {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background-image: none !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Strictly Disable Blast PNG image on all buttons in User Dashboard (Normal, Hover, Active) */
+.student-dashboard-page .theme-glass-btn-blast,
+.student-dashboard-page .theme-glass-btn:hover .theme-glass-btn-blast,
+.student-dashboard-page .theme-glass-btn:active .theme-glass-btn-blast,
+.student-dashboard-page .theme-glass-btn:focus .theme-glass-btn-blast {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: none !important;
+}
+
+/* Secondary & Outline Buttons: Force No Hover Transform / Animation */
+.student-dashboard-page .btn-dash-secondary:hover,
+.student-dashboard-page .btn-dash-secondary:active,
+.student-dashboard-page .btn-dash-outline:hover,
+.student-dashboard-page .btn-dash-outline:active,
+.student-dashboard-page .btn-dash-outline-sm:hover,
+.student-dashboard-page .btn-dash-outline-sm:active {
+  transform: none !important;
+  animation: none !important;
+}
+
+/* ==========================================================================
+   COLOURS 2027 – MUI Outlined Floating Label Form Fields for Student Dashboard
+   ========================================================================== */
+.student-dashboard-page .mui-form-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.student-dashboard-page .mui-form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.student-dashboard-page .mui-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.student-dashboard-page .mui-outlined-input {
+  width: 100%;
+  height: 52px;
+  padding: 14px 16px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #0f172a;
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 12px !important;
+  outline: none !important;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+.student-dashboard-page .mui-outlined-input:hover:not(:disabled):not(:focus) {
+  border-color: #94a3b8 !important;
+}
+
+.student-dashboard-page .mui-form-field.is-focused .mui-outlined-input,
+.student-dashboard-page .mui-outlined-input:focus {
+  border-color: #be9337 !important;
+  box-shadow: 0 0 0 1px #be9337, 0 3px 12px rgba(190, 147, 55, 0.16) !important;
+}
+
+.student-dashboard-page .mui-outlined-input:disabled {
+  background: #f8fafc !important;
+  color: #64748b !important;
+  border-color: #e2e8f0 !important;
+  cursor: not-allowed;
+}
+
+.student-dashboard-page .mui-outlined-input.has-password-toggle {
+  padding-right: 48px !important;
+}
+
+.student-dashboard-page select.mui-outlined-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  background-size: 16px !important;
+  padding-right: 40px !important;
+  cursor: pointer;
+}
+
+.student-dashboard-page .mui-floating-label {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #64748b;
+  pointer-events: none;
+  padding: 0 6px;
+  background: transparent;
+  transition: transform 0.18s cubic-bezier(0, 0, 0.2, 1), font-size 0.18s cubic-bezier(0, 0, 0.2, 1), color 0.18s cubic-bezier(0, 0, 0.2, 1), top 0.18s cubic-bezier(0, 0, 0.2, 1);
+  z-index: 2;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.student-dashboard-page .mui-form-field.is-floating .mui-floating-label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  transform-origin: top left;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #be9337;
+  background: #ffffff;
+  padding: 0 6px;
+}
+
+.student-dashboard-page .mui-form-field.is-focused.is-floating .mui-floating-label {
+  color: #be9337 !important;
+}
+
+.student-dashboard-page .mui-asterisk {
+  color: #ef4444;
+  margin-left: 3px;
+  font-weight: 700;
+  font-size: 0.95em;
+}
+
+.student-dashboard-page .mui-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+  z-index: 3;
+}
+
+.student-dashboard-page .mui-password-toggle:hover {
+  color: #be9337;
+  background: rgba(190, 147, 55, 0.08);
+}
+
+.student-dashboard-page .mui-form-hint {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-top: 4px;
+  padding-left: 4px;
+}
+
+.student-dashboard-page .mui-form-error {
+  font-size: 0.78rem;
+  color: #ef4444;
+  margin-top: 4px;
+  padding-left: 4px;
+  font-weight: 500;
+}
+
+.btn-dash-secondary {
+  --tb-bg: rgba(255, 255, 255, 0.8) !important;
+  --tb-color: #334155 !important;
+  --tb-border: 1.5px solid #cbd5e1 !important;
+  --tb-shadow: 0 4px 12px rgba(15, 23, 42, 0.05) !important;
+  font-weight: 600 !important;
+}
+
+.btn-dash-secondary:hover {
+  --tb-bg: #fffbeb !important;
+  --tb-color: #b45309 !important;
+  --tb-border: 1.5px solid #fcd34d !important;
+}
+
+.btn-dash-danger {
+  --tb-bg: rgba(255, 241, 242, 0.88) !important;
+  --tb-color: #be123c !important;
+  --tb-border: 1.5px solid #fecdd3 !important;
+  --tb-shadow: 0 4px 12px rgba(225, 29, 72, 0.12) !important;
+  font-weight: 600 !important;
+}
+
+.btn-dash-danger:hover {
+  --tb-bg: #e11d48 !important;
+  --tb-color: #ffffff !important;
+  --tb-border: 1.5px solid #e11d48 !important;
+}
+
+.btn-dash-outline {
+  --tb-bg: rgba(255, 251, 235, 0.85) !important;
+  --tb-color: #92400e !important;
+  --tb-border: 1.5px solid #fcd34d !important;
+  --tb-shadow: 0 2px 8px rgba(217, 119, 6, 0.10) !important;
+  font-weight: 700 !important;
+}
+
+.btn-dash-outline:hover {
+  --tb-bg: #fef3c7 !important;
+  --tb-color: #78350f !important;
+  --tb-border: 1.5px solid #f59e0b !important;
+}
+
+.btn-dash-outline-sm {
+  --tb-bg: rgba(255, 255, 255, 0.85) !important;
+  --tb-color: #b45309 !important;
+  --tb-border: 1px solid #fcd34d !important;
+  font-size: 0.8rem !important;
+  padding: 0.25rem 0.75rem !important;
+  font-weight: 700 !important;
+}
+
+/* ── Content Panels & Event Card Inner Layouts ── */
+.profile-card.liquid-glass-card,
+.fest-pass-card.liquid-glass-card,
+.password-card.liquid-glass-card,
+.security-tips-card.liquid-glass-card {
+  padding: 2rem;
+}
+
+.profile-card .lg-card-content,
+.fest-pass-card .lg-card-content,
+.password-card .lg-card-content,
+.security-tips-card .lg-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.event-receipt-card.liquid-glass-card {
+  padding: 1.75rem 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.event-receipt-card .lg-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.event-header-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.empty-participants-box {
+  background: rgba(248, 250, 252, 0.75) !important;
+  border: 1px dashed #cbd5e1 !important;
+  padding: 0.9rem 1.15rem !important;
+  border-radius: 12px !important;
+}
+
+.dash-empty-actions-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.printable-slip-card.liquid-glass-card {
+  padding: 2.25rem;
+  max-width: 580px;
+  width: 100%;
+}
+
+.printable-slip-card .lg-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.empty-dash-card.liquid-glass-card {
+  padding: 3.5rem 2rem;
+  text-align: center;
+}
+
+.empty-dash-card .lg-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+/* ── Full Responsive Engine ── */
+@media (max-width: 1024px) {
+  .dashboard-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .event-details-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .student-dashboard-page {
+    padding-top: calc(var(--navbar-height, 72px) + 1.25rem) !important;
+    padding-bottom: 4rem !important;
+  }
+
+  .dashboard-hero-card.liquid-glass-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .dashboard-hero-card .lg-card-content {
+    gap: 1.5rem;
+  }
+
+  .hero-profile-identity {
+    min-width: 100%;
+    gap: 1.25rem;
+  }
+
+  .hero-avatar-wrapper {
+    width: 78px;
+    height: 78px;
+  }
+
+  .hero-student-name {
+    font-size: 1.5rem;
+  }
+
+  .hero-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .profile-panel-grid,
+  .security-panel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .event-header-actions-row {
+    width: 100%;
+  }
+
+  .event-header-actions-row>* {
+    flex: 1;
+  }
+
+  .event-details-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .student-dashboard-page {
+    padding-top: calc(var(--navbar-height, 66px) + 1rem) !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .dashboard-hero-card.liquid-glass-card {
+    padding: 1.25rem 1rem;
+    border-radius: 18px !important;
+  }
+
+  .hero-profile-identity {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-info-group {
+    align-items: center;
+  }
+
+  .hero-title-row {
+    justify-content: center;
+  }
+
+  .hero-contact-chips {
+    justify-content: center;
+  }
+
+  .hero-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .metric-card.liquid-glass-card {
+    padding: 1rem 1.15rem;
+  }
+
+  .event-receipt-card.liquid-glass-card {
+    padding: 1.25rem 1rem;
+    border-radius: 16px !important;
+  }
+
+  .event-details-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .profile-card.liquid-glass-card,
+  .fest-pass-card.liquid-glass-card,
+  .password-card.liquid-glass-card,
+  .security-tips-card.liquid-glass-card {
+    padding: 1.35rem 1rem;
+    border-radius: 16px !important;
+  }
+
+  .profile-info-grid,
+  .profile-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions-bar {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions-bar>* {
+    width: 100%;
+  }
+
+  .printable-slip-card.liquid-glass-card {
+    padding: 1.25rem 1rem;
+    border-radius: 16px !important;
+  }
+
+  .slip-actions {
+    flex-direction: column-reverse;
   }
 }

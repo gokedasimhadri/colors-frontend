@@ -10,15 +10,23 @@ import {
   FileText,
   Award,
   Phone,
+  LayoutDashboard,
+  LogOut,
+  ChevronRight,
 } from 'lucide-react';
-import { getLoggedStudent } from '../../services/api';
+import { getLoggedStudent, logoutStudent } from '../../services/api';
+import LiquidGlass from '../ThemeComponents/LiquidGlass/LiquidGlass';
+import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
 import './MobileBottomBar.css';
 
 export default function MobileBottomBar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [profilePopoverOpen, setProfilePopoverOpen] = useState(false);
   const [student, setStudent] = useState(getLoggedStudent());
+
+  const studentInitial = student?.name ? student.name.charAt(0).toUpperCase() : 'S';
 
   useEffect(() => {
     const handleAuth = () => setStudent(getLoggedStudent());
@@ -30,9 +38,10 @@ export default function MobileBottomBar() {
     };
   }, []);
 
-  // Close drawer on page route changes
+  // Close drawer and popover on page route changes
   useEffect(() => {
     setDrawerOpen(false);
+    setProfilePopoverOpen(false);
   }, [location.pathname]);
 
   const handleAccountClick = () => {
@@ -43,9 +52,7 @@ export default function MobileBottomBar() {
         new CustomEvent('fest-open-auth-modal', { detail: { mode: 'login' } })
       );
     } else {
-      if (location.pathname !== '/dashboard') {
-        navigate('/dashboard');
-      }
+      setProfilePopoverOpen((prev) => !prev);
     }
   };
 
@@ -189,7 +196,10 @@ export default function MobileBottomBar() {
         <button
           type="button"
           className={`bottom-tab ${isMoreActive ? 'active' : ''}`}
-          onClick={() => setDrawerOpen(!drawerOpen)}
+          onClick={() => {
+            setProfilePopoverOpen(false);
+            setDrawerOpen(!drawerOpen);
+          }}
           aria-label="Toggle All Festival Menus"
           aria-expanded={drawerOpen}
         >
@@ -202,18 +212,135 @@ export default function MobileBottomBar() {
         {/* Tab 5: Account / Login */}
         <button
           type="button"
-          className={`bottom-tab ${location.pathname === '/dashboard' && !drawerOpen ? 'active' : ''}`}
+          className={`bottom-tab ${profilePopoverOpen || (location.pathname === '/dashboard' && !drawerOpen) ? 'active' : ''}`}
           onClick={handleAccountClick}
-          aria-label={student ? 'Student Dashboard' : 'Student Login'}
+          aria-label={student ? 'Student Profile Menu' : 'Student Login'}
+          aria-expanded={profilePopoverOpen}
         >
-          <span className="bottom-tab-icon">
-            <User size={20} strokeWidth={location.pathname === '/dashboard' && !drawerOpen ? 2.2 : 1.8} />
-          </span>
+          {student ? (
+            <div className="mobile-tab-avatar-ring">
+              <div className="mobile-tab-avatar-glass">
+                <span className="mobile-tab-avatar-initial">{studentInitial}</span>
+              </div>
+            </div>
+          ) : (
+            <span className="bottom-tab-icon">
+              <User size={20} strokeWidth={1.8} />
+            </span>
+          )}
           <span className="bottom-tab-label">
-            {student ? (student.name ? student.name.split(' ')[0] : 'Account') : 'Login'}
+            {student ? (student.name ? student.name.split(' ')[0] : 'Profile') : 'Login'}
           </span>
         </button>
       </nav>
+
+      {/* ── Mobile Profile Popover Sheet (Liquid Glass Floating Above Tab 5) ── */}
+      {profilePopoverOpen && student && (
+        <>
+          <div
+            className="mobile-popover-backdrop"
+            onClick={() => setProfilePopoverOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="mobile-popover-container">
+            <LiquidGlass
+              as="div"
+              className="profile-popover-card mobile-popover-card"
+              role="dialog"
+              aria-label="User Profile Menu"
+              borderRadius={16}
+              enableShader={false}
+            >
+              {/* 1. Profile Header */}
+              <div className="profile-popover-header">
+                <div className="profile-popover-avatar-wrap">
+                  <div className="profile-popover-avatar">
+                    <span className="profile-popover-avatar-initial">
+                      {studentInitial}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="profile-popover-meta">
+                  <div className="profile-popover-name" title={student?.name || 'User Account'}>
+                    <SplitColorText leftColor="#0f172a" rightColor="#ffffff">
+                      {student?.name || 'User Account'}
+                    </SplitColorText>
+                  </div>
+                  <div className="profile-popover-role-row">
+                    <span className="profile-popover-role-badge">
+                      <SplitColorText leftColor="#334155" rightColor="#f8fafc">
+                        {student?.role || (student?.rollNumber ? 'Student' : 'User')}
+                      </SplitColorText>
+                    </span>
+                  </div>
+                  <div
+                    className="profile-popover-email"
+                    title={student?.email || (student?.rollNumber ? `${student.rollNumber.toLowerCase()}@adityauniversity.in` : 'user@adityauniversity.in')}
+                  >
+                    <SplitColorText leftColor="#475569" rightColor="#cbd5e1">
+                      {student?.email || (student?.rollNumber ? `${student.rollNumber.toLowerCase()}@adityauniversity.in` : 'user@adityauniversity.in')}
+                    </SplitColorText>
+                  </div>
+                  <div
+                    className="profile-popover-org"
+                    title={student?.college || student?.department || (student?.rollNumber ? `ID: ${student.rollNumber}` : 'Aditya University')}
+                  >
+                    <SplitColorText leftColor="#64748b" rightColor="#94a3b8">
+                      {student?.college || student?.department || (student?.rollNumber ? `ID: ${student.rollNumber}` : 'Aditya University')}
+                    </SplitColorText>
+                  </div>
+                </div>
+              </div>
+
+              <div className="profile-popover-divider" />
+
+              {/* 2. Menu Items (Dashboard) */}
+              <div className="profile-popover-nav">
+                <Link
+                  to="/dashboard?tab=events"
+                  className="profile-popover-nav-item"
+                  onClick={() => setProfilePopoverOpen(false)}
+                >
+                  <span className="popover-nav-icon">
+                    <LayoutDashboard size={16} strokeWidth={1.8} />
+                  </span>
+                  <span className="popover-nav-title">
+                    <SplitColorText leftColor="#0f172a" rightColor="#ffffff">
+                      My Dashboard
+                    </SplitColorText>
+                  </span>
+                  <ChevronRight size={14} className="popover-nav-chevron" />
+                </Link>
+              </div>
+
+              <div className="profile-popover-divider" />
+
+              {/* 3. Logout Section */}
+              <div className="profile-popover-footer">
+                <button
+                  type="button"
+                  onClick={() => {
+                    logoutStudent();
+                    setStudent(null);
+                    setProfilePopoverOpen(false);
+                    if (location.pathname === '/dashboard') {
+                      navigate('/');
+                    }
+                  }}
+                  className="profile-popover-logout-btn"
+                  title="Sign out of account"
+                >
+                  <LogOut size={15} strokeWidth={2} />
+                  <SplitColorText leftColor="#dc2626" rightColor="#fca5a5">
+                    Logout
+                  </SplitColorText>
+                </button>
+              </div>
+            </LiquidGlass>
+          </div>
+        </>
+      )}
     </>
   );
 }

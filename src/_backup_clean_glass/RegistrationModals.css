@@ -20,8 +20,13 @@
 }
 
 @keyframes festFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .fest-modal-card {
@@ -46,9 +51,82 @@
   animation: festScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.fest-modal-card.liquid-glass-card {
-  background: rgba(255, 255, 255, 0.90) !important;
+/* ─────────────────────────────────────────────────────────────
+   Liquid Glass Modal Architecture (Apple-Style Optical Glass)
+   Translucent multi-layer frosted refraction, physical chamfer
+   3D specular bevel, and Three.js caustics compatibility.
+   ───────────────────────────────────────────────────────────── */
+
+.fest-modal-card.liquid-glass-card,
+.fest-modal-card.fest-auth-liquid-modal {
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.28) 0%,
+      rgba(255, 255, 255, 0.12) 50%,
+      rgba(255, 255, 255, 0.22) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
   border-radius: 24px !important;
+  box-shadow:
+    0 30px 80px -15px rgba(0, 0, 0, 0.48),
+    0 0 0 1px rgba(255, 255, 255, 0.35),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.85),
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.12) !important;
+  -webkit-backdrop-filter: blur(36px) saturate(210%) brightness(1.08) !important;
+  backdrop-filter: blur(36px) saturate(210%) brightness(1.08) !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  padding: 0 !important;
+  width: 92% !important;
+  max-width: 440px !important;
+  margin: 0 auto !important;
+  transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease !important;
+}
+
+.fest-modal-card.fest-auth-liquid-modal.auth-mode-login {
+  max-width: 440px !important;
+}
+
+.fest-modal-card.fest-auth-liquid-modal.auth-mode-register {
+  max-width: 520px !important;
+}
+
+.fest-modal-card.fest-auth-liquid-modal.auth-mode-confirmed {
+  max-width: 580px !important;
+}
+
+/* Glass 3D Beveled Physical Chamfer Edge for 24px radius */
+.fest-modal-card.fest-auth-liquid-modal::before,
+.fest-modal-card.liquid-glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px !important;
+  padding: 1.5px !important;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.85) 0%,
+      rgba(255, 255, 255, 0.25) 35%,
+      rgba(255, 255, 255, 0.05) 65%,
+      rgba(0, 0, 0, 0.22) 100%) !important;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Inner Bevel Refraction Lip for Glass Thickness */
+.fest-modal-card.fest-auth-liquid-modal::after,
+.fest-modal-card.liquid-glass-card::after {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  border-radius: calc(24px - 1.5px) !important;
+  box-shadow:
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.85),
+    inset 1px 0 1.5px rgba(255, 255, 255, 0.45),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.15) !important;
+  pointer-events: none;
+  z-index: 3;
 }
 
 .fest-modal-card .lg-card-content {
@@ -71,6 +149,7 @@
     transform: scale(0.95) translateY(10px);
     opacity: 0;
   }
+
   to {
     transform: scale(1) translateY(0);
     opacity: 1;
@@ -128,13 +207,17 @@
   letter-spacing: 0.02em;
 }
 
-/* Centered Header for Student Auth Modal */
+/* Centered Header for Student Auth Modal on Liquid Glass */
 .fest-auth-liquid-modal .fest-modal-header {
-  padding: 1.35rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  padding: 1.35rem 1.65rem 1.15rem 1.65rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
 }
 
 .fest-auth-liquid-modal .fest-modal-header-banner {
@@ -156,13 +239,41 @@
 .fest-auth-liquid-modal .fest-modal-title .split-color-text {
   display: inline-block;
   text-align: center;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
 
 .fest-auth-liquid-modal .fest-modal-close-btn {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  color: #0f172a !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.fest-auth-liquid-modal .fest-modal-close-btn:hover,
+.fest-auth-liquid-modal .fest-modal-close-btn:focus {
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  background: #e11d48 !important;
+  border-color: #e11d48 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.4) !important;
 }
 
 .fest-modal-subtitle {
@@ -196,10 +307,99 @@
   background: #e11d48 !important;
   color: #ffffff !important;
   border-color: #e11d48 !important;
-  transform: rotate(90deg);
 }
 
-/* Modal Tabs */
+/* Modal Tabs (Integrated ThemeTab) */
+.fest-modal-tabs-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 18px !important;
+  background: rgba(15, 23, 42, 0.02) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* Tabs inside Liquid Glass Modal */
+.fest-auth-liquid-modal .fest-modal-tabs-wrapper {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  padding: 10px 1.5rem !important;
+}
+
+.fest-auth-themetab {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.fest-auth-themetab .theme-tab-outer-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+  justify-content: center !important;
+}
+
+.fest-auth-themetab .theme-tab-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 46px !important;
+  justify-content: center !important;
+}
+
+.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-container {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.7),
+    0 4px 16px rgba(0, 0, 0, 0.06) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-active-indicator {
+  background: rgba(255, 255, 255, 0.88) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12), inset 0 1px 1px #ffffff !important;
+}
+
+.fest-auth-themetab .theme-tab-desktop-list {
+  display: flex !important;
+  width: 100% !important;
+  gap: 4px !important;
+}
+
+.fest-auth-themetab .theme-tab-mobile-stepper {
+  display: none !important;
+}
+
+.fest-auth-themetab .theme-tab-item {
+  flex: 1 !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 7px 16px !important;
+  font-size: 0.84rem !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+}
+
+/* Clean ThemeTab styling on fest-auth-themetab */
+.fest-auth-themetab .theme-tab-item:not(.active) .theme-tab-label {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.94rem !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+  letter-spacing: 0.02em !important;
+}
+
+.fest-auth-themetab .theme-tab-item.active .theme-tab-label {
+  font-size: 0.94rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em !important;
+}
+
 .fest-modal-tabs {
   display: flex;
   background: rgba(15, 23, 42, 0.03) !important;
@@ -300,8 +500,9 @@
   flex-direction: column;
 }
 
-.fest-form-group.col-span-2 {
-  grid-column: span 2;
+.fest-form-group.col-span-2,
+.col-span-2 {
+  grid-column: span 2 !important;
 }
 
 .fest-form-label {
@@ -360,9 +561,265 @@
 }
 
 .fest-form-hint {
-  font-size: 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #f8fafc !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85), 0 0 2px rgba(0, 0, 0, 0.95);
+  margin-top: 5px;
+  line-height: 1.35;
+  letter-spacing: 0.015em;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.fest-form-hint::before {
+  content: '✦';
+  font-size: 0.72rem;
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+/* ── MUI Style Outlined Form Fields with Floating Labels ── */
+.mui-form-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.mui-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.mui-outlined-input {
+  width: 100%;
+  height: 52px;
+  padding: 14px 16px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #0f172a;
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  outline: none !important;
+  box-sizing: border-box;
+  transition: border-color 0.18s cubic-bezier(0, 0, 0.2, 1), box-shadow 0.18s cubic-bezier(0, 0, 0.2, 1);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+}
+
+.mui-outlined-input.has-password-toggle {
+  padding-right: 46px !important;
+}
+
+/* Hover State: classic MUI darker gray */
+.mui-outlined-input:hover:not(:disabled):not(:focus) {
+  border-color: #64748b !important;
+}
+
+/* Focused State: classic MUI crisp outline ring */
+.mui-form-field.is-focused .mui-outlined-input,
+.mui-outlined-input:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 1px #2563eb, 0 2px 8px rgba(37, 99, 235, 0.12) !important;
+}
+
+/* Floating Label: default resting state inside input */
+.mui-floating-label {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.92rem;
+  font-weight: 500;
   color: #64748b;
-  margin-top: 0.25rem;
+  pointer-events: none;
+  padding: 0 6px;
+  background: transparent;
+  transition: transform 0.18s cubic-bezier(0, 0, 0.2, 1), font-size 0.18s cubic-bezier(0, 0, 0.2, 1), color 0.18s cubic-bezier(0, 0, 0.2, 1), top 0.18s cubic-bezier(0, 0, 0.2, 1);
+  z-index: 2;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Floating State (When Focused or Has Value) */
+.mui-form-field.is-floating .mui-floating-label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  transform-origin: top left;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  background: #ffffff;
+  padding: 0 6px;
+}
+
+/* Floating + Focused State */
+.mui-form-field.is-focused.is-floating .mui-floating-label {
+  color: #2563eb;
+}
+
+/* Asterisk */
+.mui-asterisk {
+  color: #ef4444;
+  margin-left: 3px;
+  font-weight: 700;
+  font-size: 0.95em;
+}
+
+/* Password Toggle Eye Button */
+.mui-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 50%;
+  transition: color 0.18s ease, background-color 0.18s ease;
+  z-index: 3;
+}
+
+.mui-password-toggle:hover {
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Select element specifics */
+.mui-outlined-input.mui-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  padding-right: 40px !important;
+  cursor: pointer;
+}
+
+.mui-form-hint {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #f8fafc !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85), 0 0 2px rgba(0, 0, 0, 0.95);
+  margin-top: 5px;
+  margin-left: 12px;
+  line-height: 1.35;
+  letter-spacing: 0.015em;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.mui-form-hint::before {
+  content: '✦';
+  font-size: 0.72rem;
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.mui-form-error {
+  font-size: 0.76rem;
+  color: #ef4444;
+  margin-top: 4px;
+  margin-left: 12px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.mui-form-field.has-error .mui-outlined-input {
+  border-color: #ef4444 !important;
+}
+
+.mui-form-field.has-error .mui-floating-label {
+  color: #ef4444 !important;
+}
+
+/* ── Liquid Glass Outlined Inputs & Layout (for StudentAuthModal) ── */
+.fest-auth-liquid-modal .fest-form-login-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.25rem !important;
+  width: 100% !important;
+}
+
+.fest-auth-liquid-modal .fest-form-login-stack .mui-form-field {
+  width: 100% !important;
+}
+
+.fest-auth-liquid-modal .mui-form-field {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.fest-auth-liquid-modal .mui-outlined-input {
+  background: rgba(255, 255, 255, 0.78) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
+  border-radius: 12px !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.9),
+    0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  color: #0f172a !important;
+  font-size: 0.95rem !important;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.fest-auth-liquid-modal .mui-outlined-input:hover:not(:disabled):not(:focus) {
+  background: rgba(255, 255, 255, 0.88) !important;
+  border-color: rgba(37, 99, 235, 0.5) !important;
+}
+
+.fest-auth-liquid-modal .mui-form-field.is-focused .mui-outlined-input,
+.fest-auth-liquid-modal .mui-outlined-input:focus {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: #2563eb !important;
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.95),
+    0 4px 14px rgba(37, 99, 235, 0.12) !important;
+}
+
+.fest-auth-liquid-modal .mui-floating-label {
+  color: #475569 !important;
+  font-weight: 600;
+}
+
+.fest-auth-liquid-modal .mui-form-field.is-floating .mui-floating-label {
+  background: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  color: #1e293b !important;
+}
+
+.fest-auth-liquid-modal .mui-form-field.is-focused .mui-floating-label {
+  color: #2563eb !important;
+}
+
+/* Ticket Confirmation on Liquid Glass */
+.fest-auth-liquid-modal .reg-ticket-card {
+  background: rgba(255, 255, 255, 0.45) !important;
+  border: 1.5px dashed rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
 }
 
 /* Event Summary Card inside Reg Modal */
@@ -621,6 +1078,46 @@
   gap: 1rem;
 }
 
+.fest-auth-liquid-modal .fest-modal-body {
+  padding: 1.35rem 1.65rem !important;
+}
+
+/* Footer inside Liquid Glass Modal */
+.fest-auth-liquid-modal .fest-modal-footer {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.18) 100%) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  padding: 1.15rem 1.65rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+/* Liquid Glass ThemeButton in Modal Footer */
+.fest-auth-liquid-modal .fest-modal-footer .theme-glass-btn {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  box-shadow:
+    0 10px 24px -6px rgba(0, 0, 0, 0.25),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.45),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.10) !important;
+  padding: 0.65rem 1.6rem !important;
+  border-radius: 12px !important;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.fest-auth-liquid-modal .fest-modal-footer .theme-glass-btn:hover {
+  background: rgba(255, 255, 255, 0.24) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  box-shadow:
+    0 12px 28px -6px rgba(0, 0, 0, 0.32),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.65) !important;
+}
+
 .btn-fest-secondary,
 .fest-btn-secondary {
   background: rgba(255, 255, 255, 0.7) !important;
@@ -702,9 +1199,19 @@
 }
 
 @keyframes bounceIn {
-  0% { transform: scale(0.3); opacity: 0; }
-  50% { transform: scale(1.08); opacity: 1; }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .reg-success-title {
@@ -792,9 +1299,11 @@
   .fest-form-grid {
     grid-template-columns: 1fr;
   }
+
   .fest-form-group.col-span-2 {
     grid-column: span 1;
   }
+
   .team-member-row {
     grid-template-columns: 1fr;
     border: 1px solid #e2e8f0;
@@ -802,10 +1311,12 @@
     border-radius: 10px;
     background: #ffffff;
   }
+
   .event-reg-summary-box {
     flex-direction: column;
     align-items: flex-start;
   }
+
   .event-reg-fee-box {
     border-left: none;
     border-top: 2px dashed #cbd5e1;
@@ -814,10 +1325,74 @@
     width: 100%;
     text-align: left;
   }
+
   .fest-modal-header,
   .fest-modal-body,
   .fest-modal-footer {
     padding: 1.25rem 1.25rem;
+  }
+}
+
+/* Mobile & Tablet Responsive Tuning for Liquid Glass Auth Modal */
+@media (max-width: 520px) {
+
+  .fest-modal-card.fest-auth-liquid-modal,
+  .fest-modal-card.fest-auth-liquid-modal.auth-mode-login,
+  .fest-modal-card.fest-auth-liquid-modal.auth-mode-register {
+    width: calc(100vw - 1.5rem) !important;
+    max-width: 100% !important;
+    border-radius: 20px !important;
+    margin: 0 auto !important;
+  }
+
+  .fest-modal-card.fest-auth-liquid-modal::before {
+    border-radius: 20px !important;
+  }
+
+  .fest-modal-card.fest-auth-liquid-modal::after {
+    border-radius: calc(20px - 1.5px) !important;
+  }
+
+  .fest-auth-liquid-modal .fest-modal-header {
+    padding: 1.15rem 1.25rem 0.95rem 1.25rem !important;
+  }
+
+  .fest-auth-liquid-modal .fest-modal-title {
+    font-size: 1.35rem !important;
+  }
+
+  .fest-auth-liquid-modal .fest-modal-tabs-wrapper {
+    padding: 8px 1rem !important;
+  }
+
+  .fest-auth-liquid-modal .fest-auth-themetab .theme-tab-container {
+    height: 42px !important;
+  }
+
+  .fest-auth-liquid-modal .fest-auth-themetab .theme-tab-item {
+    padding: 5px 8px !important;
+    font-size: 0.82rem !important;
+  }
+
+  .fest-auth-liquid-modal .fest-modal-body {
+    padding: 1.25rem 1.25rem !important;
+  }
+
+  .fest-auth-liquid-modal .mui-outlined-input {
+    height: 48px !important;
+    font-size: 0.9rem !important;
+    padding: 12px 14px !important;
+  }
+
+  .fest-auth-liquid-modal .fest-modal-footer {
+    padding: 1rem 1.25rem !important;
+  }
+
+  .fest-auth-liquid-modal .btn-fest-primary,
+  .fest-auth-liquid-modal .fest-btn-primary,
+  .fest-auth-liquid-modal .theme-glass-btn {
+    width: 100% !important;
+    justify-content: center !important;
   }
 }
 
@@ -833,16 +1408,19 @@
   margin-top: 0.4rem;
   line-height: 1.3;
 }
+
 .student-check-badge.found {
   background: #ecfdf5;
   color: #065f46;
   border: 1px solid #a7f3d0;
 }
+
 .student-check-badge.new {
   background: #eff6ff;
   color: #1e40af;
   border: 1px solid #bfdbfe;
 }
+
 .student-check-badge.checking {
   background: #f1f5f9;
   color: #475569;
@@ -1148,8 +1726,13 @@
 }
 
 @keyframes festSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .fest-loader-title {
@@ -1208,9 +1791,20 @@
 }
 
 @keyframes festPulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.55); }
-  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(217, 119, 6, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(217, 119, 6, 0); }
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0.55);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(217, 119, 6, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0);
+  }
 }
 
 /* Print Styling */
@@ -1218,6 +1812,7 @@
   body * {
     visibility: hidden;
   }
+
   .fest-modal-backdrop,
   .fest-modal-overlay,
   .fest-modal-card {
@@ -1228,10 +1823,12 @@
     background: #ffffff !important;
     color: #000000 !important;
   }
+
   .reg-ticket-card,
   .reg-ticket-card * {
     visibility: visible !important;
   }
+
   .reg-ticket-card {
     position: absolute;
     left: 0;
@@ -1243,6 +1840,7 @@
     background: #ffffff !important;
     color: #000000 !important;
   }
+
   .fest-modal-header,
   .fest-modal-footer,
   .fest-modal-close-btn,
@@ -1441,7 +2039,8 @@
 }
 
 .pattern-verified-hint.info {
-  color: #64748b;
+  color: #f8fafc !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .btn-add-team-participant {
@@ -1467,4 +2066,19 @@
   background: #fef3c7;
   border-color: #d97706;
   color: #78350f;
+}
+
+/* Other College input field styling and validation states */
+.pattern-other-college-field {
+  animation: festFadeIn 0.2s ease-in-out;
+}
+
+.pattern-input.college-valid {
+  border-color: #10b981 !important;
+  background-color: #f0fdf4 !important;
+}
+
+.pattern-input.college-invalid {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
 }

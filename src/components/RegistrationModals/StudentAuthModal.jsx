@@ -1,7 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { LiquidGlass } from '../ThemeComponents/LiquidGlass';
 import ThemeButton from '../ThemeComponents/ThemeButton';
+import ThemeTab from '../ThemeComponents/ThemeTabDesign/ThemeTab';
 import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
+import { MuiTextField, MuiSelectField } from './MuiTextField';
 import {
   registerStudentAccount,
   loginStudentAccount,
@@ -28,9 +31,18 @@ export default function StudentAuthModal({
   eventData = null,
   initialMode = 'login'
 }) {
+  const navigate = useNavigate();
   const [mode, setMode] = useState(initialMode || 'login'); // 'login' | 'register'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const authTabs = useMemo(
+    () => [
+      { id: 'register', label: 'Register' },
+      { id: 'login', label: 'Login' }
+    ],
+    []
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -199,6 +211,9 @@ export default function StudentAuthModal({
       if (onSuccess) {
         onSuccess(student, null);
       }
+      if (!eventData && !eventTitle) {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setLoading(false);
       setError(err.message || 'Failed to complete registration. Please check your details.');
@@ -222,6 +237,9 @@ export default function StudentAuthModal({
       setLoading(false);
       if (onSuccess) {
         onSuccess(student, null);
+      }
+      if (!eventData && !eventTitle) {
+        navigate('/dashboard');
       }
     } catch (err) {
       setLoading(false);
@@ -265,7 +283,9 @@ export default function StudentAuthModal({
   return (
     <div className="fest-modal-backdrop" onClick={onClose}>
       <LiquidGlass
-        className="fest-modal-card fest-auth-liquid-modal"
+        className={`fest-modal-card fest-auth-liquid-modal ${
+          confirmedRecord ? 'auth-mode-confirmed' : mode === 'register' ? 'auth-mode-register' : 'auth-mode-login'
+        }`}
         theme="light"
         borderRadius={24}
         enableShader={true}
@@ -278,8 +298,8 @@ export default function StudentAuthModal({
               as="h2"
               className="fest-modal-title"
               splitPercent={50}
-              leftColor="#0f172a"
-              rightColor="#be9337"
+              leftColor="#ffffff"
+              rightColor="#000000"
             >
               {confirmedRecord
                 ? 'Event Registration Confirmation'
@@ -293,41 +313,25 @@ export default function StudentAuthModal({
           </div>
         </div>
 
-        {/* Mode Switch Tabs (hidden on confirmation view) */}
+        {/* Mode Switch Tabs with ThemeTab (hidden on confirmation view) */}
         {!confirmedRecord && (
-          <div className="fest-modal-tabs">
-            <ThemeButton
-              type="button"
-              className={`fest-tab-btn ${mode === 'register' ? 'active' : ''}`}
-              borderRadius={10}
-              onClick={() => {
-                setMode('register');
+          <div className="fest-modal-tabs-wrapper">
+            <ThemeTab
+              tabs={authTabs}
+              activeTab={mode}
+              onChange={(newMode) => {
+                const tabId = typeof newMode === 'object' ? newMode.id : newMode;
+                setMode(tabId);
                 setError(null);
               }}
-            >
-              <SplitColorText
-                leftColor={mode === 'register' ? '#ffffff' : '#0f172a'}
-                rightColor={mode === 'register' ? '#ffffff' : '#475569'}
-              >
-                ✦ New Student? Register Here
-              </SplitColorText>
-            </ThemeButton>
-            <ThemeButton
-              type="button"
-              className={`fest-tab-btn ${mode === 'login' ? 'active' : ''}`}
-              borderRadius={10}
-              onClick={() => {
-                setMode('login');
-                setError(null);
-              }}
-            >
-              <SplitColorText
-                leftColor={mode === 'login' ? '#ffffff' : '#0f172a'}
-                rightColor={mode === 'login' ? '#ffffff' : '#475569'}
-              >
-                🔑 Existing Student? Sign In
-              </SplitColorText>
-            </ThemeButton>
+              size="md"
+              showSearch={false}
+              leftColor="#ffffff"
+              rightColor="#ffffff"
+              screenSync={false}
+              className="fest-auth-themetab"
+              ariaLabel="Student Portal Mode"
+            />
           </div>
         )}
 
@@ -458,8 +462,8 @@ export default function StudentAuthModal({
                     🖨️ Print Slip
                   </SplitColorText>
                 </ThemeButton>
-                <ThemeButton type="button" className="btn-fest-primary" onClick={onClose} borderRadius={10}>
-                  <SplitColorText leftColor="#ffffff" rightColor="#ffffff">
+                <ThemeButton type="button" onClick={onClose} borderRadius={12} height={44} showBlast={true}>
+                  <SplitColorText leftColor="#ffffff" rightColor="#000000">
                     Done & Explore More Events
                   </SplitColorText>
                 </ThemeButton>
@@ -469,44 +473,38 @@ export default function StudentAuthModal({
             <form onSubmit={handleRegisterSubmit} id="student-register-form">
 
 
-              <div className="fest-form-grid">
+              <div className="fest-form-grid" style={{ gap: '1.25rem', paddingTop: '0.4rem' }}>
                 {/* Roll Number (with existence check) */}
-                <div className="fest-form-group col-span-2">
-                  <label className="fest-form-label">
-                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
-                      Roll / Reg. Number
-                    </SplitColorText>{' '}
-                    <span className="required">*</span>
-                  </label>
+                <div className="col-span-2">
                   <div style={{ position: 'relative' }}>
-                    <input
-                      type="text"
+                    <MuiTextField
+                      label="Roll / Reg. Number"
                       name="roll"
+                      type="text"
                       value={regForm.roll}
                       onChange={handleRegisterChange}
                       onBlur={() => handleCheckRoll()}
-                      placeholder="e.g. 123456 or 22A91A0501"
-                      className="fest-form-input"
                       style={{ textTransform: 'uppercase' }}
                       required
+                      placeholder="e.g. 123456 or 22A91A0501"
                     />
                     {checkingRoll && (
-                      <span style={{ position: 'absolute', right: '12px', top: '12px', fontSize: '0.8rem', color: '#64748b' }}>
+                      <span style={{ position: 'absolute', right: '14px', top: '16px', fontSize: '0.78rem', color: '#b45309', fontWeight: 700, zIndex: 4 }}>
                         Checking...
                       </span>
                     )}
                   </div>
 
                   {studentStatus?.exists ? (
-                    <div className="student-check-badge found">
+                    <div className="student-check-badge found" style={{ marginTop: '0.35rem' }}>
                       ✓ Existing Student Found: <strong>{studentStatus.student?.name}</strong> ({studentStatus.student?.college || 'Aditya University'})
                     </div>
                   ) : studentStatus?.exists === false ? (
-                    <div className="student-check-badge new">
+                    <div className="student-check-badge new" style={{ marginTop: '0.35rem' }}>
                       ✦ New Student Registration
                     </div>
                   ) : (
-                    <span className="fest-form-hint">Used for verification & festival certificates</span>
+                    <span className="fest-form-hint" style={{ marginLeft: '12px' }}>Used for verification & festival certificates</span>
                   )}
 
                   {studentStatus?.alreadyRegisteredForEvent && (
@@ -537,212 +535,129 @@ export default function StudentAuthModal({
                 </div>
 
                 {/* Full Name */}
-                <div className="fest-form-group col-span-2">
-                  <label className="fest-form-label">
-                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
-                      Student Full Name
-                    </SplitColorText>{' '}
-                    <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
+                <div className="col-span-2">
+                  <MuiTextField
+                    label="Student Full Name"
                     name="name"
+                    type="text"
                     value={regForm.name}
                     onChange={handleRegisterChange}
                     placeholder="Enter student full name as per college ID"
-                    className="fest-form-input"
                     required
                   />
                 </div>
 
                 {/* Gender */}
-                <div className="fest-form-group">
-                  <label className="fest-form-label">
-                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
-                      Gender
-                    </SplitColorText>{' '}
-                    <span className="required">*</span>
-                  </label>
-                  <select
+                <div>
+                  <MuiSelectField
+                    label="Gender"
                     name="gender"
                     value={regForm.gender}
                     onChange={handleRegisterChange}
-                    className="fest-form-select"
-                  >
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
+                    options={['Male', 'Female', 'Other']}
+                    required
+                  />
                 </div>
 
                 {/* College / Institution */}
-                <div className="fest-form-group">
-                  <label className="fest-form-label">
-                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
-                      College / Institution
-                    </SplitColorText>{' '}
-                    <span className="required">*</span>
-                  </label>
-                  <select
+                <div>
+                  <MuiSelectField
+                    label="College / Institution"
                     name="college"
                     value={regForm.college}
                     onChange={handleRegisterChange}
-                    className="fest-form-select"
-                  >
-                    {COLLEGE_OPTIONS.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
+                    options={COLLEGE_OPTIONS}
+                    required
+                  />
                 </div>
 
                 {/* Other College if selected */}
                 {regForm.college === 'Other Institution' && (
-                  <div className="fest-form-group col-span-2">
-                    <label className="fest-form-label">
-                      <SplitColorText leftColor="#0f172a" rightColor="#b45309">
-                        Institution Name
-                      </SplitColorText>{' '}
-                      <span className="required">*</span>
-                    </label>
-                    <input
-                      type="text"
+                  <div className="col-span-2">
+                    <MuiTextField
+                      label="Institution Name"
                       name="otherCollege"
+                      type="text"
                       value={regForm.otherCollege}
                       onChange={handleRegisterChange}
                       onBlur={(e) => handleOtherCollegeBlur(e.target.value)}
                       placeholder="e.g. JNTU University / ABC Engineering"
-                      className="fest-form-input"
-                      style={{
-                        borderColor: otherCollegeError
-                          ? '#ef4444'
-                          : regForm.otherCollege && isValidOtherCollege(regForm.otherCollege)
-                            ? '#10b981'
-                            : '#cbd5e1',
-                        backgroundColor: otherCollegeError
-                          ? '#fef2f2'
-                          : regForm.otherCollege && isValidOtherCollege(regForm.otherCollege)
-                            ? '#f0fdf4'
-                            : '#ffffff'
-                      }}
+                      error={otherCollegeError || ''}
+                      hint={
+                        !otherCollegeError && regForm.otherCollege && isValidOtherCollege(regForm.otherCollege)
+                          ? 'ℹ️ College ID Card is required for entry and verification.'
+                          : ''
+                      }
                       required
                     />
-                    {otherCollegeError ? (
-                      <span
-                        className="fest-form-hint"
-                        style={{ color: '#dc2626', fontWeight: 600, marginTop: '4px', display: 'block' }}
-                      >
-                        {otherCollegeError}
-                      </span>
-                    ) : regForm.otherCollege && isValidOtherCollege(regForm.otherCollege) ? (
-                      <span
-                        className="fest-form-hint"
-                        style={{ color: '#0284c7', fontWeight: 600, marginTop: '4px', display: 'block' }}
-                      >
-                        ℹ️ College ID Card is required for entry and verification.
-                      </span>
-                    ) : null}
                   </div>
                 )}
 
                 {/* Mobile */}
-                <div className="fest-form-group">
-                  <label className="fest-form-label">
-                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
-                      Mobile Number
-                    </SplitColorText>{' '}
-                    <span className="required">*</span>
-                  </label>
-                  <input
-                    type="tel"
+                <div>
+                  <MuiTextField
+                    label="Mobile Number"
                     name="mobile"
+                    type="tel"
                     maxLength={10}
                     value={regForm.mobile}
                     onChange={handleRegisterChange}
                     placeholder="10-digit mobile number"
-                    className="fest-form-input"
                     required
                   />
                 </div>
 
                 {/* Email */}
-                <div className="fest-form-group">
-                  <label className="fest-form-label">
-                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
-                      Email Address
-                    </SplitColorText>{' '}
-                    <span className="required">*</span>
-                  </label>
-                  <input
-                    type="email"
+                <div>
+                  <MuiTextField
+                    label="Email Address"
                     name="email"
+                    type="email"
                     value={regForm.email}
                     onChange={handleRegisterChange}
                     placeholder="student@example.com"
-                    className="fest-form-input"
                     required
                   />
                 </div>
 
                 {/* Password */}
-                <div className="fest-form-group col-span-2">
-                  <label className="fest-form-label">
-                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
-                      Create Password (Optional)
-                    </SplitColorText>
-                  </label>
-                  <input
-                    type="password"
+                <div className="col-span-2">
+                  <MuiTextField
+                    label="Create Password (Optional)"
                     name="password"
+                    type="password"
                     value={regForm.password}
                     onChange={handleRegisterChange}
                     placeholder="Set account password (Default: 123456)"
-                    className="fest-form-input"
+                    hint="Leave blank to use default password (123456)"
                   />
-                  <span className="fest-form-hint">Leave blank to use default password (123456)</span>
                 </div>
               </div>
             </form>
           ) : (
             <form onSubmit={handleLoginSubmit} id="student-login-form">
+              <div className="fest-form-login-stack" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', paddingTop: '0.6rem' }}>
+                <MuiTextField
+                  label="Registered Email or Roll Number"
+                  name="email"
+                  type="text"
+                  value={loginForm.email}
+                  onChange={handleLoginChange}
+                  placeholder="e.g. simhapune@gmail.com or 21A91A0501"
+                  required
+                  autoComplete="username"
+                />
 
-              <div className="fest-form-grid">
-                <div className="fest-form-group col-span-2">
-                  <label className="fest-form-label">
-                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
-                      Registered Email or Roll Number
-                    </SplitColorText>{' '}
-                    <span className="required">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="email"
-                    value={loginForm.email}
-                    onChange={handleLoginChange}
-                    placeholder="Enter student email address or roll number"
-                    className="fest-form-input"
-                    required
-                  />
-                </div>
-
-                <div className="fest-form-group col-span-2">
-                  <label className="fest-form-label">
-                    <SplitColorText leftColor="#0f172a" rightColor="#b45309">
-                      Password
-                    </SplitColorText>{' '}
-                    <span className="required">*</span>
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    value={loginForm.password}
-                    onChange={handleLoginChange}
-                    placeholder="Enter your account password"
-                    className="fest-form-input"
-                    required
-                  />
-                </div>
+                <MuiTextField
+                  label="Password"
+                  name="password"
+                  type="password"
+                  value={loginForm.password}
+                  onChange={handleLoginChange}
+                  placeholder="Enter your account password"
+                  required
+                  autoComplete="current-password"
+                />
               </div>
             </form>
           )}
@@ -751,43 +666,34 @@ export default function StudentAuthModal({
         {/* Footer (hidden on confirmation view) */}
         {!confirmedRecord && (
           <div className="fest-modal-footer">
-            <ThemeButton
-              type="button"
-              className="btn-fest-secondary"
-              onClick={onClose}
-              disabled={loading}
-              borderRadius={10}
-            >
-              <SplitColorText leftColor="#334155" rightColor="#64748b">
-                Cancel
-              </SplitColorText>
-            </ThemeButton>
             {mode === 'register' ? (
               <ThemeButton
                 type="submit"
                 form="student-register-form"
-                className="btn-fest-primary"
                 disabled={loading}
-                borderRadius={10}
+                borderRadius={12}
+                height={46}
+                showBlast={true}
               >
-                <SplitColorText leftColor="#ffffff" rightColor="#ffffff">
+                <SplitColorText leftColor="#ffffff" rightColor="#000000">
                   {loading
                     ? 'Processing Registration...'
                     : studentStatus?.alreadyRegisteredForEvent
                       ? 'View Registration Slip'
-                      : 'Register & Continue →'}
+                      : 'Register & Continue'}
                 </SplitColorText>
               </ThemeButton>
             ) : (
               <ThemeButton
                 type="submit"
                 form="student-login-form"
-                className="btn-fest-primary"
                 disabled={loading}
-                borderRadius={10}
+                borderRadius={12}
+                height={46}
+                showBlast={true}
               >
-                <SplitColorText leftColor="#ffffff" rightColor="#ffffff">
-                  {loading ? 'Signing In...' : 'Sign In & Continue →'}
+                <SplitColorText leftColor="#ffffff" rightColor="#000000">
+                  {loading ? 'Signing In...' : 'Sign In & Continue'}
                 </SplitColorText>
               </ThemeButton>
             )}
