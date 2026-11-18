@@ -16,7 +16,8 @@ import './Navbar.css';
 
 const navItems = [
   { label: 'Events', path: '/events' },
-  { label: 'Invitation', path: '/invitation' },
+  // { label: 'Invitation', path: '/invitation' },
+  { label: 'Team', path: '/teams' },
   { label: 'Events Schedule', href: '/Schedule_of_Events.pdf' },
   { label: 'Sponsors', path: '/sponsors' },
   { label: 'Contact', path: '/contact' },
@@ -59,7 +60,13 @@ function UniversityLogo() {
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const isSplitThemePage = location.pathname === '/' || location.pathname.startsWith('/events');
+  const isSplitThemePage =
+    location.pathname === '/' ||
+    location.pathname.startsWith('/events') ||
+    location.pathname === '/sponsors' ||
+    location.pathname === '/teams' ||
+    location.pathname === '/team' ||
+    location.pathname === '/contact';
   const isHome = location.pathname === '/';
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);

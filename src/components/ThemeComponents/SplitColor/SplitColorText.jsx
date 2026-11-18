@@ -52,7 +52,14 @@ export const SplitColorText = forwardRef(function SplitColorText(
   const internalRef = useRef(null);
   const location = useLocation();
   const pathname = location?.pathname || '';
-  const isSplitPage = pathname === '/' || pathname === '' || pathname.startsWith('/events');
+  const isSplitPage =
+    pathname === '/' ||
+    pathname === '' ||
+    pathname.startsWith('/events') ||
+    pathname === '/sponsors' ||
+    pathname === '/teams' ||
+    pathname === '/team' ||
+    pathname === '/contact';
 
   // Active rendering mode: if splitPercent or screenSync is provided, prioritize split mode
   const resolvedMode =

@@ -5,6 +5,7 @@ import { LiquidGlass } from '../ThemeComponents/LiquidGlass';
 import ThemeButton from '../ThemeComponents/ThemeButton';
 import ThemeTab from '../ThemeComponents/ThemeTabDesign/ThemeTab';
 import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
+import SmoothTransition from '../ThemeComponents/Animation/SmoothTransition';
 import { MuiTextField, MuiSelectField } from './MuiTextField';
 import {
   registerStudentAccount,
@@ -39,8 +40,34 @@ export default function StudentAuthModal({
 
   const authTabs = useMemo(
     () => [
-      { id: 'register', label: 'Register' },
-      { id: 'login', label: 'Login' }
+      {
+        id: 'register',
+        label: (
+          <SplitColorText
+            as="span"
+            splitPercent={50}
+            leftColor="#ffffff"
+            rightColor="#000000"
+            className="fest-auth-tab-split-label"
+          >
+            Register
+          </SplitColorText>
+        )
+      },
+      {
+        id: 'login',
+        label: (
+          <SplitColorText
+            as="span"
+            splitPercent={50}
+            leftColor="#ffffff"
+            rightColor="#000000"
+            className="fest-auth-tab-split-label"
+          >
+            Login
+          </SplitColorText>
+        )
+      }
     ],
     []
   );
@@ -328,7 +355,7 @@ export default function StudentAuthModal({
               size="md"
               showSearch={false}
               leftColor="#ffffff"
-              rightColor="#ffffff"
+              rightColor="#000000"
               screenSync={false}
               className="fest-auth-themetab"
               ariaLabel="Student Portal Mode"
@@ -345,9 +372,15 @@ export default function StudentAuthModal({
             </div>
           )}
 
-          {confirmedRecord ? (
-            /* Registration Success View */
-            <div className="reg-success-view">
+          <SmoothTransition
+            transitionKey={confirmedRecord ? 'confirmed' : mode}
+            variant="fade-slide"
+            duration={280}
+            animateHeight={true}
+          >
+            {confirmedRecord ? (
+              /* Registration Success View */
+              <div className="reg-success-view">
               <div className="reg-success-icon-wrap">✓</div>
               <h3 className="reg-success-title">Registration Confirmed!</h3>
               <p className="reg-success-sub">
@@ -490,7 +523,7 @@ export default function StudentAuthModal({
                       placeholder="e.g. 123456 or 22A91A0501"
                     />
                     {checkingRoll && (
-                      <span style={{ position: 'absolute', right: '14px', top: '16px', fontSize: '0.78rem', color: '#b45309', fontWeight: 700, zIndex: 4 }}>
+                      <span style={{ position: 'absolute', right: '14px', top: '16px', fontSize: '0.78rem', color: '#be9337', fontWeight: 700, zIndex: 4 }}>
                         Checking...
                       </span>
                     )}
@@ -662,42 +695,47 @@ export default function StudentAuthModal({
               </div>
             </form>
           )}
+          </SmoothTransition>
         </div>
 
         {/* Footer (hidden on confirmation view) */}
         {!confirmedRecord && (
           <div className="fest-modal-footer">
-            {mode === 'register' ? (
-              <ThemeButton
-                type="submit"
-                form="student-register-form"
-                disabled={loading}
-                borderRadius={12}
-                height={46}
-                showBlast={true}
-              >
-                <SplitColorText leftColor="#ffffff" rightColor="#000000">
-                  {loading
-                    ? 'Processing Registration...'
-                    : studentStatus?.alreadyRegisteredForEvent
-                      ? 'View Registration Slip'
-                      : 'Register & Continue'}
-                </SplitColorText>
-              </ThemeButton>
-            ) : (
-              <ThemeButton
-                type="submit"
-                form="student-login-form"
-                disabled={loading}
-                borderRadius={12}
-                height={46}
-                showBlast={true}
-              >
-                <SplitColorText leftColor="#ffffff" rightColor="#000000">
-                  {loading ? 'Signing In...' : 'Sign In & Continue'}
-                </SplitColorText>
-              </ThemeButton>
-            )}
+            <SmoothTransition transitionKey={mode} variant="fade" duration={220} animateHeight={false}>
+              {mode === 'register' ? (
+                <ThemeButton
+                  type="submit"
+                  form="student-register-form"
+                  disabled={loading}
+                  borderRadius={12}
+                  height={46}
+                  showBlast={true}
+                  className="fest-btn-primary"
+                >
+                  <SplitColorText leftColor="#ffffff" rightColor="#000000">
+                    {loading
+                      ? 'Processing Registration...'
+                      : studentStatus?.alreadyRegisteredForEvent
+                        ? 'View Registration Slip'
+                        : 'Register & Continue'}
+                  </SplitColorText>
+                </ThemeButton>
+              ) : (
+                <ThemeButton
+                  type="submit"
+                  form="student-login-form"
+                  disabled={loading}
+                  borderRadius={12}
+                  height={46}
+                  showBlast={true}
+                  className="fest-btn-primary"
+                >
+                  <SplitColorText leftColor="#ffffff" rightColor="#000000">
+                    {loading ? 'Signing In...' : 'Sign In & Continue'}
+                  </SplitColorText>
+                </ThemeButton>
+              )}
+            </SmoothTransition>
           </div>
         )}
       </LiquidGlass>
