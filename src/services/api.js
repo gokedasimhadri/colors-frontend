@@ -164,19 +164,36 @@ export function matchesTypeCode(item, targetType = EVENT_TYPE) {
 }
 
 /**
- * Check if a record has completed PAID payment status
+ * Check if a record has completed PAID payment status,
+ * or is a CONFIRMED registration in central_event_student_registrations
  */
 export function isPaidPayment(item) {
   if (!item) return false;
-  const st = (
-    item.paymentStatus ||
-    item.status ||
+
+  // 1. Direct payment status
+  const payStatus = (
     item.payment?.status ||
+    item.paymentStatus ||
     item.backendPayment?.status ||
     ''
   ).toString().trim().toUpperCase();
 
-  return st === 'PAID' || st === 'SUCCESS' || st === 'COMPLETED';
+  if (payStatus === 'PAID' || payStatus === 'SUCCESS' || payStatus === 'COMPLETED') {
+    return true;
+  }
+
+  // 2. Item top-level status
+  const itemStatus = (item.status || '').toString().trim().toUpperCase();
+  if (itemStatus === 'PAID' || itemStatus === 'SUCCESS' || itemStatus === 'COMPLETED') {
+    return true;
+  }
+
+  // 3. User requirement: central_event_student_registrations with status=CONFIRMED
+  if (itemStatus === 'CONFIRMED') {
+    return true;
+  }
+
+  return false;
 }
 
 export const API_BASE = (
@@ -1953,9 +1970,16 @@ export async function initiateEventRegistration(payload) {
   const backendData = json.data || {};
   const registrationNumber = backendData.registrationNumber || localRegId;
   const paymentReference = backendData.paymentReference || formatPaymentReference(registrationNumber);
-  const orderId = backendData.orderId || null;
-  const keyId = backendData.keyId || null;
+  const rzpObj = backendData.razorpay || {};
+  const orderId = rzpObj.orderId || backendData.orderId || null;
+  const keyId =
+    rzpObj.keyId ||
+    backendData.keyId ||
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_RAZORPAY_KEY_ID) ||
+    'rzp_live_Kmh34Xa4jArEXT';
   const isFree = backendData.isFree || feeAmount === 0;
+  const amountInPaise = rzpObj.amount || backendData.amountInPaise || feeAmount * 100;
+  const currency = rzpObj.currency || backendData.currency || 'INR';
 
   return {
     success: true,
@@ -1963,11 +1987,17 @@ export async function initiateEventRegistration(payload) {
     paymentReference,
     orderId,
     amount: feeAmount,
-    amountInPaise: backendData.amountInPaise || feeAmount * 100,
-    currency: backendData.currency || 'INR',
+    amountInPaise,
+    currency,
     keyId,
     isFree,
-    registration: backendData.registration
+    registration: backendData.registration || null,
+    razorpay: {
+      orderId,
+      keyId,
+      amount: amountInPaise,
+      currency
+    }
   };
 }
 
