@@ -121,6 +121,25 @@
        url('/fonts/ProductSans-Bold.woff2') format('woff2');
 }
 
+/* ══════════════════════════════════════════════════════════════════════
+   VIBGYOR CONIC RAINBOW ROTATION SYSTEM
+   Smooth continuous 360-degree rainbow rotation around active buttons & tabs
+   ══════════════════════════════════════════════════════════════════════ */
+@property --rainbow-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes vibgyorConicRotate {
+  0% {
+    --rainbow-angle: 0deg;
+  }
+  100% {
+    --rainbow-angle: 360deg;
+  }
+}
+
 :root {
   /* ── Core Canvases (Light Theme) ── */
   --clr-bg-black:        #f8fafc;
@@ -132,11 +151,11 @@
   --clr-bg-light-subtle: #f1f5f9;
 
   /* ── Metallic Gold (Royal Identity) ── */
-  --clr-gold:            #b45309;
-  --clr-gold-light:      #f59e0b;
-  --clr-gold-dark:       #92400e;
-  --clr-gold-gradient:   linear-gradient(135deg, #d97706 0%, #b45309 50%, #f59e0b 100%);
-  --clr-gold-glow:       rgba(217, 119, 6, 0.25);
+  --clr-gold:            #be9337;
+  --clr-gold-light:      #d4af37;
+  --clr-gold-dark:       #a17826;
+  --clr-gold-gradient:   linear-gradient(135deg, #d4af37 0%, #be9337 50%, #9b7425 100%);
+  --clr-gold-glow:       rgba(190, 147, 55, 0.25);
 
   /* ── Vibrant Festival Powder / Splatter Spectrum ── */
   --clr-fest-pink:       #e11d48;
@@ -159,13 +178,13 @@
 
   /* ── Theme Text Colors (Light Theme) ── */
   --clr-text-white:      #0f172a;
-  --clr-text-gold:       #b45309;
+  --clr-text-gold:       #be9337;
   --clr-text-dark:       #0f172a;
   --clr-text-muted:      #475569;
   --clr-text-muted-dark: #64748b;
 
   /* ── Borders & Glass ── */
-  --clr-border-gold:     rgba(217, 119, 6, 0.35);
+  --clr-border-gold:     rgba(190, 147, 55, 0.35);
   --clr-border-dark:     #e2e8f0;
   --clr-border-light:    rgba(15, 23, 42, 0.08);
   --glass-dark:          rgba(255, 255, 255, 0.92);
@@ -531,7 +550,7 @@ body::before {
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: capitalize;
-  color: #b45309;
+  color: #be9337;
   background: #fffbeb;
   border: 1px solid #fcd34d;
   padding: 0.45rem 1.25rem;
@@ -630,4 +649,87 @@ body::before {
 @keyframes ticker {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
+}
+
+/* ==========================================================================
+   Universal Smooth Motion & Animation Engine (All Components, Cards & Pages)
+   ========================================================================== */
+
+:root {
+  --motion-ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-soft: cubic-bezier(0.25, 1, 0.5, 1);
+  --motion-duration-fast: 220ms;
+  --motion-duration-normal: 340ms;
+  --motion-duration-slow: 480ms;
+}
+
+/* 1. Universal Smooth Card Hover & Active Transitions */
+.card,
+.fest-card,
+.committee-card,
+.team-card,
+.liquid-glass-card,
+.quick-item-card,
+.transit-box,
+.transit-card,
+.query-form-card,
+.sponsor-tier-card,
+.events-card,
+.glass-panel,
+.event-item-card,
+.team-leader-card,
+.fest-pillar-card {
+  transition: transform var(--motion-duration-normal) var(--motion-ease-spring),
+              box-shadow var(--motion-duration-normal) var(--motion-ease-spring),
+              border-color 0.25s ease,
+              background 0.25s ease !important;
+  will-change: transform, box-shadow;
+}
+
+/* 2. Universal Interactive Button Press & Hover Scale */
+button,
+.btn,
+.theme-glass-btn,
+.btn-fest-primary,
+.btn-fest-secondary,
+.fest-tab-btn,
+.theme-tab-item,
+.theme-tab-chevron-btn {
+  transition: transform var(--motion-duration-fast) var(--motion-ease-spring),
+              box-shadow var(--motion-duration-fast) ease,
+              background 0.22s ease,
+              color 0.22s ease,
+              filter 0.22s ease !important;
+}
+
+button:active:not(:disabled),
+.theme-glass-btn:active:not(:disabled),
+.btn-fest-primary:active:not(:disabled),
+.btn-fest-secondary:active:not(:disabled) {
+  transform: scale(0.975) !important;
+}
+
+/* 3. Smooth Form Inputs & Focus Halos */
+input,
+select,
+textarea {
+  transition: border-color 0.25s ease,
+              box-shadow 0.25s var(--motion-ease-spring),
+              background 0.22s ease,
+              transform 0.2s ease !important;
+}
+
+/* 4. Smooth Tabs & Sliding Indicators */
+.theme-tab-container,
+.fest-modal-tabs-wrapper {
+  transition: all var(--motion-duration-normal) var(--motion-ease-spring);
+}
+
+/* 5. Smooth Modal Cards */
+.fest-modal-card {
+  transition: transform var(--motion-duration-normal) var(--motion-ease-spring),
+              opacity 0.28s ease,
+              max-width var(--motion-duration-normal) var(--motion-ease-spring),
+              min-height var(--motion-duration-normal) var(--motion-ease-spring) !important;
+  will-change: transform, opacity, max-width;
 }

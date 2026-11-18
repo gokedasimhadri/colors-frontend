@@ -36,21 +36,12 @@ export const SplitBackground = forwardRef(function SplitBackground(
   },
   ref
 ) {
-  // Check if non-default colors or custom split percent were passed
-  const isCustom =
-    leftColor !== '#FFFFFF' ||
-    rightColor !== '#000000' ||
-    splitPercent !== 50;
-
-  let dynamicStyle = style;
-  if (isCustom) {
-    const clampedPercent = Math.min(100, Math.max(0, Number(splitPercent) ?? 50));
-    const sharpGradient = `linear-gradient(to right, ${leftColor} 0%, ${leftColor} ${clampedPercent}%, ${rightColor} ${clampedPercent}%, ${rightColor} 100%)`;
-    dynamicStyle = {
-      background: sharpGradient,
-      ...style,
-    };
-  }
+  const clampedPercent = Math.min(100, Math.max(0, Number(splitPercent) ?? 50));
+  const sharpGradient = `linear-gradient(to right, ${leftColor} 0%, ${leftColor} ${clampedPercent}%, ${rightColor} ${clampedPercent}%, ${rightColor} 100%)`;
+  const dynamicStyle = {
+    background: sharpGradient,
+    ...style,
+  };
 
   return (
     <Component

@@ -216,7 +216,7 @@
 
 .btn-hero-action.secondary:hover {
   background: #fffbeb;
-  color: #b45309;
+  color: #be9337;
   border-color: #d97706;
 }
 
@@ -282,7 +282,7 @@
 
 .metric-icon-box.amber {
   background: #fffbeb;
-  color: #b45309;
+  color: #be9337;
   border: 1px solid #fde68a;
 }
 
@@ -308,7 +308,7 @@
 .student-dashboard-page .metric-label {
   font-size: 0.8rem;
   font-weight: 700;
-  color: #b45309;
+  color: #be9337;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-top: 0.2rem;
@@ -346,7 +346,7 @@
 }
 
 .dashboard-tabs-nav .tab-btn:hover {
-  color: #b45309;
+  color: #be9337;
   background: #fffbeb;
 }
 
@@ -470,7 +470,7 @@
   font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
-  color: #b45309;
+  color: #be9337;
   letter-spacing: 0.06em;
 }
 
@@ -505,7 +505,7 @@
 .form-group-dash label {
   font-size: 0.85rem;
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -622,7 +622,7 @@
   font-size: 1.15rem;
   font-weight: 900;
   letter-spacing: 0.1em;
-  background: linear-gradient(90deg, #b45309, #e11d48);
+  background: linear-gradient(90deg, #be9337, #e11d48);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -685,7 +685,7 @@
 .pass-roll {
   font-family: monospace;
   font-size: 0.85rem;
-  color: #b45309;
+  color: #be9337;
   font-weight: 800;
   letter-spacing: 0.05em;
 }
@@ -801,7 +801,7 @@
 }
 
 .btn-eye-toggle:hover {
-  color: #b45309;
+  color: #be9337;
 }
 
 .security-tips-card {
@@ -948,7 +948,7 @@
 .detail-col .label {
   font-size: 0.75rem;
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -962,7 +962,7 @@
 
 .detail-col .val.code {
   font-family: monospace;
-  color: #b45309;
+  color: #be9337;
 }
 
 .detail-col .val.price {
@@ -978,7 +978,7 @@
 .team-participants-box h5 {
   font-size: 0.85rem;
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin-bottom: 0.6rem;
@@ -1190,7 +1190,7 @@
   font-family: var(--font-heading);
   font-size: 1.55rem;
   font-weight: 900;
-  color: #b45309;
+  color: #be9337;
   letter-spacing: 0.05em;
 }
 
@@ -1559,7 +1559,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(245, 158, 11, 0.18);
-  color: #b45309;
+  color: #be9337;
   font-size: 0.75rem;
   font-weight: 800;
   padding: 2px 7px;
@@ -1915,7 +1915,7 @@
 
 .btn-dash-secondary:hover {
   --tb-bg: #fffbeb !important;
-  --tb-color: #b45309 !important;
+  --tb-color: #be9337 !important;
   --tb-border: 1.5px solid #fcd34d !important;
 }
 
@@ -1949,7 +1949,7 @@
 
 .btn-dash-outline-sm {
   --tb-bg: rgba(255, 255, 255, 0.85) !important;
-  --tb-color: #b45309 !important;
+  --tb-color: #be9337 !important;
   --tb-border: 1px solid #fcd34d !important;
   font-size: 0.8rem !important;
   padding: 0.25rem 0.75rem !important;

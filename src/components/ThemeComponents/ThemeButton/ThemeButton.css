@@ -84,6 +84,16 @@
   z-index: 1;
 }
 
+/* Active State on ThemeButton: Full-height border & radius */
+.theme-glass-btn.active::before {
+  height: 100% !important;
+  border-radius: inherit !important;
+  border-top-left-radius: inherit !important;
+  border-top-right-radius: inherit !important;
+  border-bottom-left-radius: inherit !important;
+  border-bottom-right-radius: inherit !important;
+}
+
 /* ── Content Container (Keeps text above glare) ── */
 .theme-glass-btn-content {
   position: relative;
@@ -108,8 +118,7 @@
 }
 
 /* ── Hover: 7 VIBGYOR Continuous Rainbow Flow Animation ── */
-.theme-glass-btn:hover .split-color-text,
-.theme-glass-btn.active .split-color-text {
+.theme-glass-btn:not(.active):hover .split-color-text {
   background-image: linear-gradient(
     90deg,
     #8b00ff 0%,    /* V - Violet */

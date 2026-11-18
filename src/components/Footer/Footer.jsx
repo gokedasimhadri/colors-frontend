@@ -69,11 +69,11 @@ export default function Footer() {
                   <h4 className="uni-col-heading">Explore The Fest</h4>
                   <ul className="uni-footer-links">
                     <li><VibgyorText to="/" showActive={false} onClick={handleHomeClick}>Home</VibgyorText></li>
-                    <li><VibgyorText to="/events" showActive={false}>Events Lineup</VibgyorText></li>
-                    <li><VibgyorText href="/Schedule_of_Events.pdf" target="_blank" rel="noopener noreferrer">Program Schedule</VibgyorText></li>
-                    <li><VibgyorText to="/invitation" showActive={false}>Fest Invite</VibgyorText></li>
-                    <li><VibgyorText to="/sponsors" showActive={false}>Brand Partners</VibgyorText></li>
-                    <li><VibgyorText to="/contact" showActive={false}>Helpdesk & Support</VibgyorText></li>
+                    <li><VibgyorText to="/events" showActive={false}>Events</VibgyorText></li>
+                    <li><VibgyorText href="/Schedule_of_Events.pdf" target="_blank" rel="noopener noreferrer">Events Schedule</VibgyorText></li>
+                    <li><VibgyorText to="/invitation" showActive={false}>Invitation</VibgyorText></li>
+                    <li><VibgyorText to="/sponsors" showActive={false}>Sponsors</VibgyorText></li>
+                    <li><VibgyorText to="/contact" showActive={false}>Contact</VibgyorText></li>
                   </ul>
                 </div>
 

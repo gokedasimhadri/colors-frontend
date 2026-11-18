@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getLoggedStudent } from '../../services/api';
-import { EVENT_START_DATE } from '../../utils/eventDate';
+import { EVENT_START_DATE, EVENT_CONFIG } from '../../utils/eventDate';
 import FlipClockCountdown from '@leenguyen/react-flip-clock-countdown';
 import '@leenguyen/react-flip-clock-countdown/dist/index.css';
 import SplitColorText from '../../components/ThemeComponents/SplitColor/SplitColorText';
@@ -10,15 +10,14 @@ import ThemeButton from '../../components/ThemeComponents/ThemeButton';
 import { LiquidGlass } from '../../components/ThemeComponents/LiquidGlass';
 import { Phone } from 'lucide-react';
 import './Home.css';
+import '../Invitation/Invitation.css';
 
 const EVENT_DATE = EVENT_START_DATE;
 
 // ─── The Festival Arenas (Culturals, Sports, Creo, Fete) ───────────────────
 const FEST_PILLARS = [
   {
-    code: 'CULTURALS',
     name: 'Culturals',
-    tagline: 'Music, Dance, Theatre & Expressions',
     coordinator: 'Dr. N. Ram Babu',
     phone: '8473917384',
     color: '#e11d48',
@@ -33,9 +32,7 @@ const FEST_PILLARS = [
     bgImage: '/culturals_bg.png'
   },
   {
-    code: 'SPORTS',
     name: 'Sports',
-    tagline: 'Athletics, Track & Field Championships',
     coordinator: 'Dr. N. Ravi',
     phone: '9912393905',
     color: '#0284c7',
@@ -50,9 +47,7 @@ const FEST_PILLARS = [
     bgImage: '/sports_bg.png'
   },
   {
-    code: 'CREO',
     name: 'Creo',
-    tagline: 'Fine Arts, Media, Fashion & Innovation',
     coordinator: 'Dr. B. Srinivas',
     phone: '9866732745',
     color: '#d97706',
@@ -67,9 +62,7 @@ const FEST_PILLARS = [
     bgImage: '/creo_bg.png'
   },
   {
-    code: 'FETE',
     name: 'Fete',
-    tagline: 'Food Carnival, Fun Fiesta, Games & Stalls',
     coordinator: 'Mr. J. D. Venkatesh',
     phone: '7036266661',
     color: '#059669',
@@ -88,6 +81,7 @@ const FEST_PILLARS = [
 function Home() {
   const navigate = useNavigate();
   const [student, setStudent] = useState(getLoggedStudent());
+  const { year } = EVENT_CONFIG;
 
   const handlePillarClick = (pillar) => {
     const tabId = (pillar.code || pillar.name || '').toUpperCase();
@@ -230,6 +224,76 @@ function Home() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
+          OFFICIAL FESTIVAL INVITATION (CHANCELLOR & PRO-CHANCELLOR)
+          ───────────────────────────────────────────────────────────── */}
+      <section className="home-invitation-section" id="invitation">
+        <div className="invitation-hero-header">
+          <div className="invitation-header-row invitation-title-row">
+            <SplitColorText
+              as="h2"
+              className="invitation-hero-title"
+              splitPercent={50}
+              leftColor="#0f172a"
+              rightColor="#ffffff"
+            >
+              Invitation
+            </SplitColorText>
+          </div>
+        </div>
+
+        <div className="container invitation-container">
+          <LiquidGlass
+            className="invitation-glass-card"
+            borderRadius={20}
+            enableShader={true}
+          >
+            <div className="invitation-card-grid">
+              {/* ── Left Column: Chancellor Photo & Details ── */}
+              <div className="invitation-dignitary-col left-col">
+                <div className="invitation-photo-frame">
+                  <img
+                    src="/invitation/chancellor-sesha-reddy.webp"
+                    alt="Dr. N. Sesha Reddy – Chancellor, Aditya University"
+                    className="invitation-dignitary-img"
+                  />
+                </div>
+                <h3 className="invitation-dignitary-name">Dr. N. Sesha Reddy</h3>
+                <span className="invitation-dignitary-role">Chancellor</span>
+                <span className="invitation-dignitary-inst">Aditya University</span>
+              </div>
+
+              {/* ── Center Column: Official Joint Invitation Message ── */}
+              <div className="invitation-center-col">
+                <SplitColorText
+                  as="p"
+                  className="invitation-joint-paragraph"
+                  screenSync={true}
+                  leftColor="#1e293b"
+                  rightColor="#cbd5e1"
+                >
+                  It gives us immense pleasure and pride to cordially invite talented students, scholars, and dynamic youth delegates from across the nation to Colours {year}, the premier national youth festival of Aditya University. Taking place from January 7 to 9, 2027, at our Surampalem campus, this vibrant arena celebrates creative brilliance, cultural artistry, and athletic mastery across Culturals, Sports, Creo, and Fete with a ₹10,00,000 cash prize pool. We warmly look forward to welcoming you to three unforgettable days of excellence, camaraderie, and celebration.
+                </SplitColorText>
+              </div>
+
+              {/* ── Right Column: Pro-Chancellor Photo & Details ── */}
+              <div className="invitation-dignitary-col right-col">
+                <div className="invitation-photo-frame">
+                  <img
+                    src="/invitation/pro-chancellor-satish-reddy.webp"
+                    alt="Dr. N. Satish Reddy – Pro-Chancellor, Aditya University"
+                    className="invitation-dignitary-img"
+                  />
+                </div>
+                <h3 className="invitation-dignitary-name">Dr. N. Satish Reddy</h3>
+                <span className="invitation-dignitary-role">Pro-Chancellor</span>
+                <span className="invitation-dignitary-inst">Aditya University</span>
+              </div>
+            </div>
+          </LiquidGlass>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
           FOUR MAIN FESTIVAL DOMAINS (FROM OFFICIAL POSTER)
           CULTURALS • SPORTS • CREO • FETE
           ───────────────────────────────────────────────────────────── */}
@@ -310,15 +374,17 @@ function Home() {
                     </div>
                   </div>
 
-                  <SplitColorText
-                    as="p"
-                    className="pillar-tagline"
-                    screenSync={true}
-                    leftColor="#334155"
-                    rightColor="#e2e8f0"
-                  >
-                    {pillar.tagline}
-                  </SplitColorText>
+                  {pillar.tagline && (
+                    <SplitColorText
+                      as="p"
+                      className="pillar-tagline"
+                      screenSync={true}
+                      leftColor="#334155"
+                      rightColor="#e2e8f0"
+                    >
+                      {pillar.tagline}
+                    </SplitColorText>
+                  )}
 
                   <div className="pillar-events-snippet">
                     <SplitColorText
@@ -373,52 +439,53 @@ function Home() {
                     </div>
                   </div>
 
-                <div className="pillar-coordinator-box">
-                  <SplitColorText
-                    as="span"
-                    className="coord-chip-label"
-                    screenSync={true}
-                    leftColor="#475569"
-                    rightColor="#cbd5e1"
-                  >
-                    Domain In-charge:
-                  </SplitColorText>
-                  <div className="coord-person-row">
+                  <div className="pillar-coordinator-box">
                     <SplitColorText
                       as="span"
-                      className="coord-name"
+                      className="coord-chip-label"
                       screenSync={true}
-                      leftColor="#0f172a"
-                      rightColor="#ffffff"
+                      leftColor="#475569"
+                      rightColor="#cbd5e1"
                     >
-                      {pillar.coordinator}
+                      Domain In-charge:
                     </SplitColorText>
-                    <a
-                      href={`tel:${pillar.phone}`}
-                      className="coord-phone-pill"
-                      onClick={(e) => e.stopPropagation()}
-                    >
+                    <div className="coord-person-row">
                       <SplitColorText
                         as="span"
-                        mode="fallback"
-                        className="coord-phone-icon-box"
+                        className="coord-name"
                         screenSync={true}
                         leftColor="#0f172a"
                         rightColor="#ffffff"
+                        title={pillar.coordinator}
                       >
-                        <Phone size={13} className="coord-phone-icon" strokeWidth={2} />
+                        {pillar.coordinator}
                       </SplitColorText>
-                      <SplitColorText
-                        as="span"
-                        screenSync={true}
-                        leftColor="#0f172a"
-                        rightColor="#ffffff"
+                      <a
+                        href={`tel:${pillar.phone}`}
+                        className="coord-phone-pill"
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        {pillar.phone}
-                      </SplitColorText>
-                    </a>
+                        <SplitColorText
+                          as="span"
+                          mode="fallback"
+                          className="coord-phone-icon-box"
+                          screenSync={true}
+                          leftColor="#0f172a"
+                          rightColor="#ffffff"
+                        >
+                          <Phone size={13} className="coord-phone-icon" strokeWidth={2} />
+                        </SplitColorText>
+                        <SplitColorText
+                          as="span"
+                          screenSync={true}
+                          leftColor="#0f172a"
+                          rightColor="#ffffff"
+                        >
+                          {pillar.phone}
+                        </SplitColorText>
+                      </a>
+                    </div>
                   </div>
-                </div>
 
                 </LiquidGlass>
               );

@@ -14,6 +14,8 @@ export function MuiTextField({
   hint = '',
   className = '',
   id,
+  multiline = false,
+  rows = 4,
   ...props
 }) {
   const [isFocused, setIsFocused] = useState(false);
@@ -27,23 +29,39 @@ export function MuiTextField({
     <div
       className={`mui-form-field ${isFloating ? 'is-floating' : ''} ${
         isFocused ? 'is-focused' : ''
-      } ${error ? 'has-error' : ''} ${className}`}
+      } ${error ? 'has-error' : ''} ${multiline ? 'is-multiline' : ''} ${className}`}
     >
       <div className="mui-input-container">
-        <input
-          type={isPassword ? (showPassword ? 'text' : 'password') : type}
-          id={inputId}
-          name={name}
-          value={value ?? ''}
-          onChange={onChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          placeholder={isFocused ? placeholder : ''}
-          required={required}
-          autoComplete={autoComplete}
-          className={`mui-outlined-input ${isPassword ? 'has-password-toggle' : ''}`}
-          {...props}
-        />
+        {multiline ? (
+          <textarea
+            id={inputId}
+            name={name}
+            value={value ?? ''}
+            onChange={onChange}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            placeholder={isFocused ? placeholder : ''}
+            required={required}
+            rows={rows}
+            className="mui-outlined-input mui-textarea"
+            {...props}
+          />
+        ) : (
+          <input
+            type={isPassword ? (showPassword ? 'text' : 'password') : type}
+            id={inputId}
+            name={name}
+            value={value ?? ''}
+            onChange={onChange}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            placeholder={isFocused ? placeholder : ''}
+            required={required}
+            autoComplete={autoComplete}
+            className={`mui-outlined-input ${isPassword ? 'has-password-toggle' : ''}`}
+            {...props}
+          />
+        )}
         <label htmlFor={inputId} className="mui-floating-label">
           <span>{label}</span>
           {required && <span className="mui-asterisk">*</span>}

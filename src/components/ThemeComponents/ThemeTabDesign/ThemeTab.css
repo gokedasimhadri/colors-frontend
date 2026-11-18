@@ -4,10 +4,26 @@
    and smooth morphing search bar of exact same size
    ========================================================================== */
 
+@property --rainbow-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes vibgyorConicRotate {
+  0% {
+    --rainbow-angle: 0deg;
+  }
+  100% {
+    --rainbow-angle: 360deg;
+  }
+}
+
 @keyframes vibgyorRainbowFlow {
   0% {
     background-position: 0% 50%;
   }
+
   100% {
     background-position: 200% 50%;
   }
@@ -49,9 +65,9 @@
   box-sizing: border-box;
   overflow: hidden;
   transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.25s ease,
-              border-color 0.25s ease,
-              box-shadow 0.25s ease;
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 /* Dual border enhancement to ensure clean definition on both white and black backgrounds */
@@ -77,6 +93,7 @@
 
 /* ── 1.A Tab Items List Row ─────────────────────────────────────────────── */
 .theme-tab-list {
+  position: relative !important;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -86,6 +103,57 @@
   white-space: nowrap;
   transition: opacity 0.22s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
+}
+
+/* Smooth Gliding Active Indicator Pill */
+.theme-tab-slider-indicator {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  border-radius: 9999px !important;
+  background: var(--theme-tab-active-bg, rgba(255, 255, 255, 0.22)) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid transparent !important;
+  box-shadow:
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.45),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.08),
+    0 4px 18px rgba(0, 0, 0, 0.08) !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: transform, width;
+}
+
+/* Flowing VIBGYOR Rainbow Border around the Gliding Active Indicator */
+.theme-tab-slider-indicator::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: -1px !important;
+  border-radius: 9999px !important;
+  padding: 1.8px !important;
+  box-sizing: border-box !important;
+  background: conic-gradient(
+    from var(--rainbow-angle, 0deg),
+    #8b00ff 0deg,
+    #4b0082 51.4deg,
+    #0066ff 102.8deg,
+    #00c853 154.3deg,
+    #ffd600 205.7deg,
+    #ff6d00 257.1deg,
+    #ff1744 308.6deg,
+    #8b00ff 360deg
+  ) !important;
+  animation: vibgyorConicRotate 3s linear infinite !important;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+  -webkit-mask-composite: xor !important;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+  mask-composite: exclude !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
 }
 
 .theme-tab-container.search-active .theme-tab-list {
@@ -101,6 +169,7 @@
   height: 40px;
   padding: 3px;
 }
+
 .theme-tab-container.size-sm .theme-tab-item {
   padding: 5px 12px;
   font-size: 0.78rem;
@@ -110,6 +179,7 @@
   height: 56px;
   padding: 6px;
 }
+
 .theme-tab-container.size-lg .theme-tab-item {
   padding: 10px 24px;
   font-size: 0.92rem;
@@ -151,16 +221,71 @@
   pointer-events: none;
 }
 
-/* Active Tab: Pure white-tinted transparent glass or custom activeBg */
-.theme-tab-item.active {
-  background: var(--theme-tab-active-bg, rgba(255, 255, 255, 0.22));
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-color: var(--theme-tab-active-border, var(--theme-tab-active-bg, rgba(255, 255, 255, 0.45)));
+/* Active Tab Fallback (when slider indicator is mounting) */
+.theme-tab-list:not(:has(.theme-tab-slider-indicator)) .theme-tab-item.active {
+  position: relative !important;
+  background: var(--theme-tab-active-bg, rgba(255, 255, 255, 0.22)) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid transparent !important;
   box-shadow:
-    inset 0 1px 1.5px rgba(255, 255, 255, 0.55),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.45),
     inset 0 -1px 1px rgba(0, 0, 0, 0.08),
-    0 4px 18px rgba(0, 0, 0, 0.08);
+    0 4px 18px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Flowing VIBGYOR Rainbow Border around Active Tab Fallback */
+.theme-tab-list:not(:has(.theme-tab-slider-indicator)) .theme-tab-item.active::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: -1px !important;
+  border-radius: 9999px !important;
+  padding: 1.8px !important;
+  box-sizing: border-box !important;
+  background: conic-gradient(
+    from var(--rainbow-angle, 0deg),
+    #8b00ff 0deg,
+    #4b0082 51.4deg,
+    #0066ff 102.8deg,
+    #00c853 154.3deg,
+    #ffd600 205.7deg,
+    #ff6d00 257.1deg,
+    #ff1744 308.6deg,
+    #8b00ff 360deg
+  ) !important;
+  animation: vibgyorConicRotate 3s linear infinite !important;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+  -webkit-mask-composite: xor !important;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+  mask-composite: exclude !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+/* Individual tab items sit seamlessly over the moving slider */
+.theme-tab-item {
+  position: relative !important;
+  z-index: 2 !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.2s ease,
+              color 0.2s ease !important;
+}
+
+.theme-tab-list:has(.theme-tab-slider-indicator) .theme-tab-item.active {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.theme-tab-list:has(.theme-tab-slider-indicator) .theme-tab-item.active::before {
+  display: none !important;
+}
+
+.theme-tab-item.active .theme-tab-label,
+.theme-tab-item.active .theme-tab-icon {
+  position: relative !important;
+  z-index: 2 !important;
 }
 
 /* Tab Icon */
@@ -182,57 +307,44 @@
   transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
 }
 
-/* Continuous 7-Color VIBGYOR Wave on Active Selected Tab */
 .theme-tab-label.active {
-  background-image: linear-gradient(
-    90deg,
-    #8b00ff 0%,    /* V - Violet */
-    #4b0082 7.1%,  /* I - Indigo */
-    #0066ff 14.3%, /* B - Blue */
-    #00c853 21.4%, /* G - Green */
-    #ffd600 28.6%, /* Y - Yellow */
-    #ff6d00 35.7%, /* O - Orange */
-    #ff1744 42.8%, /* R - Red */
-    #8b00ff 50%,   /* V - Violet Loop */
-    #4b0082 57.1%, /* I - Indigo */
-    #0066ff 64.3%, /* B - Blue */
-    #00c853 71.4%, /* G - Green */
-    #ffd600 78.6%, /* Y - Yellow */
-    #ff6d00 85.7%, /* O - Orange */
-    #ff1744 92.8%, /* R - Red */
-    #8b00ff 100%   /* V - Violet End */
-  ) !important;
-  background-size: 200% 100% !important;
-  background-repeat: repeat-x !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  color: transparent !important;
-  animation: vibgyorRainbowFlow 3s linear infinite !important;
-  text-shadow: none !important;
-  font-weight: 800;
+  font-weight: 700 !important;
 }
 
-/* Hover State: Continuous VIBGYOR Wave */
-.theme-tab-item:hover:not(.disabled) .theme-tab-label {
-  background-image: linear-gradient(
-    90deg,
-    #8b00ff 0%,    /* V - Violet */
-    #4b0082 7.1%,  /* I - Indigo */
-    #0066ff 14.3%, /* B - Blue */
-    #00c853 21.4%, /* G - Green */
-    #ffd600 28.6%, /* Y - Yellow */
-    #ff6d00 35.7%, /* O - Orange */
-    #ff1744 42.8%, /* R - Red */
-    #8b00ff 50%,   /* V - Violet Loop */
-    #4b0082 57.1%, /* I - Indigo */
-    #0066ff 64.3%, /* B - Blue */
-    #00c853 71.4%, /* G - Green */
-    #ffd600 78.6%, /* Y - Yellow */
-    #ff6d00 85.7%, /* O - Orange */
-    #ff1744 92.8%, /* R - Red */
-    #8b00ff 100%   /* V - Violet End */
-  ) !important;
+/* Hover State: Continuous VIBGYOR Wave on Inactive Tabs */
+.theme-tab-item:hover:not(.disabled):not(.active) .theme-tab-label {
+  background-image: linear-gradient(90deg,
+      #8b00ff 0%,
+      /* V - Violet */
+      #4b0082 7.1%,
+      /* I - Indigo */
+      #0066ff 14.3%,
+      /* B - Blue */
+      #00c853 21.4%,
+      /* G - Green */
+      #ffd600 28.6%,
+      /* Y - Yellow */
+      #ff6d00 35.7%,
+      /* O - Orange */
+      #ff1744 42.8%,
+      /* R - Red */
+      #8b00ff 50%,
+      /* V - Violet Loop */
+      #4b0082 57.1%,
+      /* I - Indigo */
+      #0066ff 64.3%,
+      /* B - Blue */
+      #00c853 71.4%,
+      /* G - Green */
+      #ffd600 78.6%,
+      /* Y - Yellow */
+      #ff6d00 85.7%,
+      /* O - Orange */
+      #ff1744 92.8%,
+      /* R - Red */
+      #8b00ff 100%
+      /* V - Violet End */
+    ) !important;
   background-size: 200% 100% !important;
   background-repeat: repeat-x !important;
   -webkit-background-clip: text !important;
@@ -300,6 +412,7 @@
     color: #ffffff;
   }
 }
+
 [data-theme='dark'] .theme-tab-integrated-search-input,
 .dark .theme-tab-integrated-search-input {
   color: #ffffff;
@@ -380,10 +493,10 @@
     inset 0 -1px 1px rgba(0, 0, 0, 0.15),
     0 8px 32px rgba(0, 0, 0, 0.12);
   transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              min-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.25s ease,
-              transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              margin 0.35s ease;
+    min-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.25s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    margin 0.35s ease;
   user-select: none;
   overflow: hidden;
   box-sizing: border-box;
@@ -447,7 +560,8 @@
   cursor: pointer;
   padding: 0;
   outline: none;
-  color: #ffffff; /* Guarantees bright white on dark side */
+  color: #ffffff;
+  /* Guarantees bright white on dark side */
   transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
 }
 
@@ -479,6 +593,7 @@
   stroke: #ffffff !important;
   color: #ffffff !important;
 }
+
 .split-color-text.theme-light .theme-tab-search-svg,
 .theme-tab-search-icon-wrap.theme-light .theme-tab-search-svg {
   stroke: #0f172a !important;
@@ -534,7 +649,7 @@
     max-width: 320px;
     overflow: hidden;
     transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-                max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .theme-tab-container.search-active {
@@ -630,6 +745,7 @@
       opacity: 0.4;
       transform: scale(0.92);
     }
+
     100% {
       opacity: 1;
       transform: scale(1);

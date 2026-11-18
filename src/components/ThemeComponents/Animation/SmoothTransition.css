@@ -1,0 +1,211 @@
+/* ==========================================================================
+   SmoothTransition Motion System & Animation Primitives
+   Ultra-smooth GPU-accelerated cubic-bezier transitions for tabs, modals,
+   cards, form viewports, and page elements.
+   ========================================================================== */
+
+:root {
+  --smooth-ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --smooth-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --smooth-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --smooth-duration-fast: 200ms;
+  --smooth-duration-normal: 320ms;
+  --smooth-duration-slow: 480ms;
+}
+
+/* ── 1. Smooth Transition Container ── */
+.smooth-transition-container {
+  position: relative;
+  width: 100%;
+  transition: height var(--smooth-duration-normal) var(--smooth-ease-spring);
+  will-change: height;
+  overflow: visible;
+}
+
+.smooth-transition-container.animating-height {
+  overflow: hidden;
+}
+
+.smooth-transition-content {
+  width: 100%;
+  animation-duration: var(--smooth-duration-normal);
+  animation-timing-function: var(--smooth-ease-spring);
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+}
+
+/* Variants */
+.smooth-transition-content.variant-fade-slide {
+  animation-name: smoothFadeSlideIn;
+}
+
+.smooth-transition-content.variant-fade {
+  animation-name: smoothFadeIn;
+}
+
+.smooth-transition-content.variant-scale {
+  animation-name: smoothScaleIn;
+}
+
+.smooth-transition-content.variant-slide-up {
+  animation-name: smoothSlideUpIn;
+}
+
+.smooth-transition-content.variant-slide-down {
+  animation-name: smoothSlideDownIn;
+}
+
+.smooth-transition-content.variant-crossfade {
+  animation-name: smoothCrossFade;
+}
+
+/* ── 2. Keyframes ── */
+@keyframes smoothFadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes smoothFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes smoothScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes smoothSlideUpIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes smoothSlideDownIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -16px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes smoothCrossFade {
+  0% {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* ── 3. Smooth Reveal Primitives ── */
+.smooth-reveal {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition: opacity var(--smooth-duration-normal) var(--smooth-ease-out),
+              transform var(--smooth-duration-normal) var(--smooth-ease-spring);
+  will-change: opacity, transform;
+}
+
+.smooth-reveal.revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.smooth-reveal.dir-down {
+  transform: translate3d(0, -14px, 0);
+}
+
+.smooth-reveal.dir-left {
+  transform: translate3d(14px, 0, 0);
+}
+
+.smooth-reveal.dir-right {
+  transform: translate3d(-14px, 0, 0);
+}
+
+.smooth-reveal.dir-none {
+  transform: none;
+}
+
+/* ── 4. Interactive Smooth Card Component ── */
+.smooth-card {
+  position: relative;
+  transition: transform var(--smooth-duration-normal) var(--smooth-ease-spring),
+              box-shadow var(--smooth-duration-normal) var(--smooth-ease-spring),
+              border-color 0.25s ease,
+              background 0.25s ease;
+  will-change: transform, box-shadow;
+}
+
+.smooth-card:hover {
+  transform: translateY(-4px) scale(1.01);
+}
+
+.smooth-card:active {
+  transform: translateY(-1px) scale(0.99);
+  transition-duration: 0.12s;
+}
+
+/* ── 5. Universal Project-Wide Smooth Motion Helpers ── */
+/* Smooth button presses */
+.smooth-btn-interactive,
+button.theme-glass-btn,
+button.btn-fest-primary,
+button.btn-fest-secondary,
+.fest-tab-btn {
+  transition: transform var(--smooth-duration-fast) var(--smooth-ease-spring),
+              box-shadow var(--smooth-duration-fast) ease,
+              background 0.2s ease,
+              filter 0.2s ease !important;
+  will-change: transform;
+}
+
+.smooth-btn-interactive:active,
+button.theme-glass-btn:active,
+button.btn-fest-primary:active,
+button.btn-fest-secondary:active {
+  transform: scale(0.97) !important;
+}
+
+/* Smooth Form Focus Halos */
+input, select, textarea {
+  transition: border-color 0.25s ease,
+              box-shadow 0.25s var(--smooth-ease-spring),
+              background 0.2s ease !important;
+}
+
+/* Smooth Modals */
+.fest-modal-card {
+  transition: transform 0.35s var(--smooth-ease-spring),
+              opacity 0.28s ease,
+              max-width 0.35s var(--smooth-ease-spring),
+              height 0.35s var(--smooth-ease-spring) !important;
+  will-change: transform, opacity, max-width;
+}
