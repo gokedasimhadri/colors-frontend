@@ -40,34 +40,8 @@ export default function StudentAuthModal({
 
   const authTabs = useMemo(
     () => [
-      {
-        id: 'register',
-        label: (
-          <SplitColorText
-            as="span"
-            splitPercent={50}
-            leftColor="#ffffff"
-            rightColor="#000000"
-            className="fest-auth-tab-split-label"
-          >
-            Register
-          </SplitColorText>
-        )
-      },
-      {
-        id: 'login',
-        label: (
-          <SplitColorText
-            as="span"
-            splitPercent={50}
-            leftColor="#ffffff"
-            rightColor="#000000"
-            className="fest-auth-tab-split-label"
-          >
-            Login
-          </SplitColorText>
-        )
-      }
+      { id: 'register', label: 'Register' },
+      { id: 'login', label: 'Login' }
     ],
     []
   );
@@ -314,7 +288,7 @@ export default function StudentAuthModal({
         className={`fest-modal-card fest-auth-liquid-modal ${
           confirmedRecord ? 'auth-mode-confirmed' : mode === 'register' ? 'auth-mode-register' : 'auth-mode-login'
         }`}
-        theme="light"
+        theme="auto"
         borderRadius={24}
         enableShader={true}
         onClick={(e) => e.stopPropagation()}
@@ -322,19 +296,13 @@ export default function StudentAuthModal({
         {/* Header */}
         <div className="fest-modal-header">
           <div className="fest-modal-header-banner">
-            <SplitColorText
-              as="h2"
-              className="fest-modal-title"
-              splitPercent={50}
-              leftColor="#ffffff"
-              rightColor="#000000"
-            >
+            <h2 className="fest-modal-title">
               {confirmedRecord
                 ? 'Event Registration Confirmation'
                 : mode === 'register'
                   ? 'Student Registration'
                   : 'Student Login'}
-            </SplitColorText>
+            </h2>
             <button className="fest-modal-close-btn" onClick={onClose} aria-label="Close modal">
               ✕
             </button>
@@ -354,8 +322,8 @@ export default function StudentAuthModal({
               }}
               size="md"
               showSearch={false}
-              leftColor="#ffffff"
-              rightColor="#000000"
+              leftColor="#0f172a"
+              rightColor="#0f172a"
               screenSync={false}
               className="fest-auth-themetab"
               ariaLabel="Student Portal Mode"
@@ -701,24 +669,24 @@ export default function StudentAuthModal({
         {/* Footer (hidden on confirmation view) */}
         {!confirmedRecord && (
           <div className="fest-modal-footer">
-            <SmoothTransition transitionKey={mode} variant="fade" duration={220} animateHeight={false}>
+            <SmoothTransition transitionKey={mode} variant="fade" duration={220} animateHeight={false} style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
               {mode === 'register' ? (
                 <ThemeButton
                   type="submit"
                   form="student-register-form"
                   disabled={loading}
                   borderRadius={12}
-                  height={46}
+                  height={48}
                   showBlast={true}
-                  className="fest-btn-primary"
+                  className="fest-btn-submit-theme"
                 >
-                  <SplitColorText leftColor="#ffffff" rightColor="#000000">
+                  <span style={{ color: '#0f172a', fontWeight: 700 }}>
                     {loading
                       ? 'Processing Registration...'
                       : studentStatus?.alreadyRegisteredForEvent
                         ? 'View Registration Slip'
                         : 'Register & Continue'}
-                  </SplitColorText>
+                  </span>
                 </ThemeButton>
               ) : (
                 <ThemeButton
@@ -726,13 +694,13 @@ export default function StudentAuthModal({
                   form="student-login-form"
                   disabled={loading}
                   borderRadius={12}
-                  height={46}
+                  height={48}
                   showBlast={true}
-                  className="fest-btn-primary"
+                  className="fest-btn-submit-theme"
                 >
-                  <SplitColorText leftColor="#ffffff" rightColor="#000000">
+                  <span style={{ color: '#0f172a', fontWeight: 700 }}>
                     {loading ? 'Signing In...' : 'Sign In & Continue'}
-                  </SplitColorText>
+                  </span>
                 </ThemeButton>
               )}
             </SmoothTransition>

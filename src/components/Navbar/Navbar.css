@@ -575,17 +575,13 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-.navbar-profile-circle-btn:hover {
-  transform: scale(1.06);
-}
-
+.navbar-profile-circle-btn:hover,
 .navbar-profile-circle-btn:active {
-  transform: scale(0.96);
+  transform: none;
 }
 
 /* VIBGYOR Rainbow Gradient Ring */
@@ -603,7 +599,6 @@
     0 0 14px rgba(0, 210, 255, 0.4),
     0 0 22px rgba(249, 115, 22, 0.3),
     0 0 30px rgba(139, 92, 246, 0.35);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .navbar-profile-circle-ring::before {
@@ -635,42 +630,27 @@
   }
 }
 
-.navbar-profile-circle-btn:hover .navbar-profile-circle-ring,
-.navbar-profile-circle-btn.active .navbar-profile-circle-ring {
-  box-shadow: 
-    0 0 20px rgba(0, 210, 255, 0.7),
-    0 0 32px rgba(249, 115, 22, 0.55),
-    0 0 42px rgba(139, 92, 246, 0.65);
-}
-
-.navbar-profile-circle-btn:hover .navbar-profile-circle-ring::before {
-  animation-duration: 4s;
-}
-
-/* Glass Center with Blur & Transparency */
+/* Glass Center with Transparent Blur (No Black Tint & No Hover Change) */
 .navbar-profile-circle-glass {
   position: relative;
   z-index: 1;
   width: calc(100% - 4.5px);
   height: calc(100% - 4.5px);
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.55);
+  background: rgba(255, 255, 255, 0.05);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 
-    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -1px 2px 0 rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.22s ease;
   box-sizing: border-box;
 }
 
 .navbar-profile-circle-btn:hover .navbar-profile-circle-glass {
-  background: rgba(15, 23, 42, 0.4);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
 /* First Letter of Name */

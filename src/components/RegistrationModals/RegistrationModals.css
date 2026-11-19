@@ -8,9 +8,9 @@
   position: fixed;
   inset: 0;
   z-index: 999999 !important;
-  background: rgba(10, 15, 30, 0.65) !important;
-  backdrop-filter: blur(16px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  background: rgba(15, 23, 42, 0.18) !important;
+  backdrop-filter: blur(12px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(160%) !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,21 +34,21 @@
   z-index: 1000000 !important;
   width: 100%;
   max-width: 620px;
-  background: rgba(255, 255, 255, 0.90) !important;
-  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
   border-radius: 24px !important;
   box-shadow:
-    0 30px 80px -15px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(255, 255, 255, 0.4),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.9) !important;
+    0 30px 80px -15px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
   color: #0f172a;
   overflow: hidden;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
   padding: 0 !important;
-  -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.03) !important;
-  backdrop-filter: blur(28px) saturate(190%) brightness(1.03) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.04) !important;
+  backdrop-filter: blur(28px) saturate(190%) brightness(1.04) !important;
   animation: festScaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -58,32 +58,31 @@
    3D specular bevel, and Three.js caustics compatibility.
    ───────────────────────────────────────────────────────────── */
 
-.fest-modal-card.liquid-glass-card,
 .fest-modal-card.fest-auth-liquid-modal {
-  background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.28) 0%,
-      rgba(255, 255, 255, 0.12) 50%,
-      rgba(255, 255, 255, 0.22) 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  position: relative !important;
+  z-index: 1000000 !important;
+  width: 92% !important;
+  max-width: 460px !important;
+  margin: 0 auto !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
   border-radius: 24px !important;
+  backdrop-filter: blur(32px) saturate(200%) brightness(1.05) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.05) !important;
   box-shadow:
-    0 30px 80px -15px rgba(0, 0, 0, 0.48),
-    0 0 0 1px rgba(255, 255, 255, 0.35),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.85),
-    inset 0 -1.5px 2px rgba(0, 0, 0, 0.12) !important;
-  -webkit-backdrop-filter: blur(36px) saturate(210%) brightness(1.08) !important;
-  backdrop-filter: blur(36px) saturate(210%) brightness(1.08) !important;
+    0 30px 80px -15px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.95),
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.04) !important;
+  color: #0f172a !important;
   overflow: hidden !important;
   isolation: isolate;
   padding: 0 !important;
-  width: 92% !important;
-  max-width: 440px !important;
-  margin: 0 auto !important;
   transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease !important;
 }
 
 .fest-modal-card.fest-auth-liquid-modal.auth-mode-login {
-  max-width: 440px !important;
+  max-width: 460px !important;
 }
 
 .fest-modal-card.fest-auth-liquid-modal.auth-mode-register {
@@ -94,7 +93,7 @@
   max-width: 580px !important;
 }
 
-/* Glass 3D Beveled Physical Chamfer Edge for 24px radius */
+/* Optical glass with 3D specular chamfers */
 .fest-modal-card.fest-auth-liquid-modal::before,
 .fest-modal-card.liquid-glass-card::before {
   content: '';
@@ -103,10 +102,10 @@
   border-radius: 24px !important;
   padding: 1.5px !important;
   background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.85) 0%,
-      rgba(255, 255, 255, 0.25) 35%,
-      rgba(255, 255, 255, 0.05) 65%,
-      rgba(0, 0, 0, 0.22) 100%) !important;
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(255, 255, 255, 0.35) 40%,
+      rgba(190, 147, 55, 0.3) 75%,
+      rgba(255, 255, 255, 0.2) 100%) !important;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -123,9 +122,9 @@
   inset: 1.5px;
   border-radius: calc(24px - 1.5px) !important;
   box-shadow:
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.85),
-    inset 1px 0 1.5px rgba(255, 255, 255, 0.45),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.15) !important;
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.95),
+    inset 1px 0 1.5px rgba(255, 255, 255, 0.6),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.08) !important;
   pointer-events: none;
   z-index: 3;
 }
@@ -143,6 +142,304 @@
 
 .fest-modal-card.event-reg-card {
   max-width: 1040px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Event Registration Modal: Pure Optical Liquid Glass & VIBGYOR Badges
+   ───────────────────────────────────────────────────────────── */
+
+.fest-modal-card.fest-event-liquid-modal {
+  position: relative !important;
+  z-index: 1000000 !important;
+  width: 95% !important;
+  max-width: 1060px !important;
+  margin: 0 auto !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  border-radius: 24px !important;
+  backdrop-filter: blur(32px) saturate(200%) brightness(1.04) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.04) !important;
+  box-shadow:
+    0 30px 80px -15px rgba(0, 0, 0, 0.22),
+    0 0 0 1px rgba(255, 255, 255, 0.7),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.95),
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.04) !important;
+  color: #0f172a !important;
+  overflow: hidden !important;
+  isolation: isolate;
+  padding: 0 !important;
+}
+
+.fest-modal-card.fest-event-liquid-modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px !important;
+  padding: 1.5px !important;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.3) 40%,
+    rgba(190, 147, 55, 0.4) 75%,
+    rgba(255, 255, 255, 0.1) 100%
+  ) !important;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.fest-modal-card.fest-event-liquid-modal::after {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  border-radius: calc(24px - 1.5px) !important;
+  box-shadow:
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.7),
+    inset 1px 0 1.5px rgba(255, 255, 255, 0.4),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.06) !important;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.fest-event-liquid-modal .fest-modal-header {
+  position: relative !important;
+  background: rgba(255, 255, 255, 0.65) !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  padding: 1.6rem 2rem 1.25rem 2rem !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.fest-event-liquid-modal .fest-modal-body {
+  padding: 1.75rem 2rem !important;
+  background: transparent !important;
+  max-height: 75vh !important;
+  overflow-y: auto !important;
+  color: #0f172a !important;
+}
+
+.fest-event-liquid-modal .fest-modal-footer {
+  position: relative !important;
+  background: rgba(255, 255, 255, 0.65) !important;
+  border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
+  padding: 1.25rem 2rem !important;
+  display: flex !important;
+  gap: 1rem !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+/* Event Summary Box inside Liquid Modal */
+.fest-event-liquid-modal .event-reg-summary-box {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 18px !important;
+  padding: 1.4rem 1.75rem !important;
+  margin-bottom: 1.5rem !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03), inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+}
+
+.fest-event-liquid-modal .event-reg-fee-box {
+  background: rgba(190, 147, 55, 0.08) !important;
+  border: 1px solid rgba(190, 147, 55, 0.3) !important;
+  border-radius: 14px !important;
+  padding: 0.65rem 1.25rem !important;
+  text-align: center !important;
+}
+
+/* Participant Pattern Block inside Liquid Modal */
+.fest-event-liquid-modal .participant-pattern-block {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 18px !important;
+  padding: 1.6rem 1.75rem !important;
+  margin-bottom: 1.5rem !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03), inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.fest-event-liquid-modal .participant-pattern-block:hover {
+  border-color: rgba(190, 147, 55, 0.5) !important;
+  box-shadow: 0 8px 24px rgba(190, 147, 55, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+}
+
+.fest-event-liquid-modal .participant-pattern-block.leader-block {
+  border-left: 4px solid #be9337 !important;
+}
+
+.fest-event-liquid-modal .participant-pattern-header {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  margin-bottom: 1.25rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
+.fest-event-liquid-modal .pattern-field-col {
+  display: block !important;
+}
+
+/* ── Badges with VIBGYOR Rainbow Animated Border ── */
+.fest-event-liquid-modal .fest-modal-badge,
+.fest-event-liquid-modal .event-meta-pill-item,
+.fest-event-liquid-modal .participant-badge-leader,
+.fest-event-liquid-modal .roster-chip {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: none !important;
+  background: rgba(255, 255, 255, 0.75) !important;
+  backdrop-filter: blur(10px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
+  border-radius: 9999px !important;
+  padding: 4px 14px !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  isolation: isolate;
+  color: #0f172a !important;
+}
+
+.fest-event-liquid-modal .fest-modal-badge::before,
+.fest-event-liquid-modal .event-meta-pill-item::before,
+.fest-event-liquid-modal .participant-badge-leader::before,
+.fest-event-liquid-modal .roster-chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--rainbow-angle, 0deg),
+    #8b00ff 0deg,
+    #4b0082 51.4deg,
+    #0066ff 102.8deg,
+    #00c853 154.2deg,
+    #ffd600 205.7deg,
+    #ff6d00 257.1deg,
+    #ff1744 308.6deg,
+    #8b00ff 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: vibgyorConicRotate 4s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Form Fields inside Liquid Modal: Authentic Glass MUI inputs ── */
+.fest-event-liquid-modal .mui-form-field {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.fest-event-liquid-modal .mui-outlined-input {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1.5px solid rgba(15, 23, 42, 0.15) !important;
+  color: #0f172a !important;
+  border-radius: 12px !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+.fest-event-liquid-modal .mui-outlined-input:hover:not(:disabled):not(:focus) {
+  background: #ffffff !important;
+  border-color: rgba(190, 147, 55, 0.5) !important;
+}
+
+.fest-event-liquid-modal .mui-form-field.is-focused .mui-outlined-input,
+.fest-event-liquid-modal .mui-outlined-input:focus {
+  background: #ffffff !important;
+  border-color: #be9337 !important;
+  box-shadow: 0 0 0 3px rgba(190, 147, 55, 0.2) !important;
+}
+
+.fest-event-liquid-modal .mui-outlined-input input,
+.fest-event-liquid-modal .mui-outlined-input select {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+.fest-event-liquid-modal .mui-floating-label {
+  color: #be9337 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  font-size: 0.78rem !important;
+}
+
+.fest-event-liquid-modal .mui-form-field.is-floating .mui-floating-label {
+  background: transparent !important;
+}
+
+.fest-event-liquid-modal .mui-select option {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* Regulations & Notices inside Liquid Modal */
+.fest-event-liquid-modal .fest-rules-box {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 14px !important;
+  padding: 1rem 1.25rem !important;
+  color: #334155 !important;
+}
+
+.fest-event-liquid-modal .team-leader-info-notice {
+  background: rgba(190, 147, 55, 0.08) !important;
+  border: 1px solid rgba(190, 147, 55, 0.25) !important;
+  border-radius: 14px !important;
+  color: #0f172a !important;
+}
+
+.fest-event-liquid-modal .roster-preview-box {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 14px !important;
+  padding: 1rem 1.25rem !important;
+  color: #0f172a !important;
+}
+
+/* Ticket confirmation view */
+.fest-event-liquid-modal .reg-ticket-card {
+  background: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 18px !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+  padding: 1.75rem !important;
+  color: #0f172a !important;
+}
+
+.fest-event-liquid-modal .reg-ticket-header {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  background: transparent !important;
+}
+
+.fest-event-liquid-modal .reg-ticket-row {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06) !important;
+  color: #0f172a !important;
+}
+
+.fest-event-liquid-modal .reg-participants-table th {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.1) !important;
+  color: #0f172a !important;
+}
+
+.fest-event-liquid-modal .reg-participants-table td {
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06) !important;
+  color: #0f172a !important;
 }
 
 @keyframes festScaleUp {
@@ -210,16 +507,16 @@
 
 /* Centered Header for Student Auth Modal on Liquid Glass */
 .fest-auth-liquid-modal .fest-modal-header {
-  padding: 1.35rem 1.65rem 1.15rem 1.65rem !important;
+  padding: 1.65rem 1.85rem 0.85rem 1.85rem !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   text-align: center !important;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%) !important;
+  background: transparent !important;
   border-bottom: none !important;
   box-shadow: none !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .fest-auth-liquid-modal .fest-modal-header-banner {
@@ -236,12 +533,7 @@
   font-weight: 900;
   text-align: center;
   margin: 0 auto;
-}
-
-.fest-auth-liquid-modal .fest-modal-title .split-color-text {
-  display: inline-block;
-  text-align: center;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  color: #0f172a !important;
 }
 
 .fest-auth-liquid-modal .fest-modal-close-btn {
@@ -256,13 +548,14 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  background: rgba(255, 255, 255, 0.45) !important;
-  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  background: rgba(15, 23, 42, 0.07) !important;
+  border: 1px solid rgba(15, 23, 42, 0.14) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-  color: #0f172a !important;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  color: #334155 !important;
+  cursor: pointer;
+  transition: all 0.2s ease !important;
 }
 
 .fest-auth-liquid-modal .fest-modal-close-btn:hover,
@@ -270,12 +563,12 @@
   position: absolute !important;
   right: 0 !important;
   top: 50% !important;
-  transform: translateY(-50%) !important;
+  transform: translateY(-50%) scale(1.08) !important;
   margin: 0 !important;
-  background: #e11d48 !important;
-  border-color: #e11d48 !important;
+  background: rgba(239, 68, 68, 0.85) !important;
+  border-color: #ef4444 !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.4) !important;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.45) !important;
 }
 
 .fest-modal-subtitle {
@@ -793,51 +1086,108 @@
 }
 
 .fest-auth-liquid-modal .mui-outlined-input {
-  background: rgba(255, 255, 255, 0.78) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.75) !important;
-  border-radius: 12px !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
+  width: 100%;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.94) !important;
+  border: 1.5px solid rgba(203, 213, 225, 0.9) !important;
+  border-radius: 14px !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
   box-shadow:
-    inset 0 1px 2px rgba(255, 255, 255, 0.9),
-    0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    inset 0 1px 2px rgba(15, 23, 42, 0.04),
+    0 2px 6px rgba(0, 0, 0, 0.03) !important;
   color: #0f172a !important;
-  font-size: 0.95rem !important;
-  font-weight: 500;
+  font-size: 0.96rem !important;
+  font-weight: 600 !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .fest-auth-liquid-modal .mui-outlined-input:hover:not(:disabled):not(:focus) {
-  background: rgba(255, 255, 255, 0.88) !important;
-  border-color: rgba(37, 99, 235, 0.5) !important;
+  background: #ffffff !important;
+  border-color: rgba(190, 147, 55, 0.5) !important;
+  box-shadow:
+    inset 0 1px 2px rgba(15, 23, 42, 0.04),
+    0 4px 12px rgba(190, 147, 55, 0.12) !important;
 }
 
 .fest-auth-liquid-modal .mui-form-field.is-focused .mui-outlined-input,
 .fest-auth-liquid-modal .mui-outlined-input:focus {
-  background: rgba(255, 255, 255, 0.96) !important;
-  border-color: #2563eb !important;
+  background: #ffffff !important;
+  border-color: #be9337 !important;
   box-shadow:
-    0 0 0 3px rgba(37, 99, 235, 0.2),
-    inset 0 1px 2px rgba(255, 255, 255, 0.95),
-    0 4px 14px rgba(37, 99, 235, 0.12) !important;
+    0 0 0 3px rgba(190, 147, 55, 0.25),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8),
+    0 4px 16px rgba(190, 147, 55, 0.15) !important;
 }
 
 .fest-auth-liquid-modal .mui-floating-label {
-  color: #475569 !important;
+  color: #64748b !important;
+  font-size: 0.92rem;
   font-weight: 600;
+  background: transparent !important;
+  padding: 0 6px;
+  border-radius: 4px;
 }
 
 .fest-auth-liquid-modal .mui-form-field.is-floating .mui-floating-label {
-  background: rgba(255, 255, 255, 0.94) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
-  color: #1e293b !important;
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  background: #ffffff !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  color: #be9337 !important;
+  font-weight: 700;
+  border-radius: 6px;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
 }
 
-.fest-auth-liquid-modal .mui-form-field.is-focused .mui-floating-label {
-  color: #2563eb !important;
+.fest-auth-liquid-modal .mui-form-field.is-focused.is-floating .mui-floating-label {
+  color: #be9337 !important;
+  border-color: rgba(190, 147, 55, 0.4) !important;
+}
+
+.fest-auth-liquid-modal .mui-outlined-input::placeholder {
+  color: #94a3b8 !important;
+}
+
+.fest-auth-liquid-modal .mui-password-toggle {
+  color: #64748b !important;
+}
+
+.fest-auth-liquid-modal .mui-password-toggle:hover {
+  color: #0f172a !important;
+}
+
+/* Tabs styling in Auth modal */
+.fest-auth-liquid-modal .fest-modal-tabs-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 1.85rem 0.25rem;
+}
+
+.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-container {
+  background: rgba(15, 23, 42, 0.06) !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06) !important;
+  height: 44px !important;
+}
+
+.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-item {
+  color: #475569 !important;
+  font-weight: 600 !important;
+  font-size: 0.92rem !important;
+}
+
+.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-item.active {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-label {
+  color: inherit !important;
 }
 
 /* Ticket Confirmation on Liquid Glass */
@@ -1111,38 +1461,44 @@
 
 /* Footer inside Liquid Glass Modal */
 .fest-auth-liquid-modal .fest-modal-footer {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.18) 100%) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
-  padding: 1.15rem 1.65rem !important;
+  background: transparent !important;
+  border-top: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 1rem 1.65rem 1.65rem 1.65rem !important;
   display: flex !important;
   align-items: center !important;
   justify-content: flex-end !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 /* Liquid Glass ThemeButton in Modal Footer */
-.fest-auth-liquid-modal .fest-modal-footer .theme-glass-btn {
-  background: rgba(255, 255, 255, 0.14) !important;
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+.fest-auth-liquid-modal .fest-modal-footer .theme-glass-btn,
+.fest-auth-liquid-modal .fest-btn-submit-theme {
+  min-width: 170px !important;
+  height: 48px !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
   box-shadow:
-    0 10px 24px -6px rgba(0, 0, 0, 0.25),
-    inset 0 1px 1.5px rgba(255, 255, 255, 0.45),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.10) !important;
-  padding: 0.65rem 1.6rem !important;
+    0 8px 24px -4px rgba(0, 0, 0, 0.25),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.5) !important;
+  padding: 0.65rem 1.8rem !important;
   border-radius: 12px !important;
-  min-height: 44px;
   cursor: pointer;
+  transition: all 0.25s ease !important;
 }
 
-.fest-auth-liquid-modal .fest-modal-footer .theme-glass-btn:hover {
-  background: rgba(255, 255, 255, 0.24) !important;
-  border-color: rgba(255, 255, 255, 0.6) !important;
+.fest-auth-liquid-modal .fest-modal-footer .theme-glass-btn:hover,
+.fest-auth-liquid-modal .fest-btn-submit-theme:hover {
+  background: rgba(255, 255, 255, 0.28) !important;
+  border-color: rgba(255, 255, 255, 0.65) !important;
   box-shadow:
-    0 12px 28px -6px rgba(0, 0, 0, 0.32),
-    inset 0 1px 1.5px rgba(255, 255, 255, 0.65) !important;
+    0 12px 28px -4px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.75) !important;
+  transform: translateY(-2px) !important;
 }
 
 .btn-fest-secondary,

@@ -211,6 +211,7 @@ export default function Sponsors() {
             </div>
 
             {/* 7-Column Container: Powered By & Co-Sponsors (Cards width: 3.5 + 3.5) */}
+            {/*
             <div className="tier-group-block sponsors-col-7">
               <div className="tier-header">
                 <span className="tier-badge-pill">
@@ -239,9 +240,11 @@ export default function Sponsors() {
                 ))}
               </div>
             </div>
+            */}
           </div>
 
           {/* Remaining Tier Groups (Associate, Media, etc.) */}
+          {/*
           {sponsorTiers.slice(2).map((tierGroup, idx) => (
             <div key={idx + 2} className="tier-group-block">
               <div className="tier-header">
@@ -272,10 +275,12 @@ export default function Sponsors() {
               </div>
             </div>
           ))}
+          */}
         </div>
       </section>
 
       {/* Corporate Sponsorship Benefits */}
+      {/*
       <section className="sponsors-benefits-section">
         <div className="container">
           <div className="benefits-header text-center">
@@ -324,8 +329,10 @@ export default function Sponsors() {
           </div>
         </div>
       </section>
+      */}
 
       {/* Become a Sponsor Form */}
+      {/*
       <section id="become-sponsor" className="sponsors-form-section">
         <div className="container">
           <div className="sponsor-form-card">
@@ -419,6 +426,7 @@ export default function Sponsors() {
           </div>
         </div>
       </section>
+      */}
     </SplitBackground>
   );
 }
