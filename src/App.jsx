@@ -3,13 +3,15 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Navbar from './components/Navbar/Navbar';
 import Home from './pages/Home/Home';
 import Events from './pages/Events/Events';
-// import Invitation from './pages/Invitation/Invitation';
+import Invitation from './pages/Invitation/Invitation';
 import Teams from './pages/Teams';
 import Sponsors from './pages/Sponsors/Sponsors';
 import Contact from './pages/Contact/Contact';
+import Live from './pages/Live/Live';
 import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
 import MouseAnimation from './components/ThemeComponents/MouseAnimation/MouseAnimation';
 import ColourBlast from './components/ThemeComponents/ColourBlast/ColourBlast';
+import DualCornerRibbonBlast from './components/ThemeComponents/DualCornerRibbonBlast/DualCornerRibbonBlast';
 
 import Footer from './components/Footer/Footer';
 import MobileBottomBar from './components/MobileBottomBar/MobileBottomBar';
@@ -18,6 +20,9 @@ function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
+    if (pathname === '/live') {
+      return;
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [pathname]);
 
@@ -50,6 +55,8 @@ function App() {
         {/* Colorful powder blast animations: page load & user clicks */}
         <MouseAnimation autoPlay={true} />
         <ColourBlast enabled={true} duration={1250} />
+        {/* Realistic Dual-Corner Diagonal Color Ribbon Blast */}
+        <DualCornerRibbonBlast autoPlay={true} delay={250} />
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -57,9 +64,10 @@ function App() {
           <Route path="/events/:eventCategory" element={<Events />} />
           <Route path="/events/:eventCategory/:eventName" element={<Events />} />
           <Route path="/events/:eventCategory/:eventSubCategory/:eventName" element={<Events />} />
-          {/* <Route path="/invitation" element={<Invitation />} /> */}
+          <Route path="/invitation" element={<Invitation />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/team" element={<Teams />} />
+          <Route path="/live" element={<Live />} />
           <Route path="/events-schedule" element={<SchedulePdfRedirect />} />
           <Route path="/sponsors" element={<Sponsors />} />
           <Route path="/contact" element={<Contact />} />

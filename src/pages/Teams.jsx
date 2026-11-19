@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import SplitBackground from '../components/ThemeComponents/backgrounds/SplitBackground';
 import SplitColorText from '../components/ThemeComponents/SplitColor/SplitColorText';
 import { LiquidGlass } from '../components/ThemeComponents/LiquidGlass';
@@ -31,7 +31,7 @@ function useScrollReveal(selector = '.scroll-reveal', options = {}) {
 }
 
 const featuredLeader = {
-  name: 'Dr. M. Sreenivasa Reddy',
+  name: 'Dr. M Sreenivasa Reddy',
   designation: 'Dy. Pro-Chancellor',
   department: 'Aditya University',
   accent: '#be9337',
@@ -40,8 +40,9 @@ const featuredLeader = {
 };
 
 const organizingTeam = [
+  featuredLeader,
   {
-    name: 'Dr. M. B. Srinivas',
+    name: 'Dr. M B Srinivas',
     designation: 'Vice-Chancellor',
     department: 'Aditya University',
     accent: '#be9337',
@@ -49,15 +50,7 @@ const organizingTeam = [
     initials: 'MBS'
   },
   {
-    name: 'Dr. G. Suresh',
-    designation: 'Registrar',
-    department: 'Aditya University',
-    accent: '#0284c7',
-    image: '/Team/suresh.webp',
-    initials: 'GS'
-  },
-  {
-    name: 'Dr. A. Ramesh',
+    name: 'Dr. A Ramesh',
     designation: 'Pro Vice-Chancellor (E & S)',
     department: 'Aditya University',
     accent: '#10b981',
@@ -65,7 +58,7 @@ const organizingTeam = [
     initials: 'AR'
   },
   {
-    name: 'Dr. S. Rama Sree',
+    name: 'Dr. S Rama Sree',
     designation: 'Pro. Vice-Chancellor (Academics)',
     department: 'Aditya University',
     accent: '#7c3aed',
@@ -81,7 +74,15 @@ const organizingTeam = [
     initials: 'TR'
   },
   {
-    name: 'Mr. V. Satyanarayana',
+    name: 'Dr. G Suresh',
+    designation: 'Registrar',
+    department: 'Aditya University',
+    accent: '#0284c7',
+    image: '/Team/suresh.webp',
+    initials: 'GS'
+  },
+  {
+    name: 'Mr. V Satyanarayana',
     designation: 'Dean-Admin.',
     department: 'Aditya University',
     accent: '#e11d48',
@@ -92,7 +93,7 @@ const organizingTeam = [
 
 const eventCommittees = [
   {
-    committee: 'Cultural & Stage Events',
+    committee: 'Cultural & Stage',
     name: 'Dr. D. Kishore',
     designation: 'Dean - Student Activities',
     department: 'Aditya University',
@@ -129,62 +130,62 @@ const eventCommittees = [
   }
 ];
 
-const functionalCommittees = [
-  {
-    committee: 'Sponsorship',
-    name: 'Dr. G. Sridevi',
-    designation: 'Dean - School of Engineering',
-    department: 'Aditya University',
-    accent: '#e11d48',
-    image: '/Team/Sridevi.jpg',
-    initials: 'GS'
-  },
-  {
-    committee: 'Campaigning and Invitations',
-    name: 'Dr. M. Raja Babu',
-    designation: 'HoD',
-    department: 'Aditya University',
-    accent: '#06b6d4',
-    image: '/Team/rajababu.webp',
-    initials: 'MR'
-  },
-  {
-    committee: 'Registration & Reception',
-    name: 'Mr. R. V. V. N. Bhima Rao',
-    designation: 'HoD',
-    department: 'Aditya University',
-    accent: '#f59e0b',
-    image: '',
-    initials: 'BR'
-  },
-  {
-    committee: 'Discipline',
-    name: 'Dr. Y. K. S. Subba Rao',
-    designation: 'Dean - Student Welfare',
-    department: 'Aditya University',
-    accent: '#8b5cf6',
-    image: '/Team/Subbarao.webp',
-    initials: 'YS'
-  },
-  {
-    committee: 'Ground Arrangements',
-    name: 'Dr. M. V. Rajesh',
-    designation: 'Associate Dean - School of Computing',
-    department: 'Aditya University',
-    accent: '#059669',
-    image: '/Team/MV Rajesh.webp',
-    initials: 'MR'
-  },
-  {
-    committee: 'Transport',
-    name: 'Dr. A. Saravanan',
-    designation: 'Dean - R&C',
-    department: 'Aditya University',
-    accent: '#dc2626',
-    image: '/Team/Dr__A_Saravanan.webp',
-    initials: 'AS'
-  }
-];
+// const functionalCommittees = [
+//   {
+//     committee: 'Sponsorship',
+//     name: 'Dr. G. Sridevi',
+//     designation: 'Dean - School of Engineering',
+//     department: 'Aditya University',
+//     accent: '#e11d48',
+//     image: '/Team/Sridevi.jpg',
+//     initials: 'GS'
+//   },
+//   {
+//     committee: 'Campaigning and Invitations',
+//     name: 'Dr. M. Raja Babu',
+//     designation: 'HoD',
+//     department: 'Aditya University',
+//     accent: '#06b6d4',
+//     image: '/Team/rajababu.webp',
+//     initials: 'MR'
+//   },
+//   {
+//     committee: 'Registration & Reception',
+//     name: 'Mr. R. V. V. N. Bhima Rao',
+//     designation: 'HoD',
+//     department: 'Aditya University',
+//     accent: '#f59e0b',
+//     image: '',
+//     initials: 'BR'
+//   },
+//   {
+//     committee: 'Discipline',
+//     name: 'Dr. Y. K. S. Subba Rao',
+//     designation: 'Dean - Student Welfare',
+//     department: 'Aditya University',
+//     accent: '#8b5cf6',
+//     image: '/Team/Subbarao.webp',
+//     initials: 'YS'
+//   },
+//   {
+//     committee: 'Ground Arrangements',
+//     name: 'Dr. M. V. Rajesh',
+//     designation: 'Associate Dean - School of Computing',
+//     department: 'Aditya University',
+//     accent: '#059669',
+//     image: '/Team/MV Rajesh.webp',
+//     initials: 'MR'
+//   },
+//   {
+//     committee: 'Transport',
+//     name: 'Dr. A. Saravanan',
+//     designation: 'Dean - R&C',
+//     department: 'Aditya University',
+//     accent: '#dc2626',
+//     image: '/Team/Dr__A_Saravanan.webp',
+//     initials: 'AS'
+//   }
+// ];
 
 function TeamMemberCard({ member, className = '', animDelay = 0 }) {
   return (
@@ -281,12 +282,9 @@ export default function Teams() {
         </div>
       </section>
 
-      {/* Cards Section */}
+      {/* Cards Section: Fullwidth Single Line */}
       <section className="teams-grid-section">
-        <div className="container">
-          <div className="teams-featured-row">
-            <TeamMemberCard member={featuredLeader} className="team-featured-card" animDelay={0} />
-          </div>
+        <div className="teams-cards-fullwidth-wrap">
           <div className="teams-cards-grid">
             {organizingTeam.map((member, idx) => (
               <TeamMemberCard key={idx} member={member} animDelay={idx * 80} />
@@ -306,7 +304,7 @@ export default function Teams() {
               leftColor="#0f172a"
               rightColor="#ffffff"
             >
-              Event Committee
+              Event Coordinator
             </SplitColorText>
           </div>
           <div className="event-committees-grid">
@@ -317,7 +315,8 @@ export default function Teams() {
         </div>
       </section>
 
-      {/* Functional Committee Section */}
+      {/* Functional Committee Section (Commented out as requested in second image) */}
+      {/*
       <section className="teams-committees-section teams-functional-section">
         <div className="container">
           <div className="teams-section-heading-row">
@@ -338,6 +337,7 @@ export default function Teams() {
           </div>
         </div>
       </section>
+      */}
     </SplitBackground>
   );
 }

@@ -1,0 +1,26 @@
+/**
+ * DualCornerRibbonBlast.css
+ * Non-blocking, hardware-accelerated full viewport canvas overlay
+ */
+
+.dual-corner-ribbon-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none !important;
+  z-index: 99990;
+  background: transparent !important;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+  display: block;
+}
+
+/* Ensure no visual interruption during print mode */
+@media print {
+  .dual-corner-ribbon-canvas {
+    display: none !important;
+  }
+}

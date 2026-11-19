@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
-  ChevronDown,
   LogOut,
   LayoutDashboard,
   ChevronRight
@@ -16,9 +15,9 @@ import './Navbar.css';
 
 const navItems = [
   { label: 'Events', path: '/events' },
-  // { label: 'Invitation', path: '/invitation' },
   { label: 'Team', path: '/teams' },
-  { label: 'Events Schedule', href: '/Schedule_of_Events.pdf' },
+  { label: 'Invitation', path: '/invitation' },
+  { label: 'Schedule', href: '/Schedule_of_Events.pdf' },
   { label: 'Sponsors', path: '/sponsors' },
   { label: 'Contact', path: '/contact' },
 ];
@@ -60,14 +59,12 @@ function UniversityLogo() {
 export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  // Dynamically determine whether the current page is a split theme page:
+  // All fest pages (or any page containing .split-background) use the split theme.
+  // Dedicated user dashboard / account subpages use the light subpage navbar.
   const isSplitThemePage =
-    location.pathname === '/' ||
-    location.pathname.startsWith('/events') ||
-    location.pathname === '/sponsors' ||
-    location.pathname === '/teams' ||
-    location.pathname === '/team' ||
-    location.pathname === '/contact';
-  const isHome = location.pathname === '/';
+    !location.pathname.startsWith('/dashboard') &&
+    !location.pathname.startsWith('/account');
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -232,6 +229,31 @@ export default function Navbar() {
 
           {/* Login/Dashboard CTA */}
           <div className="navbar-right-cluster">
+            <Link
+              to="/live"
+              onClick={() => {
+                if (location.pathname === '/live') {
+                  const playerEl = document.getElementById('live-player-section');
+                  if (playerEl) {
+                    const navEl = document.querySelector('.navbar');
+                    const navHeight = navEl ? navEl.offsetHeight : 98;
+                    const rect = playerEl.getBoundingClientRect();
+                    const targetY = window.pageYOffset + rect.top - navHeight;
+                    window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+                  }
+                }
+              }}
+              className={`navbar-live-btn ${location.pathname === '/live' ? 'active' : ''}`}
+              title="Watch Colours 2027 Live Stream"
+              aria-label="Colours 2027 Live Stream"
+            >
+              <img
+                src="/live-icon.webp"
+                alt="Live Stream"
+                className="navbar-live-img"
+              />
+            </Link>
+
             <div className="navbar-cta">
               {student ? (
                 <div className="navbar-profile-wrapper" ref={profilePopoverRef}>

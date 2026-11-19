@@ -39,6 +39,13 @@ export const Mail = createIcon('Mail', (
   </>
 ));
 
+export const MailOpen = createIcon('MailOpen', (
+  <>
+    <path d="M21.2 8.4c.5.38.8.97.8 1.6v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10a2 2 0 0 1 .8-1.6l8-6a2 2 0 0 1 2.4 0l8 6Z" />
+    <path d="m22 10-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 10" />
+  </>
+));
+
 export const Phone = createIcon('Phone', (
   <>
     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -384,6 +391,77 @@ export const Crown = createIcon('Crown', (
   </>
 ));
 
+export const Tv = createIcon('Tv', (
+  <>
+    <rect width="20" height="15" x="2" y="7" rx="2" />
+    <polyline points="17 2 12 7 7 2" />
+  </>
+));
+
+export const Radio = createIcon('Radio', (
+  <>
+    <circle cx="12" cy="12" r="2" />
+    <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
+  </>
+));
+
+export const ExternalLink = createIcon('ExternalLink', (
+  <>
+    <path d="M15 3h6v6" />
+    <path d="M10 14 21 3" />
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+  </>
+));
+
+export const Flame = createIcon('Flame', (
+  <>
+    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3z" />
+  </>
+));
+
+export const Music = createIcon('Music', (
+  <>
+    <path d="M9 18V5l12-2v13" />
+    <circle cx="6" cy="18" r="3" />
+    <circle cx="18" cy="16" r="3" />
+  </>
+));
+
+export const Trophy = createIcon('Trophy', (
+  <>
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+    <path d="M4 22h16" />
+    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+  </>
+));
+
+export const Palette = createIcon('Palette', (
+  <>
+    <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+    <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+    <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+    <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" />
+  </>
+));
+
+export const Volume2 = createIcon('Volume2', (
+  <>
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+  </>
+));
+
+export const Play = createIcon('Play', (
+  <>
+    <polygon points="6 3 20 12 6 21 6 3" />
+  </>
+));
+
 export default {
   Ticket,
   Lock,
@@ -399,6 +477,15 @@ export default {
   CalendarX2,
   UserPlus,
   Crown,
+  Tv,
+  Radio,
+  ExternalLink,
+  Flame,
+  Music,
+  Trophy,
+  Palette,
+  Volume2,
+  Play,
   Eye,
   EyeOff,
   LayoutDashboard,
@@ -409,6 +496,7 @@ export default {
   Landmark,
   MapPin,
   Mail,
+  MailOpen,
   Phone,
   Home,
   Sparkles,

@@ -38,9 +38,14 @@
 .invitation-hero-title {
   font-family: var(--font-heading);
   font-size: clamp(2.2rem, 5.5vw, 4.8rem);
-  font-weight: var(--fw-semibold, 600);
-  letter-spacing: 0.04em;
+  font-weight: 900;
+  letter-spacing: 0.02em;
   text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0.15rem 0;
+  line-height: 1.15;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {

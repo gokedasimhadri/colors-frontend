@@ -1815,11 +1815,8 @@ export async function changeStudentPassword(payload) {
 export async function fetchStudentDashboard(roll, typeCode = EVENT_TYPE, academicYear = EVENT_ACADEMIC_YEAR) {
   if (!roll) throw new Error('Student roll number is required');
   const cleanRoll = encodeURIComponent(roll.trim().toUpperCase());
-  const queryParams = new URLSearchParams();
-  if (typeCode) queryParams.set('typeCode', typeCode);
-  if (academicYear) queryParams.set('academicYear', academicYear);
-  const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
-  const endpoint = `/api/event-students/dashboard/${cleanRoll}${queryString}`;
+  // Fetch dashboard directly without typeCode/academicYear in URL query so backend returns all student records dynamically
+  const endpoint = `/api/event-students/dashboard/${cleanRoll}`;
   const res = await apiFetch(endpoint);
 
   if (!res.ok) {
@@ -1830,14 +1827,60 @@ export async function fetchStudentDashboard(roll, typeCode = EVENT_TYPE, academi
   const json = await res.json();
   const rawData = json.data || json;
 
-  // Filter registrations & payments strictly by EVENT_TYPE and PAID status
-  const filteredRegistrations = (rawData.registrations || []).filter(
-    (reg) => matchesTypeCode(reg, typeCode) && isPaidPayment(reg) && matchesAcademicYear(reg.academicYear || reg.academic_year, academicYear)
-  );
+  const rawRegistrations = [...(rawData.registrations || [])];
+  const rawPayments = [...(rawData.payments || [])];
 
-  const filteredPayments = (rawData.payments || []).filter(
-    (pay) => matchesTypeCode(pay, typeCode) && isPaidPayment(pay) && matchesAcademicYear(pay.academicYear || pay.academic_year, academicYear)
-  );
+  // Merge confirmedPaidRecords if present
+  if (Array.isArray(rawData.confirmedPaidRecords)) {
+    rawData.confirmedPaidRecords.forEach((item) => {
+      if (item.registration) {
+        const regId = item.registration._id || item.registration.registrationNumber;
+        if (!rawRegistrations.some((r) => (r._id || r.registrationNumber) === regId)) {
+          rawRegistrations.push(item.registration);
+        }
+      }
+      if (item.payment) {
+        const payId = item.payment._id || item.payment.paymentReference;
+        if (!rawPayments.some((p) => (p._id || p.paymentReference) === payId)) {
+          rawPayments.push(item.payment);
+        }
+      }
+    });
+  }
+
+  // Also query student registrations collection to ensure all dynamic backend registrations are captured
+  try {
+    const regRes = await apiFetch(`/api/central-event-registrations/student/${cleanRoll}`);
+    if (regRes && regRes.ok) {
+      const regJson = await regRes.json();
+      const extraRegs = Array.isArray(regJson) ? regJson : (regJson.data || []);
+      extraRegs.forEach((extra) => {
+        const extraId = extra._id || extra.registrationNumber || extra.registrationId;
+        if (!rawRegistrations.some((r) => (r._id || r.registrationNumber || r.registrationId) === extraId)) {
+          rawRegistrations.push(extra);
+        }
+      });
+    }
+  } catch (e) {
+    // Secondary endpoint
+  }
+
+  // Filter registrations & payments dynamically ensuring all enrolled fest events are captured
+  const isFestEvent = (item) => {
+    if (!item) return false;
+    const itemTypeCode = (item.typeCode || item.type_code || item.eventType || item.event_type || '').toUpperCase();
+    if (itemTypeCode === 'VEDA' || itemTypeCode === 'ALA') {
+      return (typeCode || 'COLORS').toUpperCase() === itemTypeCode;
+    }
+    const itemYear = item.academicYear || item.academic_year;
+    if (itemYear && !matchesAcademicYear(itemYear, academicYear)) {
+      return false;
+    }
+    return isPaidPayment(item) || item.status === 'CONFIRMED' || item.paymentStatus === 'PAID';
+  };
+
+  const filteredRegistrations = rawRegistrations.filter(isFestEvent);
+  const filteredPayments = rawPayments.filter(isFestEvent);
 
   return {
     ...rawData,
@@ -2056,7 +2099,7 @@ export async function syncStudentRegistrations(studentRoll, typeCode = EVENT_TYP
   try {
     const queryParams = new URLSearchParams();
     if (typeCode) queryParams.set('typeCode', typeCode);
-    if (academicYear) queryParams.set('academicYear', academicYear);
+    // Omit academicYear from backend query to avoid exact match failure against "2026-27"
     const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
     const res = await apiFetch(`/api/central-event-registrations/student/${studentRoll}${queryString}`);
     if (res.ok) {

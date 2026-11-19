@@ -52,12 +52,21 @@ export default function Footer() {
                       <span className="uni-footer-logo-fallback">ADITYA UNIVERSITY</span>
                     )}
                     <span className="uni-footer-vr" aria-hidden="true" />
-                    <span className="uni-footer-fest-text">COLOURS 2027</span>
+                    <span className="uni-footer-fest-text">COLOURS</span>
                   </Link>
                 </div>
-                <p className="uni-footer-desc">
-                  Over 50 prestigious colleges 25,000 student delegates participate in Aditya University's National Level Youth Festival Cultural, Sports, and Arts, Colors 2027, which offers a hefty ₹10,000,000 cash prize pool.
-                </p>
+
+                {/* Rectangular Google Map with Aditya University Pinned */}
+                <div className="uni-footer-map-card">
+                  <iframe
+                    title="Aditya University Campus Map"
+                    src="https://maps.google.com/maps?q=Aditya+University,+Surampalem,+Andhra+Pradesh&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                    className="uni-footer-map-iframe"
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
               </div>
             </div>
 
