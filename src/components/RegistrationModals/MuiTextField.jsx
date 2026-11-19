@@ -7,6 +7,8 @@ export function MuiTextField({
   type = 'text',
   value,
   onChange,
+  onBlur,
+  onFocus,
   required = false,
   placeholder = '',
   autoComplete,
@@ -25,6 +27,16 @@ export function MuiTextField({
   const isFloating = isFocused || hasValue;
   const inputId = id || `mui-${name}`;
 
+  const handleFocus = (e) => {
+    setIsFocused(true);
+    if (onFocus) onFocus(e);
+  };
+
+  const handleBlur = (e) => {
+    setIsFocused(false);
+    if (onBlur) onBlur(e);
+  };
+
   return (
     <div
       className={`mui-form-field ${isFloating ? 'is-floating' : ''} ${
@@ -38,8 +50,8 @@ export function MuiTextField({
             name={name}
             value={value ?? ''}
             onChange={onChange}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             placeholder={isFocused ? placeholder : ''}
             required={required}
             rows={rows}
@@ -53,8 +65,8 @@ export function MuiTextField({
             name={name}
             value={value ?? ''}
             onChange={onChange}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             placeholder={isFocused ? placeholder : ''}
             required={required}
             autoComplete={autoComplete}
@@ -89,6 +101,8 @@ export function MuiSelectField({
   name,
   value,
   onChange,
+  onBlur,
+  onFocus,
   required = false,
   options = [],
   children,
@@ -100,6 +114,16 @@ export function MuiSelectField({
 }) {
   const [isFocused, setIsFocused] = useState(false);
   const inputId = id || `mui-${name}`;
+
+  const handleFocus = (e) => {
+    setIsFocused(true);
+    if (onFocus) onFocus(e);
+  };
+
+  const handleBlur = (e) => {
+    setIsFocused(false);
+    if (onBlur) onBlur(e);
+  };
 
   return (
     <div
@@ -113,8 +137,8 @@ export function MuiSelectField({
           name={name}
           value={value ?? ''}
           onChange={onChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           required={required}
           className="mui-outlined-input mui-select"
           {...props}

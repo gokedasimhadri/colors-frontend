@@ -15,6 +15,10 @@ import {
   isValidOtherCollege,
   parseEventFeeInRupees
 } from '../../services/api';
+import { LiquidGlass } from '../ThemeComponents/LiquidGlass';
+import ThemeButton from '../ThemeComponents/ThemeButton';
+import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
+import { MuiTextField, MuiSelectField } from './MuiTextField';
 import './RegistrationModals.css';
 
 const COLLEGE_OPTIONS = [
@@ -39,7 +43,7 @@ export default function EventRegistrationModal({
   student,
   onClose
 }) {
-  const [agreeRules, setAgreeRules] = useState(true);
+  const [agreeRules, setAgreeRules] = useState(false);
   const [loading, setLoading] = useState(false);
   const [paymentStage, setPaymentStage] = useState('IDLE'); // 'IDLE' | 'AWAITING_PAYMENT' | 'VERIFYING'
   const [error, setError] = useState(null);
@@ -689,25 +693,41 @@ export default function EventRegistrationModal({
         className={`participant-pattern-block ${isLead ? 'leader-block' : ''}`}
       >
         <div className="participant-pattern-header">
-          <h3 className="participant-main-heading">
+          <SplitColorText
+            as="h3"
+            className="participant-main-heading"
+            screenSync={false}
+            leftColor="#0f172a"
+            rightColor="#0f172a"
+          >
             Enter Participant-{index + 1} Details
-          </h3>
+          </SplitColorText>
           <div className="participant-sub-heading-row">
             <h4 className="participant-sub-heading">
-              Participant {index + 1}
+              <SplitColorText screenSync={false} leftColor="#475569" rightColor="#475569">
+                Participant {index + 1}
+              </SplitColorText>
               {isLead && isTeam && (
-                <span className="participant-badge-leader">👑 Team Leader</span>
+                <span className="participant-badge-leader">
+                  <SplitColorText screenSync={false} leftColor="#be9337" rightColor="#be9337">
+                    👑 Team Leader
+                  </SplitColorText>
+                </span>
               )}
             </h4>
             {!isLead && (
-              <button
+              <ThemeButton
                 type="button"
                 className="btn-remove-participant"
                 onClick={() => handleRemoveMember(index - 1)}
-                title="Remove participant"
+                borderRadius={8}
+                height={32}
+                showBlast={false}
               >
-                ✕ Remove Participant
-              </button>
+                <span style={{ color: '#ef4444', fontSize: '0.8rem', fontWeight: 700 }}>
+                  ✕ Remove Participant
+                </span>
+              </ThemeButton>
             )}
           </div>
         </div>
@@ -715,39 +735,25 @@ export default function EventRegistrationModal({
         <div className="participant-pattern-grid">
           {/* Row 1: Roll Number, Name, College, Gender */}
           <div className="pattern-field-col">
-            <label className="pattern-label">Roll Number</label>
-            <div className="pattern-input-with-action">
-              <input
-                type="text"
-                className="pattern-input"
-                placeholder="e.g. 123456"
-                value={data.rollNumber}
-                onChange={(e) => handleRollChange(index, e.target.value)}
-                onBlur={() => triggerRollAutoFetch(index, data.rollNumber)}
-                style={{ textTransform: 'uppercase' }}
-                required
-              />
-              {isFetching && (
-                <span className="pattern-fetch-spinner" title="Fetching student details from ECAP...">
-                  ⏳
-                </span>
-              )}
-            </div>
-            {vStatus && (
-              <div
-                className={`pattern-verified-hint ${vStatus.startsWith('✓') ? 'success' : 'info'
-                  }`}
-              >
-                {vStatus}
-              </div>
-            )}
+            <MuiTextField
+              label="Roll Number"
+              name={`rollNumber-${index}`}
+              id={`rollNumber-${index}`}
+              placeholder="e.g. 123456"
+              value={data.rollNumber}
+              onChange={(e) => handleRollChange(index, e.target.value)}
+              onBlur={() => triggerRollAutoFetch(index, data.rollNumber)}
+              style={{ textTransform: 'uppercase' }}
+              hint={isFetching ? '⏳ Fetching student details...' : vStatus}
+              required
+            />
           </div>
 
           <div className="pattern-field-col">
-            <label className="pattern-label">Name</label>
-            <input
-              type="text"
-              className="pattern-input"
+            <MuiTextField
+              label="Name"
+              name={`name-${index}`}
+              id={`name-${index}`}
               placeholder="Full Name"
               value={data.name}
               onChange={(e) => handleFieldChange(index, 'name', e.target.value)}
@@ -756,142 +762,94 @@ export default function EventRegistrationModal({
           </div>
 
           <div className="pattern-field-col">
-            <label className="pattern-label">College</label>
-            <select
-              className="pattern-select"
+            <MuiSelectField
+              label="College"
+              name={`college-${index}`}
+              id={`college-${index}`}
               value={data.college}
               onChange={(e) => handleFieldChange(index, 'college', e.target.value)}
-            >
-              {COLLEGE_OPTIONS.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+              options={COLLEGE_OPTIONS}
+              required
+            />
           </div>
 
           {data.college === 'Other Institution' && (
             <div className="pattern-field-col pattern-other-college-field">
-              <label className="pattern-label">
-                College Name <span style={{ color: '#e11d48' }}>*</span>
-              </label>
-              <div className="pattern-input-with-action">
-                <input
-                  type="text"
-                  className={`pattern-input ${
-                    otherCollegeErrors[index]
-                      ? 'college-invalid'
-                      : data.otherCollege && isValidOtherCollege(data.otherCollege)
-                        ? 'college-valid'
-                        : ''
-                  }`}
-                  placeholder="e.g. JNTU University / ABC Engineering"
-                  value={data.otherCollege || ''}
-                  onChange={(e) => handleFieldChange(index, 'otherCollege', e.target.value)}
-                  onBlur={(e) => handleOtherCollegeBlur(index, e.target.value)}
-                  style={{
-                    borderColor: otherCollegeErrors[index]
-                      ? '#ef4444'
-                      : data.otherCollege && isValidOtherCollege(data.otherCollege)
-                        ? '#10b981'
-                        : '#cbd5e1',
-                    backgroundColor: otherCollegeErrors[index]
-                      ? '#fef2f2'
-                      : data.otherCollege && isValidOtherCollege(data.otherCollege)
-                        ? '#f0fdf4'
-                        : '#ffffff'
-                  }}
-                  required
-                />
-              </div>
-              {otherCollegeErrors[index] ? (
-                <div
-                  className="pattern-verified-hint error"
-                  style={{
-                    color: '#dc2626',
-                    fontSize: '0.74rem',
-                    fontWeight: 600,
-                    marginTop: '4px'
-                  }}
-                >
-                  {otherCollegeErrors[index]}
-                </div>
-              ) : data.otherCollege && isValidOtherCollege(data.otherCollege) ? (
-                <div
-                  className="pattern-verified-hint info"
-                  style={{
-                    color: '#0284c7',
-                    fontSize: '0.74rem',
-                    fontWeight: 600,
-                    marginTop: '4px'
-                  }}
-                >
-                  ℹ️ College ID Card is required for entry and verification.
-                </div>
-              ) : null}
+              <MuiTextField
+                label="College Name"
+                name={`otherCollege-${index}`}
+                id={`otherCollege-${index}`}
+                placeholder="e.g. JNTU University / ABC Engineering"
+                value={data.otherCollege || ''}
+                onChange={(e) => handleFieldChange(index, 'otherCollege', e.target.value)}
+                onBlur={(e) => handleOtherCollegeBlur(index, e.target.value)}
+                error={otherCollegeErrors[index]}
+                hint={!otherCollegeErrors[index] && data.otherCollege && isValidOtherCollege(data.otherCollege) ? 'ℹ️ College ID Card is required for entry and verification.' : ''}
+                required
+              />
             </div>
           )}
 
           <div className="pattern-field-col">
-            <label className="pattern-label">Gender</label>
-            <select
-              className="pattern-select"
+            <MuiSelectField
+              label="Gender"
+              name={`gender-${index}`}
+              id={`gender-${index}`}
               value={data.gender}
               onChange={(e) => handleFieldChange(index, 'gender', e.target.value)}
-            >
-              {GENDER_OPTIONS.map((g) => (
-                <option key={g} value={g}>
-                  {g}
-                </option>
-              ))}
-            </select>
+              options={GENDER_OPTIONS}
+              required
+            />
           </div>
 
           {/* Row 2: Mobile, Email, Year of study, Departments */}
           <div className="pattern-field-col">
-            <label className="pattern-label">Mobile</label>
-            <input
+            <MuiTextField
+              label="Mobile"
               type="tel"
-              className="pattern-input"
+              name={`mobile-${index}`}
+              id={`mobile-${index}`}
               placeholder="10-digit mobile"
               value={data.mobile}
               maxLength={10}
               onChange={(e) => handleFieldChange(index, 'mobile', e.target.value)}
+              required={isLead}
             />
           </div>
 
           <div className="pattern-field-col">
-            <label className="pattern-label">Email</label>
-            <input
+            <MuiTextField
+              label="Email"
               type="email"
-              className="pattern-input"
+              name={`email-${index}`}
+              id={`email-${index}`}
               placeholder="Email address"
               value={data.email}
               onChange={(e) => handleFieldChange(index, 'email', e.target.value)}
+              required={isLead}
             />
           </div>
 
           <div className="pattern-field-col">
-            <label className="pattern-label">Year of study</label>
-            <select
-              className="pattern-select"
+            <MuiSelectField
+              label="Year of Study"
+              name={`yearOfStudy-${index}`}
+              id={`yearOfStudy-${index}`}
               value={data.yearOfStudy}
               onChange={(e) => handleFieldChange(index, 'yearOfStudy', e.target.value)}
-            >
-              {YEAR_OPTIONS.map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
+              options={YEAR_OPTIONS}
+              required
+            />
           </div>
 
           <div className="pattern-field-col">
-            <label className="pattern-label">Departments</label>
-            <select
-              className="pattern-select"
+            <MuiSelectField
+              label="Departments"
+              name={`department-${index}`}
+              id={`department-${index}`}
               value={data.department || 'Select'}
               onChange={(e) => handleFieldChange(index, 'department', e.target.value)}
+              required
             >
               <option value="Select">Select</option>
               {departmentsList.map((d) => {
@@ -907,15 +865,15 @@ export default function EventRegistrationModal({
                 !departmentsList.some((d) => (d.name || d) === data.department) && (
                   <option value={data.department}>{data.department}</option>
                 )}
-            </select>
+            </MuiSelectField>
           </div>
 
           {/* Row 3: Branch, Location */}
           <div className="pattern-field-col">
-            <label className="pattern-label">Branch</label>
-            <input
-              type="text"
-              className="pattern-input"
+            <MuiTextField
+              label="Branch"
+              name={`branch-${index}`}
+              id={`branch-${index}`}
               placeholder="e.g. CSE"
               value={data.branch}
               onChange={(e) => handleFieldChange(index, 'branch', e.target.value)}
@@ -923,10 +881,10 @@ export default function EventRegistrationModal({
           </div>
 
           <div className="pattern-field-col">
-            <label className="pattern-label">Location</label>
-            <input
-              type="text"
-              className="pattern-input"
+            <MuiTextField
+              label="Location"
+              name={`location-${index}`}
+              id={`location-${index}`}
               placeholder="e.g. Surampalem / Kakinada"
               value={data.location}
               onChange={(e) => handleFieldChange(index, 'location', e.target.value)}
@@ -939,29 +897,53 @@ export default function EventRegistrationModal({
 
   return createPortal(
     <div className="fest-modal-backdrop" onClick={onClose}>
-      <div className="fest-modal-card event-reg-card" onClick={(e) => e.stopPropagation()}>
+      <LiquidGlass
+        className="fest-modal-card event-reg-card fest-event-liquid-modal"
+        theme="light"
+        borderRadius={24}
+        enableShader={true}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="fest-modal-header">
           <div className="fest-modal-header-banner">
             <div>
               <div className="fest-modal-badge">
-                {eventData.category || 'COLOURS 2027'}
+                <SplitColorText screenSync={false} leftColor="#be9337" rightColor="#be9337">
+                  {eventData.category || 'COLOURS 2027'}
+                </SplitColorText>
               </div>
-              <h2 className="fest-modal-title">
+              <SplitColorText
+                as="h2"
+                className="fest-modal-title"
+                screenSync={false}
+                leftColor="#0f172a"
+                rightColor="#0f172a"
+              >
                 {activeRecord ? 'Event Registration Confirmation' : `Register: ${eventTitle}`}
-              </h2>
-              <div className="fest-modal-subtitle">
+              </SplitColorText>
+              <SplitColorText
+                as="div"
+                className="fest-modal-subtitle"
+                screenSync={false}
+                leftColor="#475569"
+                rightColor="#475569"
+              >
                 Aditya University Youth Cultural & Sports Festival • Colours 2027
-              </div>
+              </SplitColorText>
             </div>
-            <button
+            <ThemeButton
               className="fest-modal-close-btn"
               onClick={onClose}
-              aria-label="Close modal"
+              ariaLabel="Close modal"
               type="button"
+              borderRadius={50}
+              width={36}
+              height={36}
+              showBlast={false}
             >
               ✕
-            </button>
+            </ThemeButton>
           </div>
         </div>
 
@@ -974,9 +956,15 @@ export default function EventRegistrationModal({
             <div className="reg-confirmed-view">
               <div className="reg-ticket-card">
                 <div className="reg-ticket-header">
-                  <div className="reg-ticket-fest-tag">COLOURS 2027 • OFFICIAL PASS</div>
+                  <div className="reg-ticket-fest-tag">
+                    <SplitColorText screenSync={true} leftColor="#be9337" rightColor="#be9337">
+                      COLOURS 2027 • OFFICIAL PASS
+                    </SplitColorText>
+                  </div>
                   <div className="reg-ticket-id">
-                    ID: {formatRegistrationId(activeRecord.registrationNumber || activeRecord.registrationId)}
+                    <SplitColorText screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                      ID: {formatRegistrationId(activeRecord.registrationNumber || activeRecord.registrationId)}
+                    </SplitColorText>
                   </div>
                 </div>
 
@@ -1113,12 +1101,16 @@ export default function EventRegistrationModal({
               </div>
 
               <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center' }}>
-                <button type="button" className="btn-fest-secondary" onClick={handlePrint}>
-                  🖨️ Print Slip
-                </button>
-                <button type="button" className="btn-fest-primary" onClick={onClose}>
-                  Done & Explore More Events
-                </button>
+                <ThemeButton type="button" className="btn-fest-secondary" onClick={handlePrint} borderRadius={12} height={44} showBlast={false}>
+                  <SplitColorText screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                    🖨️ Print Slip
+                  </SplitColorText>
+                </ThemeButton>
+                <ThemeButton type="button" className="btn-fest-primary" onClick={onClose} borderRadius={12} height={44} showBlast={true}>
+                  <span style={{ color: '#ffffff', fontWeight: 700 }}>
+                    Done & Explore More Events
+                  </span>
+                </ThemeButton>
               </div>
             </div>
           ) : (
@@ -1137,25 +1129,41 @@ export default function EventRegistrationModal({
               {/* Event Summary Box */}
               <div className="event-reg-summary-box">
                 <div className="event-reg-summary-details">
-                  <div className="event-reg-event-title">{eventTitle}</div>
+                  <SplitColorText
+                    as="div"
+                    className="event-reg-event-title"
+                    screenSync={false}
+                    leftColor="#0f172a"
+                    rightColor="#0f172a"
+                  >
+                    {eventTitle}
+                  </SplitColorText>
                   <div className="event-reg-meta-pills">
                     <span className="event-meta-pill-item pill-category">
-                      {eventData.category}
+                      <SplitColorText screenSync={false} leftColor="#be9337" rightColor="#be9337">
+                        {eventData.category}
+                      </SplitColorText>
                     </span>
                     <span className="event-meta-pill-item">
-                      👥 {eventData.eventType || (isTeam ? 'Team' : 'Solo')}
+                      <SplitColorText screenSync={false} leftColor="#0f172a" rightColor="#0f172a">
+                        👥 {eventData.eventType || (isTeam ? 'Team' : 'Solo')}
+                      </SplitColorText>
                     </span>
                     <span className="event-meta-pill-item">
-                      📍 {eventData.venueObj?.name || eventData.venue || 'Campus Venue'}
+                      <SplitColorText screenSync={false} leftColor="#0f172a" rightColor="#0f172a">
+                        📍 {eventData.venueObj?.name || eventData.venue || 'Campus Venue'}
+                      </SplitColorText>
                     </span>
                   </div>
                 </div>
 
                 <div className="event-reg-fee-box">
-                  <div className="event-reg-fee-label">Entry Fee</div>
-                  <div className="event-reg-fee-amount">
+                  <SplitColorText as="div" className="event-reg-fee-label" screenSync={false} leftColor="#be9337" rightColor="#be9337">
+                    Entry Fee
+                  </SplitColorText>
+                  <SplitColorText as="div" className="event-reg-fee-amount" screenSync={false} leftColor="#0f172a" rightColor="#0f172a">
                     {eventData.price ? `₹ ${eventData.price}/-` : 'Free'}
-                  </div>
+                  </SplitColorText>
                 </div>
               </div>
 
@@ -1164,13 +1172,10 @@ export default function EventRegistrationModal({
                 <div
                   className="team-leader-info-notice"
                   style={{
-                    background: 'rgba(2, 132, 199, 0.08)',
-                    border: '1px solid rgba(2, 132, 199, 0.22)',
-                    borderRadius: '10px',
+                    borderRadius: '12px',
                     padding: '0.85rem 1.15rem',
                     marginBottom: '1.25rem',
                     fontSize: '0.86rem',
-                    color: '#0369a1',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.65rem',
@@ -1179,7 +1184,7 @@ export default function EventRegistrationModal({
                 >
                   <span style={{ fontSize: '1.2rem' }}>💡</span>
                   <div>
-                    <strong style={{ color: '#0284c7' }}>Team Leader Registration:</strong> You only need to register and complete payment as Participant 1 now. You can add or update the rest of your squad participants later directly from your <strong>Student Dashboard Account</strong>!
+                    <strong style={{ color: '#be9337' }}>Team Leader Registration:</strong> You only need to register and complete payment as Participant 1 now. You can add or update the rest of your squad participants later directly from your <strong>Student Dashboard Account</strong>!
                   </div>
                 </div>
               )}
@@ -1192,20 +1197,29 @@ export default function EventRegistrationModal({
 
               {/* Add Member Button (If Team Event) */}
               {isTeam && teamMembers.length + 1 < maxTeamSize && (
-                <button
-                  type="button"
-                  className="btn-add-team-participant"
-                  onClick={handleAddMember}
-                >
-                  + Add Participant ({teamMembers.length + 1}/{maxTeamSize})
-                </button>
+                <div style={{ marginBottom: '1.25rem' }}>
+                  <ThemeButton
+                    type="button"
+                    className="btn-add-team-participant"
+                    onClick={handleAddMember}
+                    borderRadius={12}
+                    height={44}
+                    showBlast={false}
+                  >
+                    <SplitColorText screenSync={false} leftColor="#0f172a" rightColor="#0f172a">
+                      + Add Participant ({teamMembers.length + 1}/{maxTeamSize})
+                    </SplitColorText>
+                  </ThemeButton>
+                </div>
               )}
 
               {/* Real-time Team Participants Roster Table Preview */}
               {isTeam && allParticipants.length > 0 && (
                 <div className="roster-preview-box" style={{ marginBottom: '1.5rem' }}>
                   <div className="roster-preview-title">
-                    📋 Team Participants Roster ({allParticipants.length} of {minTeamSize}-{maxTeamSize})
+                    <SplitColorText screenSync={false} leftColor="#0f172a" rightColor="#0f172a">
+                      📋 Team Participants Roster ({allParticipants.length} of {minTeamSize}-{maxTeamSize})
+                    </SplitColorText>
                   </div>
                   <div className="roster-chips-wrap">
                     {allParticipants.map((p, idx) => (
@@ -1234,46 +1248,41 @@ export default function EventRegistrationModal({
                     required
                   />
                   <span>
-                    I confirm that all entered details are accurate, and I agree to adhere to the official rules, time limits, and campus code of conduct for {eventTitle}.
+                    <SplitColorText screenSync={false} leftColor="#334155" rightColor="#334155">
+                      I confirm that all entered details are accurate, and I agree to adhere to the official rules, time limits, and campus code of conduct for {eventTitle}.
+                    </SplitColorText>
                   </span>
                 </label>
               </div>
 
               {/* Action Buttons */}
-              <div className="fest-modal-footer">
-                <button
-                  type="button"
-                  className="btn-fest-secondary"
-                  onClick={onClose}
-                  disabled={loading && paymentStage === 'VERIFYING'}
-                >
-                  Cancel
-                </button>
-
-                <button
+              <div className="fest-modal-footer" style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                <ThemeButton
                   type="submit"
                   className="btn-fest-primary"
                   disabled={loading && paymentStage === 'VERIFYING'}
-                  style={{
-                    background: 'linear-gradient(135deg, #e11d48, #be123c)',
-                    color: '#ffffff'
-                  }}
+                  borderRadius={12}
+                  height={48}
+                  showBlast={true}
+                  style={{ minWidth: '220px', padding: '0 1.75rem' }}
                 >
-                  {paymentStage === 'VERIFYING'
-                    ? 'Verifying Payment on Server...'
-                    : paymentStage === 'AWAITING_PAYMENT'
-                      ? 'Awaiting Payment Completion...'
-                      : loading
-                        ? 'Processing...'
-                        : eventData.price
-                          ? `Pay ₹ ${eventData.price}/- & Register via Razorpay ★`
-                          : 'Confirm Free Registration ★'}
-                </button>
+                  <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '0.98rem' }}>
+                    {paymentStage === 'VERIFYING'
+                      ? 'Verifying Payment on Server...'
+                      : paymentStage === 'AWAITING_PAYMENT'
+                        ? 'Awaiting Payment Completion...'
+                        : loading
+                          ? 'Processing...'
+                          : eventData.price
+                            ? `Pay ₹ ${eventData.price}/- & Register`
+                            : 'Register Event'}
+                  </span>
+                </ThemeButton>
               </div>
             </form>
           )}
         </div>
-      </div>
+      </LiquidGlass>
     </div>,
     document.body
   );

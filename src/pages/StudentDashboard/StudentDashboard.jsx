@@ -34,13 +34,11 @@ import {
   Target,
   CreditCard,
   Sparkles,
-  Zap,
   Printer,
   Eye,
   EyeOff,
   Edit3,
   X,
-  ShieldCheck,
   CalendarX2,
   Users,
   FileText,
@@ -560,7 +558,7 @@ export default function StudentDashboard() {
           {activeTab === 'events' ? (
             <span className="dash-tab-title active">Registered Events</span>
           ) : (
-            <SplitColorText leftColor="#0f172a" rightColor="#be9337">
+            <SplitColorText leftColor="#0f172a" rightColor="#0f172a">
               Registered Events
             </SplitColorText>
           )}
@@ -578,7 +576,7 @@ export default function StudentDashboard() {
           {activeTab === 'profile' ? (
             <span className="dash-tab-title active">Profile & ID</span>
           ) : (
-            <SplitColorText leftColor="#0f172a" rightColor="#be9337">
+            <SplitColorText leftColor="#0f172a" rightColor="#0f172a">
               Profile & ID
             </SplitColorText>
           )}
@@ -593,7 +591,7 @@ export default function StudentDashboard() {
           {activeTab === 'security' ? (
             <span className="dash-tab-title active">Change Password</span>
           ) : (
-            <SplitColorText leftColor="#0f172a" rightColor="#be9337">
+            <SplitColorText leftColor="#0f172a" rightColor="#0f172a">
               Change Password
             </SplitColorText>
           )}
@@ -617,7 +615,7 @@ export default function StudentDashboard() {
             <div className="empty-dash-icon">
               <Lock size={44} strokeWidth={1.8} />
             </div>
-            <SplitColorText as="h2" className="empty-dash-title" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+            <SplitColorText as="h2" className="empty-dash-title" splitPercent={50} leftColor="#0f172a" rightColor="#0f172a">
               Student Portal & Account Access
             </SplitColorText>
             <p className="empty-dash-desc">
@@ -680,6 +678,14 @@ export default function StudentDashboard() {
           borderRadius={24}
           enableShader={false}
         >
+          {/* Fest Blast Artwork in Right Bottom Corner */}
+          <img
+            src="/blast.png"
+            alt=""
+            aria-hidden="true"
+            className="dashboard-hero-blast-corner"
+          />
+
           <div className="hero-profile-identity">
             <div className="hero-avatar-wrapper">
               {!photoError && studentPhotoUrl ? (
@@ -690,7 +696,7 @@ export default function StudentDashboard() {
                   onError={() => setPhotoError(true)}
                 />
               ) : (
-                <div className="hero-avatar-fallback">
+                <div className="hero-avatar-fallback" style={{ backgroundColor: '#0b5299' }}>
                   {activeStudent.name ? activeStudent.name.charAt(0) : 'S'}
                 </div>
               )}
@@ -701,7 +707,7 @@ export default function StudentDashboard() {
 
             <div className="hero-info-group">
               <div className="hero-title-row">
-                <SplitColorText as="h1" className="hero-student-name" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                <SplitColorText as="h1" className="hero-student-name" splitPercent={50} leftColor="#0f172a" rightColor="#0f172a">
                   {activeStudent.name}
                 </SplitColorText>
                 <span className="hero-roll-chip">{activeStudent.roll}</span>
@@ -740,7 +746,7 @@ export default function StudentDashboard() {
               <Target size={24} strokeWidth={2.2} />
             </div>
             <div className="metric-content">
-              <SplitColorText as="span" className="metric-value" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+              <SplitColorText as="span" className="metric-value" splitPercent={50} leftColor="#0f172a" rightColor="#0f172a">
                 {totalRegistrations}
               </SplitColorText>
               <span className="metric-label">Enrolled Events</span>
@@ -752,7 +758,7 @@ export default function StudentDashboard() {
               <CheckCircle2 size={24} strokeWidth={2.2} />
             </div>
             <div className="metric-content">
-              <SplitColorText as="span" className="metric-value" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+              <SplitColorText as="span" className="metric-value" splitPercent={50} leftColor="#0f172a" rightColor="#0f172a">
                 {paidCount}
               </SplitColorText>
               <span className="metric-label">Confirmed Passes</span>
@@ -764,22 +770,10 @@ export default function StudentDashboard() {
               <CreditCard size={24} strokeWidth={2.2} />
             </div>
             <div className="metric-content">
-              <SplitColorText as="span" className="metric-value" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+              <SplitColorText as="span" className="metric-value" splitPercent={50} leftColor="#0f172a" rightColor="#0f172a">
                 ₹ {totalAmountPaid}
               </SplitColorText>
               <span className="metric-label">Total Fee Paid</span>
-            </div>
-          </LiquidGlass>
-
-          <LiquidGlass className="metric-card metric-glass-card" theme="light" borderRadius={18} enableShader={false}>
-            <div className="metric-icon-box purple">
-              <Zap size={24} strokeWidth={2.2} />
-            </div>
-            <div className="metric-content">
-              <SplitColorText as="span" className="metric-value" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
-                ACTIVE
-              </SplitColorText>
-              <span className="metric-label">Festival Status</span>
             </div>
           </LiquidGlass>
         </section>
@@ -793,8 +787,8 @@ export default function StudentDashboard() {
             size="md"
             showSearch={false}
             leftColor="#0f172a"
-            rightColor="#be9337"
-            activeBg="#be9337"
+            rightColor="#0f172a"
+            activeBg="#0b5299"
             activeColor="#ffffff"
             className="dashboard-themetab-bar"
             ariaLabel="Dashboard Navigation Tabs"
@@ -821,7 +815,7 @@ export default function StudentDashboard() {
               <LiquidGlass className="profile-card profile-glass-card" theme="light" borderRadius={22} enableShader={true}>
                 <div className="card-header-row">
                   <div className="card-title-group">
-                    <SplitColorText as="h3" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                    <SplitColorText as="h3" splitPercent={50} leftColor="#0f172a" rightColor="#0f172a">
                       Student Account Information
                     </SplitColorText>
                     <p>Verified profile details recorded in central festival register</p>
@@ -1040,7 +1034,7 @@ export default function StudentDashboard() {
                         onError={() => setPhotoError(true)}
                       />
                     ) : (
-                      <div className="hero-avatar-fallback" style={{ fontSize: '1.75rem' }}>
+                      <div className="hero-avatar-fallback" style={{ fontSize: '1.75rem', backgroundColor: '#0b5299' }}>
                         {activeStudent.name ? activeStudent.name.charAt(0) : 'S'}
                       </div>
                     )}
@@ -1086,7 +1080,7 @@ export default function StudentDashboard() {
               <LiquidGlass className="password-card password-glass-card" theme="light" borderRadius={22} enableShader={true}>
                 <div className="card-header-row">
                   <div className="card-title-group">
-                    <SplitColorText as="h3" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                    <SplitColorText as="h3" splitPercent={50} leftColor="#0f172a" rightColor="#0f172a">
                       Account Security & Password
                     </SplitColorText>
                     <p>Update your portal access key to keep your festival account safe</p>
@@ -1172,37 +1166,6 @@ export default function StudentDashboard() {
                   </div>
                 </form>
               </LiquidGlass>
-
-              {/* Safety Tips Card */}
-              <LiquidGlass className="security-tips-card security-glass-card" theme="light" borderRadius={22} enableShader={false}>
-                <SplitColorText as="h4" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
-                  <span className="tips-header-wrap">
-                    <ShieldCheck size={20} className="security-tips-icon" />
-                    Password & Festival Guidelines
-                  </span>
-                </SplitColorText>
-                <p style={{ fontSize: '0.88rem', color: '#64748b' }}>
-                  Your password protects your event participation slips, registered team details, and on-spot certificate verification.
-                </p>
-                <ul className="security-tips-list">
-                  <li>
-                    <span className="bullet">✦</span>
-                    Use at least 6 characters with a combination of letters and numbers.
-                  </li>
-                  <li>
-                    <span className="bullet">✦</span>
-                    Do not share your credentials with unauthorized participants.
-                  </li>
-                  <li>
-                    <span className="bullet">✦</span>
-                    Your registered Roll Number <strong>{activeStudent.roll}</strong> is required for on-stage attendance verification.
-                  </li>
-                  <li>
-                    <span className="bullet">✦</span>
-                    If you forget your password, contact the fest central registration desk with your college ID card.
-                  </li>
-                </ul>
-              </LiquidGlass>
             </div>
           </div>
         )}
@@ -1215,7 +1178,7 @@ export default function StudentDashboard() {
                 <div className="empty-dash-icon">
                   <CalendarX2 size={44} strokeWidth={1.8} />
                 </div>
-                <SplitColorText as="h3" className="empty-dash-title" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                <SplitColorText as="h3" className="empty-dash-title" splitPercent={50} leftColor="#0f172a" rightColor="#0f172a">
                   No Enrolled Events Found
                 </SplitColorText>
                 <p className="empty-dash-desc">
@@ -1267,7 +1230,7 @@ export default function StudentDashboard() {
                               </span>
                             </span>
                           </div>
-                          <SplitColorText as="h4" className="event-main-title" splitPercent={50} leftColor="#0f172a" rightColor="#be9337">
+                          <SplitColorText as="h4" className="event-main-title" splitPercent={50} leftColor="#0f172a" rightColor="#0f172a">
                             {title}
                           </SplitColorText>
                         </div>

@@ -21,6 +21,7 @@ import StudentAuthModal from '../../components/RegistrationModals/StudentAuthMod
 import EventRegistrationModal from '../../components/RegistrationModals/EventRegistrationModal';
 import SplitBackground from '../../components/ThemeComponents/backgrounds/SplitBackground';
 import SplitColorText from '../../components/ThemeComponents/SplitColor/SplitColorText';
+import { LiquidGlass } from '../../components/ThemeComponents/LiquidGlass';
 import ThemeButton from '../../components/ThemeComponents/ThemeButton/ThemeButton';
 import ThemeTab from '../../components/ThemeComponents/ThemeTabDesign/ThemeTab';
 import CardScrollAnimation from '../../components/ThemeComponents/CardScrollAnimation/CardScrollAnimation';
@@ -1429,53 +1430,86 @@ function CoordinatorsHierarchyFlow({ faculty = [], students = [], title = '' }) 
     const containerRect = containerRef.current.getBoundingClientRect();
     if (containerRect.width === 0 || containerRect.height === 0) return;
 
-    const facPoints = [];
-    facultyRefs.current.forEach((el) => {
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        facPoints.push({
-          x: rect.left + rect.width / 2 - containerRect.left,
-          y: rect.bottom - containerRect.top
-        });
-      }
-    });
-
-    const stuPoints = [];
-    studentRefs.current.forEach((el) => {
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        stuPoints.push({
-          x: rect.left + rect.width / 2 - containerRect.left,
-          y: rect.top - containerRect.top
-        });
-      }
-    });
-
-    if (facPoints.length === 0 || stuPoints.length === 0) {
+    const facEls = facultyRefs.current.filter(Boolean);
+    const stuEls = studentRefs.current.filter(Boolean);
+    if (facEls.length === 0 || stuEls.length === 0) {
       setFlowCoords(null);
       return;
     }
 
-    const maxFacY = Math.max(...facPoints.map((p) => p.y));
-    const minStuY = Math.min(...stuPoints.map((p) => p.y));
+    const facRects = facEls.map((el) => el.getBoundingClientRect());
+    const stuRects = stuEls.map((el) => el.getBoundingClientRect());
 
-    if (minStuY > maxFacY) {
-      const yMid = (maxFacY + minStuY) / 2;
-      const allX = [...facPoints.map((p) => p.x), ...stuPoints.map((p) => p.x)];
-      const minX = Math.min(...allX);
-      const maxX = Math.max(...allX);
+    const maxFacRight = Math.max(...facRects.map((r) => r.right));
+    const minStuLeft = Math.min(...stuRects.map((r) => r.left));
+
+    // Determine if layout is side-by-side (Faculty left, Student right) or stacked (narrow screens)
+    const isSideBySide = minStuLeft >= maxFacRight - 15;
+
+    if (isSideBySide) {
+      // Horizontal Flow: Faculty exits from right edge, Student enters at left edge
+      const facPoints = facRects.map((rect) => ({
+        x: rect.right - containerRect.left,
+        y: rect.top + rect.height / 2 - containerRect.top
+      }));
+
+      const stuPoints = stuRects.map((rect) => ({
+        x: rect.left - containerRect.left,
+        y: rect.top + rect.height / 2 - containerRect.top
+      }));
+
+      const maxFacX = Math.max(...facPoints.map((p) => p.x));
+      const minStuX = Math.min(...stuPoints.map((p) => p.x));
+      const xMid = (maxFacX + minStuX) / 2;
+
+      const allY = [...facPoints.map((p) => p.y), ...stuPoints.map((p) => p.y)];
+      const busMinY = Math.min(...allY);
+      const busMaxY = Math.max(...allY);
 
       setFlowCoords({
+        isSideBySide: true,
         facPoints,
         stuPoints,
-        yMid,
-        busMinX: minX,
-        busMaxX: maxX,
+        xMid,
+        busMinY,
+        busMaxY,
         width: containerRect.width,
         height: containerRect.height
       });
     } else {
-      setFlowCoords(null);
+      // Vertical Flow: Faculty exits from bottom, Student enters at top (mobile fallback)
+      const facPoints = facRects.map((rect) => ({
+        x: rect.left + rect.width / 2 - containerRect.left,
+        y: rect.bottom - containerRect.top
+      }));
+
+      const stuPoints = stuRects.map((rect) => ({
+        x: rect.left + rect.width / 2 - containerRect.left,
+        y: rect.top - containerRect.top
+      }));
+
+      const maxFacY = Math.max(...facPoints.map((p) => p.y));
+      const minStuY = Math.min(...stuPoints.map((p) => p.y));
+
+      if (minStuY > maxFacY) {
+        const yMid = (maxFacY + minStuY) / 2;
+        const allX = [...facPoints.map((p) => p.x), ...stuPoints.map((p) => p.x)];
+        const busMinX = Math.min(...allX);
+        const busMaxX = Math.max(...allX);
+
+        setFlowCoords({
+          isSideBySide: false,
+          facPoints,
+          stuPoints,
+          yMid,
+          busMinX,
+          busMaxX,
+          width: containerRect.width,
+          height: containerRect.height
+        });
+      } else {
+        setFlowCoords(null);
+      }
     }
   }, []);
 
@@ -1542,98 +1576,201 @@ function CoordinatorsHierarchyFlow({ faculty = [], students = [], title = '' }) 
             preserveAspectRatio="none"
             aria-hidden="true"
           >
-            {/* Horizontal Connector Bus Bar */}
-            {flowCoords.busMinX !== flowCoords.busMaxX && (
-              <g className="flow-bus-bar-group">
-                <line
-                  x1={flowCoords.busMinX}
-                  y1={flowCoords.yMid}
-                  x2={flowCoords.busMaxX}
-                  y2={flowCoords.yMid}
-                  className="flow-path-glow"
-                />
-                <line
-                  x1={flowCoords.busMinX}
-                  y1={flowCoords.yMid}
-                  x2={flowCoords.busMaxX}
-                  y2={flowCoords.yMid}
-                  className="flow-path-core"
-                />
-                <line
-                  x1={flowCoords.busMinX}
-                  y1={flowCoords.yMid}
-                  x2={flowCoords.busMaxX}
-                  y2={flowCoords.yMid}
-                  className="flow-path-pulse"
-                />
-              </g>
+            {flowCoords.isSideBySide ? (
+              <>
+                {/* Vertical Bus Bar if multiple coordinators have different vertical alignments */}
+                {Math.abs(flowCoords.busMinY - flowCoords.busMaxY) > 2 && (
+                  <g className="flow-bus-bar-group">
+                    <line
+                      x1={flowCoords.xMid}
+                      y1={flowCoords.busMinY}
+                      x2={flowCoords.xMid}
+                      y2={flowCoords.busMaxY}
+                      className="flow-path-glow"
+                    />
+                    <line
+                      x1={flowCoords.xMid}
+                      y1={flowCoords.busMinY}
+                      x2={flowCoords.xMid}
+                      y2={flowCoords.busMaxY}
+                      className="flow-path-core"
+                    />
+                    <line
+                      x1={flowCoords.xMid}
+                      y1={flowCoords.busMinY}
+                      x2={flowCoords.xMid}
+                      y2={flowCoords.busMaxY}
+                      className="flow-path-pulse"
+                    />
+                  </g>
+                )}
+
+                {/* Horizontal lines from Faculty Coordinators to xMid */}
+                {flowCoords.facPoints.map((fac, idx) => (
+                  <g key={`fac-h-line-${idx}`}>
+                    <line
+                      x1={fac.x}
+                      y1={fac.y}
+                      x2={flowCoords.xMid}
+                      y2={fac.y}
+                      className="flow-path-glow"
+                    />
+                    <line
+                      x1={fac.x}
+                      y1={fac.y}
+                      x2={flowCoords.xMid}
+                      y2={fac.y}
+                      className="flow-path-core"
+                    />
+                    <line
+                      x1={fac.x}
+                      y1={fac.y}
+                      x2={flowCoords.xMid}
+                      y2={fac.y}
+                      className="flow-path-pulse"
+                    />
+                    {/* Junction Dot on xMid */}
+                    <circle cx={flowCoords.xMid} cy={fac.y} r={4.5} className="flow-junction-dot" />
+                    <circle cx={flowCoords.xMid} cy={fac.y} r={7} className="flow-junction-ring" />
+                  </g>
+                ))}
+
+                {/* Horizontal lines from xMid to Student Coordinators with Arrowhead pointing Right */}
+                {flowCoords.stuPoints.map((stu, idx) => (
+                  <g key={`stu-h-line-${idx}`}>
+                    <line
+                      x1={flowCoords.xMid}
+                      y1={stu.y}
+                      x2={stu.x - 7}
+                      y2={stu.y}
+                      className="flow-path-glow"
+                    />
+                    <line
+                      x1={flowCoords.xMid}
+                      y1={stu.y}
+                      x2={stu.x - 7}
+                      y2={stu.y}
+                      className="flow-path-core"
+                    />
+                    <line
+                      x1={flowCoords.xMid}
+                      y1={stu.y}
+                      x2={stu.x - 7}
+                      y2={stu.y}
+                      className="flow-path-pulse"
+                    />
+                    {/* Junction Dot on xMid if different from faculty line */}
+                    {Math.abs(stu.y - flowCoords.facPoints[0]?.y) > 2 && (
+                      <>
+                        <circle cx={flowCoords.xMid} cy={stu.y} r={4.5} className="flow-junction-dot" />
+                        <circle cx={flowCoords.xMid} cy={stu.y} r={7} className="flow-junction-ring" />
+                      </>
+                    )}
+
+                    {/* Crisp Flowchart Arrowhead pointing RIGHT into Student Card */}
+                    <polygon
+                      points={`${stu.x - 8},${stu.y - 6} ${stu.x - 8},${stu.y + 6} ${stu.x},${stu.y}`}
+                      className="flow-arrowhead"
+                    />
+                  </g>
+                ))}
+              </>
+            ) : (
+              <>
+                {/* Horizontal Connector Bus Bar */}
+                {flowCoords.busMinX !== flowCoords.busMaxX && (
+                  <g className="flow-bus-bar-group">
+                    <line
+                      x1={flowCoords.busMinX}
+                      y1={flowCoords.yMid}
+                      x2={flowCoords.busMaxX}
+                      y2={flowCoords.yMid}
+                      className="flow-path-glow"
+                    />
+                    <line
+                      x1={flowCoords.busMinX}
+                      y1={flowCoords.yMid}
+                      x2={flowCoords.busMaxX}
+                      y2={flowCoords.yMid}
+                      className="flow-path-core"
+                    />
+                    <line
+                      x1={flowCoords.busMinX}
+                      y1={flowCoords.yMid}
+                      x2={flowCoords.busMaxX}
+                      y2={flowCoords.yMid}
+                      className="flow-path-pulse"
+                    />
+                  </g>
+                )}
+
+                {/* Vertical Drops from each Faculty Coordinator to yMid */}
+                {flowCoords.facPoints.map((fac, idx) => (
+                  <g key={`fac-line-${idx}`}>
+                    <line
+                      x1={fac.x}
+                      y1={fac.y}
+                      x2={fac.x}
+                      y2={flowCoords.yMid}
+                      className="flow-path-glow"
+                    />
+                    <line
+                      x1={fac.x}
+                      y1={fac.y}
+                      x2={fac.x}
+                      y2={flowCoords.yMid}
+                      className="flow-path-core"
+                    />
+                    <line
+                      x1={fac.x}
+                      y1={fac.y}
+                      x2={fac.x}
+                      y2={flowCoords.yMid}
+                      className="flow-path-pulse"
+                    />
+                    {/* Junction Dots at the Bus Bar intersection */}
+                    <circle cx={fac.x} cy={flowCoords.yMid} r={4.5} className="flow-junction-dot" />
+                    <circle cx={fac.x} cy={flowCoords.yMid} r={7} className="flow-junction-ring" />
+                  </g>
+                ))}
+
+                {/* Vertical Drops from yMid to each Student Coordinator with Arrowhead */}
+                {flowCoords.stuPoints.map((stu, idx) => (
+                  <g key={`stu-line-${idx}`}>
+                    <line
+                      x1={stu.x}
+                      y1={flowCoords.yMid}
+                      x2={stu.x}
+                      y2={stu.y - 7}
+                      className="flow-path-glow"
+                    />
+                    <line
+                      x1={stu.x}
+                      y1={flowCoords.yMid}
+                      x2={stu.x}
+                      y2={stu.y - 7}
+                      className="flow-path-core"
+                    />
+                    <line
+                      x1={stu.x}
+                      y1={flowCoords.yMid}
+                      x2={stu.x}
+                      y2={stu.y - 7}
+                      className="flow-path-pulse"
+                    />
+                    {/* Junction Dots at the Bus Bar intersection */}
+                    <circle cx={stu.x} cy={flowCoords.yMid} r={4.5} className="flow-junction-dot" />
+                    <circle cx={stu.x} cy={flowCoords.yMid} r={7} className="flow-junction-ring" />
+
+                    {/* Crisp Flowchart Arrowhead */}
+                    <polygon
+                      points={`${stu.x - 6},${stu.y - 8} ${stu.x + 6},${stu.y - 8} ${stu.x},${stu.y}`}
+                      className="flow-arrowhead"
+                    />
+                  </g>
+                ))}
+              </>
             )}
-
-            {/* Vertical Drops from each Faculty Coordinator to yMid */}
-            {flowCoords.facPoints.map((fac, idx) => (
-              <g key={`fac-line-${idx}`}>
-                <line
-                  x1={fac.x}
-                  y1={fac.y}
-                  x2={fac.x}
-                  y2={flowCoords.yMid}
-                  className="flow-path-glow"
-                />
-                <line
-                  x1={fac.x}
-                  y1={fac.y}
-                  x2={fac.x}
-                  y2={flowCoords.yMid}
-                  className="flow-path-core"
-                />
-                <line
-                  x1={fac.x}
-                  y1={fac.y}
-                  x2={fac.x}
-                  y2={flowCoords.yMid}
-                  className="flow-path-pulse"
-                />
-                {/* Junction Dots at the Bus Bar intersection */}
-                <circle cx={fac.x} cy={flowCoords.yMid} r={4.5} className="flow-junction-dot" />
-                <circle cx={fac.x} cy={flowCoords.yMid} r={7} className="flow-junction-ring" />
-              </g>
-            ))}
-
-            {/* Vertical Drops from yMid to each Student Coordinator with Arrowhead */}
-            {flowCoords.stuPoints.map((stu, idx) => (
-              <g key={`stu-line-${idx}`}>
-                <line
-                  x1={stu.x}
-                  y1={flowCoords.yMid}
-                  x2={stu.x}
-                  y2={stu.y - 7}
-                  className="flow-path-glow"
-                />
-                <line
-                  x1={stu.x}
-                  y1={flowCoords.yMid}
-                  x2={stu.x}
-                  y2={stu.y - 7}
-                  className="flow-path-core"
-                />
-                <line
-                  x1={stu.x}
-                  y1={flowCoords.yMid}
-                  x2={stu.x}
-                  y2={stu.y - 7}
-                  className="flow-path-pulse"
-                />
-                {/* Junction Dots at the Bus Bar intersection */}
-                <circle cx={stu.x} cy={flowCoords.yMid} r={4.5} className="flow-junction-dot" />
-                <circle cx={stu.x} cy={flowCoords.yMid} r={7} className="flow-junction-ring" />
-
-                {/* Crisp Flowchart Arrowhead */}
-                <polygon
-                  points={`${stu.x - 6},${stu.y - 8} ${stu.x + 6},${stu.y - 8} ${stu.x},${stu.y}`}
-                  className="flow-arrowhead"
-                />
-              </g>
-            ))}
           </svg>
         )}
 
@@ -1642,53 +1779,92 @@ function CoordinatorsHierarchyFlow({ faculty = [], students = [], title = '' }) 
           <div className="coordinators-tier coordinators-tier-faculty">
             <div className="coordinators-grid">
               {faculty.map((fc, idx) => (
-                <div
+                <LiquidGlass
                   key={`faculty-${idx}`}
                   ref={(el) => (facultyRefs.current[idx] = el)}
-                  className="coordinator-card"
+                  className="coordinator-card team-glass-card"
+                  borderRadius={20}
+                  enableShader={true}
                 >
-                  <div className="coordinator-photo-container">
-                    <FacultyCoordinatorPhoto
-                      coordinator={fc}
-                      index={idx}
-                      alt={fc.cordinatorName}
-                      className="coordinator-photo"
-                    />
-                    <span className="coordinator-badge">
-                      <SplitColorText as="span" screenSync={true} leftColor="#ffffff" rightColor="#ffffff">
-                        Faculty Coordinator
-                      </SplitColorText>
-                    </span>
-                  </div>
-                  <div className="coordinator-card-body">
-                    <SplitColorText as="div" className="coordinator-name" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                  <div className="team-card-inner">
+                    {/* Avatar Frame with Rotating VIBGYOR Rainbow Border */}
+                    <div className="team-avatar-frame">
+                      <FacultyCoordinatorPhoto
+                        coordinator={fc}
+                        index={idx}
+                        alt={fc.cordinatorName}
+                        className="team-avatar-img"
+                      />
+                    </div>
+
+                    {/* Name */}
+                    <SplitColorText
+                      as="h3"
+                      className="team-member-name coordinator-name"
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
                       {formatTitleCase(fc.cordinatorName)}
                     </SplitColorText>
-                    <div className="coordinator-dept">
-                      <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#fbbf24">
-                        {formatTitleCase(fc.cordinatorDesignation || fc.departmentName || fc.cordinatorCollege || 'Coordinator')}
+
+                    {/* Designation */}
+                    <SplitColorText
+                      as="span"
+                      className="team-member-designation coordinator-dept"
+                      screenSync={true}
+                      leftColor="#be9337"
+                      rightColor="#be9337"
+                    >
+                      {formatTitleCase(fc.cordinatorDesignation || fc.departmentName || fc.cordinatorCollege || 'Coordinator')}
+                    </SplitColorText>
+
+                    {/* Department / Institution */}
+                    <SplitColorText
+                      as="p"
+                      className="team-member-dept coordinator-institution"
+                      screenSync={true}
+                      leftColor="#0f172a"
+                      rightColor="#ffffff"
+                    >
+                      {fc.cordinatorCollege || 'Aditya University'}
+                    </SplitColorText>
+
+                    {/* Badge Pill with VIBGYOR Rainbow Border */}
+                    <div className="team-committee-badge-pill">
+                      <SplitColorText
+                        as="span"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                      >
+                        Faculty Coordinator
                       </SplitColorText>
                     </div>
-                    <div className="coordinator-contacts-list">
-                      {fc.cordinatorPhone && (
-                        <a href={`tel:${fc.cordinatorPhone}`} className="coordinator-contact-item">
-                          <Phone size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
-                          <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                            {fc.cordinatorPhone}
-                          </SplitColorText>
-                        </a>
-                      )}
-                      {fc.cordinatorEmail && (
-                        <a href={`mailto:${fc.cordinatorEmail}`} className="coordinator-contact-item">
-                          <Mail size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
-                          <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                            {fc.cordinatorEmail}
-                          </SplitColorText>
-                        </a>
-                      )}
-                    </div>
+
+                    {/* Contacts List */}
+                    {(fc.cordinatorPhone || fc.cordinatorEmail) && (
+                      <div className="coordinator-contacts-list">
+                        {fc.cordinatorPhone && (
+                          <a href={`tel:${fc.cordinatorPhone}`} className="coordinator-contact-item">
+                            <Phone size={13} strokeWidth={2.4} className="coordinator-lucide-icon" />
+                            <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                              {fc.cordinatorPhone}
+                            </SplitColorText>
+                          </a>
+                        )}
+                        {fc.cordinatorEmail && (
+                          <a href={`mailto:${fc.cordinatorEmail}`} className="coordinator-contact-item">
+                            <Mail size={13} strokeWidth={2.4} className="coordinator-lucide-icon" />
+                            <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                              {fc.cordinatorEmail}
+                            </SplitColorText>
+                          </a>
+                        )}
+                      </div>
+                    )}
                   </div>
-                </div>
+                </LiquidGlass>
               ))}
             </div>
           </div>
@@ -1707,56 +1883,95 @@ function CoordinatorsHierarchyFlow({ faculty = [], students = [], title = '' }) 
                   : `/img/person/${(idx % 8) + 2}.jpg`;
 
                 return (
-                  <div
+                  <LiquidGlass
                     key={`student-${idx}`}
                     ref={(el) => (studentRefs.current[idx] = el)}
-                    className="coordinator-card"
+                    className="coordinator-card team-glass-card"
+                    borderRadius={20}
+                    enableShader={true}
                   >
-                    <div className="coordinator-photo-container">
-                      <img
-                        src={photoUrl}
-                        alt={sc.studentCordinatorName}
-                        className="coordinator-photo"
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.src = `/img/person/${(idx % 8) + 2}.jpg`;
-                        }}
-                      />
-                      <span className="coordinator-badge">
-                        <SplitColorText as="span" screenSync={true} leftColor="#ffffff" rightColor="#ffffff">
-                          Student Coordinator
-                        </SplitColorText>
-                      </span>
-                    </div>
-                    <div className="coordinator-card-body">
-                      <SplitColorText as="div" className="coordinator-name" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                    <div className="team-card-inner">
+                      {/* Avatar Frame with Rotating VIBGYOR Rainbow Border */}
+                      <div className="team-avatar-frame">
+                        <img
+                          src={photoUrl}
+                          alt={sc.studentCordinatorName}
+                          className="team-avatar-img"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = `/img/person/${(idx % 8) + 2}.jpg`;
+                          }}
+                        />
+                      </div>
+
+                      {/* Name */}
+                      <SplitColorText
+                        as="h3"
+                        className="team-member-name coordinator-name"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                      >
                         {formatTitleCase(sc.studentCordinatorName)}
                       </SplitColorText>
-                      <div className="coordinator-dept">
-                        <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#fbbf24">
-                          {formatTitleCase(sc.studentCordinatorCollege || sc.departmentName || 'Student Coordinator')}
+
+                      {/* Designation */}
+                      <SplitColorText
+                        as="span"
+                        className="team-member-designation coordinator-dept"
+                        screenSync={true}
+                        leftColor="#be9337"
+                        rightColor="#be9337"
+                      >
+                        {formatTitleCase(sc.studentCordinatorCollege || sc.departmentName || 'Student Coordinator')}
+                      </SplitColorText>
+
+                      {/* Department / Institution */}
+                      <SplitColorText
+                        as="p"
+                        className="team-member-dept coordinator-institution"
+                        screenSync={true}
+                        leftColor="#0f172a"
+                        rightColor="#ffffff"
+                      >
+                        {sc.cordinatorCollege || 'Aditya University'}
+                      </SplitColorText>
+
+                      {/* Badge Pill with VIBGYOR Rainbow Border */}
+                      <div className="team-committee-badge-pill">
+                        <SplitColorText
+                          as="span"
+                          screenSync={true}
+                          leftColor="#0f172a"
+                          rightColor="#ffffff"
+                        >
+                          Student Coordinator
                         </SplitColorText>
                       </div>
-                      <div className="coordinator-contacts-list">
-                        {sc.studentCordinatorPhone && (
-                          <a href={`tel:${sc.studentCordinatorPhone}`} className="coordinator-contact-item">
-                            <Phone size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
-                            <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                              {sc.studentCordinatorPhone}
-                            </SplitColorText>
-                          </a>
-                        )}
-                        {sc.studentCordinatorEmail && (
-                          <a href={`mailto:${sc.studentCordinatorEmail}`} className="coordinator-contact-item">
-                            <Mail size={14} strokeWidth={2.4} className="coordinator-lucide-icon" />
-                            <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                              {sc.studentCordinatorEmail}
-                            </SplitColorText>
-                          </a>
-                        )}
-                      </div>
+
+                      {/* Contacts List */}
+                      {(sc.studentCordinatorPhone || sc.studentCordinatorEmail) && (
+                        <div className="coordinator-contacts-list">
+                          {sc.studentCordinatorPhone && (
+                            <a href={`tel:${sc.studentCordinatorPhone}`} className="coordinator-contact-item">
+                              <Phone size={13} strokeWidth={2.4} className="coordinator-lucide-icon" />
+                              <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                                {sc.studentCordinatorPhone}
+                              </SplitColorText>
+                            </a>
+                          )}
+                          {sc.studentCordinatorEmail && (
+                            <a href={`mailto:${sc.studentCordinatorEmail}`} className="coordinator-contact-item">
+                              <Mail size={13} strokeWidth={2.4} className="coordinator-lucide-icon" />
+                              <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                                {sc.studentCordinatorEmail}
+                              </SplitColorText>
+                            </a>
+                          )}
+                        </div>
+                      )}
                     </div>
-                  </div>
+                  </LiquidGlass>
                 );
               })}
             </div>

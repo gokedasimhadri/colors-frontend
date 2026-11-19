@@ -935,29 +935,75 @@
 .coordinators-flow-wrapper {
   position: relative;
   width: 100%;
-  margin-top: 0;
-  margin-bottom: 0;
+  max-width: 980px;
+  margin: 0 auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
+  gap: 0;
 }
 
 .coordinators-tier {
-  width: 100%;
+  flex: 1;
+  max-width: 360px;
   position: relative;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.coordinators-tier-faculty {
+  align-items: flex-end;
+}
+
+.coordinators-tier-student {
+  align-items: flex-start;
 }
 
 .coordinators-flow-spacer {
-  width: 100%;
-  height: 80px;
+  width: 110px;
+  min-width: 80px;
+  height: 50px;
   position: relative;
   pointer-events: none;
+  flex-shrink: 0;
 }
 
-@media (max-width: 640px) {
+.coordinators-tier-faculty .coordinators-grid {
+  justify-content: flex-end;
+}
+
+.coordinators-tier-student .coordinators-grid {
+  justify-content: flex-start;
+}
+
+@media (max-width: 768px) {
+  .coordinators-flow-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .coordinators-tier {
+    width: 100%;
+    max-width: 100%;
+    align-items: center;
+  }
+
+  .coordinators-tier-faculty,
+  .coordinators-tier-student {
+    align-items: center;
+  }
+
+  .coordinators-tier-faculty .coordinators-grid,
+  .coordinators-tier-student .coordinators-grid {
+    justify-content: center;
+  }
+
   .coordinators-flow-spacer {
-    height: 65px;
+    width: 100%;
+    height: 70px;
   }
 }
 
@@ -1042,124 +1088,262 @@
   width: 100%;
 }
 
-/* Reduced width sleek coordinator card */
-.coordinator-card {
+/* ─────────────────────────────────────────────────────────────
+   Coordinator Cards: Matching Teams Page Liquid Glass & Rainbow Border
+   ───────────────────────────────────────────────────────────── */
+
+@property --rainbow-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes vibgyorConicRotate {
+  0% {
+    --rainbow-angle: 0deg;
+  }
+  100% {
+    --rainbow-angle: 360deg;
+  }
+}
+
+@keyframes vibgyorFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.coordinators-grid {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 2rem;
   width: 100%;
-  max-width: 320px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(20px) saturate(190%);
-  -webkit-backdrop-filter: blur(20px) saturate(190%);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow:
-    inset 0 1px 2px rgba(255, 255, 255, 0.35),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.15),
-    0 12px 36px rgba(0, 0, 0, 0.16);
+}
+
+.coordinator-card.team-glass-card {
   position: relative;
-  user-select: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.coordinator-card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    inset 0 1px 2px rgba(255, 255, 255, 0.45),
-    0 16px 44px rgba(0, 0, 0, 0.22);
-}
-
-/* Full width photo at the top of the card */
-.coordinator-photo-container {
-  width: 100%;
-  height: 250px;
-  position: relative;
-  overflow: hidden;
-  background: rgba(15, 23, 42, 0.2);
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  margin: 0;
-}
-
-.coordinator-photo {
-  width: 100%;
-  /* height: 100%; */
-  object-fit: cover;
-  display: block;
-}
-
-/* Heading turned into a badge aligned at the right side top */
-.coordinator-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 5;
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 5px 12px;
-  border-radius: 50px;
-  color: #ffffff;
-  letter-spacing: 0.04em;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  display: inline-flex;
-  align-items: center;
-}
-
-/* Card body containing Name, Designation, and Lucide contact links */
-.coordinator-card-body {
-  padding: 1.25rem 1.4rem 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  flex: 1;
+  width: 100%;
+  max-width: 290px;
+  border-radius: 20px !important;
+  padding: 2.2rem 1.25rem 1.8rem !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  -webkit-backdrop-filter: blur(20px) saturate(190%) brightness(1.04) !important;
+  backdrop-filter: blur(20px) saturate(190%) brightness(1.04) !important;
+  box-shadow: none !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  box-sizing: border-box;
+  overflow: hidden;
+  isolation: isolate;
 }
 
-.coordinator-name {
-  font-weight: 800;
-  font-size: 1.15rem;
-  margin: 0 0 0.3rem;
-  line-height: 1.25;
+.coordinator-card.team-glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: none !important;
 }
 
-.coordinator-dept {
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 0.85rem;
+.coordinator-card.team-glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px !important;
+  padding: 1.5px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.12) 30%,
+    rgba(255, 255, 255, 0.02) 65%,
+    rgba(0, 0, 0, 0.25) 100%
+  ) !important;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 3;
 }
 
-.coordinator-contacts-list {
+.coordinator-card.team-glass-card::after {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  border-radius: calc(20px - 1.5px) !important;
+  box-shadow:
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.35),
+    inset 1px 0 1px rgba(255, 255, 255, 0.15),
+    inset -1px -1px 2px rgba(0, 0, 0, 0.2) !important;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.coordinator-card .team-card-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.45rem;
+  height: 100%;
   width: 100%;
 }
 
-.coordinator-contact-item {
+/* ── Avatar Frame with Rotating VIBGYOR Rainbow Border ── */
+.coordinator-card .team-avatar-frame {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: none !important;
+  padding: 4px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.coordinator-card .team-avatar-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 3.5px;
+  box-sizing: border-box;
+  background: conic-gradient(
+    from var(--rainbow-angle, 0deg),
+    #8b00ff 0deg,
+    #4b0082 51.4deg,
+    #0066ff 102.8deg,
+    #00c853 154.3deg,
+    #ffd600 205.7deg,
+    #ff6d00 257.1deg,
+    #ff1744 308.6deg,
+    #8b00ff 360deg
+  );
+  animation: vibgyorConicRotate 3.5s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.coordinator-card .team-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Details Styling ── */
+.coordinator-card .team-member-name {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0 0 0.35rem 0;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.coordinator-card .team-member-designation {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #be9337 !important;
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.coordinator-card .team-member-dept {
+  font-size: 0.82rem;
+  opacity: 0.85;
+  margin: 0;
+  text-align: center;
+}
+
+/* ── Committee Badge with Rainbow Border ── */
+.coordinator-card .team-committee-badge-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem;
-  font-size: 0.88rem;
+  padding: 4px 16px;
+  border-radius: 9999px;
+  margin-top: 0.85rem;
+  position: relative;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.coordinator-card .team-committee-badge-pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  padding: 1.5px;
+  box-sizing: border-box;
+  background: linear-gradient(
+    90deg,
+    #ff1744,
+    #ff6d00,
+    #ffd600,
+    #00c853,
+    #0066ff,
+    #8b00ff,
+    #ff1744
+  );
+  background-size: 200% 100%;
+  animation: vibgyorFlow 3s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.coordinator-card .coordinator-contacts-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  margin-top: 0.85rem;
+}
+
+.coordinator-card .coordinator-contact-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
   font-weight: 600;
   text-decoration: none;
   word-break: break-all;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.coordinator-contact-item:hover {
+.coordinator-card .coordinator-contact-item:hover {
   opacity: 0.8;
   transform: translateY(-1px);
 }
 
-.coordinator-lucide-icon {
+.coordinator-card .coordinator-lucide-icon {
   flex-shrink: 0;
   color: #be9337;
 }
