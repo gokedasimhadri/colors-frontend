@@ -216,7 +216,8 @@
   justify-content: center !important;
   text-align: center !important;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
   backdrop-filter: blur(14px) !important;
   -webkit-backdrop-filter: blur(14px) !important;
 }
@@ -324,11 +325,12 @@
 
 /* Tabs inside Liquid Glass Modal */
 .fest-auth-liquid-modal .fest-modal-tabs-wrapper {
-  background: rgba(255, 255, 255, 0.05) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-  padding: 10px 1.5rem !important;
+  background: transparent !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 8px 1.5rem 12px 1.5rem !important;
 }
 
 .fest-auth-themetab {
@@ -386,19 +388,26 @@
   white-space: nowrap !important;
 }
 
-/* Clean ThemeTab styling on fest-auth-themetab */
-.fest-auth-themetab .theme-tab-item:not(.active) .theme-tab-label {
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  font-size: 0.94rem !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45) !important;
+/* Clean ThemeTab styling on fest-auth-themetab with SplitColorText */
+.fest-auth-themetab .theme-tab-item .theme-tab-label {
+  font-weight: 800 !important;
+  font-size: 0.95rem !important;
   letter-spacing: 0.02em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-.fest-auth-themetab .theme-tab-item.active .theme-tab-label {
-  font-size: 0.94rem !important;
+.fest-auth-themetab .fest-auth-tab-split-label {
+  display: inline-block !important;
   font-weight: 800 !important;
-  letter-spacing: 0.02em !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.03em !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45)) !important;
+}
+
+.fest-auth-themetab .theme-tab-item.active .fest-auth-tab-split-label {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35)) !important;
 }
 
 .fest-modal-tabs {
@@ -509,7 +518,7 @@
 .fest-form-label {
   font-size: 0.8rem;
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
   margin-bottom: 0.35rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -617,6 +626,23 @@
 
 .mui-outlined-input.has-password-toggle {
   padding-right: 46px !important;
+}
+
+.mui-outlined-input.mui-textarea {
+  height: auto !important;
+  min-height: 110px !important;
+  padding-top: 14px !important;
+  resize: vertical;
+}
+
+.mui-form-field.is-multiline .mui-floating-label {
+  top: 24px;
+  transform: translateY(-50%);
+}
+
+.mui-form-field.is-multiline.is-floating .mui-floating-label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
 }
 
 /* Hover State: classic MUI darker gray */
@@ -889,7 +915,7 @@
 .event-reg-fee-label {
   font-size: 0.72rem;
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -947,7 +973,7 @@
 
 .student-strip-roll {
   font-size: 0.82rem;
-  color: #b45309;
+  color: #be9337;
   font-weight: 700;
   font-family: monospace;
 }
@@ -965,7 +991,7 @@
   border-radius: 8px;
   font-size: 0.78rem;
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -988,7 +1014,7 @@
 .team-section-title {
   font-size: 0.95rem;
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0.85rem;
@@ -1165,8 +1191,8 @@
 .btn-fest-primary:hover:not(:disabled),
 .fest-btn-primary:hover:not(:disabled) {
   transform: translateY(-1px) !important;
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
-  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4) !important;
+  background: linear-gradient(135deg, #d4af37 0%, #be9337 100%) !important;
+  box-shadow: 0 6px 20px rgba(190, 147, 55, 0.4) !important;
 }
 
 .btn-fest-primary:disabled,
@@ -1253,7 +1279,7 @@
   font-size: 0.76rem;
   font-weight: 900;
   letter-spacing: 0.12em;
-  color: #b45309;
+  color: #be9337;
   background: #fffbeb;
   border: 1px solid #fcd34d;
   padding: 4px 12px;
@@ -1291,7 +1317,7 @@
 
 .reg-ticket-val.code {
   font-family: monospace;
-  color: #b45309;
+  color: #be9337;
   font-size: 1rem;
 }
 
@@ -1478,7 +1504,7 @@
 
 .reg-participants-table th {
   background: #f8fafc;
-  color: #b45309;
+  color: #be9337;
   font-weight: 800;
   text-transform: uppercase;
   font-size: 0.72rem;
@@ -1504,7 +1530,7 @@
 
 .col-idx {
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
   width: 32px;
   text-align: center;
 }
@@ -1575,7 +1601,7 @@
 .roster-preview-title {
   font-size: 0.8rem;
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
   text-transform: uppercase;
   margin-bottom: 0.5rem;
 }
@@ -1605,7 +1631,7 @@
 
 .roster-chip-num {
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
 }
 
 .roster-chip-name {
@@ -1652,7 +1678,7 @@
 .solo-preview-title {
   font-size: 0.82rem;
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
   text-transform: uppercase;
 }
 
@@ -1967,7 +1993,7 @@
 .pattern-label {
   font-size: 0.82rem;
   font-weight: 800;
-  color: #b45309;
+  color: #be9337;
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }

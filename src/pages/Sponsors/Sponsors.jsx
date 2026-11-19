@@ -1,6 +1,50 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import SplitBackground from '../../components/ThemeComponents/backgrounds/SplitBackground';
+import SplitColorText from '../../components/ThemeComponents/SplitColor/SplitColorText';
+import { MuiTextField, MuiSelectField } from '../../components/RegistrationModals/MuiTextField';
+import '../../components/RegistrationModals/RegistrationModals.css';
 import './Sponsors.css';
+
+const SPONSORSHIP_TIERS = [
+  'Gold Partner (₹3,00,000)',
+  'Title Presenter (₹10,00,000)',
+  'Powered By Partner (₹5,00,000)',
+  'Silver Partner (₹1,50,000)',
+  'Stall & Food Vendor (₹50,000)'
+];
+
+function SponsorCard({ sponsor, color }) {
+  return (
+    <div className="sponsor-card">
+      <div className="sponsor-logo-container" style={{ borderColor: color }}>
+        {sponsor.logo ? (
+          <img
+            src={sponsor.logo}
+            alt={sponsor.name}
+            className="sponsor-logo-img"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              const fallback = e.currentTarget.nextElementSibling;
+              if (fallback) fallback.style.display = 'flex';
+            }}
+          />
+        ) : null}
+        <span
+          className="sponsor-logo-fallback"
+          style={{ display: sponsor.logo ? 'none' : 'flex' }}
+        >
+          {sponsor.logoText}
+        </span>
+      </div>
+      <div className="sponsor-details">
+        <h3 className="sponsor-name">{sponsor.name}</h3>
+        <span className="sponsor-tagline">{sponsor.tagline}</span>
+        <p className="sponsor-desc">{sponsor.desc}</p>
+      </div>
+    </div>
+  );
+}
 
 export default function Sponsors() {
   const [formData, setFormData] = useState({
@@ -17,11 +61,12 @@ export default function Sponsors() {
     {
       tier: 'TITLE SPONSOR',
       badge: 'Platinum Presenter',
-      color: '#b45309',
+      color: '#be9337',
       sponsors: [
         {
           name: 'ADITYA GROUP OF INSTITUTIONS',
           tagline: 'Leading Educational Pioneer in South India',
+          logo: '/AGI_Logo.png',
           logoText: 'AGI',
           desc: 'Title sponsor fostering innovation, athletic training, and cultural empowerment.'
         }
@@ -35,12 +80,14 @@ export default function Sponsors() {
         {
           name: 'STATE BANK OF INDIA',
           tagline: 'Official Banking & Digital Payments Partner',
+          logo: '/SBI-logo.jpg',
           logoText: 'SBI',
           desc: 'Seamless festival cashless transactions and student entrepreneurship rewards.'
         },
         {
           name: 'RAZORPAY',
           tagline: 'Official Payment Gateway Partner',
+          logo: '/Razorpay_logo.svg',
           logoText: 'RZP',
           desc: 'Powering high-concurrency national event registrations and instant confirmations.'
         }
@@ -54,18 +101,21 @@ export default function Sponsors() {
         {
           name: 'DECATHLON SPORTS INDIA',
           tagline: 'Official Sports Apparel & Equipment Partner',
+          logo: '/decathlon-logo.png',
           logoText: 'DCT',
           desc: 'Providing tournament match balls, referee kits, and championship MVP prizes.'
         },
         {
           name: 'RED BULL ENERGY',
           tagline: 'Official Energy Drink & Stage Partner',
+          logo: '/redbull-logo.jpg',
           logoText: 'RB',
           desc: 'Energizing participants and hosting the Red Bull Dance Battles showcase.'
         },
         {
           name: 'BOAT AUDIO',
           tagline: 'Official Youth Audio Partner',
+          logo: '/boat-logo.png',
           logoText: 'bOAT',
           desc: 'Rewarding competition winners with wireless audio kits and tech merchandise.'
         }
@@ -79,12 +129,14 @@ export default function Sponsors() {
         {
           name: 'THE HINDU',
           tagline: 'National Print & Digital Media Partner',
+          logo: '/the_hindu_logo.png',
           logoText: 'TH',
           desc: 'Comprehensive regional and national festival coverage across print and online.'
         },
         {
           name: 'RADIO MIRCHI 98.3 FM',
           tagline: 'Official Radio & RJ Host Partner',
+          logo: '/RADIOMIRCHI.jpg',
           logoText: '98.3',
           desc: 'Broadcasting live campus interviews, contest updates, and RJ entertainment.'
         }
@@ -107,51 +159,115 @@ export default function Sponsors() {
   };
 
   return (
-    <div className="sponsors-page-wrapper">
+    <SplitBackground as="main" className="sponsors-page-wrapper">
       {/* Hero Header */}
       <section className="sponsors-hero">
-        <div className="container text-center">
-          <div className="sponsors-badge-top">ADITYA UNIVERSITY • COLOURS 2027 • ₹10 LAKHS IN CASH PRIZES</div>
-          <h1 className="sponsors-hero-title">Proud Sponsors & Partners</h1>
-          <p className="sponsors-hero-sub">
-            We extend our profound gratitude to our esteemed corporate, financial, and media partners
-            who empower over 25,000 students to pursue excellence at Colours 2027.
-          </p>
-          <div className="sponsors-hero-actions">
-            <a href="#become-sponsor" className="btn-sponsors-primary">
-              Partner With Us / Sponsorship Deck ↓
-            </a>
-            <Link to="/contact" className="btn-sponsors-outline">
-              Contact Marketing Cell
-            </Link>
-          </div>
+        <div className="sponsors-header-row sponsors-title-row">
+          <SplitColorText
+            as="h1"
+            className="sponsors-hero-title"
+            splitPercent={50}
+            leftColor="#0f172a"
+            rightColor="#ffffff"
+          >
+            Sponsors & Partners
+          </SplitColorText>
         </div>
       </section>
 
       {/* Tiered Sponsor Sections */}
       <section className="sponsors-grid-section">
         <div className="container">
-          {sponsorTiers.map((tierGroup, idx) => (
-            <div key={idx} className="tier-group-block">
+          {/* Top Combined Row: Title Sponsor (5) & Powered By / Co-Sponsors (7) */}
+          <div className="sponsors-top-row-grid">
+            {/* 5-Column Container: Title Sponsor (Card width: 5) */}
+            <div className="tier-group-block sponsors-col-5">
               <div className="tier-header">
-                <span className="tier-badge-pill" style={{ borderColor: tierGroup.color, color: tierGroup.color }}>
-                  {tierGroup.badge}
+                <span className="tier-badge-pill">
+                  <SplitColorText
+                    screenSync={true}
+                    leftColor="#0f172a"
+                    rightColor="#ffffff"
+                  >
+                    {sponsorTiers[0].badge}
+                  </SplitColorText>
                 </span>
-                <h2 className="tier-heading">{tierGroup.tier}</h2>
+                <SplitColorText
+                  as="h2"
+                  className="tier-heading"
+                  screenSync={true}
+                  leftColor="#0f172a"
+                  rightColor="#ffffff"
+                >
+                  {sponsorTiers[0].tier}
+                </SplitColorText>
+              </div>
+
+              <div className="tier-cards-grid sponsors-cards-col-5">
+                {sponsorTiers[0].sponsors.map((sp, sIdx) => (
+                  <SponsorCard key={sIdx} sponsor={sp} color={sponsorTiers[0].color} />
+                ))}
+              </div>
+            </div>
+
+            {/* 7-Column Container: Powered By & Co-Sponsors (Cards width: 3.5 + 3.5) */}
+            <div className="tier-group-block sponsors-col-7">
+              <div className="tier-header">
+                <span className="tier-badge-pill">
+                  <SplitColorText
+                    screenSync={true}
+                    leftColor="#0f172a"
+                    rightColor="#ffffff"
+                  >
+                    {sponsorTiers[1].badge}
+                  </SplitColorText>
+                </span>
+                <SplitColorText
+                  as="h2"
+                  className="tier-heading"
+                  screenSync={true}
+                  leftColor="#0f172a"
+                  rightColor="#ffffff"
+                >
+                  {sponsorTiers[1].tier}
+                </SplitColorText>
+              </div>
+
+              <div className="tier-cards-grid sponsors-cards-col-7">
+                {sponsorTiers[1].sponsors.map((sp, sIdx) => (
+                  <SponsorCard key={sIdx} sponsor={sp} color={sponsorTiers[1].color} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Remaining Tier Groups (Associate, Media, etc.) */}
+          {sponsorTiers.slice(2).map((tierGroup, idx) => (
+            <div key={idx + 2} className="tier-group-block">
+              <div className="tier-header">
+                <span className="tier-badge-pill">
+                  <SplitColorText
+                    screenSync={true}
+                    leftColor="#0f172a"
+                    rightColor="#ffffff"
+                  >
+                    {tierGroup.badge}
+                  </SplitColorText>
+                </span>
+                <SplitColorText
+                  as="h2"
+                  className="tier-heading"
+                  screenSync={true}
+                  leftColor="#0f172a"
+                  rightColor="#ffffff"
+                >
+                  {tierGroup.tier}
+                </SplitColorText>
               </div>
 
               <div className="tier-cards-grid">
                 {tierGroup.sponsors.map((sp, sIdx) => (
-                  <div key={sIdx} className="sponsor-card">
-                    <div className="sponsor-logo-circle" style={{ borderColor: tierGroup.color }}>
-                      <span>{sp.logoText}</span>
-                    </div>
-                    <div className="sponsor-details">
-                      <h3 className="sponsor-name">{sp.name}</h3>
-                      <span className="sponsor-tagline">{sp.tagline}</span>
-                      <p className="sponsor-desc">{sp.desc}</p>
-                    </div>
-                  </div>
+                  <SponsorCard key={sIdx} sponsor={sp} color={tierGroup.color} />
                 ))}
               </div>
             </div>
@@ -164,8 +280,24 @@ export default function Sponsors() {
         <div className="container">
           <div className="benefits-header text-center">
             <span className="section-mini-tag">PARTNERSHIP VALUE</span>
-            <h2 className="section-main-heading">Why Sponsor Colours 2027?</h2>
-            <p className="benefits-sub">Direct engagement with India's most dynamic youth demographic</p>
+            <SplitColorText
+              as="h2"
+              className="section-main-heading"
+              screenSync={true}
+              leftColor="#0f172a"
+              rightColor="#ffffff"
+            >
+              Why Sponsor Colours 2027?
+            </SplitColorText>
+            <SplitColorText
+              as="p"
+              className="benefits-sub"
+              screenSync={true}
+              leftColor="#475569"
+              rightColor="#cbd5e1"
+            >
+              Direct engagement with India's most dynamic youth demographic
+            </SplitColorText>
           </div>
 
           <div className="benefits-grid">
@@ -220,74 +352,63 @@ export default function Sponsors() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="sponsor-form">
-                  <div className="form-field">
-                    <label>Company / Organization Name *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Acme Tech Solutions"
-                      value={formData.companyName}
-                      onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                    />
-                  </div>
+                  <MuiTextField
+                    label="Company / Organization Name"
+                    name="companyName"
+                    value={formData.companyName}
+                    onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                    required
+                    placeholder="e.g. Acme Tech Solutions"
+                  />
 
                   <div className="form-row-2">
-                    <div className="form-field">
-                      <label>Contact Person *</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Full Name"
-                        value={formData.contactPerson}
-                        onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
-                      />
-                    </div>
-                    <div className="form-field">
-                      <label>Mobile Number *</label>
-                      <input
-                        type="tel"
-                        required
-                        placeholder="+91 98765 43210"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="form-field">
-                    <label>Official Email Address *</label>
-                    <input
-                      type="email"
+                    <MuiTextField
+                      label="Contact Person"
+                      name="contactPerson"
+                      value={formData.contactPerson}
+                      onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
                       required
-                      placeholder="partner@company.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="Full Name"
+                    />
+                    <MuiTextField
+                      label="Mobile Number"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      required
+                      placeholder="+91 98765 43210"
                     />
                   </div>
 
-                  <div className="form-field">
-                    <label>Preferred Sponsorship Category</label>
-                    <select
-                      value={formData.tier}
-                      onChange={(e) => setFormData({ ...formData, tier: e.target.value })}
-                    >
-                      <option>Title Presenter (₹10,00,000)</option>
-                      <option>Powered By Partner (₹5,00,000)</option>
-                      <option>Gold Partner (₹3,00,000)</option>
-                      <option>Silver Partner (₹1,50,000)</option>
-                      <option>Stall & Food Vendor (₹50,000)</option>
-                    </select>
-                  </div>
+                  <MuiTextField
+                    label="Official Email Address"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    placeholder="partner@company.com"
+                  />
 
-                  <div className="form-field">
-                    <label>Message / Specific Proposal</label>
-                    <textarea
-                      rows="3"
-                      placeholder="Share your goals or marketing requirements..."
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    />
-                  </div>
+                  <MuiSelectField
+                    label="Preferred Sponsorship Category"
+                    name="tier"
+                    value={formData.tier}
+                    onChange={(e) => setFormData({ ...formData, tier: e.target.value })}
+                    required
+                    options={SPONSORSHIP_TIERS}
+                  />
+
+                  <MuiTextField
+                    label="Message / Specific Proposal"
+                    name="message"
+                    multiline={true}
+                    rows={3}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    placeholder="Share your goals or marketing requirements..."
+                  />
 
                   <button type="submit" className="btn-sponsors-primary w-100">
                     Submit Partnership Request →
@@ -298,6 +419,6 @@ export default function Sponsors() {
           </div>
         </div>
       </section>
-    </div>
+    </SplitBackground>
   );
 }

@@ -8,6 +8,7 @@ import {
   Menu,
   X,
   FileText,
+  Users,
   Award,
   Phone,
   LayoutDashboard,
@@ -65,7 +66,8 @@ export default function MobileBottomBar() {
 
   const isMoreActive =
     drawerOpen ||
-    location.pathname === '/invitation' ||
+    location.pathname === '/teams' ||
+    location.pathname === '/team' ||
     location.pathname === '/sponsors' ||
     location.pathname === '/contact';
 
@@ -99,16 +101,16 @@ export default function MobileBottomBar() {
         {/* Festival Menu Links (Only items not directly available on the outer bottom bar, with exact Navbar names) */}
         <div className="drawer-links-grid">
           <Link
-            to="/invitation"
-            className={`drawer-link-item ${location.pathname === '/invitation' ? 'active' : ''}`}
+            to="/teams"
+            className={`drawer-link-item ${location.pathname === '/teams' || location.pathname === '/team' ? 'active' : ''}`}
             onClick={() => setDrawerOpen(false)}
           >
             <span className="drawer-icon-bubble gold">
-              <FileText size={18} />
+              <Users size={18} />
             </span>
             <div className="drawer-link-text">
-              <span className="drawer-link-label">Invitation</span>
-              <span className="drawer-link-sub">Official Festival Invite</span>
+              <span className="drawer-link-label">Team</span>
+              <span className="drawer-link-sub">Festival Committee & Organizers</span>
             </div>
           </Link>
 

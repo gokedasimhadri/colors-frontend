@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react';
 import { Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import SplitColorText from '../SplitColor/SplitColorText';
 import './ThemeTab.css';
@@ -63,6 +63,20 @@ export default function ThemeTab({
   activeColor
 }) {
   const currentActive = activeTab !== undefined ? activeTab : value;
+  const normalizedTabs = useMemo(() => {
+    return (tabs || []).map((tab) => {
+      if (typeof tab === 'string' || typeof tab === 'number') {
+        return { id: String(tab), label: String(tab) };
+      }
+      return {
+        id: tab.id !== undefined ? tab.id : (tab.value !== undefined ? tab.value : tab.key),
+        label: tab.label !== undefined ? tab.label : (tab.title !== undefined ? tab.title : tab.name),
+        icon: tab.icon,
+        disabled: Boolean(tab.disabled)
+      };
+    });
+  }, [tabs]);
+
   const [isSearchOpen, setIsSearchOpen] = useState(Boolean(searchQuery));
   const [tabsWidth, setTabsWidth] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -71,6 +85,40 @@ export default function ThemeTab({
   const listRef = useRef(null);
   const searchInputRef = useRef(null);
   const searchCircleRef = useRef(null);
+  const tabRefs = useRef({});
+  const [sliderStyle, setSliderStyle] = useState({ left: 0, top: 0, width: 0, height: 0, ready: false });
+
+  useLayoutEffect(() => {
+    if (isSearchOpen) return;
+
+    const updateSlider = () => {
+      const activeEl = tabRefs.current[String(currentActive)];
+      if (activeEl && listRef.current) {
+        const listRect = listRef.current.getBoundingClientRect();
+        const elRect = activeEl.getBoundingClientRect();
+        if (elRect.width > 0) {
+          setSliderStyle({
+            left: elRect.left - listRect.left,
+            top: elRect.top - listRect.top,
+            width: elRect.width,
+            height: elRect.height,
+            ready: true
+          });
+        }
+      }
+    };
+
+    updateSlider();
+    const frameId = requestAnimationFrame(updateSlider);
+    const timeoutId = setTimeout(updateSlider, 50);
+
+    window.addEventListener('resize', updateSlider);
+    return () => {
+      cancelAnimationFrame(frameId);
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', updateSlider);
+    };
+  }, [currentActive, normalizedTabs, isSearchOpen]);
 
   const hasSearch = Boolean(showSearch && typeof onSearchChange === 'function');
 
@@ -177,18 +225,6 @@ export default function ThemeTab({
     }
   };
 
-  const normalizedTabs = (tabs || []).map((tab) => {
-    if (typeof tab === 'string' || typeof tab === 'number') {
-      return { id: String(tab), label: String(tab) };
-    }
-    return {
-      id: tab.id !== undefined ? tab.id : (tab.value !== undefined ? tab.value : tab.key),
-      label: tab.label !== undefined ? tab.label : (tab.title !== undefined ? tab.title : tab.name),
-      icon: tab.icon,
-      disabled: Boolean(tab.disabled)
-    };
-  });
-
   const handleSelect = (tab) => {
     if (tab.disabled || isSearchOpen) return;
     if (typeof onChange === 'function') onChange(tab.id, tab);
@@ -243,12 +279,28 @@ export default function ThemeTab({
       >
         {/* A. Segmented Tab Items List (Desktop / Tablet view) */}
         <div ref={listRef} className="theme-tab-list theme-tab-desktop-list" aria-hidden={isSearchOpen}>
+          {/* Smooth Hardware-Accelerated Sliding VIBGYOR Active Pill */}
+          {sliderStyle.ready && (
+            <div
+              className="theme-tab-slider-indicator"
+              style={{
+                transform: `translate3d(${sliderStyle.left}px, ${sliderStyle.top}px, 0)`,
+                width: `${sliderStyle.width}px`,
+                height: `${sliderStyle.height}px`
+              }}
+              aria-hidden="true"
+            />
+          )}
+
           {normalizedTabs.map((tab) => {
             const isActive = currentActive === tab.id;
 
             return (
               <button
                 key={String(tab.id)}
+                ref={(el) => {
+                  if (el) tabRefs.current[String(tab.id)] = el;
+                }}
                 type="button"
                 role="tab"
                 tabIndex={isSearchOpen ? -1 : 0}
@@ -263,12 +315,10 @@ export default function ThemeTab({
                   <span className={`theme-tab-label ${isActive ? 'active' : ''}`}>
                     {tab.label}
                   </span>
-                ) : isActive ? (
-                  <span className="theme-tab-label active">{tab.label}</span>
                 ) : (
                   <SplitColorText
                     as="span"
-                    className="theme-tab-label"
+                    className={`theme-tab-label ${isActive ? 'active' : ''}`}
                     screenSync={screenSync}
                     leftColor={leftColor}
                     rightColor={rightColor}
@@ -316,7 +366,19 @@ export default function ThemeTab({
                 onClick={() => handleSelect(activeTabObj)}
               >
                 {activeTabObj.icon && <span className="theme-tab-icon">{activeTabObj.icon}</span>}
-                <span className="theme-tab-label active">{activeTabObj.label}</span>
+                {React.isValidElement(activeTabObj.label) ? (
+                  <span className="theme-tab-label active">{activeTabObj.label}</span>
+                ) : (
+                  <SplitColorText
+                    as="span"
+                    className="theme-tab-label active"
+                    screenSync={screenSync}
+                    leftColor={leftColor}
+                    rightColor={rightColor}
+                  >
+                    {activeTabObj.label}
+                  </SplitColorText>
+                )}
               </button>
             )}
           </div>

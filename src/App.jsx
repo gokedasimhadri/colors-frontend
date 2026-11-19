@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Navbar from './components/Navbar/Navbar';
 import Home from './pages/Home/Home';
 import Events from './pages/Events/Events';
-import Invitation from './pages/Invitation/Invitation';
+// import Invitation from './pages/Invitation/Invitation';
+import Teams from './pages/Teams';
 import Sponsors from './pages/Sponsors/Sponsors';
 import Contact from './pages/Contact/Contact';
 import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
@@ -32,7 +33,7 @@ function SchedulePdfRedirect() {
     <main style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: '6rem' }}>
       <p style={{ fontSize: '1rem', color: '#334155', fontWeight: 600 }}>
         Opening Schedule of Events PDF...{' '}
-        <a href="/Schedule_of_Events.pdf" style={{ color: '#b45309', textDecoration: 'underline' }}>
+        <a href="/Schedule_of_Events.pdf" style={{ color: '#be9337', textDecoration: 'underline' }}>
           Click here if it does not open automatically
         </a>
         .
@@ -56,7 +57,9 @@ function App() {
           <Route path="/events/:eventCategory" element={<Events />} />
           <Route path="/events/:eventCategory/:eventName" element={<Events />} />
           <Route path="/events/:eventCategory/:eventSubCategory/:eventName" element={<Events />} />
-          <Route path="/invitation" element={<Invitation />} />
+          {/* <Route path="/invitation" element={<Invitation />} /> */}
+          <Route path="/teams" element={<Teams />} />
+          <Route path="/team" element={<Teams />} />
           <Route path="/events-schedule" element={<SchedulePdfRedirect />} />
           <Route path="/sponsors" element={<Sponsors />} />
           <Route path="/contact" element={<Contact />} />

@@ -299,6 +299,10 @@
 }
 
 /* ── RIGHT HALF: PURE WHITE CANVAS (#FFFFFF) ── */
+.portal-col {
+  flex-shrink: 0;
+}
+
 .uni-footer-right .uni-col-heading {
   font-family: var(--font-heading);
   font-size: var(--fs-h4);
@@ -310,6 +314,7 @@
   margin-bottom: 1.25rem;
   position: relative;
   padding-bottom: 0.5rem;
+  white-space: nowrap;
 }
 
 .uni-footer-right .uni-col-heading::after {

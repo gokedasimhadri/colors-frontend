@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useParams, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
-import { User, Phone, Mail, ArrowLeft, Tag, Users, MapPin, Calendar, RotateCcw, Target, Landmark } from 'lucide-react';
+import { User, Phone, Mail, ArrowLeft, Tag, Users, MapPin, Calendar } from 'lucide-react';
 import {
   EVENT_TYPE,
   fetchCategoriesWithSubCategories,
@@ -334,16 +334,43 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent, init
 
         {!loading && !error && filteredCategories.length === 0 && (
           <div className="events-empty-state">
-            <span style={{ fontSize: '3rem' }}>🎯</span>
-            <h3>No events found matching "{searchQuery}"</h3>
-            <p>Try searching for a different keyword or switch to All Categories.</p>
-            <button
-              onClick={() => { setSearchQuery(''); setActiveTab('ALL'); }}
-              className="btn-checkout-primary"
-              style={{ marginTop: '1rem' }}
+            <div className="events-empty-icon-wrap">
+              <span className="events-empty-emoji">🎯</span>
+            </div>
+            <SplitColorText
+              as="h3"
+              className="events-empty-title"
+              screenSync={true}
+              leftColor="#0f172a"
+              rightColor="#ffffff"
             >
-              Clear Search
-            </button>
+              No events found matching "{searchQuery}"
+            </SplitColorText>
+            <SplitColorText
+              as="p"
+              className="events-empty-desc"
+              screenSync={true}
+              leftColor="#475569"
+              rightColor="#cbd5e1"
+            >
+              Try searching for a different keyword or switch to All Categories.
+            </SplitColorText>
+            <ThemeButton
+              as="button"
+              type="button"
+              borderRadius={9999}
+              className="btn-event-checkout-theme btn-events-empty-action"
+              onClick={() => { setSearchQuery(''); setActiveTab('ALL'); }}
+            >
+              <SplitColorText
+                as="span"
+                screenSync={true}
+                leftColor="#0f172a"
+                rightColor="#ffffff"
+              >
+                Clear Search
+              </SplitColorText>
+            </ThemeButton>
           </div>
         )}
 
@@ -1153,23 +1180,86 @@ function SubCategoryEventsView({ category, subCategory, themeCode, onBack, onSel
           )}
 
           {error && (
-            <div className="events-error">
-              <h3>Unable to load events for {subCategory}</h3>
-              <p>{error}</p>
-              <button onClick={onBack} className="btn-checkout-primary" style={{ marginTop: '1rem' }}>
-                Back to All Categories
-              </button>
+            <div className="events-error events-empty-state">
+              <div className="events-empty-icon-wrap">
+                <span className="events-empty-emoji">⚠️</span>
+              </div>
+              <SplitColorText
+                as="h3"
+                className="events-empty-title"
+                screenSync={true}
+                leftColor="#0f172a"
+                rightColor="#ffffff"
+              >
+                Unable to load events for {subCategory}
+              </SplitColorText>
+              <SplitColorText
+                as="p"
+                className="events-empty-desc"
+                screenSync={true}
+                leftColor="#475569"
+                rightColor="#cbd5e1"
+              >
+                {error}
+              </SplitColorText>
+              <ThemeButton
+                as="button"
+                type="button"
+                borderRadius={9999}
+                className="btn-event-checkout-theme btn-events-empty-action"
+                onClick={onBack}
+              >
+                <SplitColorText
+                  as="span"
+                  screenSync={true}
+                  leftColor="#0f172a"
+                  rightColor="#ffffff"
+                >
+                  ← Back to All Categories
+                </SplitColorText>
+              </ThemeButton>
             </div>
           )}
 
           {!loading && !error && events.length === 0 && (
             <div className="events-empty-state">
-              <span style={{ fontSize: '3rem' }}>🎯</span>
-              <h3>No events registered yet for {subCategory}</h3>
-              <p>New competitions are actively being scheduled for this subcategory.</p>
-              <button onClick={onBack} className="btn-checkout-primary" style={{ marginTop: '1rem' }}>
-                Back to All Categories
-              </button>
+              <div className="events-empty-icon-wrap">
+                <span className="events-empty-emoji">🎯</span>
+              </div>
+              <SplitColorText
+                as="h3"
+                className="events-empty-title"
+                screenSync={true}
+                leftColor="#0f172a"
+                rightColor="#ffffff"
+              >
+                No events registered yet for {subCategory}
+              </SplitColorText>
+              <SplitColorText
+                as="p"
+                className="events-empty-desc"
+                screenSync={true}
+                leftColor="#475569"
+                rightColor="#cbd5e1"
+              >
+                New competitions are actively being scheduled for this subcategory.
+              </SplitColorText>
+              <ThemeButton
+                as="button"
+                type="button"
+                borderRadius={9999}
+                className="btn-event-checkout-theme btn-events-empty-action"
+                onClick={onBack}
+              >
+                <SplitColorText
+                  as="span"
+                  screenSync={true}
+                  leftColor="#0f172a"
+                  rightColor="#ffffff"
+                >
+                  ← Back to All Categories
+                </SplitColorText>
+              </ThemeButton>
             </div>
           )}
 
@@ -1853,19 +1943,6 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                       {cleanOverview}
                     </SplitColorText>
                     <div className="detail-cta-row">
-                      <div className="detail-fee-group">
-                        <span className="detail-fee-callout">
-                          <SplitColorText as="span" screenSync={true} leftColor="#475569" rightColor="#94a3b8">
-                            Entry Fee:
-                          </SplitColorText>{' '}
-                          <strong className="detail-fee-amount">
-                            <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#be9337">
-                              {eventData.price ? `₹ ${eventData.price}/-` : 'Free'}
-                            </SplitColorText>
-                          </strong>
-                        </span>
-                      </div>
-
                       <ThemeButton
                         onClick={handleRegisterButtonClick}
                         className="btn-register-hero-theme"
@@ -1886,7 +1963,7 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                     <Tag className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
                   </div>
                   <div className="stat-card-label">
-                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
+                    <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#be9337">
                       Registration Fee
                     </SplitColorText>
                   </div>
@@ -1902,7 +1979,7 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                     <Users className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
                   </div>
                   <div className="stat-card-label">
-                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
+                    <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#be9337">
                       Participation Type
                     </SplitColorText>
                   </div>
@@ -1918,8 +1995,8 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                     <MapPin className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
                   </div>
                   <div className="stat-card-label">
-                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
-                      Venue Location
+                    <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#be9337">
+                      Venue
                     </SplitColorText>
                   </div>
                   <div className="stat-card-value stat-small">
@@ -1934,7 +2011,7 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                     <Calendar className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
                   </div>
                   <div className="stat-card-label">
-                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
+                    <SplitColorText as="span" screenSync={true} leftColor="#be9337" rightColor="#be9337">
                       Festival Schedule
                     </SplitColorText>
                   </div>
@@ -1946,45 +2023,13 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                     </SplitColorText>
                   </div>
                 </div>
-
-                <div className="detail-stat-card">
-                  <div className="stat-card-icon-box">
-                    <RotateCcw className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
-                  </div>
-                  <div className="stat-card-label">
-                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
-                      Competition Rounds
-                    </SplitColorText>
-                  </div>
-                  <div className="stat-card-value">
-                    <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                      {eventData.rounds || 1} {eventData.rounds === 1 ? 'Round' : 'Rounds'}
-                    </SplitColorText>
-                  </div>
-                </div>
-
-                <div className="detail-stat-card">
-                  <div className="stat-card-icon-box">
-                    <Target className="stat-card-lucide-icon" size={22} strokeWidth={2.2} />
-                  </div>
-                  <div className="stat-card-label">
-                    <SplitColorText as="span" screenSync={true} leftColor="#b45309" rightColor="#fbbf24">
-                      Event Capacity
-                    </SplitColorText>
-                  </div>
-                  <div className="stat-card-value">
-                    <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                      {eventData.capacity || 100} Participants
-                    </SplitColorText>
-                  </div>
-                </div>
               </div>
 
               {/* Overview Section */}
               <div className="detail-section">
                 <div className="detail-pill-badge">
                   <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                    Overview & Description
+                    Overview
                   </SplitColorText>
                 </div>
                 <SplitColorText
@@ -2003,7 +2048,7 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                 <div className="detail-section">
                   <div className="detail-pill-badge">
                     <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                      Official Rules & Regulations
+                      Rules
                     </SplitColorText>
                   </div>
                   <ul className="detail-rules-list">
@@ -2016,37 +2061,6 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                       </li>
                     ))}
                   </ul>
-                </div>
-              )}
-
-              {/* Venue Details Section */}
-              {eventData.venueObj && (eventData.venueObj.name || eventData.venueObj.roomNo) && (
-                <div className="detail-section">
-                  <div className="detail-pill-badge">
-                    <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                      Venue Information
-                    </SplitColorText>
-                  </div>
-                  <div className="detail-venue-box">
-                    <p className="detail-venue-text">
-                      <Landmark size={18} strokeWidth={2.2} className="venue-lucide-icon" />
-                      <SplitColorText as="span" screenSync={true} leftColor="#475569" rightColor="#cbd5e1">
-                        <strong>Hall/Ground:</strong>{' '}
-                      </SplitColorText>
-                      <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                        {eventData.venueObj.name || eventData.venue}
-                      </SplitColorText>
-                    </p>
-                    {eventData.venueObj.roomNo && (
-                      <p className="detail-venue-subtext">
-                        <MapPin size={18} strokeWidth={2.2} className="venue-lucide-icon" />
-                        <SplitColorText as="span" screenSync={true} leftColor="#475569" rightColor="#cbd5e1">
-                          <strong>Room Number:</strong>{' '}
-                          {eventData.venueObj.roomNo} • {eventData.venueObj.venueType || 'Indoor'}
-                        </SplitColorText>
-                      </p>
-                    )}
-                  </div>
                 </div>
               )}
 
