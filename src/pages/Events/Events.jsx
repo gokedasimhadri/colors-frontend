@@ -2157,6 +2157,7 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                     >
                       {cleanOverview}
                     </SplitColorText>
+                    {/* Temporarily hidden per user request - re-enable later:
                     <div className="detail-cta-row">
                       <ThemeButton
                         onClick={handleRegisterButtonClick}
@@ -2167,6 +2168,7 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                         </SplitColorText>
                       </ThemeButton>
                     </div>
+                    */}
                   </div>
                 </div>
               </div>

@@ -368,6 +368,7 @@ export default function Navbar() {
                   )}
                 </div>
               ) : (
+                /* Temporarily hidden per user request - re-enable later:
                 <ThemeButton
                   onClick={handleLoginClick}
                   id="navbar-login-btn"
@@ -377,6 +378,8 @@ export default function Navbar() {
                     Register  |  Sign In
                   </SplitColorText>
                 </ThemeButton>
+                */
+                null
               )}
             </div>
           </div>
@@ -460,6 +463,7 @@ export default function Navbar() {
           onItemClick={closeMenu}
         />
 
+        {/* Temporarily hidden per user request - re-enable later:
         {!student && (
           <ThemeButton
             onClick={handleLoginClick}
@@ -470,6 +474,7 @@ export default function Navbar() {
             Login
           </ThemeButton>
         )}
+        */}
       </div>
 
       {/* Student Account Registration & Login Modal */}
