@@ -1943,7 +1943,8 @@ export async function initiateEventRegistration(payload) {
       phone: payload.studentMobile,
       college: payload.studentCollege || 'Aditya University',
       department: payload.studentDepartment || 'General',
-      year: payload.studentYear || '3rd Year'
+      year: payload.studentYear || '3rd Year',
+      accommodation: payload.studentAccommodation || (Array.isArray(payload.participants) && payload.participants[0]?.accommodation) || 'No'
     },
     teamName: payload.isTeam ? payload.teamName : null,
     teamSize,

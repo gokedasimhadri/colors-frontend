@@ -39,11 +39,18 @@ export default function EventRegistrationModal({
   student,
   onClose
 }) {
-  const [agreeRules, setAgreeRules] = useState(true);
+  const [agreeRules, setAgreeRules] = useState(false);
   const [loading, setLoading] = useState(false);
   const [paymentStage, setPaymentStage] = useState('IDLE'); // 'IDLE' | 'AWAITING_PAYMENT' | 'VERIFYING'
   const [error, setError] = useState(null);
   const [successRecord, setSuccessRecord] = useState(null);
+
+  // Reset confirmation checkbox to unchecked whenever modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setAgreeRules(false);
+    }
+  }, [isOpen, eventData?._id, eventData?.slug]);
 
   // Participant 1 (Team Leader or Solo) State matching Image 1
   const [leadParticipant, setLeadParticipant] = useState({
@@ -57,7 +64,8 @@ export default function EventRegistrationModal({
     yearOfStudy: 'Select',
     department: 'Select',
     branch: '',
-    location: ''
+    location: '',
+    accommodation: 'No'
   });
 
   // Live department list loaded from /api/event-departments
@@ -134,7 +142,8 @@ export default function EventRegistrationModal({
         yearOfStudy: student.year || student.yearOfStudy || 'Select',
         department: matchedDept,
         branch: rawBranch,
-        location: student.location || 'Surampalem'
+        location: student.location || 'Surampalem',
+        accommodation: student.accommodation || 'No'
       });
 
       // Background enrichment via ECAP API
@@ -345,7 +354,8 @@ export default function EventRegistrationModal({
         yearOfStudy: 'Select',
         department: 'Select',
         branch: '',
-        location: leadParticipant.location || ''
+        location: leadParticipant.location || '',
+        accommodation: 'No'
       }
     ]);
     if (error) setError(null);
@@ -387,7 +397,8 @@ export default function EventRegistrationModal({
       department: leadParticipant.department || 'Select',
       departments: leadParticipant.department || 'Select',
       branch: leadParticipant.branch || leadParticipant.department || '',
-      location: leadParticipant.location || ''
+      location: leadParticipant.location || '',
+      accommodation: leadParticipant.accommodation || 'No'
     });
 
     if (isTeam && Array.isArray(teamMembers)) {
@@ -414,7 +425,8 @@ export default function EventRegistrationModal({
           department: m.department || 'Select',
           departments: m.department || 'Select',
           branch: m.branch || m.department || '',
-          location: m.location || ''
+          location: m.location || '',
+          accommodation: m.accommodation || 'No'
         });
       });
     }
@@ -527,11 +539,12 @@ export default function EventRegistrationModal({
         studentMobile: leadParticipant.mobile || student.mobile,
         studentDepartment: leadParticipant.department || 'General',
         studentYear: leadParticipant.yearOfStudy || '3rd Year',
+        studentAccommodation: leadParticipant.accommodation || 'No',
         isTeam,
         teamName: null,
         teamSize: activeParticipants.length,
         participants: activeParticipants,
-        teamMembers: validTeamMembers
+        teamMembers: activeParticipants.slice(1)
       };
 
       // Case A: Free Event (₹ 0) -> Direct registration
@@ -910,7 +923,7 @@ export default function EventRegistrationModal({
             </select>
           </div>
 
-          {/* Row 3: Branch, Location */}
+          {/* Row 3: Branch, Location, Accommodation */}
           <div className="pattern-field-col">
             <label className="pattern-label">Branch</label>
             <input
@@ -931,6 +944,18 @@ export default function EventRegistrationModal({
               value={data.location}
               onChange={(e) => handleFieldChange(index, 'location', e.target.value)}
             />
+          </div>
+
+          <div className="pattern-field-col">
+            <label className="pattern-label">Accommodation</label>
+            <select
+              className="pattern-select"
+              value={data.accommodation || 'No'}
+              onChange={(e) => handleFieldChange(index, 'accommodation', e.target.value)}
+            >
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
           </div>
         </div>
       </div>
@@ -1253,10 +1278,12 @@ export default function EventRegistrationModal({
                 <button
                   type="submit"
                   className="btn-fest-primary"
-                  disabled={loading && paymentStage === 'VERIFYING'}
+                  disabled={!agreeRules || (loading && paymentStage === 'VERIFYING')}
                   style={{
                     background: 'linear-gradient(135deg, #e11d48, #be123c)',
-                    color: '#ffffff'
+                    color: '#ffffff',
+                    opacity: !agreeRules ? 0.55 : 1,
+                    cursor: !agreeRules ? 'not-allowed' : 'pointer'
                   }}
                 >
                   {paymentStage === 'VERIFYING'

@@ -82,7 +82,8 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
             yearOfStudy: p.yearOfStudy || p.year || 'Select',
             department: p.department || p.departments || 'Select',
             branch: p.branch || p.department || '',
-            location: p.location || ''
+            location: p.location || '',
+            accommodation: p.accommodation || 'No'
           };
         });
       } else if (registration.student) {
@@ -114,7 +115,8 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
             yearOfStudy: registration.student.year || '3rd Year',
             department: registration.student.department || 'General',
             branch: registration.student.department || '',
-            location: 'Surampalem'
+            location: 'Surampalem',
+            accommodation: registration.student.accommodation || 'No'
           }
         ];
       }
@@ -256,7 +258,8 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
         yearOfStudy: 'Select',
         department: 'Select',
         branch: '',
-        location: ''
+        location: '',
+        accommodation: 'No'
       }
     ]);
   };
@@ -635,7 +638,7 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
                       </select>
                     </div>
 
-                    {/* Row 3: Branch, Location */}
+                    {/* Row 3: Branch, Location, Accommodation */}
                     <div className="pattern-field-col">
                       <label className="pattern-label">Branch</label>
                       <input
@@ -656,6 +659,18 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
                         value={data.location}
                         onChange={(e) => handleFieldChange(index, 'location', e.target.value)}
                       />
+                    </div>
+
+                    <div className="pattern-field-col">
+                      <label className="pattern-label">Accommodation</label>
+                      <select
+                        className="pattern-select"
+                        value={data.accommodation || 'No'}
+                        onChange={(e) => handleFieldChange(index, 'accommodation', e.target.value)}
+                      >
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                      </select>
                     </div>
                   </div>
                 </div>
