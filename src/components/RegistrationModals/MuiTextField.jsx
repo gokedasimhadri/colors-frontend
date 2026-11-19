@@ -14,6 +14,7 @@ export function MuiTextField({
   autoComplete,
   error = '',
   hint = '',
+  hintClassName = '',
   className = '',
   id,
   multiline = false,
@@ -90,7 +91,9 @@ export function MuiTextField({
           </button>
         )}
       </div>
-      {hint && !error && <span className="mui-form-hint">{hint}</span>}
+      {hint && !error && (
+        <span className={`mui-form-hint ${hintClassName}`.trim()}>{hint}</span>
+      )}
       {error && <span className="mui-form-error">{error}</span>}
     </div>
   );
@@ -159,7 +162,9 @@ export function MuiSelectField({
           {required && <span className="mui-asterisk">*</span>}
         </label>
       </div>
-      {hint && !error && <span className="mui-form-hint">{hint}</span>}
+      {hint && !error && (
+        <span className={`mui-form-hint ${hintClassName}`.trim()}>{hint}</span>
+      )}
       {error && <span className="mui-form-error">{error}</span>}
     </div>
   );

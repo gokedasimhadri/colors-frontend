@@ -225,7 +225,9 @@ function Home() {
 
       {/* ─────────────────────────────────────────────────────────────
           OFFICIAL FESTIVAL INVITATION (CHANCELLOR & PRO-CHANCELLOR)
+          (Moved to dedicated /invitation page)
           ───────────────────────────────────────────────────────────── */}
+      {/*
       <section className="home-invitation-section" id="invitation">
         <div className="invitation-hero-header">
           <div className="invitation-header-row invitation-title-row">
@@ -248,7 +250,6 @@ function Home() {
             enableShader={true}
           >
             <div className="invitation-card-grid">
-              {/* ── Left Column: Chancellor Photo & Details ── */}
               <div className="invitation-dignitary-col left-col">
                 <div className="invitation-photo-frame">
                   <img
@@ -262,20 +263,18 @@ function Home() {
                 <span className="invitation-dignitary-inst">Aditya University</span>
               </div>
 
-              {/* ── Center Column: Official Joint Invitation Message ── */}
               <div className="invitation-center-col">
                 <SplitColorText
                   as="p"
                   className="invitation-joint-paragraph"
                   screenSync={true}
                   leftColor="#1e293b"
-                  rightColor="#cbd5e1"
+                  rightColor="#f8fafc"
                 >
                   It gives us immense pleasure and pride to cordially invite talented students, scholars, and dynamic youth delegates from across the nation to Colours {year}, the premier national youth festival of Aditya University. Taking place from January 7 to 9, 2027, at our Surampalem campus, this vibrant arena celebrates creative brilliance, cultural artistry, and athletic mastery across Culturals, Sports, Creo, and Fete with a ₹10,00,000 cash prize pool. We warmly look forward to welcoming you to three unforgettable days of excellence, camaraderie, and celebration.
                 </SplitColorText>
               </div>
 
-              {/* ── Right Column: Pro-Chancellor Photo & Details ── */}
               <div className="invitation-dignitary-col right-col">
                 <div className="invitation-photo-frame">
                   <img
@@ -292,6 +291,7 @@ function Home() {
           </LiquidGlass>
         </div>
       </section>
+      */}
 
       {/* ─────────────────────────────────────────────────────────────
           FOUR MAIN FESTIVAL DOMAINS (FROM OFFICIAL POSTER)
@@ -447,7 +447,7 @@ function Home() {
                       leftColor="#475569"
                       rightColor="#cbd5e1"
                     >
-                      Domain In-charge:
+                      Faculty Coordinator:
                     </SplitColorText>
                     <div className="coord-person-row">
                       <SplitColorText

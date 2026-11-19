@@ -6,8 +6,8 @@ import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
 export const DEFAULT_NAV_ITEMS = [
   { label: 'Home', path: '/' },
   { label: 'Events', path: '/events' },
-  // { label: 'Invitation', path: '/invitation' },
   { label: 'Team', path: '/teams' },
+  { label: 'Invitation', path: '/invitation' },
   { label: 'Events Schedule', href: '/Schedule_of_Events.pdf' },
   { label: 'Sponsors', path: '/sponsors' },
   { label: 'Contact', path: '/contact' },

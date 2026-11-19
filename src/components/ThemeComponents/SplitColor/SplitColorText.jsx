@@ -52,14 +52,14 @@ export const SplitColorText = forwardRef(function SplitColorText(
   const internalRef = useRef(null);
   const location = useLocation();
   const pathname = location?.pathname || '';
+
+  // Dynamic Split Page Detection:
+  // All festival pages (or any page rendering .split-background) use the split theme.
+  // Dedicated user dashboard / account subpages use the light subpage layout.
   const isSplitPage =
-    pathname === '/' ||
-    pathname === '' ||
-    pathname.startsWith('/events') ||
-    pathname === '/sponsors' ||
-    pathname === '/teams' ||
-    pathname === '/team' ||
-    pathname === '/contact';
+    typeof document !== 'undefined' && document.querySelector('.split-background')
+      ? true
+      : !pathname.startsWith('/dashboard') && !pathname.startsWith('/account');
 
   // Active rendering mode: if splitPercent or screenSync is provided, prioritize split mode
   const resolvedMode =
@@ -122,6 +122,10 @@ export const SplitColorText = forwardRef(function SplitColorText(
         item.closest('.navbar-links') ||
         item.closest('.theme-glass-btn') ||
         item.closest('.mobile-menu') ||
+        item.closest('.liquid-glass-card') ||
+        item.closest('.invitation-glass-card') ||
+        item.closest('.invitation-card-grid') ||
+        item.closest('.invitation-center-col') ||
         item.closest('.theme-tab-container') ||
         item.closest('.theme-tab-item') ||
         item.closest('.theme-tab-mobile-stepper') ||
@@ -237,14 +241,16 @@ export const SplitColorText = forwardRef(function SplitColorText(
         return;
       }
 
-      if (!isSplitPage) {
+      const splitBg = document.querySelector('.split-background');
+      const isCurrentSplit = Boolean(splitBg) || (!pathname.startsWith('/dashboard') && !pathname.startsWith('/account'));
+
+      if (!isCurrentSplit) {
         setSyncedPercent(100);
         setDetectedTheme('light');
         ticking = false;
         return;
       }
 
-      const splitBg = document.querySelector('.split-background');
       const bgRect = splitBg?.getBoundingClientRect();
       const splitX = bgRect ? bgRect.left + (bgRect.width / 2) : window.innerWidth / 2;
 

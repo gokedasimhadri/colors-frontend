@@ -7,10 +7,10 @@ import {
   User,
   Menu,
   X,
-  FileText,
   Users,
   Award,
   Phone,
+  MailOpen,
   LayoutDashboard,
   LogOut,
   ChevronRight,
@@ -57,17 +57,11 @@ export default function MobileBottomBar() {
     }
   };
 
-  const handleRegisterClick = () => {
-    setDrawerOpen(false);
-    window.dispatchEvent(
-      new CustomEvent('fest-open-auth-modal', { detail: { mode: 'register' } })
-    );
-  };
-
   const isMoreActive =
     drawerOpen ||
     location.pathname === '/teams' ||
     location.pathname === '/team' ||
+    location.pathname === '/invitation' ||
     location.pathname === '/sponsors' ||
     location.pathname === '/contact';
 
@@ -85,18 +79,20 @@ export default function MobileBottomBar() {
         role="dialog"
         aria-label="Festival Navigation Menu"
       >
-        <div className="drawer-handle-bar" onClick={() => setDrawerOpen(false)}>
-          <span className="drawer-pill" />
+        <div className="drawer-top-header">
+          <div className="drawer-header-spacer" />
+          <div className="drawer-handle-bar" onClick={() => setDrawerOpen(false)}>
+            <span className="drawer-pill" />
+          </div>
+          <button
+            type="button"
+            className="drawer-close-btn"
+            onClick={() => setDrawerOpen(false)}
+            aria-label="Close Menu"
+          >
+            <X size={18} />
+          </button>
         </div>
-
-        <button
-          type="button"
-          className="drawer-close-btn"
-          onClick={() => setDrawerOpen(false)}
-          aria-label="Close Menu"
-        >
-          <X size={19} />
-        </button>
 
         {/* Festival Menu Links (Only items not directly available on the outer bottom bar, with exact Navbar names) */}
         <div className="drawer-links-grid">
@@ -113,6 +109,36 @@ export default function MobileBottomBar() {
               <span className="drawer-link-sub">Festival Committee & Organizers</span>
             </div>
           </Link>
+
+          <Link
+            to="/invitation"
+            className={`drawer-link-item ${location.pathname === '/invitation' ? 'active' : ''}`}
+            onClick={() => setDrawerOpen(false)}
+          >
+            <span className="drawer-icon-bubble emerald">
+              <MailOpen size={18} />
+            </span>
+            <div className="drawer-link-text">
+              <span className="drawer-link-label">Invitation</span>
+              <span className="drawer-link-sub">Official Festival Invite</span>
+            </div>
+          </Link>
+
+          <a
+            href="/Schedule_of_Events.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="drawer-link-item"
+            onClick={() => setDrawerOpen(false)}
+          >
+            <span className="drawer-icon-bubble blue">
+              <Calendar size={18} />
+            </span>
+            <div className="drawer-link-text">
+              <span className="drawer-link-label">Schedule</span>
+              <span className="drawer-link-sub">Day-wise Events Schedule PDF</span>
+            </div>
+          </a>
 
           <Link
             to="/sponsors"
@@ -180,19 +206,32 @@ export default function MobileBottomBar() {
           <span className="bottom-tab-label">Events</span>
         </Link>
 
-        {/* Tab 3: Schedule */}
-        <a
-          href="/Schedule_of_Events.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bottom-tab"
-          aria-label="Events Schedule PDF"
+        {/* Tab 3: Live Stream */}
+        <Link
+          to="/live"
+          onClick={() => {
+            if (location.pathname === '/live') {
+              const playerEl = document.getElementById('live-player-section');
+              if (playerEl) {
+                const navEl = document.querySelector('.navbar');
+                const navHeight = navEl ? navEl.offsetHeight : 98;
+                const rect = playerEl.getBoundingClientRect();
+                const targetY = window.pageYOffset + rect.top - navHeight;
+                window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+              }
+            }
+          }}
+          className={`bottom-tab bottom-tab-live ${location.pathname === '/live' && !drawerOpen ? 'active' : ''}`}
+          aria-label="Colours 2027 Live Stream"
         >
-          <span className="bottom-tab-icon">
-            <Calendar size={20} strokeWidth={1.8} />
+          <span className="bottom-tab-icon bottom-tab-live-icon">
+            <img
+              src="/live-icon.webp"
+              alt="Live Stream"
+              className="bottom-tab-live-img"
+            />
           </span>
-          <span className="bottom-tab-label">Schedule</span>
-        </a>
+        </Link>
 
         {/* Tab 4: More / Menus */}
         <button
@@ -214,7 +253,7 @@ export default function MobileBottomBar() {
         {/* Tab 5: Account / Login */}
         <button
           type="button"
-          className={`bottom-tab ${profilePopoverOpen || (location.pathname === '/dashboard' && !drawerOpen) ? 'active' : ''}`}
+          className={`bottom-tab ${profilePopoverOpen || (location.pathname === '/dashboard' && !drawerOpen) ? 'active' : ''} ${student ? 'logged-in' : ''}`}
           onClick={handleAccountClick}
           aria-label={student ? 'Student Profile Menu' : 'Student Login'}
           aria-expanded={profilePopoverOpen}
@@ -226,13 +265,13 @@ export default function MobileBottomBar() {
               </div>
             </div>
           ) : (
-            <span className="bottom-tab-icon">
-              <User size={20} strokeWidth={1.8} />
-            </span>
+            <>
+              <span className="bottom-tab-icon">
+                <User size={20} strokeWidth={1.8} />
+              </span>
+              <span className="bottom-tab-label">Login</span>
+            </>
           )}
-          <span className="bottom-tab-label">
-            {student ? (student.name ? student.name.split(' ')[0] : 'Profile') : 'Login'}
-          </span>
         </button>
       </nav>
 

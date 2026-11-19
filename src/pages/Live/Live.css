@@ -1,0 +1,345 @@
+/* ==========================================================================
+   LIVE PAGE – Colours 2027 Official Live Broadcast Player
+   Viewport-Fitted Cinema Layout:
+   - Fits 100vh height and width without top/bottom clipping
+   - 16:9 proportional video scaling
+   - Broadcast Standby Screen (Eliminates "Video is unavailable" error)
+   ========================================================================== */
+
+.live-page-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  padding-top: var(--navbar-height, 98px);
+  padding-bottom: 5rem;
+  position: relative;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* ── Standard Page Hero Header (Matches Invitation & Teams) ── */
+.live-hero-header {
+  width: 100%;
+  padding: 2.5rem 0 1.5rem;
+  background: transparent !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.live-header-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.live-title-row {
+  margin-bottom: 0.85rem;
+}
+
+.live-hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 5.5vw, 4.8rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0.15rem 0;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+/* ── Container (Viewport-fitted cinema stage: fills screen height below navbar) ── */
+.live-container {
+  width: 100%;
+  max-width: var(--container-max, 1280px);
+  margin: 0 auto;
+  min-height: calc(100vh - var(--navbar-height, 98px));
+  min-height: calc(100dvh - var(--navbar-height, 98px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 1.5rem;
+  box-sizing: border-box;
+}
+
+/* ── Live Player Glass Card (Proportionally fits screen height upon page open) ── */
+.live-player-glass-card {
+  width: 100%;
+  max-width: min(94vw, calc((100vh - var(--navbar-height, 98px) - 3rem) * (16 / 9)), 1200px);
+  max-width: min(94vw, calc((100dvh - var(--navbar-height, 98px) - 3rem) * (16 / 9)), 1200px);
+  border-radius: 20px !important;
+  padding: 1.25rem !important;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.75) 0%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(15, 23, 42, 0.75) 50%,
+    rgba(15, 23, 42, 0.75) 100%
+  ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.35),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.35),
+    0 20px 50px -10px rgba(0, 0, 0, 0.35) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* ── Video Player Screen Container ── */
+.live-video-screen-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #090d16;
+  position: relative;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+}
+
+.live-video-screen-ratio {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.live-video-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  z-index: 1;
+  display: block;
+}
+
+.live-standby-switch-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.live-standby-switch-btn:hover {
+  background: #0f172a;
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.04);
+}
+
+/* ── Broadcast Standby Screen (Pro Studio Look) ── */
+.live-standby-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1rem, 2.5vw, 1.75rem);
+  box-sizing: border-box;
+  background: radial-gradient(circle at 50% 30%, #151d32 0%, #070a10 75%, #030508 100%);
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.live-standby-ambient-glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.12) 0%, rgba(14, 165, 233, 0.08) 50%, transparent 75%);
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.live-standby-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  z-index: 2;
+}
+
+.live-standby-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: clamp(0.68rem, 1vw, 0.78rem);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.live-standby-beacon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+  animation: standbyPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes standbyPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.5;
+  }
+}
+
+.live-standby-dates {
+  font-size: clamp(0.72rem, 1vw, 0.82rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #be9337;
+  background: rgba(190, 147, 55, 0.12);
+  border: 1px solid rgba(190, 147, 55, 0.3);
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.live-standby-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 2;
+  margin: auto 0;
+  padding: 0.5rem 0;
+}
+
+.live-standby-crest-wrap {
+  margin-bottom: 0.65rem;
+}
+
+.live-standby-logo {
+  height: clamp(38px, 6vw, 56px);
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+.live-standby-fest-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 4vw, 2.4rem);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.35rem;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.live-standby-fest-sub {
+  font-size: clamp(0.78rem, 1.3vw, 0.95rem);
+  color: #94a3b8;
+  max-width: 540px;
+  margin: 0 0 1.25rem;
+  line-height: 1.45;
+  padding: 0 0.5rem;
+}
+
+.live-standby-cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.live-standby-feed-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  padding: 0.65rem 1.4rem;
+  border-radius: 12px;
+  font-size: clamp(0.8rem, 1.1vw, 0.9rem);
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.22s ease;
+}
+
+.live-standby-feed-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-2px);
+}
+
+/* ── Mobile & Small Screen Adaptations (Matches Invitation & Teams) ── */
+@media (max-width: 768px) {
+  .live-page-wrapper {
+    min-height: 100vh;
+    padding-top: var(--navbar-height, 72px);
+    padding-bottom: calc(3rem + 68px);
+  }
+
+  .live-hero-header {
+    padding: 1.5rem 0 0.85rem;
+  }
+
+  .live-hero-title {
+    font-size: clamp(1.75rem, 7vw, 2.6rem);
+    white-space: nowrap;
+  }
+
+  .live-container {
+    min-height: calc(100vh - var(--navbar-height, 72px) - 68px);
+    min-height: calc(100dvh - var(--navbar-height, 72px) - 68px);
+    padding: 0.5rem 10px 1rem;
+  }
+
+  .live-player-glass-card {
+    max-width: 100%;
+    padding: 0.65rem !important;
+    border-radius: 16px !important;
+  }
+
+  .live-video-screen-container {
+    border-radius: 12px;
+  }
+
+  .live-standby-fest-sub {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .live-hero-title {
+    font-size: clamp(1.4rem, 7.2vw, 1.85rem);
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+}

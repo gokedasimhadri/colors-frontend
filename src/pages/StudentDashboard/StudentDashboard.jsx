@@ -1,10 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { jsPDF } from 'jspdf';
 import {
   getLoggedStudent,
   logoutStudent,
   fetchStudentDashboard,
+  syncStudentRegistrations,
   updateStudentProfile,
   changeStudentPassword,
   fetchAllEvents,
@@ -43,7 +45,9 @@ import {
   Users,
   FileText,
   UserPlus,
-  Crown
+  Crown,
+  ChevronDown,
+  Download
 } from 'lucide-react';
 import StudentAuthModal from '../../components/RegistrationModals/StudentAuthModal';
 import ManageTeamModal from '../../components/RegistrationModals/ManageTeamModal';
@@ -272,11 +276,201 @@ export default function StudentDashboard() {
     newPassword: '',
     confirmPassword: ''
   });
+  const [passwordErrors, setPasswordErrors] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [passwordAlert, setPasswordAlert] = useState(null);
 
   // Receipt Modal State
   const [selectedReceipt, setSelectedReceipt] = useState(null);
+  // Fest Delegate Pass Modal State
+  const [selectedPass, setSelectedPass] = useState(null);
+
+  // Accordion state for registered event cards (open by default)
+  const [expandedEvents, setExpandedEvents] = useState({});
+
+  const toggleEventAccordion = (key) => {
+    setExpandedEvents((prev) => ({
+      ...prev,
+      [key]: prev[key] === undefined ? false : !prev[key]
+    }));
+  };
+
+  // Direct Dynamic PDF Download for Payment Receipt
+  const handleDownloadReceiptPdf = async (payment) => {
+    if (!payment) return;
+    try {
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+
+      const pageWidth = doc.internal.pageSize.getWidth(); // 210mm
+      const margin = 20;
+      const contentWidth = pageWidth - margin * 2; // 170mm
+
+      // Load AUS Logo
+      const loadLogo = () =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => {
+            try {
+              const canvas = document.createElement('canvas');
+              canvas.width = img.naturalWidth || img.width;
+              canvas.height = img.naturalHeight || img.height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0);
+              resolve(canvas.toDataURL('image/png'));
+            } catch {
+              resolve(null);
+            }
+          };
+          img.onerror = () => resolve(null);
+          img.src = '/AUS Long Logo .png';
+        });
+
+      const logoData = await loadLogo();
+      let currentY = 22;
+
+      if (logoData) {
+        const logoW = 92;
+        const logoH = 11.7;
+        const logoX = (pageWidth - logoW) / 2;
+        doc.addImage(logoData, 'PNG', logoX, currentY, logoW, logoH);
+        currentY += logoH + 6;
+      }
+
+      // Title: COLOURS 2027
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(16);
+      doc.setTextColor(11, 82, 153); // #0b5299
+      doc.text('COLOURS 2027', pageWidth / 2, currentY, { align: 'center' });
+      currentY += 6;
+
+      // Subtitle: A NATIONAL LEVEL YOUTH FESTIVAL
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.5);
+      doc.setTextColor(71, 85, 105); // #475569
+      doc.text('A NATIONAL LEVEL YOUTH FESTIVAL', pageWidth / 2, currentY, { align: 'center' });
+      currentY += 6;
+
+      // Badge: PAYMENT RECEIPT
+      const badgeText = 'PAYMENT RECEIPT';
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'bold');
+      const badgeW = doc.getTextWidth(badgeText) + 12;
+      const badgeH = 6;
+      const badgeX = (pageWidth - badgeW) / 2;
+      const badgeY = currentY;
+
+      doc.setFillColor(236, 253, 245); // #ecfdf5
+      doc.setDrawColor(167, 243, 208); // #a7f3d0
+      doc.roundedRect(badgeX, badgeY, badgeW, badgeH, 3, 3, 'FD');
+
+      doc.setTextColor(6, 95, 70); // #065f46
+      doc.text(badgeText, pageWidth / 2, badgeY + 4.2, { align: 'center' });
+      currentY += badgeH + 6;
+
+      // Horizontal dashed divider line
+      doc.setDrawColor(203, 213, 225); // #cbd5e1
+      doc.setLineDash([2, 2], 0);
+      doc.line(margin, currentY, margin + contentWidth, currentY);
+      doc.setLineDash([], 0);
+      currentY += 8;
+
+      // Data fields
+      const rawRegId = payment.registrationNumber || payment.registrationId;
+      const rawPayRef = payment.paymentReference;
+      const regId = formatRegistrationId(rawRegId);
+      const payRef = formatPaymentReference(rawPayRef || rawRegId);
+      const eventName = payment.eventTitle || payment.eventName || payment.event_name || 'Colours 2027 Event';
+      const studentName = payment.student?.name || payment.participant?.name || payment.student_name || activeStudent?.name || '';
+      const studentRoll = payment.student?.rollNumber || payment.student?.roll || payment.participant?.rollNumber || payment.roll_number || activeStudent?.roll || '';
+      const leadParticipant = studentRoll ? `${studentName} (${studentRoll})` : studentName;
+      const college = payment.student?.college || payment.participant?.college || activeStudent?.college || 'Aditya University';
+      const razorpayPaymentId = payment.razorpay?.paymentId || payment.paymentId || payment.payment?.paymentId || 'Pending Verification';
+      const razorpayOrderId = payment.razorpay?.orderId || payment.payment?.orderId || 'N/A';
+      const feeAmount = payment.amount !== undefined ? payment.amount : parseEventFeeInRupees(payment.fee?.amount || 0);
+      const amountPaid = `Rs. ${feeAmount}/-`;
+      const status = payment.payment?.status === 'PAID' || payment.status === 'PAID' ? 'PAID' : (payment.status || 'CONFIRMED');
+
+      const rows = [
+        { label: 'Event Name:', value: eventName },
+        { label: 'Lead Participant:', value: leadParticipant },
+        { label: 'College:', value: college },
+        { label: 'Registration ID:', value: regId },
+        { label: 'Payment Reference:', value: payRef },
+        { label: 'Razorpay Payment ID:', value: razorpayPaymentId },
+        { label: 'Razorpay Order ID:', value: razorpayOrderId },
+        { label: 'Amount Paid:', value: amountPaid },
+        { label: 'Status:', value: status },
+      ];
+
+      const colKeyX = margin + 2;
+      const colValX = margin + contentWidth - 2;
+
+      rows.forEach((row, idx) => {
+        if (idx > 0) {
+          doc.setDrawColor(241, 245, 249);
+          doc.setLineWidth(0.3);
+          doc.line(margin, currentY, margin + contentWidth, currentY);
+        }
+        currentY += 6;
+
+        // Key: Bold
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9.5);
+        doc.setTextColor(15, 23, 42); // #0f172a
+        doc.text(row.label, colKeyX, currentY);
+
+        // Value: Thin (normal)
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9.5);
+
+        if (row.label === 'Status:' || row.label === 'Amount Paid:') {
+          doc.setTextColor(21, 128, 61); // green #15803d
+        } else {
+          doc.setTextColor(51, 65, 85); // #334155
+        }
+
+        doc.text(String(row.value), colValX, currentY, { align: 'right' });
+        currentY += 3.5;
+      });
+
+      currentY += 5;
+      // Bottom dashed divider line
+      doc.setDrawColor(203, 213, 225);
+      doc.setLineDash([2, 2], 0);
+      doc.line(margin, currentY, margin + contentWidth, currentY);
+      doc.setLineDash([], 0);
+      currentY += 8;
+
+      // Footer note
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(100, 116, 139); // #64748b
+      doc.text('This is a computer-generated official payment receipt for Colours 2027.', pageWidth / 2, currentY, { align: 'center' });
+      currentY += 4.5;
+
+      const now = new Date();
+      const dateStr =
+        now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) +
+        ', ' +
+        now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+      doc.text(`Generated on: ${dateStr}`, pageWidth / 2, currentY, { align: 'center' });
+
+      // Save PDF directly to user's downloads
+      const cleanReg = (regId || 'Receipt').replace(/[^a-zA-Z0-9_-]/g, '_');
+      doc.save(`Colours2027_Payment_Receipt_${cleanReg}.pdf`);
+    } catch (err) {
+      console.error('Failed to generate receipt PDF:', err);
+    }
+  };
 
   // Listen to auth changes
   useEffect(() => {
@@ -299,10 +493,43 @@ export default function StudentDashboard() {
     try {
       setLoading(true);
       const data = await fetchStudentDashboard(current.roll, EVENT_TYPE, EVENT_ACADEMIC_YEAR);
+      let regs = data.registrations || [];
+      let pays = data.payments || [];
+
+      // Always sync from student registrations endpoint to ensure all dynamic backend registrations are captured
+      try {
+        const synced = await syncStudentRegistrations(current.roll, EVENT_TYPE, EVENT_ACADEMIC_YEAR);
+        if (Array.isArray(synced) && synced.length > 0) {
+          const seen = new Set(regs.map((r) => r.registrationNumber || r.registrationId || r._id).filter(Boolean));
+          synced.forEach((s) => {
+            const sid = s.registrationNumber || s.registrationId || s._id;
+            if (!seen.has(sid)) {
+              regs.push(s);
+              if (sid) seen.add(sid);
+            }
+          });
+        }
+      } catch { }
+
+      // Also merge any confirmed registrations from local storage
+      try {
+        const local = getRegisteredEventsForStudent(current.roll);
+        if (Array.isArray(local) && local.length > 0) {
+          const seen = new Set(regs.map((r) => r.registrationNumber || r.registrationId || r._id).filter(Boolean));
+          local.forEach((l) => {
+            const lid = l.registrationNumber || l.registrationId || l._id;
+            if (!seen.has(lid)) {
+              regs.push(l);
+              if (lid) seen.add(lid);
+            }
+          });
+        }
+      } catch { }
+
       setDashboardData({
         student: data.student || current,
-        registrations: data.registrations || [],
-        payments: data.payments || []
+        registrations: regs,
+        payments: pays
       });
 
       // Synchronize profile form
@@ -433,25 +660,66 @@ export default function StudentDashboard() {
     }
   };
 
-  // Handle Change Password
+  // Validate password against custom security policy
+  const validateNewPassword = (pwd) => {
+    if (!pwd || !pwd.trim()) {
+      return 'Enter a new password';
+    }
+    if (pwd.length < 8) {
+      return 'Password must be at least 8 characters long';
+    }
+    if (!/[A-Z]/.test(pwd)) {
+      return 'Password must contain at least one capital letter (A-Z)';
+    }
+    if (!/[0-9]/.test(pwd)) {
+      return 'Password must contain at least one number (0-9)';
+    }
+    if (!/[@_$#!]/.test(pwd)) {
+      return 'Password must contain at least one special character (@, _, $, #, !)';
+    }
+    if (!/^[A-Za-z0-9@_$#!]+$/.test(pwd)) {
+      return 'Only special characters @, _, $, #, ! are allowed';
+    }
+    return null;
+  };
+
+  // Handle Change Password with Custom Validation
   const handleChangePassword = async (e) => {
     e.preventDefault();
     setPasswordAlert(null);
 
     const { currentPassword, newPassword, confirmPassword } = passwordForm;
+    const errors = {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    };
 
-    if (!currentPassword) {
-      setPasswordAlert({ type: 'error', message: 'Please enter your current password' });
+    if (!currentPassword || !currentPassword.trim()) {
+      errors.currentPassword = 'Enter your current password';
+    }
+
+    const newPwError = validateNewPassword(newPassword);
+    if (newPwError) {
+      errors.newPassword = newPwError;
+    }
+
+    if (!confirmPassword || !confirmPassword.trim()) {
+      errors.confirmPassword = 'Confirm your new password';
+    } else if (newPassword !== confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match';
+    }
+
+    if (errors.currentPassword || errors.newPassword || errors.confirmPassword) {
+      setPasswordErrors(errors);
+      setPasswordAlert({
+        type: 'error',
+        message: errors.currentPassword || errors.newPassword || errors.confirmPassword
+      });
       return;
     }
-    if (!newPassword || newPassword.length < 6) {
-      setPasswordAlert({ type: 'error', message: 'New password must be at least 6 characters long' });
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setPasswordAlert({ type: 'error', message: 'New passwords do not match' });
-      return;
-    }
+
+    setPasswordErrors({ currentPassword: '', newPassword: '', confirmPassword: '' });
 
     try {
       setPasswordLoading(true);
@@ -471,6 +739,11 @@ export default function StudentDashboard() {
         newPassword: '',
         confirmPassword: ''
       });
+      setPasswordErrors({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
       setTimeout(() => setPasswordAlert(null), 6000);
     } catch (err) {
       setPasswordAlert({
@@ -481,6 +754,10 @@ export default function StudentDashboard() {
       setPasswordLoading(false);
     }
   };
+
+  // Live validation state for new password
+  const isNewPwTyped = Boolean(passwordForm.newPassword && passwordForm.newPassword.length > 0);
+  const isNewPwValid = isNewPwTyped && !validateNewPassword(passwordForm.newPassword);
 
   // Student Photo Url lookup
   const studentPhotoUrl = student?.roll
@@ -493,40 +770,110 @@ export default function StudentDashboard() {
   const paymentsList = dashboardData.payments || [];
   const registrationsList = dashboardData.registrations || [];
 
-  // Combined list of student's registered events (payments + registrations)
+  // Combined list of student's registered events (payments + registrations dynamically merged)
   const displayEventsList = useMemo(() => {
-    const list = [...paymentsList];
-    const seenRegNumbers = new Set(
-      list.map((p) => p.registrationNumber || p.registrationId).filter(Boolean)
-    );
-
+    // 1. Build lookup map of registrations
+    const regMap = new Map();
     registrationsList.forEach((reg) => {
-      const regNo = reg.registrationNumber || reg.registrationId;
-      if (!seenRegNumbers.has(regNo)) {
-        list.push({
-          ...reg,
-          eventTitle: reg.eventTitle || reg.eventName || reg.event_name || reg.event_title || 'Colours 2027 Event',
-          paymentReference: reg.paymentReference || (regNo ? `PAY-${regNo}` : 'N/A'),
-          amount: reg.amount !== undefined ? reg.amount : (reg.fee?.amount !== undefined ? parseEventFeeInRupees(reg.fee.amount) : (reg.price || 0)),
-          status: reg.payment?.status === 'PAID' ? 'PAID' : (reg.status || 'CONFIRMED'),
-          participants: Array.isArray(reg.participants) && reg.participants.length > 0
-            ? reg.participants
-            : (reg.participant ? [reg.participant] : [])
-        });
-        if (regNo) seenRegNumbers.add(regNo);
-      }
+      const key = reg.registrationNumber || reg.registrationId || reg._id;
+      if (key) regMap.set(String(key), reg);
+      if (reg.eventId) regMap.set(String(reg.eventId), reg);
     });
 
-    // Filter records strictly by:
-    // 1. EVENT_TYPE (VITE_EVENT_TYPE in .env, default 'COLORS')
-    // 2. Payment status === 'PAID'
-    // 3. EVENT_ACADEMIC_YEAR (VITE_EVENT_ACADEMIC_YEAR in .env, default '2026-2027')
-    const filteredEvents = list.filter((item) => {
-      const typeOk = matchesTypeCode(item, EVENT_TYPE);
-      const paidOk = isPaidPayment(item);
+    const seenKeys = new Set();
+    const combined = [];
+
+    // Process payments list
+    paymentsList.forEach((pay) => {
+      const regNo = pay.registrationNumber || pay.registrationId || pay._id;
+      const matchingReg = regNo ? regMap.get(String(regNo)) : (pay.eventId ? regMap.get(String(pay.eventId)) : null);
+
+      const dedupeKey = pay.registrationNumber || pay.registrationId || matchingReg?.registrationNumber || pay.paymentReference || pay._id;
+      if (dedupeKey && seenKeys.has(String(dedupeKey))) return;
+      if (dedupeKey) seenKeys.add(String(dedupeKey));
+
+      const eventTitle =
+        pay.eventTitle ||
+        pay.eventName ||
+        pay.event_name ||
+        matchingReg?.eventTitle ||
+        matchingReg?.eventName ||
+        matchingReg?.event_name ||
+        pay.event?.name ||
+        pay.event?.title ||
+        matchingReg?.event?.name ||
+        'Colours 2027 Event';
+
+      const participants =
+        Array.isArray(pay.participants) && pay.participants.length > 0
+          ? pay.participants
+          : Array.isArray(matchingReg?.participants) && matchingReg.participants.length > 0
+          ? matchingReg.participants
+          : pay.participant
+          ? [pay.participant]
+          : matchingReg?.participant
+          ? [matchingReg.participant]
+          : pay.student
+          ? [pay.student]
+          : matchingReg?.student
+          ? [matchingReg.student]
+          : [];
+
+      combined.push({
+        ...matchingReg,
+        ...pay,
+        eventTitle,
+        participants,
+        paymentReference: pay.paymentReference || (regNo ? `PAY-${regNo}` : 'N/A'),
+        amount: pay.amount !== undefined ? pay.amount : (matchingReg?.amount !== undefined ? matchingReg.amount : (pay.fee?.amount !== undefined ? parseEventFeeInRupees(pay.fee.amount) : 0)),
+        status: pay.payment?.status === 'PAID' || pay.status === 'PAID' ? 'PAID' : (matchingReg?.status || pay.status || 'CONFIRMED')
+      });
+    });
+
+    // Add remaining registrations that had no matching payment record
+    registrationsList.forEach((reg) => {
+      const dedupeKey = reg.registrationNumber || reg.registrationId || reg._id;
+      if (dedupeKey && seenKeys.has(String(dedupeKey))) return;
+      if (dedupeKey) seenKeys.add(String(dedupeKey));
+
+      const eventTitle =
+        reg.eventTitle ||
+        reg.eventName ||
+        reg.event_name ||
+        reg.event?.name ||
+        reg.event?.title ||
+        'Colours 2027 Event';
+
+      const participants =
+        Array.isArray(reg.participants) && reg.participants.length > 0
+          ? reg.participants
+          : reg.participant
+          ? [reg.participant]
+          : reg.student
+          ? [reg.student]
+          : [];
+
+      combined.push({
+        ...reg,
+        eventTitle,
+        participants,
+        paymentReference: reg.paymentReference || (dedupeKey ? `PAY-${dedupeKey}` : 'N/A'),
+        amount: reg.amount !== undefined ? reg.amount : (reg.fee?.amount !== undefined ? parseEventFeeInRupees(reg.fee.amount) : 0),
+        status: reg.payment?.status === 'PAID' || reg.status === 'PAID' ? 'PAID' : (reg.status || 'CONFIRMED')
+      });
+    });
+
+    // Filter to ensure only current fest events (excluding other fests like VEDA/ALA if explicitly tagged)
+    const filteredEvents = combined.filter((item) => {
+      const itemType = (item.typeCode || item.type_code || item.eventType || item.event_type || '').toUpperCase();
+      if (itemType === 'VEDA' || itemType === 'ALA') {
+        return (EVENT_TYPE || 'COLORS').toUpperCase() === itemType;
+      }
       const itemYear = item.academicYear || item.academic_year;
-      const yearOk = matchesAcademicYear(itemYear, EVENT_ACADEMIC_YEAR);
-      return typeOk && paidOk && yearOk;
+      if (itemYear && !matchesAcademicYear(itemYear, EVENT_ACADEMIC_YEAR)) {
+        return false;
+      }
+      return true;
     });
 
     // Enrich each registered event with catalog metadata (category, subCategory, participationType)
@@ -541,6 +888,7 @@ export default function StudentDashboard() {
       });
       return {
         ...item,
+        eventTitle: item.eventTitle || matched?.eventName || matched?.title || 'Colours 2027 Event',
         category: item.category || matched?.category || matched?.categoryName || '',
         subCategory: item.subCategory || matched?.subCategory || matched?.subcategoryName || '',
         participationType: item.participationType || matched?.participationType || ''
@@ -990,17 +1338,7 @@ export default function StudentDashboard() {
                       required
                     />
 
-                    <div className="form-actions-bar">
-                      <ThemeButton
-                        type="button"
-                        className="btn-dash-secondary"
-                        borderRadius={12}
-                        height={44}
-                        showBlast={false}
-                        onClick={() => setIsEditingProfile(false)}
-                      >
-                        Cancel
-                      </ThemeButton>
+                    <div className="form-actions-bar" style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                       <ThemeButton
                         type="submit"
                         className="btn-dash-primary"
@@ -1008,6 +1346,7 @@ export default function StudentDashboard() {
                         height={44}
                         showBlast={false}
                         disabled={profileSaving}
+                        style={{ minWidth: '200px' }}
                       >
                         <span className="btn-icon-label" style={{ color: '#ffffff' }}>
                           {profileSaving ? 'Saving Changes...' : 'Save Profile Changes'}
@@ -1016,58 +1355,6 @@ export default function StudentDashboard() {
                     </div>
                   </form>
                 )}
-              </LiquidGlass>
-
-              {/* Digital Fest Delegate Card */}
-              <LiquidGlass className="fest-pass-card fest-pass-glass-card" theme="light" borderRadius={22} enableShader={true}>
-                <div className="pass-top-header">
-                  <div className="pass-fest-badge">COLOURS 2027</div>
-                  <span className="pass-chip-status">OFFICIAL DELEGATE</span>
-                </div>
-
-                <div className="pass-body">
-                  <div className="pass-photo-frame">
-                    {!photoError && studentPhotoUrl ? (
-                      <img
-                        src={studentPhotoUrl}
-                        alt={activeStudent.name}
-                        onError={() => setPhotoError(true)}
-                      />
-                    ) : (
-                      <div className="hero-avatar-fallback" style={{ fontSize: '1.75rem', backgroundColor: '#0b5299' }}>
-                        {activeStudent.name ? activeStudent.name.charAt(0) : 'S'}
-                      </div>
-                    )}
-                  </div>
-                  <div className="pass-meta">
-                    <span className="pass-name">{activeStudent.name}</span>
-                    <span className="pass-roll">{activeStudent.roll}</span>
-                    <span className="pass-college">
-                      {activeStudent.college === 'Other Institution' && activeStudent.otherCollege
-                        ? activeStudent.otherCollege
-                        : activeStudent.college}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="pass-barcode-box">
-                  <div className="pass-barcode-lines" />
-                  <span className="pass-barcode-text">CLR27-{activeStudent.roll}</span>
-                </div>
-
-                <ThemeButton
-                  type="button"
-                  className="btn-dash-primary"
-                  borderRadius={12}
-                  height={44}
-                  showBlast={false}
-                  onClick={() => window.print()}
-                  style={{ width: '100%', marginTop: '1rem' }}
-                >
-                  <span className="btn-icon-label" style={{ color: '#ffffff' }}>
-                    <Printer size={16} /> Print Delegate Card
-                  </span>
-                </ThemeButton>
               </LiquidGlass>
             </div>
           </div>
@@ -1098,38 +1385,53 @@ export default function StudentDashboard() {
                   </div>
                 )}
 
-                <form onSubmit={handleChangePassword} className="profile-form-grid">
+                <form onSubmit={handleChangePassword} className="profile-form-grid security-password-form-grid" noValidate>
                   <MuiTextField
                     label="Current Password"
                     type="password"
                     name="currentPassword"
                     id="current-pw"
                     value={passwordForm.currentPassword}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setPasswordForm((prev) => ({
                         ...prev,
                         currentPassword: e.target.value
-                      }))
-                    }
+                      }));
+                      if (passwordErrors.currentPassword) {
+                        setPasswordErrors((prev) => ({ ...prev, currentPassword: '' }));
+                      }
+                    }}
                     placeholder="Enter current password"
-                    className="full-width"
+                    error={passwordErrors.currentPassword}
                     required
                   />
 
                   <MuiTextField
-                    label="New Password (minimum 6 characters)"
+                    label="New Password"
                     type="password"
                     name="newPassword"
                     id="new-pw"
                     value={passwordForm.newPassword}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setPasswordForm((prev) => ({
                         ...prev,
                         newPassword: e.target.value
-                      }))
+                      }));
+                      if (passwordErrors.newPassword) {
+                        setPasswordErrors((prev) => ({ ...prev, newPassword: '' }));
+                      }
+                    }}
+                    placeholder="Type new password"
+                    hint="Min 8 chars, 1 capital (A-Z), 1 number (0-9), & allowed special chars (@, _, $, #, !)"
+                    hintClassName={isNewPwTyped ? (isNewPwValid ? 'hint-valid' : 'hint-invalid') : ''}
+                    error={isNewPwTyped ? '' : passwordErrors.newPassword}
+                    className={
+                      passwordErrors.newPassword
+                        ? 'has-error'
+                        : isNewPwTyped
+                        ? (isNewPwValid ? 'is-live-valid' : '')
+                        : ''
                     }
-                    placeholder="Enter new strong password"
-                    className="full-width"
                     required
                   />
 
@@ -1139,14 +1441,17 @@ export default function StudentDashboard() {
                     name="confirmPassword"
                     id="confirm-pw"
                     value={passwordForm.confirmPassword}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setPasswordForm((prev) => ({
                         ...prev,
                         confirmPassword: e.target.value
-                      }))
-                    }
+                      }));
+                      if (passwordErrors.confirmPassword) {
+                        setPasswordErrors((prev) => ({ ...prev, confirmPassword: '' }));
+                      }
+                    }}
                     placeholder="Re-type new password"
-                    className="full-width"
+                    error={passwordErrors.confirmPassword}
                     required
                   />
 
@@ -1198,44 +1503,62 @@ export default function StudentDashboard() {
               </LiquidGlass>
             ) : (
               <div className="events-list-wrapper">
-                {displayEventsList.map((payment) => {
+                {displayEventsList.map((payment, pIndex) => {
                   const rawRegId = payment.registrationNumber || payment.registrationId;
                   const rawPayRef = payment.paymentReference;
                   const regId = formatRegistrationId(rawRegId);
                   const payRef = formatPaymentReference(rawPayRef || rawRegId);
                   const title = payment.eventTitle || payment.eventName || 'Colours 2027 Event';
-                  const teamParticipants = Array.isArray(payment.participants)
+                  const rawParticipants = Array.isArray(payment.participants) && payment.participants.length > 0
                     ? payment.participants
                     : [];
+                  const teamParticipants = rawParticipants.length > 0
+                    ? rawParticipants
+                    : [
+                        {
+                          name: payment.leadParticipant || payment.studentName || activeStudent.name || 'Student Participant',
+                          rollNumber: payment.studentRollNumber || payment.rollNumber || payment.roll || activeStudent.roll || '—',
+                          role: isSports ? 'Team Leader' : 'Participant',
+                          department: payment.department || activeStudent.department || 'General',
+                          year: payment.year || activeStudent.year || '3rd Year',
+                          email: payment.email || activeStudent.email || '—',
+                          phone: payment.phone || payment.mobile || activeStudent.mobile || '—',
+                          college: payment.college || activeStudent.college || 'Aditya University',
+                          otherCollege: payment.otherCollege || activeStudent.otherCollege || ''
+                        }
+                      ];
                   const isSports = isSportsAndGamesEvent(payment, catalogEvents);
+                  const eventKey = payment._id || rawPayRef || rawRegId || `event-${pIndex}`;
+                  const isExpanded = expandedEvents[eventKey] !== false;
 
                   return (
                     <LiquidGlass
                       as="article"
-                      key={payment._id || payRef}
+                      key={eventKey}
                       className="event-receipt-card event-glass-card"
                       theme="light"
                       borderRadius={20}
                       enableShader={true}
                     >
-                      <div className="event-card-header">
+                      <div
+                        className={`event-card-header accordion-header ${isExpanded ? 'is-open' : 'is-closed'}`}
+                        onClick={() => toggleEventAccordion(eventKey)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            toggleEventAccordion(eventKey);
+                          }
+                        }}
+                      >
                         <div>
-                          <div className="event-badge-group">
-                            <span className="event-category-pill">
-                              {payment.typeCode || EVENT_TYPE || 'COLORS'}
-                            </span>
-                            <span className={`event-status-pill ${String(payment.status || '').toLowerCase() === 'paid' || String(payment.status || '').toLowerCase() === 'confirmed' ? 'paid' : 'pending'}`}>
-                              <span className="receipt-status-wrap">
-                                <Check size={12} strokeWidth={3} /> {payment.status === 'CONFIRMED' ? 'CONFIRMED & PAID' : (payment.status || 'PAID')}
-                              </span>
-                            </span>
-                          </div>
                           <SplitColorText as="h4" className="event-main-title" splitPercent={50} leftColor="#0f172a" rightColor="#0f172a">
                             {title}
                           </SplitColorText>
                         </div>
 
-                        <div className="event-header-actions-row">
+                        <div className="event-header-actions-row" onClick={(e) => e.stopPropagation()}>
                           {isSports && (
                             <ThemeButton
                               type="button"
@@ -1253,55 +1576,35 @@ export default function StudentDashboard() {
                           )}
                           <ThemeButton
                             type="button"
-                            className="btn-dash-primary"
+                            className="btn-dash-primary btn-dash-payment-receipt"
                             borderRadius={10}
-                            height={38}
+                            height={34}
                             showBlast={false}
-                            onClick={() => setSelectedReceipt(payment)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDownloadReceiptPdf(payment);
+                            }}
+                            title="Download Payment Receipt PDF"
                           >
-                            <span className="btn-icon-label" style={{ color: '#ffffff' }}>
-                              <FileText size={15} /> View / Print Slip
+                            <span className="btn-icon-label" style={{ color: '#ffffff', fontWeight: 300, fontSize: '0.78rem' }}>
+                              <Download size={14} strokeWidth={1.8} /> Payment Receipt
                             </span>
                           </ThemeButton>
+
+                          <button
+                            type="button"
+                            className={`btn-dash-accordion-toggle ${isExpanded ? 'expanded' : ''}`}
+                            onClick={() => toggleEventAccordion(eventKey)}
+                            aria-label={isExpanded ? 'Collapse participant details' : 'Expand participant details'}
+                            title={isExpanded ? 'Click to collapse' : 'Click to expand'}
+                          >
+                            <ChevronDown size={18} strokeWidth={2.4} className="accordion-chevron-icon" />
+                          </button>
                         </div>
                       </div>
 
-                      <div className="event-details-grid">
-                        <div className="detail-col">
-                          <span className="label">Registration ID</span>
-                          <span className="val code">{regId}</span>
-                        </div>
-                        <div className="detail-col">
-                          <span className="label">Payment Reference</span>
-                          <span className="val code">{payRef}</span>
-                        </div>
-                        <div className="detail-col">
-                          <span className="label">Razorpay Payment ID</span>
-                          <span className="val code">
-                            {payment.razorpay?.paymentId || payment.payment?.paymentId || payment.paymentId || 'Verified Gateway'}
-                          </span>
-                        </div>
-                        <div className="detail-col">
-                          <span className="label">Amount Paid</span>
-                          <span className="val price">₹ {payment.amount}</span>
-                        </div>
-                        <div className="detail-col">
-                          <span className="label">Confirmed Date</span>
-                          <span className="val">
-                            {payment.createdAt
-                              ? new Date(payment.createdAt).toLocaleDateString('en-IN', {
-                                day: 'numeric',
-                                month: 'short',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })
-                              : 'Confirmed'}
-                          </span>
-                        </div>
-                      </div>
-
-                      {teamParticipants.length > 0 ? (
+                      <div className={`event-accordion-body ${isExpanded ? 'open' : 'collapsed'}`}>
+                        {teamParticipants.length > 0 ? (
                         <div className="team-participants-box">
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                             <h5 style={{ margin: 0 }}>
@@ -1324,21 +1627,83 @@ export default function StudentDashboard() {
                               </ThemeButton>
                             )}
                           </div>
-                          <div className="participants-chips-wrap">
-                            {teamParticipants.map((p, idx) => (
-                              <div
-                                key={idx}
-                                className={`participant-chip ${p.isLeader ? 'leader' : ''}`}
-                              >
-                                {p.isLeader ? (
-                                  <Crown size={13} className="participant-crown" />
-                                ) : (
-                                  <User size={13} className="participant-user" />
-                                )}
-                                <strong>{p.name}</strong>
-                                <span className="roll">({p.rollNumber || p.roll})</span>
-                              </div>
-                            ))}
+                          <div className="dash-participants-table-responsive">
+                            <table className="dash-participants-table">
+                              <thead>
+                                <tr>
+                                  <th style={{ width: '40px', textAlign: 'center' }}>#</th>
+                                  <th>ROLL NUMBER</th>
+                                  <th>NAME</th>
+                                  <th>ROLE</th>
+                                  <th>DEPARTMENT / YEAR</th>
+                                  <th>EMAIL</th>
+                                  <th>MOBILE</th>
+                                  <th style={{ textAlign: 'center' }}>PASS</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {teamParticipants.map((p, idx) => {
+                                  const isLeader = Boolean(p.isLeader || p.role === 'Leader' || p.role === 'Team Leader' || idx === 0);
+                                  const roleTitle = p.role ? (p.role === 'Leader' ? 'Team Leader' : p.role) : (isLeader ? 'Team Leader' : 'Participant');
+                                  const dept = p.department || payment.department || activeStudent.department || 'General';
+                                  const yr = p.year || payment.year || activeStudent.year || '3rd Year';
+                                  const rollNo = p.rollNumber || p.roll || payment.studentRollNumber || payment.rollNumber || activeStudent.roll || '—';
+                                  const pName = p.name || payment.leadParticipant || payment.studentName || activeStudent.name || '—';
+                                  const email = p.email || payment.email || activeStudent.email || '—';
+                                  const phone = p.phone || p.mobile || payment.phone || payment.mobile || activeStudent.mobile || '—';
+                                  const pCollege = p.college || payment.college || activeStudent.college || 'Aditya University';
+                                  const pOtherCollege = p.otherCollege || payment.otherCollege || activeStudent.otherCollege || '';
+
+                                  return (
+                                    <tr key={idx}>
+                                      <td className="col-idx">{p.no || idx + 1}</td>
+                                      <td>
+                                        <span className="dash-table-roll-badge">
+                                          {rollNo}
+                                        </span>
+                                      </td>
+                                      <td>
+                                        <div className="dash-table-name-cell">
+                                          <span className="dash-table-name">{pName}</span>
+                                          {isLeader && (
+                                            <span className="dash-table-leader-tag">
+                                              LEADER
+                                            </span>
+                                          )}
+                                        </div>
+                                      </td>
+                                      <td className="dash-table-role">{roleTitle}</td>
+                                      <td className="dash-table-dept">
+                                        <span className="dept-name">{dept}</span>{' '}
+                                        <span className="dept-year">({yr})</span>
+                                      </td>
+                                      <td className="dash-table-email">{email}</td>
+                                      <td className="dash-table-mobile">{phone}</td>
+                                      <td style={{ textAlign: 'center' }}>
+                                        <button
+                                          type="button"
+                                          className="btn-dash-table-pass"
+                                          onClick={() => setSelectedPass({
+                                            name: pName,
+                                            roll: rollNo,
+                                            college: pCollege,
+                                            otherCollege: pOtherCollege,
+                                            department: dept,
+                                            year: yr,
+                                            role: roleTitle,
+                                            eventTitle: title
+                                          })}
+                                          title="View Pass"
+                                        >
+                                          <CreditCard size={13} />
+                                          <span>View Pass</span>
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                       ) : (
@@ -1372,6 +1737,7 @@ export default function StudentDashboard() {
                           </div>
                         </div>
                       )}
+                      </div>
                     </LiquidGlass>
                   );
                 })}
@@ -1386,25 +1752,41 @@ export default function StudentDashboard() {
             className="receipt-modal-backdrop"
             onClick={() => setSelectedReceipt(null)}
           >
-            <LiquidGlass
-              className="printable-slip-card slip-glass-card"
-              theme="light"
-              borderRadius={22}
-              enableShader={true}
+            <div
+              className="printable-slip-card"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="slip-header">
+                <img
+                  src="/AUS Long Logo .png"
+                  alt="Aditya University"
+                  className="slip-aus-logo"
+                />
                 <div className="slip-logo">COLOURS 2027</div>
                 <div className="slip-subtitle">
-                  Aditya University Youth Cultural & Sports Festival
+                  A NATIONAL LEVEL YOUTH FESTIVAL
                 </div>
                 <span className="slip-status-badge">
-                  <CheckCircle2 size={13} /> OFFICIAL PAYMENT RECEIPT
+                  <CheckCircle2 size={13} /> PAYMENT RECEIPT
                 </span>
               </div>
 
               <table className="slip-table">
                 <tbody>
+                  <tr>
+                    <td className="lbl">Event Name:</td>
+                    <td className="val">{selectedReceipt.eventTitle || selectedReceipt.eventName || selectedReceipt.event_name}</td>
+                  </tr>
+                  <tr>
+                    <td className="lbl">Lead Participant:</td>
+                    <td className="val">
+                      {selectedReceipt.student?.name || selectedReceipt.participant?.name || selectedReceipt.student_name || activeStudent?.name} ({selectedReceipt.student?.rollNumber || selectedReceipt.student?.roll || selectedReceipt.participant?.rollNumber || selectedReceipt.roll_number || activeStudent?.roll})
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="lbl">College:</td>
+                    <td className="val">{selectedReceipt.student?.college || selectedReceipt.participant?.college || activeStudent?.college}</td>
+                  </tr>
                   <tr>
                     <td className="lbl">Registration ID:</td>
                     <td className="val" style={{ color: '#e11d48' }}>
@@ -1430,20 +1812,6 @@ export default function StudentDashboard() {
                     </td>
                   </tr>
                   <tr>
-                    <td className="lbl">Event Name:</td>
-                    <td className="val">{selectedReceipt.eventTitle || selectedReceipt.eventName || selectedReceipt.event_name}</td>
-                  </tr>
-                  <tr>
-                    <td className="lbl">Lead Participant:</td>
-                    <td className="val">
-                      {selectedReceipt.student?.name || selectedReceipt.participant?.name || selectedReceipt.student_name || activeStudent?.name} ({selectedReceipt.student?.rollNumber || selectedReceipt.student?.roll || selectedReceipt.participant?.rollNumber || selectedReceipt.roll_number || activeStudent?.roll})
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="lbl">College:</td>
-                    <td className="val">{selectedReceipt.student?.college || selectedReceipt.participant?.college || activeStudent?.college}</td>
-                  </tr>
-                  <tr>
                     <td className="lbl">Amount Paid:</td>
                     <td className="val" style={{ color: '#15803d', fontSize: '1.05rem' }}>
                       ₹ {selectedReceipt.amount !== undefined ? selectedReceipt.amount : parseEventFeeInRupees(selectedReceipt.fee?.amount || 0)}/-
@@ -1452,18 +1820,11 @@ export default function StudentDashboard() {
                   <tr>
                     <td className="lbl">Status:</td>
                     <td className="val" style={{ color: '#15803d' }}>
-                      {selectedReceipt.payment?.status === 'PAID' || selectedReceipt.status === 'PAID' ? 'CONFIRMED & PAID' : (selectedReceipt.status || 'CONFIRMED')}
+                      {selectedReceipt.payment?.status === 'PAID' || selectedReceipt.status === 'PAID' ? 'PAID' : (selectedReceipt.status || 'CONFIRMED')}
                     </td>
                   </tr>
                 </tbody>
               </table>
-
-              <div className="slip-barcode-area">
-                <div className="pass-barcode-lines" style={{ height: '36px' }} />
-                <div className="pass-barcode-text">
-                  {formatRegistrationId(selectedReceipt.registrationNumber || selectedReceipt.paymentReference || selectedReceipt.registrationId)}
-                </div>
-              </div>
 
               <div className="slip-actions">
                 <ThemeButton
@@ -1472,11 +1833,11 @@ export default function StudentDashboard() {
                   borderRadius={10}
                   height={42}
                   showBlast={false}
-                  onClick={() => window.print()}
+                  onClick={() => handleDownloadReceiptPdf(selectedReceipt)}
                   style={{ flex: 1 }}
                 >
                   <span className="btn-icon-label" style={{ color: '#ffffff' }}>
-                    <Printer size={15} /> Print Receipt
+                    <Download size={15} /> Download PDF
                   </span>
                 </ThemeButton>
                 <ThemeButton
@@ -1493,7 +1854,108 @@ export default function StudentDashboard() {
                   </span>
                 </ThemeButton>
               </div>
-            </LiquidGlass>
+            </div>
+          </div>,
+          document.body
+        )}
+
+        {/* ── Digital Fest Delegate Pass Modal ── */}
+        {selectedPass && createPortal(
+          <div
+            className="receipt-modal-backdrop"
+            onClick={() => setSelectedPass(null)}
+          >
+            <div
+              className="fest-pass-card fest-pass-modal-card"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="pass-top-header">
+                <div className="pass-brand-lockup">
+                  <img
+                    src="/ADITYA%20LOGO2.png"
+                    alt="Aditya Group of Institutions"
+                    className="pass-aditya-logo"
+                  />
+                  <span className="pass-vr-line" />
+                  <div className="pass-brand-text">
+                    <span className="pass-brand-title">COLOURS</span>
+                    <span className="pass-brand-year">2027</span>
+                  </div>
+                </div>
+                <span className="pass-chip-status">OFFICIAL DELEGATE</span>
+              </div>
+
+              <div className="pass-body">
+                <div className="pass-photo-frame">
+                  {selectedPass.roll && selectedPass.roll !== '—' ? (
+                    <img
+                      src={`https://info.aec.edu.in/adityacentral/studentphotos/${selectedPass.roll.toUpperCase()}.jpg`}
+                      alt={selectedPass.name}
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const fallback = e.currentTarget.parentElement?.querySelector('.pass-fallback-avatar');
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div
+                    className="hero-avatar-fallback pass-fallback-avatar"
+                    style={{
+                      fontSize: '1.75rem',
+                      backgroundColor: '#0b5299',
+                      display: selectedPass.roll && selectedPass.roll !== '—' ? 'none' : 'flex'
+                    }}
+                  >
+                    {selectedPass.name && selectedPass.name !== '—' ? selectedPass.name.charAt(0).toUpperCase() : 'S'}
+                  </div>
+                </div>
+                <div className="pass-meta">
+                  <span className="pass-name">{selectedPass.name}</span>
+                  <span className="pass-roll">{selectedPass.roll}</span>
+                  <span className="pass-college">
+                    {selectedPass.college === 'Other Institution' && selectedPass.otherCollege
+                      ? selectedPass.otherCollege
+                      : (selectedPass.college || 'Aditya University')}
+                  </span>
+                </div>
+              </div>
+
+              <div className="pass-barcode-box">
+                <div className="pass-barcode-lines" />
+                <span className="pass-barcode-text">
+                  CLR27-{selectedPass.roll && selectedPass.roll !== '—' ? selectedPass.roll : 'DELEGATE'}
+                </span>
+              </div>
+
+              <div className="slip-actions" style={{ marginTop: '1.25rem' }}>
+                <ThemeButton
+                  type="button"
+                  className="btn-dash-primary"
+                  borderRadius={10}
+                  height={42}
+                  showBlast={false}
+                  onClick={() => window.print()}
+                  style={{ flex: 1 }}
+                >
+                  <span className="btn-icon-label" style={{ color: '#ffffff' }}>
+                    <Printer size={15} /> Print Delegate Card
+                  </span>
+                </ThemeButton>
+                <ThemeButton
+                  type="button"
+                  className="btn-dash-secondary"
+                  borderRadius={10}
+                  height={42}
+                  showBlast={false}
+                  onClick={() => setSelectedPass(null)}
+                  style={{ flex: 1 }}
+                >
+                  <span className="btn-icon-label">
+                    <X size={15} /> Close
+                  </span>
+                </ThemeButton>
+              </div>
+            </div>
           </div>,
           document.body
         )}
