@@ -105,8 +105,12 @@ export default function MobileBottomBar() {
               <Users size={18} />
             </span>
             <div className="drawer-link-text">
-              <span className="drawer-link-label">Team</span>
-              <span className="drawer-link-sub">Festival Committee & Organizers</span>
+              <SplitColorText as="span" className="drawer-link-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                Team
+              </SplitColorText>
+              <SplitColorText as="span" className="drawer-link-sub" screenSync={true} leftColor="#475569" rightColor="#cbd5e1">
+                Committee & Organizers
+              </SplitColorText>
             </div>
           </Link>
 
@@ -119,8 +123,12 @@ export default function MobileBottomBar() {
               <MailOpen size={18} />
             </span>
             <div className="drawer-link-text">
-              <span className="drawer-link-label">Invitation</span>
-              <span className="drawer-link-sub">Official Festival Invite</span>
+              <SplitColorText as="span" className="drawer-link-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                Invitation
+              </SplitColorText>
+              <SplitColorText as="span" className="drawer-link-sub" screenSync={true} leftColor="#475569" rightColor="#cbd5e1">
+                Colours Invitation
+              </SplitColorText>
             </div>
           </Link>
 
@@ -135,8 +143,12 @@ export default function MobileBottomBar() {
               <Calendar size={18} />
             </span>
             <div className="drawer-link-text">
-              <span className="drawer-link-label">Schedule</span>
-              <span className="drawer-link-sub">Day-wise Events Schedule PDF</span>
+              <SplitColorText as="span" className="drawer-link-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                Schedule
+              </SplitColorText>
+              <SplitColorText as="span" className="drawer-link-sub" screenSync={true} leftColor="#475569" rightColor="#cbd5e1">
+                Day-wise Schedule
+              </SplitColorText>
             </div>
           </a>
 
@@ -149,8 +161,12 @@ export default function MobileBottomBar() {
               <Award size={18} />
             </span>
             <div className="drawer-link-text">
-              <span className="drawer-link-label">Sponsors</span>
-              <span className="drawer-link-sub">Corporate Supporters</span>
+              <SplitColorText as="span" className="drawer-link-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                Sponsors
+              </SplitColorText>
+              <SplitColorText as="span" className="drawer-link-sub" screenSync={true} leftColor="#475569" rightColor="#cbd5e1">
+                Sponsors and Partners
+              </SplitColorText>
             </div>
           </Link>
 
@@ -163,8 +179,12 @@ export default function MobileBottomBar() {
               <Phone size={18} />
             </span>
             <div className="drawer-link-text">
-              <span className="drawer-link-label">Contact</span>
-              <span className="drawer-link-sub">Helpdesk & Helplines</span>
+              <SplitColorText as="span" className="drawer-link-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                Contact
+              </SplitColorText>
+              <SplitColorText as="span" className="drawer-link-sub" screenSync={true} leftColor="#475569" rightColor="#cbd5e1">
+                Reach Out & Trasnsit
+              </SplitColorText>
             </div>
           </Link>
         </div>
@@ -191,7 +211,9 @@ export default function MobileBottomBar() {
           <span className="bottom-tab-icon">
             <Home size={20} strokeWidth={location.pathname === '/' && !drawerOpen ? 2.2 : 1.8} />
           </span>
-          <span className="bottom-tab-label">Home</span>
+          <SplitColorText as="span" className="bottom-tab-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+            Home
+          </SplitColorText>
         </Link>
 
         {/* Tab 2: Events */}
@@ -203,7 +225,9 @@ export default function MobileBottomBar() {
           <span className="bottom-tab-icon">
             <Sparkles size={20} strokeWidth={location.pathname.startsWith('/events') && !drawerOpen ? 2.2 : 1.8} />
           </span>
-          <span className="bottom-tab-label">Events</span>
+          <SplitColorText as="span" className="bottom-tab-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+            Events
+          </SplitColorText>
         </Link>
 
         {/* Tab 3: Live Stream */}
@@ -247,7 +271,9 @@ export default function MobileBottomBar() {
           <span className="bottom-tab-icon">
             {drawerOpen ? <X size={20} strokeWidth={2.2} /> : <Menu size={20} strokeWidth={isMoreActive ? 2.2 : 1.8} />}
           </span>
-          <span className="bottom-tab-label">Menu</span>
+          <SplitColorText as="span" className="bottom-tab-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+            Menu
+          </SplitColorText>
         </button>
 
         {/* Tab 5: Account / Login */}
@@ -269,7 +295,9 @@ export default function MobileBottomBar() {
               <span className="bottom-tab-icon">
                 <User size={20} strokeWidth={1.8} />
               </span>
-              <span className="bottom-tab-label">Login</span>
+              <SplitColorText as="span" className="bottom-tab-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                Login
+              </SplitColorText>
             </>
           )}
         </button>

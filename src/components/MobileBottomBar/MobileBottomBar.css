@@ -99,8 +99,45 @@
     justify-content: center;
     width: 24px;
     height: 24px;
+    position: relative;
+    z-index: 3;
     transition: transform 0.2s ease, color 0.2s ease;
     filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+  }
+
+  /* Dynamic Contrast Across Split Screen (Left = White / Right = Dark) */
+  .mobile-bottom-bar .bottom-tab:nth-child(1),
+  .mobile-bottom-bar .bottom-tab:nth-child(2) {
+    color: #0f172a !important;
+    text-shadow: none !important;
+  }
+
+  .mobile-bottom-bar .bottom-tab:nth-child(1) .bottom-tab-icon,
+  .mobile-bottom-bar .bottom-tab:nth-child(2) .bottom-tab-icon {
+    color: #0f172a !important;
+    filter: none !important;
+  }
+
+  .mobile-bottom-bar .bottom-tab:nth-child(1) .bottom-tab-icon svg,
+  .mobile-bottom-bar .bottom-tab:nth-child(2) .bottom-tab-icon svg {
+    stroke: #0f172a !important;
+  }
+
+  .mobile-bottom-bar .bottom-tab:nth-child(4),
+  .mobile-bottom-bar .bottom-tab:nth-child(5) {
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65) !important;
+  }
+
+  .mobile-bottom-bar .bottom-tab:nth-child(4) .bottom-tab-icon,
+  .mobile-bottom-bar .bottom-tab:nth-child(5) .bottom-tab-icon {
+    color: #ffffff !important;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6)) !important;
+  }
+
+  .mobile-bottom-bar .bottom-tab:nth-child(4) .bottom-tab-icon svg,
+  .mobile-bottom-bar .bottom-tab:nth-child(5) .bottom-tab-icon svg {
+    stroke: #ffffff !important;
   }
 
   .bottom-tab.bottom-tab-live {
@@ -113,21 +150,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
+    z-index: 3;
   }
 
   .bottom-tab-live-img {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     object-fit: contain;
-    filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.65));
+    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.75));
     transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.22s ease;
   }
 
   .bottom-tab.active .bottom-tab-live-img {
-    transform: scale(1.15);
-    filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.95)) !important;
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 14px rgba(239, 68, 68, 0.95)) !important;
   }
 
   .bottom-tab-label {
@@ -140,24 +178,56 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    position: relative;
+    z-index: 3;
     transition: color 0.2s ease;
   }
 
-  /* Active Tab State: No surrounding box/capsule shape, slow VIBGYOR continuous rainbow animation without glow */
+  /* Active Tab State: Pure Liquid Glass Capsule with VIBGYOR Rainbow Border (No text/icon rainbow) */
   .bottom-tab.active {
-    background: transparent !important;
-    border: 1px solid transparent !important;
-    box-shadow: none !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18) !important;
+    position: relative;
+  }
+
+  .bottom-tab.active::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 1.6px;
+    box-sizing: border-box;
+    background: conic-gradient(
+      from var(--rainbow-angle, 0deg),
+      #8b00ff 0deg,
+      #4b0082 51.4deg,
+      #0066ff 102.8deg,
+      #00c853 154.3deg,
+      #ffd600 205.7deg,
+      #ff6d00 257.1deg,
+      #ff1744 308.6deg,
+      #8b00ff 360deg
+    );
+    animation: vibgyorConicRotate 3.5s linear infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 2;
   }
 
   .bottom-tab.active .bottom-tab-icon {
-    transform: translateY(-2px);
-    animation: vibgyorColorFlow 6s linear infinite !important;
+    transform: translateY(-1px);
+    animation: none !important;
     filter: none !important;
   }
 
   .bottom-tab.active .bottom-tab-icon svg {
-    stroke: currentColor !important;
     fill: none !important;
     filter: none !important;
   }
@@ -166,37 +236,11 @@
     display: inline-block;
     width: max-content;
     max-width: 68px;
-    background-image: linear-gradient(
-      90deg,
-      #8b00ff 0%,    /* Violet */
-      #4b0082 7.1%,  /* Indigo */
-      #0066ff 14.3%, /* Blue */
-      #00c853 21.4%, /* Green */
-      #ffd600 28.6%, /* Yellow */
-      #ff6d00 35.7%, /* Orange */
-      #ff1744 42.8%, /* Red */
-      #8b00ff 50%,   /* Violet Loop */
-      #4b0082 57.1%, /* Indigo */
-      #0066ff 64.3%, /* Blue */
-      #00c853 71.4%, /* Green */
-      #ffd600 78.6%, /* Yellow */
-      #ff6d00 85.7%, /* Orange */
-      #ff1744 92.8%, /* Red */
-      #8b00ff 100%   /* Violet End */
-    ) !important;
-    background-size: 200% 100% !important;
-    background-repeat: repeat-x !important;
-    background-position: 0% 50%;
-    -webkit-background-clip: text !important;
-    background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    color: transparent !important;
-    animation: vibgyorRainbowFlow 6s linear infinite !important;
     font-weight: 700 !important;
-    letter-spacing: 0.03em;
-    text-shadow: none !important;
-    transform: scale(1.06);
+    letter-spacing: 0.02em;
+    animation: none !important;
     filter: none !important;
+    text-shadow: none !important;
   }
 
   .bottom-tab:not(.active):hover {
@@ -467,12 +511,38 @@
   }
 
   .drawer-link-item.active {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(190, 147, 55, 0.5);
-    box-shadow:
-      0 0 18px rgba(190, 147, 55, 0.28),
-      inset 0 1px 1.5px rgba(255, 255, 255, 0.35);
-    color: #fbbf24;
+    background: rgba(255, 255, 255, 0.14) !important;
+    border-color: transparent !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    color: inherit !important;
+    position: relative;
+  }
+
+  .drawer-link-item.active::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    padding: 1.6px;
+    box-sizing: border-box;
+    background: conic-gradient(
+      from var(--rainbow-angle, 0deg),
+      #8b00ff 0deg,
+      #4b0082 51.4deg,
+      #0066ff 102.8deg,
+      #00c853 154.3deg,
+      #ffd600 205.7deg,
+      #ff6d00 257.1deg,
+      #ff1744 308.6deg,
+      #8b00ff 360deg
+    );
+    animation: vibgyorConicRotate 3.5s linear infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
   }
 
   .drawer-icon-bubble {

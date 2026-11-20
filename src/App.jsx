@@ -9,7 +9,7 @@ import Sponsors from './pages/Sponsors/Sponsors';
 import Contact from './pages/Contact/Contact';
 import Live from './pages/Live/Live';
 import StudentDashboard from './pages/StudentDashboard/StudentDashboard';
-import MouseAnimation from './components/ThemeComponents/MouseAnimation/MouseAnimation';
+// import MouseAnimation from './components/ThemeComponents/MouseAnimation/MouseAnimation';
 import ColourBlast from './components/ThemeComponents/ColourBlast/ColourBlast';
 import DualCornerRibbonBlast from './components/ThemeComponents/DualCornerRibbonBlast/DualCornerRibbonBlast';
 
@@ -52,8 +52,9 @@ function App() {
     <Router>
       <ScrollToTop />
       <div className="app">
-        {/* Colorful powder blast animations: page load & user clicks */}
+        {/* Old Powder Blast (Commented out per user request - only new ribbon confetti blast active):
         <MouseAnimation autoPlay={true} />
+        */}
         <ColourBlast enabled={true} duration={1250} />
         {/* Realistic Dual-Corner Diagonal Color Ribbon Blast */}
         <DualCornerRibbonBlast autoPlay={true} delay={250} />

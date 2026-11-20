@@ -221,6 +221,26 @@
   transform: translateY(-1px) !important;
 }
 
+/* Ensure external link items (e.g. Schedule PDF) NEVER show any pill background, shadow, or active border */
+.navbar-theme-btn[href],
+a.navbar-theme-btn[target="_blank"],
+.navbar-theme-btn[href]:focus,
+.navbar-theme-btn[href]:active,
+.navbar-theme-btn[href].active {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  outline: none !important;
+}
+
+.navbar-theme-btn[href]::before,
+a.navbar-theme-btn[target="_blank"]::before,
+.navbar-theme-btn[href].active::before {
+  display: none !important;
+}
+
 /* Blast Effect: Exactly like ThemeButton - center locked to bottom-right corner, strictly within height */
 .navbar-theme-btn .theme-glass-btn-blast {
   position: absolute !important;
@@ -470,9 +490,9 @@
 }
 
 .navbar-live-img {
-  height: 34px;
+  height: 38px;
   width: auto;
-  max-width: 54px;
+  max-width: 58px;
   object-fit: contain;
   display: block;
   filter: drop-shadow(0 2px 8px rgba(239, 68, 68, 0.45));

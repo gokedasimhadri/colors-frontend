@@ -13,7 +13,8 @@ const DOMAIN_CHAIRS = [
     domain: 'CULTURALS',
     name: 'Dr. N Ram Babu',
     phone: '8473917384',
-    initials: 'NR'
+    initials: 'NR',
+    image: '/Team/5225_2.jpg'
   },
   {
     domain: 'SPORTS',
@@ -25,13 +26,15 @@ const DOMAIN_CHAIRS = [
     domain: 'CREO',
     name: 'Dr. B Srinivas',
     phone: '9866732745',
-    initials: 'BS'
+    initials: 'BS',
+    image: '/Team/4721_cse.jpg'
   },
   {
     domain: 'FETE',
     name: 'Mr. J D Venkatesh',
     phone: '7731027776',
-    initials: 'JV'
+    initials: 'JV',
+    image: '/Team/Mr__J_D_Venkatesh.webp'
   }
 ];
 
@@ -97,21 +100,35 @@ export default function Contact() {
                 borderRadius={20}
                 enableShader={true}
               >
+                {/* Top Right Corner Badge: Faculty Coordinator */}
+                <div className="contact-chair-badge">
+                  <SplitColorText
+                    as="span"
+                    screenSync={true}
+                    leftColor="#0f172a"
+                    rightColor="#ffffff"
+                  >
+                    Faculty Coordinator
+                  </SplitColorText>
+                </div>
+
                 <div className="contact-chair-inner">
-                  {/* Round Container (Empty Liquid Glass Container) */}
+                  {/* Round Container (Empty Liquid Glass Container or Photo) */}
                   <div className="contact-chair-avatar-frame">
                     {chair.image ? (
-                      <img
-                        src={chair.image}
-                        alt={chair.name}
-                        className="contact-chair-avatar-img"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                          if (e.currentTarget.nextElementSibling) {
-                            e.currentTarget.nextElementSibling.style.display = 'block';
-                          }
-                        }}
-                      />
+                      <>
+                        <img
+                          src={chair.image}
+                          alt={chair.name}
+                          className="contact-chair-avatar-img"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            const fallback = e.currentTarget.parentElement?.querySelector('.contact-chair-avatar-empty');
+                            if (fallback) fallback.style.display = 'block';
+                          }}
+                        />
+                        <div className="contact-chair-avatar-empty" style={{ display: 'none' }} />
+                      </>
                     ) : (
                       <div className="contact-chair-avatar-empty" />
                     )}
@@ -292,7 +309,7 @@ export default function Contact() {
                   leftColor="#0f172a"
                   rightColor="#ffffff"
                 >
-                  🚆 Transit & How to Reach Aditya University Campus
+                  Transit & How to Reach Aditya University
                 </SplitColorText>
                 <div className="transit-grid">
                   <div className="transit-card">
@@ -307,12 +324,12 @@ export default function Contact() {
                     </SplitColorText>
                     <p>
                       <SplitColorText screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                        <strong>Samalkot Junction (SLO):</strong> 12 km (20 mins drive). 24/7 college shuttle & auto available.
+                        <strong>Samalkot Junction (SLO):</strong> 13 km (20 - 25 mins drive). Autos & APSRTC buses available
                       </SplitColorText>
                     </p>
                     <p>
                       <SplitColorText screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                        <strong>Rajahmundry (RJY):</strong> 40 km (50 mins drive).
+                        <strong>Rajahmundry (RJY):</strong> 50 km (1 hr drive).
                       </SplitColorText>
                     </p>
                   </div>
@@ -329,7 +346,7 @@ export default function Contact() {
                     </SplitColorText>
                     <p>
                       <SplitColorText screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                        <strong>Rajahmundry Domestic Airport (RJA):</strong> 45 km with daily flights from Hyderabad, Bengaluru, Chennai.
+                        <strong>Rajahmundry Domestic Airport (RJY):</strong> 50 km with daily flights from Hyderabad, Bengaluru, Chennai.
                       </SplitColorText>
                     </p>
                   </div>
@@ -342,11 +359,11 @@ export default function Contact() {
                       leftColor="#be9337"
                       rightColor="#be9337"
                     >
-                      By Road / Highway
+                      By Road
                     </SplitColorText>
                     <p>
                       <SplitColorText screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                        Located on ADB Road, connecting NH-16 (Chennai–Kolkata National Highway) with frequent buses from Kakinada.
+                        Located on ADB Road, connecting NH-16 (Chennai–Kolkata National Highway) at Rajanagaram, with frequent buses from Kakinada, Samalkot, and Rajahmundry.
                       </SplitColorText>
                     </p>
                   </div>

@@ -96,7 +96,7 @@
   display: flex;
   flex-direction: column;
   border-radius: 20px !important;
-  padding: 1.25rem 0.85rem !important;
+  padding: 0.85rem 0.85rem 1.25rem !important;
   background: transparent !important;
   border: none !important;
   outline: none !important;
@@ -107,6 +107,78 @@
   overflow: hidden;
   box-sizing: border-box;
   isolation: isolate;
+}
+
+/* ── Top-Right Corner Badge: Faculty Coordinator ── */
+.contact-chair-badge {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5px 8px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.contact-chair-badge::before {
+  content: '';
+  display: block;
+  position: absolute;
+  inset: -1px;
+  border-radius: 9999px;
+  padding: 1.5px;
+  box-sizing: border-box;
+  background: conic-gradient(
+    from var(--rainbow-angle, 0deg),
+    #8b00ff 0deg,
+    #4b0082 51.4deg,
+    #0066ff 102.8deg,
+    #00c853 154.3deg,
+    #ffd600 205.7deg,
+    #ff6d00 257.1deg,
+    #ff1744 308.6deg,
+    #8b00ff 360deg
+  );
+  animation: vibgyorConicRotate 3.5s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.contact-chair-badge .split-color-text {
+  position: relative;
+  z-index: 2;
+  font-size: 0.65rem;
+  font-weight: 800 !important;
+  letter-spacing: 0.02em;
+  text-transform: capitalize !important;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .contact-chair-card {
+    padding: 0.75rem 0.75rem 1.15rem !important;
+  }
+  .contact-chair-badge {
+    top: -2px;
+    right: 0;
+    padding: 2px 7px;
+  }
+  .contact-chair-badge .split-color-text {
+    font-size: 0.6rem;
+  }
 }
 
 .contact-chair-card:hover {
@@ -150,6 +222,7 @@
 
 .contact-chair-inner {
   padding: 0 !important;
+  padding-top: 1.85rem !important;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -161,8 +234,8 @@
 
 /* ── Big Round Image Container with Rotating VIBGYOR Rainbow Border ── */
 .contact-chair-avatar-frame {
-  width: clamp(100px, 8.5vw, 120px);
-  height: clamp(100px, 8.5vw, 120px);
+  width: clamp(94px, 7.5vw, 112px);
+  height: clamp(94px, 7.5vw, 112px);
   border-radius: 50%;
   border: none !important;
   padding: 4px;
@@ -170,7 +243,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.65rem;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
   flex-shrink: 0;
   position: relative;
