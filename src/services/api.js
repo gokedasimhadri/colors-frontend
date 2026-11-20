@@ -2165,4 +2165,136 @@ export async function updateEventParticipants(registrationNumber, participants, 
   return json;
 }
 
+/**
+ * Robust detection of Sports & Games events.
+ * Returns true only for Sports & Games, false for Culturals, Creo, etc.
+ */
+export function isSportsAndGamesEvent(item, catalogEvents = []) {
+  if (!item) return false;
+
+  // 1. Direct category match
+  const cat = (
+    item.category ||
+    item.categoryName ||
+    item.eventCategory ||
+    item.event_category ||
+    item.eventCategoryName ||
+    item.activityCategory ||
+    item.backendRegistration?.category ||
+    item.backendRegistration?.categoryName ||
+    item.backendRegistration?.eventCategory ||
+    item.registration?.category ||
+    item.registration?.categoryName ||
+    ''
+  ).toString().trim().toLowerCase();
+
+  if (
+    cat.includes('sport') ||
+    cat.includes('game') ||
+    cat === 'sports' ||
+    cat === 'sports & games' ||
+    cat === 'sports and games'
+  ) {
+    return true;
+  }
+
+  // Explicit non-sports categories (e.g. Culturals Events, Creo Events)
+  if (
+    cat.includes('cultural') ||
+    cat.includes('creo') ||
+    cat.includes('technical') ||
+    cat.includes('academic')
+  ) {
+    return false;
+  }
+
+  // 2. Direct subcategory match
+  const subcat = (
+    item.subcategory ||
+    item.subCategory ||
+    item.subcategoryName ||
+    item.eventSubCategory ||
+    item.backendRegistration?.subCategory ||
+    item.backendRegistration?.subcategoryName ||
+    item.registration?.subCategory ||
+    ''
+  ).toString().trim().toLowerCase();
+
+  if (subcat.includes('sport') || subcat.includes('game')) {
+    return true;
+  }
+
+  const NON_SPORTS_KEYWORDS = [
+    'singing', 'vocal', 'instrumental', 'mime', 'mono action', 'monoact',
+    'stand-up', 'standup', 'comedy', 'skit', 'drama', 'dance', 'mimicry',
+    'painting', 'fashion', 'treasure hunt', 'mehandi', 'movie making',
+    'photography', 'sahityam', 'dumb charades', 'rangoli', 'literary', 'arts'
+  ];
+  for (const ns of NON_SPORTS_KEYWORDS) {
+    if (subcat.includes(ns)) return false;
+  }
+
+  const SPORTS_KEYWORDS = [
+    'running', 'jumping', 'throwing', 'volleyball', 'basketball',
+    'badminton', 'relay', 'football', 'tennikoit', 'kabaddi',
+    'throwball', 'chess', 'kho kho', 'khokho', 'table tennis',
+    'cricket', 'athletics', 'sports', 'game'
+  ];
+  for (const s of SPORTS_KEYWORDS) {
+    if (subcat.includes(s)) return true;
+  }
+
+  // 3. Match against catalog events
+  const title = (
+    item.eventTitle ||
+    item.eventName ||
+    item.event_name ||
+    item.title ||
+    ''
+  ).toString().trim().toLowerCase();
+
+  const eventId = (
+    item.eventId ||
+    item.rawId ||
+    item._id ||
+    item.event_id ||
+    item.backendRegistration?.eventId ||
+    ''
+  ).toString().trim();
+
+  if (Array.isArray(catalogEvents) && catalogEvents.length > 0) {
+    const matched = catalogEvents.find((ev) => {
+      const evTitle = (ev.eventName || ev.title || '').trim().toLowerCase();
+      const evId = (ev._id || ev.rawId || '').toString();
+      const evSlug = (ev.slug || '').toLowerCase();
+      return (
+        (eventId && evId === eventId) ||
+        (evTitle && (evTitle === title || title.includes(evTitle) || evTitle.includes(title))) ||
+        (evSlug && title.includes(evSlug))
+      );
+    });
+
+    if (matched) {
+      const mCat = (matched.category || matched.categoryName || '').toLowerCase();
+      if (mCat.includes('sport') || mCat.includes('game')) {
+        return true;
+      }
+      if (mCat.includes('cultural') || mCat.includes('creo')) {
+        return false;
+      }
+    }
+  }
+
+  // 4. Fallback keyword check on event title
+  for (const ns of NON_SPORTS_KEYWORDS) {
+    if (title.includes(ns)) return false;
+  }
+  for (const s of SPORTS_KEYWORDS) {
+    if (title.includes(s)) return true;
+  }
+
+  return false;
+}
+
+
 

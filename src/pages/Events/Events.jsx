@@ -33,7 +33,11 @@ const FEST_TYPE = EVENT_TYPE || 'COLORS';
  * instead of all-caps from backend data
  */
 export function formatTitleCase(str) {
-  if (!str || typeof str !== 'string') return str;
+  if (!str) return '';
+  if (typeof str === 'object') {
+    return str.name || str.building || str.address || 'Aditya University Campus';
+  }
+  if (typeof str !== 'string') return String(str);
   return str.toLowerCase().replace(/(?:^|\s|-|\/)\S/g, (char) => char.toUpperCase());
 }
 
@@ -429,7 +433,7 @@ function AllCategoriesView({ themeCode, onSelectSubCategory, onSelectEvent, init
                           rightColor="#ffffff"
                           className="coord-role"
                         >
-                          Major Event Co-ordinator
+                          Event Co-ordinator
                         </SplitColorText>
 
                         <SplitColorText
@@ -1881,7 +1885,9 @@ function EventDetailView({ category, subCategory, eventName, themeCode, onBack, 
                   </div>
                   <div className="stat-card-value stat-small">
                     <SplitColorText as="span" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                      {eventData.venue}
+                      {typeof eventData.venue === 'object'
+                        ? (eventData.venue?.name || eventData.venue?.building || eventData.venue?.address || 'Campus Venue')
+                        : (eventData.venue || 'Campus Venue')}
                     </SplitColorText>
                   </div>
                 </div>

@@ -13,12 +13,14 @@ import {
   formatRegistrationId,
   formatPaymentReference,
   isValidOtherCollege,
-  parseEventFeeInRupees
+  parseEventFeeInRupees,
+  isSportsAndGamesEvent
 } from '../../services/api';
 import { LiquidGlass } from '../ThemeComponents/LiquidGlass';
 import ThemeButton from '../ThemeComponents/ThemeButton';
 import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
 import { MuiTextField, MuiSelectField } from './MuiTextField';
+import useModalScrollLock from './modalScrollLock';
 import './RegistrationModals.css';
 
 const COLLEGE_OPTIONS = [
@@ -43,6 +45,7 @@ export default function EventRegistrationModal({
   student,
   onClose
 }) {
+  useModalScrollLock(isOpen);
   const [agreeRules, setAgreeRules] = useState(false);
   const [loading, setLoading] = useState(false);
   const [paymentStage, setPaymentStage] = useState('IDLE'); // 'IDLE' | 'AWAITING_PAYMENT' | 'VERIFYING'
@@ -533,7 +536,7 @@ export default function EventRegistrationModal({
         subCategory: '',
         price: feeAmount,
         amount: feeAmount,
-        venue: eventData.venueObj?.name || eventData.venue || 'Aditya University Campus',
+        venue: eventData.venueObj?.name || (typeof eventData.venue === 'object' ? eventData.venue?.name : eventData.venue) || 'Aditya University Campus',
         studentId: student._id || student.id,
         studentName: leadParticipant.name || student.name,
         studentRoll: leadParticipant.rollNumber || student.roll,
@@ -709,20 +712,20 @@ export default function EventRegistrationModal({
           <SplitColorText
             as="h3"
             className="participant-main-heading"
-            screenSync={false}
+            screenSync={true}
             leftColor="#0f172a"
-            rightColor="#0f172a"
+            rightColor="#ffffff"
           >
             Enter Participant-{index + 1} Details
           </SplitColorText>
           <div className="participant-sub-heading-row">
             <h4 className="participant-sub-heading">
-              <SplitColorText screenSync={false} leftColor="#475569" rightColor="#475569">
+              <SplitColorText screenSync={true} leftColor="#475569" rightColor="#cbd5e1">
                 Participant {index + 1}
               </SplitColorText>
               {isLead && isTeam && (
                 <span className="participant-badge-leader">
-                  <SplitColorText screenSync={false} leftColor="#be9337" rightColor="#be9337">
+                  <SplitColorText screenSync={true} leftColor="#be9337" rightColor="#fde047">
                     👑 Team Leader
                   </SplitColorText>
                 </span>
@@ -752,7 +755,7 @@ export default function EventRegistrationModal({
               label="Roll Number"
               name={`rollNumber-${index}`}
               id={`rollNumber-${index}`}
-              placeholder="e.g. 123456"
+              placeholder="e.g. 24B11CS001"
               value={data.rollNumber}
               onChange={(e) => handleRollChange(index, e.target.value)}
               onBlur={() => triggerRollAutoFetch(index, data.rollNumber)}
@@ -923,7 +926,7 @@ export default function EventRegistrationModal({
     <div className="fest-modal-backdrop" onClick={onClose}>
       <LiquidGlass
         className="fest-modal-card event-reg-card fest-event-liquid-modal"
-        theme="light"
+        theme="auto"
         borderRadius={24}
         enableShader={true}
         onClick={(e) => e.stopPropagation()}
@@ -933,41 +936,37 @@ export default function EventRegistrationModal({
           <div className="fest-modal-header-banner">
             <div>
               <div className="fest-modal-badge">
-                <SplitColorText screenSync={false} leftColor="#be9337" rightColor="#be9337">
+                <SplitColorText screenSync={true} leftColor="#be9337" rightColor="#fde047">
                   {eventData.category || 'COLOURS 2027'}
                 </SplitColorText>
               </div>
               <SplitColorText
                 as="h2"
                 className="fest-modal-title"
-                screenSync={false}
+                screenSync={true}
                 leftColor="#0f172a"
-                rightColor="#0f172a"
+                rightColor="#ffffff"
               >
                 {activeRecord ? 'Event Registration Confirmation' : `Register: ${eventTitle}`}
               </SplitColorText>
               <SplitColorText
                 as="div"
                 className="fest-modal-subtitle"
-                screenSync={false}
+                screenSync={true}
                 leftColor="#475569"
-                rightColor="#475569"
+                rightColor="#cbd5e1"
               >
                 Aditya University Youth Cultural & Sports Festival • Colours 2027
               </SplitColorText>
             </div>
-            <ThemeButton
+            <button
               className="fest-modal-close-btn"
               onClick={onClose}
-              ariaLabel="Close modal"
+              aria-label="Close modal"
               type="button"
-              borderRadius={50}
-              width={36}
-              height={36}
-              showBlast={false}
             >
               ✕
-            </ThemeButton>
+            </button>
           </div>
         </div>
 
@@ -981,7 +980,7 @@ export default function EventRegistrationModal({
               <div className="reg-ticket-card">
                 <div className="reg-ticket-header">
                   <div className="reg-ticket-fest-tag">
-                    <SplitColorText screenSync={true} leftColor="#be9337" rightColor="#be9337">
+                    <SplitColorText screenSync={true} leftColor="#be9337" rightColor="#fde047">
                       COLOURS 2027 • OFFICIAL PASS
                     </SplitColorText>
                   </div>
@@ -1061,7 +1060,7 @@ export default function EventRegistrationModal({
                 <div className="reg-ticket-row">
                   <span className="reg-ticket-label">Venue</span>
                   <span className="reg-ticket-val">
-                    {eventData.venueObj?.name || eventData.venue || 'Aditya University Central Campus'}
+                    {eventData.venueObj?.name || (typeof eventData.venue === 'object' ? eventData.venue?.name : eventData.venue) || 'Aditya University Central Campus'}
                   </span>
                 </div>
                 <div className="reg-ticket-row">
@@ -1156,43 +1155,43 @@ export default function EventRegistrationModal({
                   <SplitColorText
                     as="div"
                     className="event-reg-event-title"
-                    screenSync={false}
+                    screenSync={true}
                     leftColor="#0f172a"
-                    rightColor="#0f172a"
+                    rightColor="#ffffff"
                   >
                     {eventTitle}
                   </SplitColorText>
                   <div className="event-reg-meta-pills">
                     <span className="event-meta-pill-item pill-category">
-                      <SplitColorText screenSync={false} leftColor="#be9337" rightColor="#be9337">
+                      <SplitColorText screenSync={true} leftColor="#be9337" rightColor="#fde047">
                         {eventData.category}
                       </SplitColorText>
                     </span>
                     <span className="event-meta-pill-item">
-                      <SplitColorText screenSync={false} leftColor="#0f172a" rightColor="#0f172a">
+                      <SplitColorText screenSync={true} leftColor="#0f172a" rightColor="#f8fafc">
                         👥 {eventData.eventType || (isTeam ? 'Team' : 'Solo')}
                       </SplitColorText>
                     </span>
                     <span className="event-meta-pill-item">
-                      <SplitColorText screenSync={false} leftColor="#0f172a" rightColor="#0f172a">
-                        📍 {eventData.venueObj?.name || eventData.venue || 'Campus Venue'}
+                      <SplitColorText screenSync={true} leftColor="#0f172a" rightColor="#f8fafc">
+                        📍 {eventData.venueObj?.name || (typeof eventData.venue === 'object' ? eventData.venue?.name : eventData.venue) || 'Campus Venue'}
                       </SplitColorText>
                     </span>
                   </div>
                 </div>
 
                 <div className="event-reg-fee-box">
-                  <SplitColorText as="div" className="event-reg-fee-label" screenSync={false} leftColor="#be9337" rightColor="#be9337">
+                  <SplitColorText as="div" className="event-reg-fee-label" screenSync={true} leftColor="#be9337" rightColor="#fde047">
                     Entry Fee
                   </SplitColorText>
-                  <SplitColorText as="div" className="event-reg-fee-amount" screenSync={false} leftColor="#0f172a" rightColor="#0f172a">
+                  <SplitColorText as="div" className="event-reg-fee-amount" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
                     {eventData.price ? `₹ ${eventData.price}/-` : 'Free'}
                   </SplitColorText>
                 </div>
               </div>
 
-              {/* Team Leader Registration Notice */}
-              {isTeam && (
+              {/* Team Leader Registration Notice - ONLY shown for Sports & Games Group events */}
+              {isTeam && isSportsAndGamesEvent(eventData) && (
                 <div
                   className="team-leader-info-notice"
                   style={{
@@ -1208,7 +1207,9 @@ export default function EventRegistrationModal({
                 >
                   <span style={{ fontSize: '1.2rem' }}>💡</span>
                   <div>
-                    <strong style={{ color: '#be9337' }}>Team Leader Registration:</strong> You only need to register and complete payment as Participant 1 now. You can add or update the rest of your squad participants later directly from your <strong>Student Dashboard Account</strong>!
+                    <SplitColorText screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
+                      <strong style={{ color: '#be9337' }}>Team Leader Registration:</strong> You only need to register and complete payment as Participant 1 now. You can add or update the rest of your squad participants later directly from your <strong>Student Dashboard Account</strong>!
+                    </SplitColorText>
                   </div>
                 </div>
               )}
@@ -1221,7 +1222,7 @@ export default function EventRegistrationModal({
 
               {/* Add Member Button (If Team Event) */}
               {isTeam && teamMembers.length + 1 < maxTeamSize && (
-                <div style={{ marginBottom: '1.25rem' }}>
+                <div className="add-participant-btn-wrap" style={{ marginBottom: '1.25rem' }}>
                   <ThemeButton
                     type="button"
                     className="btn-add-team-participant"
@@ -1230,9 +1231,9 @@ export default function EventRegistrationModal({
                     height={44}
                     showBlast={false}
                   >
-                    <SplitColorText screenSync={false} leftColor="#0f172a" rightColor="#0f172a">
+                    <span style={{ color: '#be9337', fontWeight: 800 }}>
                       + Add Participant ({teamMembers.length + 1}/{maxTeamSize})
-                    </SplitColorText>
+                    </span>
                   </ThemeButton>
                 </div>
               )}
@@ -1241,7 +1242,7 @@ export default function EventRegistrationModal({
               {isTeam && allParticipants.length > 0 && (
                 <div className="roster-preview-box" style={{ marginBottom: '1.5rem' }}>
                   <div className="roster-preview-title">
-                    <SplitColorText screenSync={false} leftColor="#0f172a" rightColor="#0f172a">
+                    <SplitColorText screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
                       📋 Team Participants Roster ({allParticipants.length} of {minTeamSize}-{maxTeamSize})
                     </SplitColorText>
                   </div>
@@ -1272,7 +1273,7 @@ export default function EventRegistrationModal({
                     required
                   />
                   <span>
-                    <SplitColorText screenSync={false} leftColor="#334155" rightColor="#334155">
+                    <SplitColorText screenSync={true} leftColor="#1e293b" rightColor="#f1f5f9">
                       I confirm that all entered details are accurate, and I agree to adhere to the official rules, time limits, and campus code of conduct for {eventTitle}.
                     </SplitColorText>
                   </span>
@@ -1295,7 +1296,7 @@ export default function EventRegistrationModal({
                     cursor: !agreeRules ? 'not-allowed' : 'pointer'
                   }}
                 >
-                  <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '0.98rem' }}>
+                  <span style={{ color: '#000000', fontWeight: 800, fontSize: '0.98rem' }}>
                     {paymentStage === 'VERIFYING'
                       ? 'Verifying Payment on Server...'
                       : paymentStage === 'AWAITING_PAYMENT'

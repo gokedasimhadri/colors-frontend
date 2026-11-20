@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
 /* ==========================================================================
    INVITATION PAGE – Official Colours 2027 Theme
    SplitBackground Dual-Tone Canvas & Hero Title
@@ -38,7 +40,7 @@
 .invitation-hero-title {
   font-family: var(--font-heading);
   font-size: clamp(2.2rem, 5.5vw, 4.8rem);
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0.02em;
   text-align: center;
   width: 100%;
@@ -207,27 +209,69 @@
   width: 100%;
 }
 
+.invitation-message-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .invitation-joint-paragraph {
   font-size: clamp(0.88rem, 1.05vw, 1.02rem);
   line-height: 1.72;
   font-weight: 400;
   width: 100%;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0 0 1.15rem 0;
   text-align: justify;
   text-justify: inter-word;
-  text-align-last: center;
+  text-align-last: left;
+  text-indent: 1.75rem;
   letter-spacing: 0.01em;
+}
+
+.invitation-joint-paragraph strong {
+  font-weight: 900;
+  color: inherit;
+  -webkit-text-fill-color: inherit;
+}
+
+.invitation-joint-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.invitation-joint-paragraph.invitation-tagline {
+  font-family: 'Great Vibes', cursive, sans-serif !important;
+  color: #be9337 !important;
+  -webkit-text-fill-color: #be9337 !important;
+  font-size: clamp(1.4rem, 2.1vw, 1.95rem);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.45;
+  text-indent: 0;
+  text-align: center;
+  text-align-last: center;
+  margin-top: 0.65rem;
+  margin-bottom: 0;
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 16px rgba(190, 147, 55, 0.2);
 }
 
 @media (max-width: 768px) {
   .invitation-joint-paragraph {
-    font-size: 0.84rem;
-    line-height: 1.6;
-    margin: 0 auto;
+    font-size: 0.85rem;
+    line-height: 1.62;
+    margin: 0 0 0.95rem 0;
+    text-indent: 1.25rem;
     text-align: justify;
     text-justify: inter-word;
-    text-align-last: center;
+    text-align-last: left;
+  }
+
+  .invitation-joint-paragraph.invitation-tagline {
+    font-size: clamp(1.22rem, 4vw, 1.55rem);
+    line-height: 1.38;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
   }
 }
 
@@ -325,9 +369,18 @@
   .invitation-joint-paragraph {
     font-size: clamp(0.8rem, 2.8vw, 0.88rem);
     line-height: 1.62;
+    margin: 0 0 0.85rem 0;
+    text-indent: 1rem;
     text-align: justify;
     text-justify: inter-word;
-    text-align-last: center;
+    text-align-last: left;
+  }
+
+  .invitation-joint-paragraph.invitation-tagline {
+    font-size: clamp(1.15rem, 4.4vw, 1.4rem);
+    line-height: 1.35;
+    margin-top: 0.45rem;
+    margin-bottom: 0;
   }
 
   .invitation-glass-card {

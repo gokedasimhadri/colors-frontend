@@ -89,6 +89,7 @@
   box-shadow:
     inset 0 1px 1.5px rgba(255, 255, 255, 0.55),
     0 8px 32px rgba(0, 0, 0, 0.18);
+  isolation: auto !important;
 }
 
 /* ── 1.A Tab Items List Row ─────────────────────────────────────────────── */
@@ -376,6 +377,7 @@
   pointer-events: none;
   transform: scale(0.97);
   transition: opacity 0.25s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  isolation: auto !important;
 }
 
 .theme-tab-container.search-active .theme-tab-integrated-search {
@@ -397,36 +399,83 @@
   color: #0f172a;
 }
 
-/* Search input taking full remaining width */
-.theme-tab-integrated-search-input {
+/* Search Input Wrapper */
+.theme-tab-search-input-wrap {
+  position: relative;
   flex: 1;
   min-width: 0;
-  background: transparent;
-  border: none;
-  outline: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* SplitColorText Visual Display Layer */
+.theme-tab-search-display {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: pre;
+  padding: 0 4px;
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #0f172a;
+  line-height: 1.2;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.theme-tab-search-split-val {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: pre;
+}
+
+.theme-tab-search-split-placeholder {
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: pre;
+}
+
+/* Search input taking full remaining width, overlaid on top with transparent text */
+.theme-tab-integrated-search-input {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  caret-color: #ffd600 !important;
   padding: 0 4px;
   line-height: 1.2;
-}
-
-@media (prefers-color-scheme: dark) {
-  .theme-tab-integrated-search-input {
-    color: #ffffff;
-  }
-}
-
-[data-theme='dark'] .theme-tab-integrated-search-input,
-.dark .theme-tab-integrated-search-input {
-  color: #ffffff;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .theme-tab-integrated-search-input::placeholder {
-  color: #64748b;
-  font-weight: 500;
-  opacity: 0.9;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  opacity: 0 !important;
+}
+
+.theme-tab-integrated-search-input::selection {
+  background: rgba(190, 147, 55, 0.35) !important;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
 }
 
 /* Close / Clear Button at Far Right Edge */
@@ -539,7 +588,8 @@
 }
 
 /* When search opens, circle smoothly merges into the tabs track */
-.theme-tab-search-circle.merged {
+.theme-tab-search-circle.merged,
+.theme-tab-outer-wrapper.search-open .theme-tab-search-circle {
   width: 0 !important;
   min-width: 0 !important;
   padding: 0 !important;
@@ -549,6 +599,7 @@
   transform: scale(0.4) translateX(-20px);
   pointer-events: none;
   box-shadow: none !important;
+  display: none !important;
 }
 
 /* Magnifier Icon Button */
@@ -615,7 +666,7 @@
 }
 
 /* Mobile & Small Screen Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .theme-tab-outer-wrapper {
     gap: 8px;
     width: 100%;
@@ -628,6 +679,9 @@
     width: 100% !important;
     max-width: 100% !important;
     display: flex !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .theme-tab-desktop-list {
@@ -662,6 +716,7 @@
     max-width: 100% !important;
     flex: 1 1 100% !important;
     margin: 0 !important;
+    box-sizing: border-box !important;
   }
 
   /* Chevron navigation buttons on left and right */

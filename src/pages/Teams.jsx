@@ -112,11 +112,11 @@ const eventCommittees = [
   },
   {
     committee: 'Creo',
-    name: 'Dr. P S V V S R Kumar',
+    name: 'Dr. Pullela S V V S R Kumar',
     designation: 'Dean - Academics',
     department: 'Aditya University',
     accent: '#be9337',
-    image: '',
+    image: '/Team/Pullela SVVSR Kumar.jpg',
     initials: 'PK'
   },
   {
@@ -304,7 +304,7 @@ export default function Teams() {
               leftColor="#0f172a"
               rightColor="#ffffff"
             >
-              Event Coordinators
+              Event Convenors
             </SplitColorText>
           </div>
           <div className="event-committees-grid">

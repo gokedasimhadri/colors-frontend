@@ -9,6 +9,7 @@ import {
   isValidOtherCollege
 } from '../../services/api';
 import './RegistrationModals.css';
+import useModalScrollLock from './modalScrollLock';
 
 const COLLEGE_OPTIONS = [
   'AUS',
@@ -27,6 +28,7 @@ const YEAR_OPTIONS = [
 ];
 
 export default function ManageTeamModal({ isOpen, onClose, registration, onUpdated }) {
+  useModalScrollLock(isOpen);
   const [participants, setParticipants] = useState([]);
   const [departmentsList, setDepartmentsList] = useState(FALLBACK_EVENT_DEPARTMENTS);
   const [fetchingStatus, setFetchingStatus] = useState({});
@@ -336,7 +338,7 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
   return createPortal(
     <div className="fest-modal-overlay" onClick={onClose}>
       <div
-        className="fest-modal-card"
+        className="fest-modal-card fest-event-liquid-modal"
         style={{ maxWidth: '960px', width: '95%' }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -350,7 +352,7 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
           </div>
           <button
             type="button"
-            className="fest-modal-close"
+            className="fest-modal-close-btn"
             onClick={onClose}
             aria-label="Close modal"
           >
@@ -359,8 +361,8 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
         </div>
 
         {/* Body Form */}
-        <form onSubmit={handleSave}>
-          <div className="fest-modal-body" style={{ maxHeight: '72vh', overflowY: 'auto' }}>
+        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, overflow: 'hidden' }}>
+          <div className="fest-modal-body" style={{ flex: '1 1 auto', minHeight: 0, overflowY: 'auto', overscrollBehavior: 'contain' }}>
             {error && (
               <div
                 className="fest-modal-error"
@@ -678,13 +680,15 @@ export default function ManageTeamModal({ isOpen, onClose, registration, onUpdat
             })}
 
             {/* Add Participant Button */}
-            <button
-              type="button"
-              className="btn-add-team-participant"
-              onClick={handleAddParticipant}
-            >
-              + Add Participant ({participants.length + 1})
-            </button>
+            <div className="add-participant-btn-wrap">
+              <button
+                type="button"
+                className="btn-add-team-participant"
+                onClick={handleAddParticipant}
+              >
+                + Add Participant ({participants.length + 1})
+              </button>
+            </div>
           </div>
 
           {/* Footer Actions */}

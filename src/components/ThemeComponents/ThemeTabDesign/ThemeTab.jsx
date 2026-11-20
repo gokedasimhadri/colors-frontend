@@ -79,11 +79,12 @@ export default function ThemeTab({
 
   const [isSearchOpen, setIsSearchOpen] = useState(Boolean(searchQuery));
   const [tabsWidth, setTabsWidth] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 900);
 
   const containerRef = useRef(null);
   const listRef = useRef(null);
   const searchInputRef = useRef(null);
+  const searchDisplayRef = useRef(null);
   const searchCircleRef = useRef(null);
   const tabRefs = useRef({});
   const [sliderStyle, setSliderStyle] = useState({ left: 0, top: 0, width: 0, height: 0, ready: false });
@@ -138,7 +139,7 @@ export default function ThemeTab({
   // Track viewport to avoid constraining width on mobile search
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(typeof window !== 'undefined' && window.innerWidth <= 768);
+      setIsMobile(typeof window !== 'undefined' && window.innerWidth <= 900);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -218,14 +219,29 @@ export default function ThemeTab({
       }
     }
     setIsSearchOpen(true);
+    if (typeof window !== 'undefined') {
+      setTimeout(() => window.dispatchEvent(new CustomEvent('split-color-sync')), 50);
+      setTimeout(() => window.dispatchEvent(new CustomEvent('split-color-sync')), 150);
+    }
   };
 
   const handleCloseSearch = (e) => {
-    if (e) e.stopPropagation();
+    if (e) {
+      e.stopPropagation();
+      if (e.currentTarget && typeof e.currentTarget.blur === 'function') {
+        e.currentTarget.blur();
+      }
+    }
+    if (searchInputRef.current && typeof searchInputRef.current.blur === 'function') {
+      searchInputRef.current.blur();
+    }
     if (typeof onSearchChange === 'function') {
       onSearchChange('');
     }
     setIsSearchOpen(false);
+    if (searchCircleRef.current && typeof searchCircleRef.current.focus === 'function') {
+      searchCircleRef.current.focus();
+    }
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('split-color-sync'));
       setTimeout(() => window.dispatchEvent(new CustomEvent('split-color-sync')), 60);
@@ -420,7 +436,11 @@ export default function ThemeTab({
 
         {/* B. Integrated Search Bar inside container (Reveals when search circle merges into tabs) */}
         {hasSearch && (
-          <div className="theme-tab-integrated-search" aria-hidden={!isSearchOpen}>
+          <div
+            className="theme-tab-integrated-search"
+            inert={!isSearchOpen ? '' : undefined}
+            aria-hidden={!isSearchOpen ? 'true' : undefined}
+          >
             {/* Search Icon at the Far Left with SplitColorText fallback contrast */}
             <div className="theme-tab-integrated-search-icon" aria-hidden="true">
               <SplitColorText
@@ -435,17 +455,61 @@ export default function ThemeTab({
               </SplitColorText>
             </div>
 
-            {/* Focused Search Input */}
-            <input
-              ref={searchInputRef}
-              type="text"
-              tabIndex={isSearchOpen ? 0 : -1}
-              className="theme-tab-integrated-search-input"
-              placeholder={searchPlaceholder}
-              value={searchQuery || ''}
-              onChange={(e) => onSearchChange(e.target.value)}
-              aria-label="Search events"
-            />
+            {/* Focused Search Input with SplitColorText */}
+            <div className="theme-tab-search-input-wrap">
+              <div className="theme-tab-search-display" aria-hidden="true" ref={searchDisplayRef}>
+                {searchQuery ? (
+                  <SplitColorText
+                    as="span"
+                    mode="split"
+                    screenSync={screenSync}
+                    leftColor={leftColor}
+                    rightColor={rightColor}
+                    className="theme-tab-search-split-val"
+                  >
+                    {searchQuery}
+                  </SplitColorText>
+                ) : (
+                  <SplitColorText
+                    as="span"
+                    mode="split"
+                    screenSync={screenSync}
+                    leftColor="rgba(15, 23, 42, 0.45)"
+                    rightColor="rgba(255, 255, 255, 0.55)"
+                    className="theme-tab-search-split-placeholder"
+                  >
+                    {searchPlaceholder}
+                  </SplitColorText>
+                )}
+              </div>
+
+              <input
+                ref={searchInputRef}
+                type="text"
+                tabIndex={isSearchOpen ? 0 : -1}
+                className="theme-tab-integrated-search-input"
+                value={searchQuery || ''}
+                onChange={(e) => {
+                  onSearchChange(e.target.value);
+                  if (searchDisplayRef.current && searchInputRef.current) {
+                    searchDisplayRef.current.scrollLeft = searchInputRef.current.scrollLeft;
+                  }
+                }}
+                onScroll={(e) => {
+                  if (searchDisplayRef.current) {
+                    searchDisplayRef.current.scrollLeft = e.target.scrollLeft;
+                  }
+                }}
+                onKeyDown={() => {
+                  requestAnimationFrame(() => {
+                    if (searchDisplayRef.current && searchInputRef.current) {
+                      searchDisplayRef.current.scrollLeft = searchInputRef.current.scrollLeft;
+                    }
+                  });
+                }}
+                aria-label="Search events"
+              />
+            </div>
 
             {/* Close / Clear Button at Far Right */}
             <button

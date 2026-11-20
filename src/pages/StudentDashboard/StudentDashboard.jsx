@@ -75,6 +75,22 @@ function normalizeCollege(col) {
   return 'AUS';
 }
 
+export function formatVenue(venue) {
+  if (!venue) return 'RAMANUJAN BHAVAN - SEMINAR HALL - Room: 201';
+  if (typeof venue === 'string') return venue;
+  if (typeof venue === 'object') {
+    const parts = [];
+    if (venue.name) parts.push(venue.name);
+    if (venue.building && venue.building !== venue.name) parts.push(venue.building);
+    if (venue.floor) parts.push(`Floor: ${venue.floor}`);
+    if (venue.ground) parts.push(venue.ground);
+    if (venue.roomNo) parts.push(`Room: ${venue.roomNo}`);
+    if (parts.length === 0 && venue.address) parts.push(venue.address);
+    return parts.length > 0 ? parts.join(' - ') : (venue.address || 'RAMANUJAN BHAVAN - SEMINAR HALL - Room: 201');
+  }
+  return String(venue);
+}
+
 const YEAR_OPTIONS = [
   '1st Year',
   '2nd Year',
@@ -895,7 +911,7 @@ export default function StudentDashboard() {
         category: item.category || matched?.category || matched?.categoryName || '',
         subCategory: item.subCategory || matched?.subCategory || matched?.subcategoryName || '',
         participationType: item.participationType || matched?.participationType || '',
-        venue: item.venue || item.eventVenue || matched?.venue || (matched?.venueObj ? `${matched.venueObj.name || ''} ${matched.venueObj.roomNo ? `- Room: ${matched.venueObj.roomNo}` : ''}`.trim() : '') || 'RAMANUJAN BHAVAN - SEMINAR HALL - Room: 201',
+        venue: formatVenue(item.venue || item.eventVenue || matched?.venue || matched?.venueObj),
         eventDate: item.eventDate || item.date || matched?.eventDate || matched?.date || '07 JAN - 09 JAN 2027'
       };
     });
@@ -1705,7 +1721,7 @@ export default function StudentDashboard() {
                                               isLeader: isLeader,
                                               eventTitle: title,
                                               eventDate: payment.eventDate || payment.date || '07 JAN - 09 JAN 2027',
-                                              venue: payment.venue || payment.eventVenue || 'RAMANUJAN BHAVAN - SEMINAR HALL - Room: 201',
+                                              venue: formatVenue(payment.venue || payment.eventVenue),
                                               teamId: cleanTeamId,
                                               registrationNumber: regId,
                                               paymentReference: payRef,
@@ -2021,7 +2037,7 @@ export default function StudentDashboard() {
                     <div className="cred-venue-bar">
                       <MapPin size={15} className="cred-venue-icon" />
                       <span className="cred-venue-text">
-                        VENUE: {selectedPass.venue}
+                        VENUE: {formatVenue(selectedPass.venue)}
                       </span>
                     </div>
                   </div>
