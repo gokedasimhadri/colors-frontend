@@ -11,25 +11,25 @@ import './Contact.css';
 const DOMAIN_CHAIRS = [
   {
     domain: 'CULTURALS',
-    name: 'Dr. N. Rambabu',
+    name: 'Dr. N Ram Babu',
     phone: '8473917384',
     initials: 'NR'
   },
   {
     domain: 'SPORTS',
-    name: 'Dr. N. Ravi',
+    name: 'Dr. N Ravi',
     phone: '9912393905',
     initials: 'NR'
   },
   {
     domain: 'CREO',
-    name: 'Dr. B. Srinivas',
+    name: 'Dr. B Srinivas',
     phone: '9866732745',
     initials: 'BS'
   },
   {
     domain: 'FETE',
-    name: 'Mr. J. D. Venkatesh',
+    name: 'Mr. J D Venkatesh',
     phone: '7731027776',
     initials: 'JV'
   }

@@ -94,7 +94,7 @@ const organizingTeam = [
 const eventCommittees = [
   {
     committee: 'Cultural & Stage',
-    name: 'Dr. D. Kishore',
+    name: 'Dr. D Kishore',
     designation: 'Dean - Student Activities',
     department: 'Aditya University',
     accent: '#0284c7',
@@ -103,7 +103,7 @@ const eventCommittees = [
   },
   {
     committee: 'Sports',
-    name: 'Dr. G. Sanjiv Rao',
+    name: 'Dr. G Sanjiv Rao',
     designation: 'Dean - Career Development',
     department: 'Aditya University',
     accent: '#10b981',
@@ -112,7 +112,7 @@ const eventCommittees = [
   },
   {
     committee: 'Creo',
-    name: 'Dr. P. S. V. V. S. R. Kumar',
+    name: 'Dr. P S V V S R Kumar',
     designation: 'Dean - Academics',
     department: 'Aditya University',
     accent: '#be9337',
@@ -121,7 +121,7 @@ const eventCommittees = [
   },
   {
     committee: 'FETE',
-    name: 'Mr. J. D. Venkatesh',
+    name: 'Mr. J D Venkatesh',
     designation: 'Asst. Prof.',
     department: 'Aditya University',
     accent: '#7c3aed',
@@ -133,7 +133,7 @@ const eventCommittees = [
 // const functionalCommittees = [
 //   {
 //     committee: 'Sponsorship',
-//     name: 'Dr. G. Sridevi',
+//     name: 'Dr. G Sridevi',
 //     designation: 'Dean - School of Engineering',
 //     department: 'Aditya University',
 //     accent: '#e11d48',
@@ -142,7 +142,7 @@ const eventCommittees = [
 //   },
 //   {
 //     committee: 'Campaigning and Invitations',
-//     name: 'Dr. M. Raja Babu',
+//     name: 'Dr. M Raja Babu',
 //     designation: 'HoD',
 //     department: 'Aditya University',
 //     accent: '#06b6d4',
@@ -151,7 +151,7 @@ const eventCommittees = [
 //   },
 //   {
 //     committee: 'Registration & Reception',
-//     name: 'Mr. R. V. V. N. Bhima Rao',
+//     name: 'Mr. R V V N Bhima Rao',
 //     designation: 'HoD',
 //     department: 'Aditya University',
 //     accent: '#f59e0b',
@@ -160,7 +160,7 @@ const eventCommittees = [
 //   },
 //   {
 //     committee: 'Discipline',
-//     name: 'Dr. Y. K. S. Subba Rao',
+//     name: 'Dr. Y K S Subba Rao',
 //     designation: 'Dean - Student Welfare',
 //     department: 'Aditya University',
 //     accent: '#8b5cf6',
@@ -169,7 +169,7 @@ const eventCommittees = [
 //   },
 //   {
 //     committee: 'Ground Arrangements',
-//     name: 'Dr. M. V. Rajesh',
+//     name: 'Dr. M V Rajesh',
 //     designation: 'Associate Dean - School of Computing',
 //     department: 'Aditya University',
 //     accent: '#059669',
@@ -178,7 +178,7 @@ const eventCommittees = [
 //   },
 //   {
 //     committee: 'Transport',
-//     name: 'Dr. A. Saravanan',
+//     name: 'Dr. A Saravanan',
 //     designation: 'Dean - R&C',
 //     department: 'Aditya University',
 //     accent: '#dc2626',
@@ -304,7 +304,7 @@ export default function Teams() {
               leftColor="#0f172a"
               rightColor="#ffffff"
             >
-              Event Coordinator
+              Event Coordinators
             </SplitColorText>
           </div>
           <div className="event-committees-grid">

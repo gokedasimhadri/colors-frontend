@@ -13,6 +13,7 @@
   0% {
     --rainbow-angle: 0deg;
   }
+
   100% {
     --rainbow-angle: 360deg;
   }
@@ -22,6 +23,7 @@
   0% {
     background-position: 0% 50%;
   }
+
   100% {
     background-position: 200% 50%;
   }
@@ -42,7 +44,7 @@
   isolation: auto !important;
   transform: translateY(0);
   transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.25s ease;
+    opacity 0.25s ease;
   will-change: transform;
 }
 
@@ -105,7 +107,8 @@
 }
 
 .navbar-logo-img {
-  height: clamp(44px, 4vw, 54px);
+  height: clamp(55px, 5.5vw, 69px);
+  max-height: calc(var(--navbar-height, 98px) - 16px);
   width: auto;
   max-width: 280px;
   object-fit: contain;
@@ -289,17 +292,15 @@
   border-bottom-right-radius: 9999px !important;
   padding: 1.8px !important;
   box-sizing: border-box !important;
-  background: conic-gradient(
-    from var(--rainbow-angle, 0deg),
-    #8b00ff 0deg,
-    #4b0082 51.4deg,
-    #0066ff 102.8deg,
-    #00c853 154.3deg,
-    #ffd600 205.7deg,
-    #ff6d00 257.1deg,
-    #ff1744 308.6deg,
-    #8b00ff 360deg
-  ) !important;
+  background: conic-gradient(from var(--rainbow-angle, 0deg),
+      #8b00ff 0deg,
+      #4b0082 51.4deg,
+      #0066ff 102.8deg,
+      #00c853 154.3deg,
+      #ffd600 205.7deg,
+      #ff6d00 257.1deg,
+      #ff1744 308.6deg,
+      #8b00ff 360deg) !important;
   animation: vibgyorConicRotate 3s linear infinite !important;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
   -webkit-mask-composite: xor !important;
@@ -342,24 +343,38 @@
 .navbar.navbar-subpage .navbar-theme-btn:not(.active):hover .split-color-text,
 #navbar-login-btn:hover .split-color-text,
 .navbar.navbar-subpage #navbar-login-btn:hover .split-color-text {
-  background-image: linear-gradient(
-    90deg,
-    #8b00ff 0%,    /* V - Violet */
-    #4b0082 7.1%,  /* I - Indigo */
-    #0066ff 14.3%, /* B - Blue */
-    #00c853 21.4%, /* G - Green */
-    #ffd600 28.6%, /* Y - Yellow */
-    #ff6d00 35.7%, /* O - Orange */
-    #ff1744 42.8%, /* R - Red */
-    #8b00ff 50%,   /* V - Violet loop */
-    #4b0082 57.1%, /* I - Indigo */
-    #0066ff 64.3%, /* B - Blue */
-    #00c853 71.4%, /* G - Green */
-    #ffd600 78.6%, /* Y - Yellow */
-    #ff6d00 85.7%, /* O - Orange */
-    #ff1744 92.8%, /* R - Red */
-    #8b00ff 100%   /* V - Violet end */
-  ) !important;
+  background-image: linear-gradient(90deg,
+      #8b00ff 0%,
+      /* V - Violet */
+      #4b0082 7.1%,
+      /* I - Indigo */
+      #0066ff 14.3%,
+      /* B - Blue */
+      #00c853 21.4%,
+      /* G - Green */
+      #ffd600 28.6%,
+      /* Y - Yellow */
+      #ff6d00 35.7%,
+      /* O - Orange */
+      #ff1744 42.8%,
+      /* R - Red */
+      #8b00ff 50%,
+      /* V - Violet loop */
+      #4b0082 57.1%,
+      /* I - Indigo */
+      #0066ff 64.3%,
+      /* B - Blue */
+      #00c853 71.4%,
+      /* G - Green */
+      #ffd600 78.6%,
+      /* Y - Yellow */
+      #ff6d00 85.7%,
+      /* O - Orange */
+      #ff1744 92.8%,
+      /* R - Red */
+      #8b00ff 100%
+      /* V - Violet end */
+    ) !important;
   background-size: 200% 100% !important;
   background-repeat: repeat-x !important;
   background-position: 0% 50%;
@@ -379,24 +394,38 @@
 }
 
 #mobile-navbar-login-btn:hover .theme-glass-btn-content {
-  background-image: linear-gradient(
-    90deg,
-    #8b00ff 0%,    /* V - Violet */
-    #4b0082 7.1%,  /* I - Indigo */
-    #0066ff 14.3%, /* B - Blue */
-    #00c853 21.4%, /* G - Green */
-    #ffd600 28.6%, /* Y - Yellow */
-    #ff6d00 35.7%, /* O - Orange */
-    #ff1744 42.8%, /* R - Red */
-    #8b00ff 50%,   /* V - Violet loop */
-    #4b0082 57.1%, /* I - Indigo */
-    #0066ff 64.3%, /* B - Blue */
-    #00c853 71.4%, /* G - Green */
-    #ffd600 78.6%, /* Y - Yellow */
-    #ff6d00 85.7%, /* O - Orange */
-    #ff1744 92.8%, /* R - Red */
-    #8b00ff 100%   /* V - Violet end */
-  ) !important;
+  background-image: linear-gradient(90deg,
+      #8b00ff 0%,
+      /* V - Violet */
+      #4b0082 7.1%,
+      /* I - Indigo */
+      #0066ff 14.3%,
+      /* B - Blue */
+      #00c853 21.4%,
+      /* G - Green */
+      #ffd600 28.6%,
+      /* Y - Yellow */
+      #ff6d00 35.7%,
+      /* O - Orange */
+      #ff1744 42.8%,
+      /* R - Red */
+      #8b00ff 50%,
+      /* V - Violet loop */
+      #4b0082 57.1%,
+      /* I - Indigo */
+      #0066ff 64.3%,
+      /* B - Blue */
+      #00c853 71.4%,
+      /* G - Green */
+      #ffd600 78.6%,
+      /* Y - Yellow */
+      #ff6d00 85.7%,
+      /* O - Orange */
+      #ff1744 92.8%,
+      /* R - Red */
+      #8b00ff 100%
+      /* V - Violet end */
+    ) !important;
   background-size: 200% 100% !important;
   background-repeat: repeat-x !important;
   background-position: 0% 50%;
@@ -631,7 +660,7 @@
   justify-content: center;
   box-sizing: border-box;
   overflow: hidden;
-  box-shadow: 
+  box-shadow:
     0 0 14px rgba(0, 210, 255, 0.4),
     0 0 22px rgba(249, 115, 22, 0.3),
     0 0 30px rgba(139, 92, 246, 0.35);
@@ -642,17 +671,24 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: conic-gradient(
-    from 140deg,
-    #8b5cf6 0%,   /* Violet */
-    #4f46e5 14%,  /* Indigo */
-    #00d2ff 28%,  /* Blue */
-    #10b981 44%,  /* Green */
-    #facc15 62%,  /* Yellow */
-    #f97316 78%,  /* Orange */
-    #ef4444 92%,  /* Red */
-    #8b5cf6 100%  /* Violet loop */
-  );
+  background: conic-gradient(from 140deg,
+      #8b5cf6 0%,
+      /* Violet */
+      #4f46e5 14%,
+      /* Indigo */
+      #00d2ff 28%,
+      /* Blue */
+      #10b981 44%,
+      /* Green */
+      #facc15 62%,
+      /* Yellow */
+      #f97316 78%,
+      /* Orange */
+      #ef4444 92%,
+      /* Red */
+      #8b5cf6 100%
+      /* Violet loop */
+    );
   animation: vibgyorSpin 8s linear infinite;
   z-index: 0;
 }
@@ -661,6 +697,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -697,7 +734,7 @@
   color: #ffffff;
   line-height: 1;
   text-transform: uppercase;
-  text-shadow: 
+  text-shadow:
     0 1px 4px rgba(0, 0, 0, 0.7),
     0 0 10px rgba(255, 255, 255, 0.4);
   user-select: none;
@@ -716,7 +753,7 @@
   backdrop-filter: blur(32px) saturate(210%) brightness(1.08) !important;
   border: 1px solid rgba(255, 255, 255, 0.28) !important;
   border-radius: 16px !important;
-  box-shadow: 
+  box-shadow:
     0 20px 50px rgba(0, 0, 0, 0.22),
     0 4px 16px rgba(0, 0, 0, 0.1),
     inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
@@ -731,7 +768,7 @@
 
 .profile-popover-card:hover {
   background: rgba(255, 255, 255, 0.14) !important;
-  box-shadow: 
+  box-shadow:
     0 24px 60px rgba(0, 0, 0, 0.28),
     0 6px 20px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
@@ -747,6 +784,7 @@
     opacity: 0;
     transform: translateY(-6px) scale(0.98);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -770,23 +808,30 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: conic-gradient(
-    from 140deg,
-    #8b5cf6 0%,   /* Violet */
-    #4f46e5 14%,  /* Indigo */
-    #00d2ff 28%,  /* Blue */
-    #10b981 44%,  /* Green */
-    #facc15 62%,  /* Yellow */
-    #f97316 78%,  /* Orange */
-    #ef4444 92%,  /* Red */
-    #8b5cf6 100%  /* Violet loop */
-  );
+  background: conic-gradient(from 140deg,
+      #8b5cf6 0%,
+      /* Violet */
+      #4f46e5 14%,
+      /* Indigo */
+      #00d2ff 28%,
+      /* Blue */
+      #10b981 44%,
+      /* Green */
+      #facc15 62%,
+      /* Yellow */
+      #f97316 78%,
+      /* Orange */
+      #ef4444 92%,
+      /* Red */
+      #8b5cf6 100%
+      /* Violet loop */
+    );
   padding: 2.2px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  box-shadow: 
+  box-shadow:
     0 0 12px rgba(0, 210, 255, 0.35),
     0 0 20px rgba(249, 115, 22, 0.25);
   box-sizing: border-box;
@@ -906,7 +951,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #f59e0b; /* Golden accent */
+  color: #f59e0b;
+  /* Golden accent */
   width: 18px;
   height: 18px;
   flex-shrink: 0;
