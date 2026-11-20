@@ -73,7 +73,7 @@
 .events-hero-title {
   font-family: var(--font-heading);
   font-size: clamp(2.2rem, 5.5vw, 4.8rem);
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0.02em;
   text-align: center;
   width: 100%;
@@ -2492,11 +2492,37 @@
   text-decoration: underline;
 }
 
-/* ── Mobile View Container Spacing (16px Left & Right) ── */
+/* ── Mobile View Container Spacing (Full Width Search Bar & Clean Edges) ── */
 @media (max-width: 900px) {
   .events-hero-header {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  .events-hero-header-inner {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .events-control-bar {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+  }
+
+  .events-filter-themetab {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
     box-sizing: border-box !important;
   }
 
@@ -2507,5 +2533,12 @@
     padding-left: 16px !important;
     padding-right: 16px !important;
     box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .events-hero-header {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
   }
 }

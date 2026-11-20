@@ -112,6 +112,7 @@ export function MuiSelectField({
   className = '',
   id,
   hint = '',
+  hintClassName = '',
   error = '',
   ...props
 }) {

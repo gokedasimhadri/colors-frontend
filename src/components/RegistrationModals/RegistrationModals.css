@@ -3,6 +3,14 @@
    Light Theme: Crisp White Surfaces, Warm Gold Accents & Slate Text
    ───────────────────────────────────────────────────────────── */
 
+/* ── Global Background Lock when Any Modal is Open ── */
+html.fest-modal-scroll-locked,
+body.fest-modal-scroll-locked {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  touch-action: none !important;
+}
+
 .fest-modal-backdrop,
 .fest-modal-overlay {
   position: fixed;
@@ -15,8 +23,19 @@
   align-items: center;
   justify-content: center;
   padding: 1.25rem;
-  overflow-y: auto;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
   animation: festFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (max-height: 720px), (max-width: 540px) {
+  .fest-modal-backdrop,
+  .fest-modal-overlay {
+    align-items: flex-start !important;
+    padding: 0.85rem 0.65rem !important;
+  }
 }
 
 @keyframes festFadeIn {
@@ -42,10 +61,13 @@
     0 0 0 1px rgba(255, 255, 255, 0.6),
     inset 0 1.5px 2px rgba(255, 255, 255, 0.95) !important;
   color: #0f172a;
-  overflow: hidden;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
+  overflow: hidden !important;
+  max-height: calc(100vh - 2.5rem) !important;
+  max-height: calc(100dvh - 2rem) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overscroll-behavior: contain !important;
+  touch-action: pan-y !important;
   padding: 0 !important;
   -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.04) !important;
   backdrop-filter: blur(28px) saturate(190%) brightness(1.04) !important;
@@ -74,6 +96,12 @@
   overflow: hidden !important;
   isolation: isolate;
   padding: 0 !important;
+  max-height: calc(100vh - 2.5rem) !important;
+  max-height: calc(100dvh - 2rem) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overscroll-behavior: contain !important;
+  touch-action: pan-y !important;
   transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease !important;
 }
 
@@ -155,63 +183,59 @@
   width: 95% !important;
   max-width: 1060px !important;
   margin: 0 auto !important;
-  background: rgba(255, 255, 255, 0.88) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
   border-radius: 24px !important;
-  backdrop-filter: blur(32px) saturate(200%) brightness(1.04) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.04) !important;
-  box-shadow:
-    0 30px 80px -15px rgba(0, 0, 0, 0.22),
-    0 0 0 1px rgba(255, 255, 255, 0.7),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.95),
-    inset 0 -1.5px 2px rgba(0, 0, 0, 0.04) !important;
-  color: #0f172a !important;
+  backdrop-filter: blur(28px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.28) !important;
+  color: #000000 !important;
   overflow: hidden !important;
   isolation: isolate;
   padding: 0 !important;
+  max-height: calc(100vh - 2.5rem) !important;
+  max-height: calc(100dvh - 2rem) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overscroll-behavior: contain !important;
+  touch-action: pan-y !important;
 }
 
-.fest-modal-card.fest-event-liquid-modal::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 24px !important;
-  padding: 1.5px !important;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.9) 0%,
-    rgba(255, 255, 255, 0.3) 40%,
-    rgba(190, 147, 55, 0.4) 75%,
-    rgba(255, 255, 255, 0.1) 100%
-  ) !important;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-  z-index: 3;
-}
-
+/* Reduced bevel: Disable thick specular chamfer and inner bevel lip on event liquid modal (match auth modal pure liquid glass) */
+.fest-modal-card.fest-event-liquid-modal::before,
 .fest-modal-card.fest-event-liquid-modal::after {
-  content: '';
-  position: absolute;
-  inset: 1.5px;
-  border-radius: calc(24px - 1.5px) !important;
-  box-shadow:
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.7),
-    inset 1px 0 1.5px rgba(255, 255, 255, 0.4),
-    inset -1px -1px 2px rgba(0, 0, 0, 0.06) !important;
-  pointer-events: none;
-  z-index: 3;
+  display: none !important;
+  content: none !important;
 }
 
 .fest-event-liquid-modal .fest-modal-header {
   position: relative !important;
-  background: rgba(255, 255, 255, 0.65) !important;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18) !important;
   padding: 1.6rem 2rem 1.25rem 2rem !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.fest-event-liquid-modal .fest-modal-title:not(.split-color-text) {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.fest-event-liquid-modal .fest-modal-title.split-color-text,
+.fest-auth-liquid-modal .fest-modal-title.split-color-text {
+  color: unset !important;
+  -webkit-text-fill-color: initial !important;
+}
+
+.fest-event-liquid-modal .fest-modal-subtitle:not(.split-color-text) {
+  color: rgba(15, 23, 42, 0.7) !important;
+}
+
+.fest-event-liquid-modal .fest-modal-subtitle.split-color-text {
+  color: unset !important;
+  -webkit-text-fill-color: initial !important;
 }
 
 .fest-event-liquid-modal .fest-modal-body {
@@ -219,56 +243,67 @@
   background: transparent !important;
   max-height: 75vh !important;
   overflow-y: auto !important;
-  color: #0f172a !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  color: #000000 !important;
 }
 
 .fest-event-liquid-modal .fest-modal-footer {
   position: relative !important;
-  background: rgba(255, 255, 255, 0.65) !important;
-  border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
+  background: transparent !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.18) !important;
   padding: 1.25rem 2rem !important;
   display: flex !important;
   gap: 1rem !important;
   align-items: center !important;
   justify-content: flex-end !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
 }
 
 /* Event Summary Box inside Liquid Modal */
 .fest-event-liquid-modal .event-reg-summary-box {
-  background: rgba(255, 255, 255, 0.75) !important;
-  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
   border-radius: 18px !important;
   padding: 1.4rem 1.75rem !important;
   margin-bottom: 1.5rem !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03), inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.5) !important;
 }
 
 .fest-event-liquid-modal .event-reg-fee-box {
-  background: rgba(190, 147, 55, 0.08) !important;
-  border: 1px solid rgba(190, 147, 55, 0.3) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
   border-radius: 14px !important;
   padding: 0.65rem 1.25rem !important;
   text-align: center !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
 }
 
 /* Participant Pattern Block inside Liquid Modal */
 .fest-event-liquid-modal .participant-pattern-block {
-  background: rgba(255, 255, 255, 0.7) !important;
-  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
   border-radius: 18px !important;
   padding: 1.6rem 1.75rem !important;
   margin-bottom: 1.5rem !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03), inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.5) !important;
   transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 
 .fest-event-liquid-modal .participant-pattern-block:hover {
-  border-color: rgba(190, 147, 55, 0.5) !important;
-  box-shadow: 0 8px 24px rgba(190, 147, 55, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(190, 147, 55, 0.6) !important;
+  box-shadow: 0 8px 24px rgba(190, 147, 55, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
 }
 
 .fest-event-liquid-modal .participant-pattern-block.leader-block {
@@ -276,7 +311,7 @@
 }
 
 .fest-event-liquid-modal .participant-pattern-header {
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18) !important;
   margin-bottom: 1.25rem !important;
   padding-bottom: 0.75rem !important;
 }
@@ -295,14 +330,14 @@
   align-items: center !important;
   justify-content: center !important;
   border: none !important;
-  background: rgba(255, 255, 255, 0.75) !important;
+  background: rgba(255, 255, 255, 0.22) !important;
   backdrop-filter: blur(10px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(10px) saturate(180%) !important;
   border-radius: 9999px !important;
   padding: 4px 14px !important;
   font-size: 0.78rem !important;
   font-weight: 700 !important;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.9), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6), 0 2px 6px rgba(0, 0, 0, 0.04) !important;
   isolation: isolate;
   color: #0f172a !important;
 }
@@ -343,55 +378,56 @@
 }
 
 .fest-event-liquid-modal .mui-outlined-input {
-  background: rgba(255, 255, 255, 0.28) !important;
-  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
   color: #0f172a !important;
   border-radius: 14px !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
   box-shadow:
-    inset 0 1px 2px rgba(255, 255, 255, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.7),
     inset 0 -1px 1px rgba(0, 0, 0, 0.03),
-    0 4px 16px rgba(0, 0, 0, 0.04) !important;
+    0 4px 14px rgba(0, 0, 0, 0.06) !important;
 }
 
 .fest-event-liquid-modal .mui-outlined-input:hover:not(:disabled):not(:focus) {
-  background: rgba(255, 255, 255, 0.38) !important;
-  border-color: rgba(255, 255, 255, 0.75) !important;
+  background: rgba(255, 255, 255, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.8) !important;
   box-shadow:
-    inset 0 1px 2px rgba(255, 255, 255, 0.75),
-    0 6px 20px rgba(0, 0, 0, 0.06) !important;
+    inset 0 1px 2px rgba(255, 255, 255, 0.8),
+    0 6px 20px rgba(0, 0, 0, 0.08) !important;
 }
 
 .fest-event-liquid-modal .mui-form-field.is-focused .mui-outlined-input,
 .fest-event-liquid-modal .mui-outlined-input:focus {
   background: rgba(255, 255, 255, 0.48) !important;
   border-color: #be9337 !important;
-  box-shadow: 0 0 0 3px rgba(190, 147, 55, 0.25), inset 0 1px 2.5px rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 0 0 3px rgba(190, 147, 55, 0.25), inset 0 1px 2.5px rgba(255, 255, 255, 0.9) !important;
 }
 
 .fest-event-liquid-modal .mui-outlined-input input,
 .fest-event-liquid-modal .mui-outlined-input select {
   color: #0f172a !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
 }
 
 .fest-event-liquid-modal .mui-floating-label {
-  color: #b48528 !important;
-  font-weight: 700 !important;
+  color: #be9337 !important;
+  font-weight: 800 !important;
   letter-spacing: 0.04em !important;
   text-transform: uppercase !important;
   font-size: 0.78rem !important;
 }
 
 .fest-event-liquid-modal .mui-form-field.is-floating .mui-floating-label {
-  background: rgba(255, 255, 255, 0.45) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #b45309 !important;
   backdrop-filter: blur(14px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
   border-radius: 8px !important;
   padding: 2px 8px !important;
-  border: 1px solid rgba(255, 255, 255, 0.65) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), inset 0 1px 1.5px rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(217, 119, 6, 0.4) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), inset 0 1px 1.5px rgba(255, 255, 255, 0.9) !important;
 }
 
 .fest-event-liquid-modal .mui-select option {
@@ -400,59 +436,111 @@
 }
 
 /* Regulations & Notices inside Liquid Modal */
-.fest-event-liquid-modal .fest-rules-box {
-  background: rgba(255, 255, 255, 0.75) !important;
-  border: 1px solid rgba(15, 23, 42, 0.08) !important;
-  border-radius: 14px !important;
-  padding: 1rem 1.25rem !important;
-  color: #334155 !important;
-}
 
 .fest-event-liquid-modal .team-leader-info-notice {
-  background: rgba(190, 147, 55, 0.08) !important;
-  border: 1px solid rgba(190, 147, 55, 0.25) !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(190, 147, 55, 0.35) !important;
   border-radius: 14px !important;
   color: #0f172a !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4) !important;
 }
 
 .fest-event-liquid-modal .roster-preview-box {
-  background: rgba(255, 255, 255, 0.7) !important;
-  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
   border-radius: 14px !important;
   padding: 1rem 1.25rem !important;
   color: #0f172a !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+/* Regulations & Notices inside Liquid Modal */
+.fest-event-liquid-modal .fest-rules-box {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.32) !important;
+  border-radius: 14px !important;
+  padding: 1rem 1.25rem !important;
+  color: #334155 !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+/* Submit ThemeButton on Liquid Glass Modal */
+.fest-event-liquid-modal .btn-fest-primary {
+  min-width: 220px !important;
+  height: 48px !important;
+  background: rgba(255, 255, 255, 0.22) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  box-shadow:
+    0 8px 24px -4px rgba(0, 0, 0, 0.25),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.6) !important;
+  border-radius: 12px !important;
+  cursor: pointer;
+  transition: all 0.25s ease !important;
+}
+
+.fest-event-liquid-modal .btn-fest-primary span {
+  color: #000000 !important;
+  font-weight: 800 !important;
+}
+
+.fest-event-liquid-modal .btn-fest-primary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.32) !important;
+  border-color: rgba(255, 255, 255, 0.7) !important;
+  box-shadow:
+    0 12px 28px -4px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.85) !important;
+  transform: translateY(-2px) !important;
+}
+
+.fest-event-liquid-modal .btn-add-team-participant {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1.5px dashed rgba(190, 147, 55, 0.6) !important;
+  color: #b48528 !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.fest-event-liquid-modal .btn-add-team-participant:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-color: #be9337 !important;
 }
 
 /* Ticket confirmation view */
 .fest-event-liquid-modal .reg-ticket-card {
-  background: rgba(255, 255, 255, 0.75) !important;
-  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
   border-radius: 18px !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.6) !important;
   padding: 1.75rem !important;
   color: #0f172a !important;
 }
 
 .fest-event-liquid-modal .reg-ticket-header {
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
   background: transparent !important;
 }
 
 .fest-event-liquid-modal .reg-ticket-row {
-  border-bottom: 1px solid rgba(15, 23, 42, 0.06) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
   color: #0f172a !important;
 }
 
 .fest-event-liquid-modal .reg-participants-table th {
-  background: rgba(255, 255, 255, 0.8) !important;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.1) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25) !important;
   color: #0f172a !important;
 }
 
 .fest-event-liquid-modal .reg-participants-table td {
-  border-bottom: 1px solid rgba(15, 23, 42, 0.06) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
   color: #0f172a !important;
 }
 
@@ -551,7 +639,8 @@
   -webkit-text-fill-color: #000000 !important;
 }
 
-.fest-auth-liquid-modal .fest-modal-close-btn {
+.fest-auth-liquid-modal .fest-modal-close-btn,
+.fest-event-liquid-modal .fest-modal-close-btn {
   position: absolute !important;
   right: 0 !important;
   top: 50% !important;
@@ -573,6 +662,12 @@
   transition: all 0.2s ease !important;
 }
 
+.fest-event-liquid-modal .fest-modal-close-btn {
+  right: 2rem !important;
+  top: 1.6rem !important;
+  transform: none !important;
+}
+
 .fest-auth-liquid-modal .fest-modal-close-btn:hover,
 .fest-auth-liquid-modal .fest-modal-close-btn:focus {
   position: absolute !important;
@@ -580,6 +675,15 @@
   top: 50% !important;
   transform: translateY(-50%) scale(1.08) !important;
   margin: 0 !important;
+  background: rgba(239, 68, 68, 0.85) !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.45) !important;
+}
+
+.fest-event-liquid-modal .fest-modal-close-btn:hover,
+.fest-event-liquid-modal .fest-modal-close-btn:focus {
+  transform: scale(1.08) !important;
   background: rgba(239, 68, 68, 0.85) !important;
   border-color: #ef4444 !important;
   color: #ffffff !important;
@@ -829,8 +933,12 @@
 /* Modal Body */
 .fest-modal-body {
   padding: 1.75rem 2rem;
-  overflow-y: auto;
-  flex: 1;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
   color: #0f172a;
   background: transparent !important;
 }
@@ -1186,15 +1294,15 @@
 .fest-auth-liquid-modal .mui-outlined-input {
   width: 100%;
   height: 52px;
-  background: rgba(255, 255, 255, 0.28) !important;
-  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.38) !important;
   border-radius: 14px !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
   box-shadow:
-    inset 0 1px 2px rgba(255, 255, 255, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
     inset 0 -1px 1px rgba(0, 0, 0, 0.03),
-    0 4px 16px rgba(0, 0, 0, 0.04) !important;
+    0 4px 14px rgba(0, 0, 0, 0.04) !important;
   color: #000000 !important;
   font-size: 0.96rem !important;
   font-weight: 600 !important;
@@ -1204,20 +1312,20 @@
 }
 
 .fest-auth-liquid-modal .mui-outlined-input:hover:not(:disabled):not(:focus) {
-  background: rgba(255, 255, 255, 0.38) !important;
-  border-color: rgba(255, 255, 255, 0.75) !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  border-color: rgba(255, 255, 255, 0.65) !important;
   box-shadow:
-    inset 0 1px 2px rgba(255, 255, 255, 0.75),
+    inset 0 1px 2px rgba(255, 255, 255, 0.65),
     0 6px 20px rgba(0, 0, 0, 0.06) !important;
 }
 
 .fest-auth-liquid-modal .mui-form-field.is-focused .mui-outlined-input,
 .fest-auth-liquid-modal .mui-outlined-input:focus {
-  background: rgba(255, 255, 255, 0.48) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
   border-color: #be9337 !important;
   box-shadow:
     0 0 0 3px rgba(190, 147, 55, 0.25),
-    inset 0 1px 2.5px rgba(255, 255, 255, 0.85),
+    inset 0 1px 2.5px rgba(255, 255, 255, 0.75),
     0 8px 24px rgba(190, 147, 55, 0.12) !important;
 }
 
@@ -1227,6 +1335,14 @@
   color: #000000 !important;
   background: transparent !important;
   font-weight: 600 !important;
+}
+
+.fest-auth-liquid-modal .mui-outlined-input:-webkit-autofill,
+.fest-auth-liquid-modal .mui-outlined-input:-webkit-autofill:hover,
+.fest-auth-liquid-modal .mui-outlined-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.08) inset !important;
+  -webkit-text-fill-color: #000000 !important;
+  transition: background-color 5000s ease-in-out 0s !important;
 }
 
 .fest-auth-liquid-modal .mui-floating-label {
@@ -1244,14 +1360,14 @@
 .fest-auth-liquid-modal .mui-form-field.is-floating .mui-floating-label {
   top: 0;
   transform: translateY(-50%) scale(0.85);
-  background: rgba(255, 255, 255, 0.45) !important;
+  background: rgba(255, 255, 255, 0.22) !important;
   backdrop-filter: blur(14px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
   color: #b48528 !important;
   font-weight: 700;
   border-radius: 8px;
   padding: 2px 8px !important;
-  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
   box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.05),
     inset 0 1px 1.5px rgba(255, 255, 255, 0.8) !important;
@@ -1259,7 +1375,7 @@
 
 .fest-auth-liquid-modal .mui-form-field.is-focused.is-floating .mui-floating-label {
   color: #be9337 !important;
-  background: rgba(255, 255, 255, 0.6) !important;
+  background: rgba(255, 255, 255, 0.35) !important;
   border-color: #be9337 !important;
   box-shadow:
     0 2px 10px rgba(190, 147, 55, 0.25),
@@ -1562,6 +1678,12 @@
 
 .fest-auth-liquid-modal .fest-modal-body {
   padding: 1.35rem 1.65rem !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
 }
 
 /* Footer inside Liquid Glass Modal */
@@ -1802,13 +1924,32 @@
 }
 
 /* Responsive */
-@media (max-width: 640px) {
-  .fest-form-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 768px) {
+  .fest-form-grid,
+  .fest-auth-liquid-modal .fest-form-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.25rem !important;
+    grid-template-columns: 1fr !important;
   }
 
-  .fest-form-group.col-span-2 {
-    grid-column: span 1;
+  .fest-form-grid > *,
+  .fest-auth-liquid-modal .fest-form-grid > *,
+  .fest-form-group.col-span-2,
+  .col-span-2 {
+    width: 100% !important;
+    grid-column: 1 / -1 !important;
+  }
+
+  .fest-auth-liquid-modal .mui-form-field {
+    width: 100% !important;
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .fest-auth-liquid-modal .mui-outlined-input {
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .team-member-row {
@@ -1902,7 +2043,26 @@
     padding: 1.25rem 1.25rem !important;
   }
 
+  .fest-auth-liquid-modal .fest-form-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.25rem !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  .fest-auth-liquid-modal .fest-form-grid > *,
+  .fest-auth-liquid-modal .col-span-2 {
+    width: 100% !important;
+    grid-column: 1 / -1 !important;
+  }
+
+  .fest-auth-liquid-modal .mui-form-field {
+    width: 100% !important;
+  }
+
   .fest-auth-liquid-modal .mui-outlined-input {
+    width: 100% !important;
+    box-sizing: border-box !important;
     height: 48px !important;
     font-size: 0.9rem !important;
     padding: 12px 14px !important;
@@ -2572,29 +2732,44 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
 }
 
-.btn-add-team-participant {
-  width: 100%;
-  padding: 0.9rem 1.25rem;
-  background: #fffbeb;
-  border: 2px dashed #fcd34d;
-  border-radius: 14px;
-  color: #92400e;
-  font-weight: 800;
-  font-size: 0.95rem;
-  cursor: pointer;
+.add-participant-btn-wrap {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
+  justify-content: flex-end;
+  width: 100%;
   margin-top: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.btn-add-team-participant {
+  width: auto !important;
+  min-width: 220px !important;
+  padding: 0.65rem 1.4rem !important;
+  background: rgba(190, 147, 55, 0.08) !important;
+  border: 1.5px dashed #be9337 !important;
+  border-radius: 12px !important;
+  color: #be9337 !important;
+  font-weight: 800 !important;
+  font-size: 0.92rem !important;
+  cursor: pointer;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  transition: all 0.2s ease;
+  margin: 0 !important;
 }
 
 .btn-add-team-participant:hover {
-  background: #fef3c7;
-  border-color: #d97706;
-  color: #78350f;
+  background: rgba(190, 147, 55, 0.16) !important;
+  border-color: #be9337 !important;
+  color: #be9337 !important;
+}
+
+.btn-add-team-participant,
+.btn-add-team-participant span,
+.btn-add-team-participant .split-color-text {
+  color: #be9337 !important;
+  -webkit-text-fill-color: #be9337 !important;
 }
 
 /* Other College input field styling and validation states */
@@ -2610,4 +2785,181 @@
 .pattern-input.college-invalid {
   border-color: #ef4444 !important;
   background-color: #fef2f2 !important;
+}
+
+/* ── Mobile View: Ultra-Tight Margins, High Readability & Responsiveness ── */
+@media (max-width: 640px) {
+  .fest-modal-backdrop,
+  .fest-modal-overlay {
+    padding: 0.35rem 0.25rem !important;
+    align-items: flex-start !important;
+    overflow-y: auto !important;
+  }
+
+  .fest-modal-card.fest-event-liquid-modal,
+  .fest-modal-card.fest-auth-liquid-modal {
+    width: 98% !important;
+    max-width: 98% !important;
+    margin: 0.35rem auto !important;
+    border-radius: 16px !important;
+  }
+
+  .fest-event-liquid-modal .fest-modal-header,
+  .fest-auth-liquid-modal .fest-modal-header {
+    padding: 0.85rem 0.75rem 0.55rem 0.75rem !important;
+  }
+
+  .fest-event-liquid-modal .fest-modal-title {
+    font-size: 1.2rem !important;
+    font-weight: 800 !important;
+    line-height: 1.25 !important;
+  }
+
+  .fest-event-liquid-modal .fest-modal-subtitle {
+    font-size: 0.74rem !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    margin-top: 2px !important;
+  }
+
+  .fest-event-liquid-modal .fest-modal-badge {
+    margin-bottom: 4px !important;
+  }
+
+  .fest-event-liquid-modal .fest-modal-badge span {
+    font-size: 0.7rem !important;
+    padding: 2px 8px !important;
+  }
+
+  .fest-event-liquid-modal .fest-modal-body {
+    padding: 0.65rem 0.75rem 1.25rem 0.75rem !important;
+  }
+
+  .fest-event-liquid-modal .event-reg-summary-box {
+    padding: 0.75rem 0.75rem !important;
+    margin-bottom: 0.85rem !important;
+    border-radius: 14px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.65rem !important;
+  }
+
+  .fest-event-liquid-modal .event-reg-summary-details {
+    width: 100% !important;
+  }
+
+  .fest-event-liquid-modal .event-reg-event-title {
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+  }
+
+  .fest-event-liquid-modal .event-reg-meta-pills {
+    flex-wrap: wrap !important;
+    gap: 0.4rem !important;
+    margin-top: 0.4rem !important;
+  }
+
+  .fest-event-liquid-modal .event-meta-pill-item {
+    font-size: 0.72rem !important;
+    padding: 2px 7px !important;
+    max-width: 100% !important;
+    word-break: break-word !important;
+    white-space: normal !important;
+  }
+
+  .fest-event-liquid-modal .event-reg-fee-box {
+    align-self: flex-start !important;
+    text-align: left !important;
+    padding: 0.45rem 0.85rem !important;
+    border-radius: 10px !important;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+  }
+
+  .fest-event-liquid-modal .event-reg-fee-label {
+    font-size: 0.72rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  .fest-event-liquid-modal .event-reg-fee-amount {
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+  }
+
+  .fest-event-liquid-modal .team-leader-info-notice {
+    padding: 0.65rem 0.85rem !important;
+    font-size: 0.78rem !important;
+    margin-bottom: 0.85rem !important;
+    border-radius: 12px !important;
+    gap: 0.5rem !important;
+  }
+
+  .fest-event-liquid-modal .participant-pattern-block {
+    padding: 0.85rem 0.75rem !important;
+    margin-bottom: 0.85rem !important;
+    border-radius: 14px !important;
+  }
+
+  .fest-event-liquid-modal .participant-pattern-header {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .fest-event-liquid-modal .participant-main-heading {
+    font-size: 0.95rem !important;
+    font-weight: 800 !important;
+  }
+
+  .fest-event-liquid-modal .participant-sub-heading {
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+  }
+
+  .fest-event-liquid-modal .participant-pattern-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.85rem !important;
+  }
+
+  .fest-event-liquid-modal .mui-outlined-input {
+    height: 48px !important;
+    font-size: 0.92rem !important;
+    padding: 12px 14px !important;
+    border-radius: 12px !important;
+  }
+
+  .fest-event-liquid-modal .mui-floating-label {
+    font-size: 0.72rem !important;
+  }
+
+  .fest-event-liquid-modal .mui-form-field.is-floating .mui-floating-label {
+    font-size: 0.66rem !important;
+    top: -8px !important;
+  }
+
+  .fest-event-liquid-modal .fest-rules-box {
+    padding: 0.65rem 0.85rem !important;
+    font-size: 0.78rem !important;
+    border-radius: 12px !important;
+  }
+
+  .fest-event-liquid-modal .fest-modal-footer {
+    padding-top: 0.85rem !important;
+  }
+
+  .fest-event-liquid-modal .btn-fest-primary {
+    width: 100% !important;
+    height: 46px !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* Center button on mobile */
+  .add-participant-btn-wrap {
+    justify-content: center !important;
+  }
+
+  .btn-add-team-participant {
+    width: 100% !important;
+    max-width: 320px !important;
+  }
 }

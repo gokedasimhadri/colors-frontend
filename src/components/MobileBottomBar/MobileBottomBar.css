@@ -105,39 +105,74 @@
     filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
   }
 
-  /* Dynamic Contrast Across Split Screen (Left = White / Right = Dark) */
-  .mobile-bottom-bar .bottom-tab:nth-child(1),
-  .mobile-bottom-bar .bottom-tab:nth-child(2) {
+  /* ── Dynamic Contrast Themes for Bottom Tabs (Auto Black & White) ── */
+  /* Theme Light: When tab is over a White / Light background */
+  .bottom-tab.theme-light {
     color: #0f172a !important;
     text-shadow: none !important;
   }
 
-  .mobile-bottom-bar .bottom-tab:nth-child(1) .bottom-tab-icon,
-  .mobile-bottom-bar .bottom-tab:nth-child(2) .bottom-tab-icon {
+  .bottom-tab.theme-light .bottom-tab-icon {
     color: #0f172a !important;
     filter: none !important;
   }
 
-  .mobile-bottom-bar .bottom-tab:nth-child(1) .bottom-tab-icon svg,
-  .mobile-bottom-bar .bottom-tab:nth-child(2) .bottom-tab-icon svg {
+  .bottom-tab.theme-light .bottom-tab-icon svg {
     stroke: #0f172a !important;
+    color: #0f172a !important;
   }
 
-  .mobile-bottom-bar .bottom-tab:nth-child(4),
-  .mobile-bottom-bar .bottom-tab:nth-child(5) {
+  .bottom-tab.theme-light .bottom-tab-label {
+    color: #0f172a !important;
+    text-shadow: none !important;
+  }
+
+  .bottom-tab.theme-light .mobile-tab-avatar-glass {
+    background: rgba(15, 23, 42, 0.08) !important;
+    border-color: rgba(15, 23, 42, 0.25) !important;
+  }
+
+  .bottom-tab.theme-light .mobile-tab-avatar-initial {
+    color: #0f172a !important;
+  }
+
+  /* Theme Dark: When tab is over a Black / Dark background */
+  .bottom-tab.theme-dark {
     color: #ffffff !important;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65) !important;
   }
 
-  .mobile-bottom-bar .bottom-tab:nth-child(4) .bottom-tab-icon,
-  .mobile-bottom-bar .bottom-tab:nth-child(5) .bottom-tab-icon {
+  .bottom-tab.theme-dark .bottom-tab-icon {
     color: #ffffff !important;
     filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6)) !important;
   }
 
-  .mobile-bottom-bar .bottom-tab:nth-child(4) .bottom-tab-icon svg,
-  .mobile-bottom-bar .bottom-tab:nth-child(5) .bottom-tab-icon svg {
+  .bottom-tab.theme-dark .bottom-tab-icon svg {
     stroke: #ffffff !important;
+    color: #ffffff !important;
+  }
+
+  .bottom-tab.theme-dark .bottom-tab-label {
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65) !important;
+  }
+
+  .bottom-tab.theme-dark .mobile-tab-avatar-glass {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+  }
+
+  .bottom-tab.theme-dark .mobile-tab-avatar-initial {
+    color: #ffffff !important;
+  }
+
+  /* Active Tab styling per theme */
+  .bottom-tab.active.theme-light {
+    background: rgba(15, 23, 42, 0.06) !important;
+  }
+
+  .bottom-tab.active.theme-dark {
+    background: rgba(255, 255, 255, 0.12) !important;
   }
 
   .bottom-tab.bottom-tab-live {
@@ -243,13 +278,30 @@
     text-shadow: none !important;
   }
 
-  .bottom-tab:not(.active):hover {
-    color: #ffffff;
+  .bottom-tab.theme-light:not(.active):hover {
+    color: #000000 !important;
   }
 
-  .bottom-tab:not(.active):hover .bottom-tab-icon {
-    color: #ffffff;
+  .bottom-tab.theme-light:not(.active):hover .bottom-tab-icon {
+    color: #000000 !important;
+    filter: none !important;
+  }
+
+  .bottom-tab.theme-light:not(.active):hover .bottom-tab-icon svg {
+    stroke: #000000 !important;
+  }
+
+  .bottom-tab.theme-dark:not(.active):hover {
+    color: #ffffff !important;
+  }
+
+  .bottom-tab.theme-dark:not(.active):hover .bottom-tab-icon {
+    color: #ffffff !important;
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
+  }
+
+  .bottom-tab.theme-dark:not(.active):hover .bottom-tab-icon svg {
+    stroke: #ffffff !important;
   }
 
   .bottom-active-dot {

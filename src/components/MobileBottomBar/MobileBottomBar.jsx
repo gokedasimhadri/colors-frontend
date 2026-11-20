@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Home,
@@ -44,6 +44,139 @@ export default function MobileBottomBar() {
     setDrawerOpen(false);
     setProfilePopoverOpen(false);
   }, [location.pathname]);
+
+  // ── Dynamic Background Luminance Tracking per Bottom Tab ──
+  const [tabThemes, setTabThemes] = useState({
+    home: 'light',
+    events: 'light',
+    menu: 'dark',
+    login: 'dark'
+  });
+  const tabRefs = useRef({});
+
+  useEffect(() => {
+    let ticking = false;
+
+    const detectLuminanceAtPoint = (cx, cy) => {
+      if (typeof document === 'undefined') return 1;
+
+      // Active modal or open drawer: background is light/frosted white
+      if (document.querySelector('.fest-modal-backdrop, .mobile-bottom-drawer.open')) {
+        return 1;
+      }
+
+      const elements = typeof document.elementsFromPoint === 'function'
+        ? document.elementsFromPoint(cx, cy)
+        : [];
+
+      for (const item of elements) {
+        if (!item) continue;
+        if (item.closest('.mobile-bottom-bar') || item.closest('.mobile-popover-container')) {
+          continue;
+        }
+        if (item.tagName === 'CANVAS' || item.classList.contains('blast-canvas') || item.classList.contains('mouse-animation-canvas')) {
+          continue;
+        }
+
+        const themeAttr = item.getAttribute('data-theme') || item.closest('[data-theme]')?.getAttribute('data-theme');
+        if (themeAttr === 'light') return 1;
+        if (themeAttr === 'dark') return 0;
+
+        if (item.closest('.uni-footer-left')) return 0;
+        if (item.closest('.uni-footer-right')) return 1;
+        if (item.closest('.uni-footer-bottom')) return 0;
+        if (item.closest('.hero-dates-card') || item.closest('.pillar-card')) return 1;
+
+        let curr = item;
+        while (curr && curr !== document.documentElement && curr !== document.body) {
+          if (curr.classList.contains('uni-footer-left')) return 0;
+          if (curr.classList.contains('uni-footer-right')) return 1;
+          if (curr.classList.contains('uni-footer-bottom')) return 0;
+
+          const comp = window.getComputedStyle(curr);
+          const bg = comp.backgroundColor;
+          if (bg && bg !== 'transparent' && !bg.includes('rgba(0, 0, 0, 0)')) {
+            const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+            if (match) {
+              const r = parseInt(match[1], 10);
+              const g = parseInt(match[2], 10);
+              const b = parseInt(match[3], 10);
+              const a = match[4] !== undefined ? parseFloat(match[4]) : 1;
+              if (a > 0.25) {
+                return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+              }
+            }
+          }
+          curr = curr.parentElement;
+        }
+      }
+
+      // Default split page detection fallback
+      const splitBg = document.querySelector('.split-background');
+      const isSplit = Boolean(splitBg) || (!location.pathname.startsWith('/dashboard') && !location.pathname.startsWith('/account'));
+      if (isSplit) {
+        const splitX = window.innerWidth / 2;
+        return cx < splitX ? 1 : 0;
+      }
+      return 1;
+    };
+
+    const updateThemes = () => {
+      const newThemes = {};
+      const keys = ['home', 'events', 'menu', 'login'];
+      keys.forEach((k) => {
+        const el = tabRefs.current[k];
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const lum = detectLuminanceAtPoint(cx, cy);
+          newThemes[k] = lum > 0.5 ? 'light' : 'dark';
+        } else {
+          const isLeft = k === 'home' || k === 'events';
+          const isSplit = !location.pathname.startsWith('/dashboard') && !location.pathname.startsWith('/account');
+          newThemes[k] = isSplit ? (isLeft ? 'light' : 'dark') : 'light';
+        }
+      });
+
+      setTabThemes((prev) => {
+        if (
+          prev.home === newThemes.home &&
+          prev.events === newThemes.events &&
+          prev.menu === newThemes.menu &&
+          prev.login === newThemes.login
+        ) {
+          return prev;
+        }
+        return newThemes;
+      });
+
+      ticking = false;
+    };
+
+    const onScrollOrResize = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateThemes);
+        ticking = true;
+      }
+    };
+
+    updateThemes();
+    const rafId = window.requestAnimationFrame(updateThemes);
+    const t1 = setTimeout(updateThemes, 60);
+    const t2 = setTimeout(updateThemes, 200);
+
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('resize', onScrollOrResize);
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener('scroll', onScrollOrResize);
+      window.removeEventListener('resize', onScrollOrResize);
+    };
+  }, [location.pathname, drawerOpen]);
 
   const handleAccountClick = () => {
     setDrawerOpen(false);
@@ -199,35 +332,33 @@ export default function MobileBottomBar() {
         {/* Tab 1: Home */}
         <Link
           to="/"
+          ref={(el) => { tabRefs.current.home = el; }}
           onClick={(e) => {
             if (location.pathname === '/') {
               e.preventDefault();
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className={`bottom-tab ${location.pathname === '/' && !drawerOpen ? 'active' : ''}`}
+          className={`bottom-tab theme-${tabThemes.home} ${location.pathname === '/' && !drawerOpen ? 'active' : ''}`}
           aria-label="Home"
         >
           <span className="bottom-tab-icon">
             <Home size={20} strokeWidth={location.pathname === '/' && !drawerOpen ? 2.2 : 1.8} />
           </span>
-          <SplitColorText as="span" className="bottom-tab-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-            Home
-          </SplitColorText>
+          <span className="bottom-tab-label">Home</span>
         </Link>
 
         {/* Tab 2: Events */}
         <Link
           to="/events"
-          className={`bottom-tab ${location.pathname.startsWith('/events') && !drawerOpen ? 'active' : ''}`}
+          ref={(el) => { tabRefs.current.events = el; }}
+          className={`bottom-tab theme-${tabThemes.events} ${location.pathname.startsWith('/events') && !drawerOpen ? 'active' : ''}`}
           aria-label="Events"
         >
           <span className="bottom-tab-icon">
             <Sparkles size={20} strokeWidth={location.pathname.startsWith('/events') && !drawerOpen ? 2.2 : 1.8} />
           </span>
-          <SplitColorText as="span" className="bottom-tab-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-            Events
-          </SplitColorText>
+          <span className="bottom-tab-label">Events</span>
         </Link>
 
         {/* Tab 3: Live Stream */}
@@ -260,7 +391,8 @@ export default function MobileBottomBar() {
         {/* Tab 4: More / Menus */}
         <button
           type="button"
-          className={`bottom-tab ${isMoreActive ? 'active' : ''}`}
+          ref={(el) => { tabRefs.current.menu = el; }}
+          className={`bottom-tab theme-${tabThemes.menu} ${isMoreActive ? 'active' : ''}`}
           onClick={() => {
             setProfilePopoverOpen(false);
             setDrawerOpen(!drawerOpen);
@@ -271,15 +403,14 @@ export default function MobileBottomBar() {
           <span className="bottom-tab-icon">
             {drawerOpen ? <X size={20} strokeWidth={2.2} /> : <Menu size={20} strokeWidth={isMoreActive ? 2.2 : 1.8} />}
           </span>
-          <SplitColorText as="span" className="bottom-tab-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-            Menu
-          </SplitColorText>
+          <span className="bottom-tab-label">Menu</span>
         </button>
 
         {/* Tab 5: Account / Login */}
         <button
           type="button"
-          className={`bottom-tab ${profilePopoverOpen || (location.pathname === '/dashboard' && !drawerOpen) ? 'active' : ''} ${student ? 'logged-in' : ''}`}
+          ref={(el) => { tabRefs.current.login = el; }}
+          className={`bottom-tab theme-${tabThemes.login} ${profilePopoverOpen || (location.pathname === '/dashboard' && !drawerOpen) ? 'active' : ''} ${student ? 'logged-in' : ''}`}
           onClick={handleAccountClick}
           aria-label={student ? 'Student Profile Menu' : 'Student Login'}
           aria-expanded={profilePopoverOpen}
@@ -295,9 +426,7 @@ export default function MobileBottomBar() {
               <span className="bottom-tab-icon">
                 <User size={20} strokeWidth={1.8} />
               </span>
-              <SplitColorText as="span" className="bottom-tab-label" screenSync={true} leftColor="#0f172a" rightColor="#ffffff">
-                Login
-              </SplitColorText>
+              <span className="bottom-tab-label">Login</span>
             </>
           )}
         </button>

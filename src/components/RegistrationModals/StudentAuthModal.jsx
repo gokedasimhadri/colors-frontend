@@ -6,6 +6,8 @@ import ThemeButton from '../ThemeComponents/ThemeButton';
 import ThemeTab from '../ThemeComponents/ThemeTabDesign/ThemeTab';
 import SmoothTransition from '../ThemeComponents/Animation/SmoothTransition';
 import { MuiTextField, MuiSelectField } from './MuiTextField';
+import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
+import useModalScrollLock from './modalScrollLock';
 import {
   registerStudentAccount,
   loginStudentAccount,
@@ -32,6 +34,7 @@ export default function StudentAuthModal({
   eventData = null,
   initialMode = 'login'
 }) {
+  useModalScrollLock(isOpen);
   const navigate = useNavigate();
   const [mode, setMode] = useState(initialMode || 'login'); // 'login' | 'register'
   const [loading, setLoading] = useState(false);
@@ -202,7 +205,7 @@ export default function StudentAuthModal({
         gender: regForm.gender,
         mobile: regForm.mobile.trim(),
         email: regForm.email.trim().toLowerCase(),
-        password: regForm.password.trim() || '123456'
+        password: regForm.password.trim() || 'Aditya@123'
       };
 
       // 1. Register student account into central_event_student_account collection
@@ -295,13 +298,19 @@ export default function StudentAuthModal({
         {/* Header */}
         <div className="fest-modal-header">
           <div className="fest-modal-header-banner">
-            <h2 className="fest-modal-title">
+            <SplitColorText
+              as="h2"
+              className="fest-modal-title"
+              screenSync={true}
+              leftColor="#0f172a"
+              rightColor="#ffffff"
+            >
               {confirmedRecord
                 ? 'Event Registration Confirmation'
                 : mode === 'register'
                   ? 'Student Registration'
                   : 'Student Login'}
-            </h2>
+            </SplitColorText>
             <button className="fest-modal-close-btn" onClick={onClose} aria-label="Close modal">
               ✕
             </button>
@@ -487,7 +496,7 @@ export default function StudentAuthModal({
                       onBlur={() => handleCheckRoll()}
                       style={{ textTransform: 'uppercase' }}
                       required
-                      placeholder="e.g. 123456 or 22A91A0501"
+                      placeholder="e.g. 24B11CS001"
                     />
                     {checkingRoll && (
                       <span style={{ position: 'absolute', right: '14px', top: '16px', fontSize: '0.78rem', color: '#be9337', fontWeight: 700, zIndex: 4 }}>
@@ -629,8 +638,8 @@ export default function StudentAuthModal({
                     type="password"
                     value={regForm.password}
                     onChange={handleRegisterChange}
-                    placeholder="Set account password (Default: 123456)"
-                    hint="Leave blank to use default password (123456)"
+                    placeholder="Set account password (Default: Aditya@123)"
+                    hint="Leave to use default password (Aditya@123)"
                   />
                 </div>
               </div>

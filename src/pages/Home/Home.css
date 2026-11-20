@@ -92,8 +92,9 @@
 }
 
 .poster-colours-heading {
-  font-family: var(--font-brand);
-  font-weight: var(--fw-black);
+  font-family: 'Google Sans Flex', 'Outfit', var(--font-brand);
+  font-weight: 900 !important;
+  font-variation-settings: 'wght' 800, 'GRAD' 100;
   font-size: var(--fs-hero-title);
   line-height: var(--lh-tight);
   letter-spacing: var(--ls-tight);
@@ -205,6 +206,7 @@
   0% {
     background-position: 0% 50%;
   }
+
   100% {
     background-position: 200% 50%;
   }
@@ -248,24 +250,38 @@
 
 /* Hover ONLY: 7 VIBGYOR colors animate inside the number text */
 .date-square-tile:hover .date-digit {
-  background-image: linear-gradient(
-    90deg,
-    #8b00ff 0%,    /* V - Violet */
-    #4b0082 7.1%,  /* I - Indigo */
-    #0066ff 14.3%, /* B - Blue */
-    #00c853 21.4%, /* G - Green */
-    #ffd600 28.6%, /* Y - Yellow */
-    #ff6d00 35.7%, /* O - Orange */
-    #ff1744 42.8%, /* R - Red */
-    #8b00ff 50%,   /* V - Violet loop */
-    #4b0082 57.1%, /* I - Indigo */
-    #0066ff 64.3%, /* B - Blue */
-    #00c853 71.4%, /* G - Green */
-    #ffd600 78.6%, /* Y - Yellow */
-    #ff6d00 85.7%, /* O - Orange */
-    #ff1744 92.8%, /* R - Red */
-    #8b00ff 100%   /* V - Violet end */
-  );
+  background-image: linear-gradient(90deg,
+      #8b00ff 0%,
+      /* V - Violet */
+      #4b0082 7.1%,
+      /* I - Indigo */
+      #0066ff 14.3%,
+      /* B - Blue */
+      #00c853 21.4%,
+      /* G - Green */
+      #ffd600 28.6%,
+      /* Y - Yellow */
+      #ff6d00 35.7%,
+      /* O - Orange */
+      #ff1744 42.8%,
+      /* R - Red */
+      #8b00ff 50%,
+      /* V - Violet loop */
+      #4b0082 57.1%,
+      /* I - Indigo */
+      #0066ff 64.3%,
+      /* B - Blue */
+      #00c853 71.4%,
+      /* G - Green */
+      #ffd600 78.6%,
+      /* Y - Yellow */
+      #ff6d00 85.7%,
+      /* O - Orange */
+      #ff1744 92.8%,
+      /* R - Red */
+      #8b00ff 100%
+      /* V - Violet end */
+    );
   background-size: 200% 100%;
   background-repeat: repeat-x;
   -webkit-background-clip: text;
@@ -399,7 +415,7 @@
   overflow: hidden;
   isolation: isolate;
   transition: all 0.28s cubic-bezier(0.2, 0, 0, 1);
-  box-shadow: 
+  box-shadow:
     0 14px 32px -6px rgba(225, 29, 72, 0.22),
     inset 0 1px 2px 0 rgba(255, 255, 255, 0.75),
     inset 0 -1px 1px 0 rgba(225, 29, 72, 0.18),
@@ -409,7 +425,9 @@
 .btn-hero-primary::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 48%;
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
@@ -422,7 +440,7 @@
   border-color: #e11d48;
   color: #9f1239;
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
     0 18px 40px -6px rgba(225, 29, 72, 0.34),
     inset 0 1.5px 2px 0 #ffffff,
     inset 0 0 26px 0 rgba(225, 29, 72, 0.22);
@@ -450,7 +468,7 @@
   overflow: hidden;
   isolation: isolate;
   transition: all 0.28s cubic-bezier(0.2, 0, 0, 1);
-  box-shadow: 
+  box-shadow:
     0 12px 30px -6px rgba(0, 0, 0, 0.42),
     inset 0 1px 2px 0 rgba(255, 255, 255, 0.75),
     inset 0 -1px 1px 0 rgba(255, 255, 255, 0.16),
@@ -460,7 +478,9 @@
 .btn-hero-secondary::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 48%;
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
@@ -473,7 +493,7 @@
   border-color: #ffffff;
   color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
     0 16px 38px -6px rgba(0, 0, 0, 0.55),
     inset 0 1.5px 2px 0 #ffffff,
     inset 0 0 26px 0 rgba(255, 255, 255, 0.2);
@@ -644,7 +664,7 @@
 }
 
 .hero-flip-clock [class*="_2EBbg"] {
-  font-family: 'Bebas Neue', var(--font-google-sans, 'Google Sans'), sans-serif !important;
+  font-family: 'Outfit', var(--font-google-sans, 'Google Sans'), sans-serif !important;
   font-weight: 800 !important;
 }
 
@@ -680,10 +700,10 @@
   border: 1px solid rgba(10, 17, 40, 0.16) !important;
 }
 
-.hero-flip-clock .fcc__digit_block--day > div,
-.hero-flip-clock .fcc__digit_block--hour > div,
-.hero-flip-clock .fcc__digit_block--day ._3luxx > div,
-.hero-flip-clock .fcc__digit_block--hour ._3luxx > div,
+.hero-flip-clock .fcc__digit_block--day>div,
+.hero-flip-clock .fcc__digit_block--hour>div,
+.hero-flip-clock .fcc__digit_block--day ._3luxx>div,
+.hero-flip-clock .fcc__digit_block--hour ._3luxx>div,
 .hero-flip-clock .fcc__unit_time--day ._SKh-V,
 .hero-flip-clock .fcc__unit_time--day ._106d2,
 .hero-flip-clock .fcc__unit_time--day ._2v-d4,
@@ -718,10 +738,10 @@
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
 }
 
-.hero-flip-clock .fcc__digit_block--minute > div,
-.hero-flip-clock .fcc__digit_block--second > div,
-.hero-flip-clock .fcc__digit_block--minute ._3luxx > div,
-.hero-flip-clock .fcc__digit_block--second ._3luxx > div,
+.hero-flip-clock .fcc__digit_block--minute>div,
+.hero-flip-clock .fcc__digit_block--second>div,
+.hero-flip-clock .fcc__digit_block--minute ._3luxx>div,
+.hero-flip-clock .fcc__digit_block--second ._3luxx>div,
 .hero-flip-clock .fcc__unit_time--minute ._SKh-V,
 .hero-flip-clock .fcc__unit_time--minute ._106d2,
 .hero-flip-clock .fcc__unit_time--minute ._2v-d4,
@@ -739,30 +759,30 @@
 
 /* ── COLON ( : ) SEPARATORS: SPLIT-COLOR SYSTEM ── */
 /* 1st Separator (between DAYS & HOURS - on Pure White Canvas): SOLID BLACK / DEEP NAVY */
-.hero-flip-clock .fcc__unit_time--day + .fcc__separator:before,
-.hero-flip-clock .fcc__unit_time--day + .fcc__separator:after,
-.hero-flip-clock > div.fcc__separator:nth-child(2):before,
-.hero-flip-clock > div.fcc__separator:nth-child(2):after {
+.hero-flip-clock .fcc__unit_time--day+.fcc__separator:before,
+.hero-flip-clock .fcc__unit_time--day+.fcc__separator:after,
+.hero-flip-clock>div.fcc__separator:nth-child(2):before,
+.hero-flip-clock>div.fcc__separator:nth-child(2):after {
   background: #0A1128 !important;
   background-color: #0A1128 !important;
   box-shadow: 0 1px 2px rgba(10, 17, 40, 0.25) !important;
 }
 
 /* 2nd Separator (between HOURS & MINS - at exact 50% split center seam): DUAL-TONE SPLIT COLOR */
-.hero-flip-clock .fcc__unit_time--hour + .fcc__separator:before,
-.hero-flip-clock .fcc__unit_time--hour + .fcc__separator:after,
-.hero-flip-clock > div.fcc__separator:nth-child(4):before,
-.hero-flip-clock > div.fcc__separator:nth-child(4):after {
+.hero-flip-clock .fcc__unit_time--hour+.fcc__separator:before,
+.hero-flip-clock .fcc__unit_time--hour+.fcc__separator:after,
+.hero-flip-clock>div.fcc__separator:nth-child(4):before,
+.hero-flip-clock>div.fcc__separator:nth-child(4):after {
   background: linear-gradient(to right, #0A1128 0%, #0A1128 50%, #ffffff 50%, #ffffff 100%) !important;
   background-color: transparent !important;
   box-shadow: -1px 0 2px rgba(10, 17, 40, 0.25), 1px 0 4px rgba(255, 255, 255, 0.6) !important;
 }
 
 /* 3rd Separator (between MINS & SECS - on Midnight Black Canvas): SOLID PURE WHITE */
-.hero-flip-clock .fcc__unit_time--minute + .fcc__separator:before,
-.hero-flip-clock .fcc__unit_time--minute + .fcc__separator:after,
-.hero-flip-clock > div.fcc__separator:nth-child(6):before,
-.hero-flip-clock > div.fcc__separator:nth-child(6):after {
+.hero-flip-clock .fcc__unit_time--minute+.fcc__separator:before,
+.hero-flip-clock .fcc__unit_time--minute+.fcc__separator:after,
+.hero-flip-clock>div.fcc__separator:nth-child(6):before,
+.hero-flip-clock>div.fcc__separator:nth-child(6):after {
   background: #FFFFFF !important;
   background-color: #FFFFFF !important;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.75) !important;
@@ -901,7 +921,7 @@
   overflow: hidden;
   isolation: isolate;
   transition: all 0.28s cubic-bezier(0.2, 0, 0, 1);
-  box-shadow: 
+  box-shadow:
     0 14px 32px -6px rgba(217, 119, 6, 0.22),
     inset 0 1px 2px 0 rgba(255, 255, 255, 0.75),
     inset 0 -1px 1px 0 rgba(245, 158, 11, 0.2),
@@ -911,7 +931,9 @@
 .btn-hero-gold::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 48%;
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
@@ -924,7 +946,7 @@
   border-color: #f59e0b;
   color: #92400e;
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
     0 18px 40px -6px rgba(217, 119, 6, 0.35),
     inset 0 1.5px 2px 0 #ffffff,
     inset 0 0 26px 0 rgba(245, 158, 11, 0.25);
@@ -952,7 +974,7 @@
   overflow: hidden;
   isolation: isolate;
   transition: all 0.28s cubic-bezier(0.2, 0, 0, 1);
-  box-shadow: 
+  box-shadow:
     0 12px 30px -6px rgba(0, 0, 0, 0.45),
     inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.55),
     inset 0 -1px 1px 0 rgba(255, 255, 255, 0.14),
@@ -962,7 +984,9 @@
 .btn-hero-dark-outline::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 48%;
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
@@ -975,7 +999,7 @@
   border-color: rgba(255, 255, 255, 0.85);
   color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
     0 16px 38px -6px rgba(0, 0, 0, 0.55),
     inset 0 1.5px 2px 0 #ffffff,
     inset 0 0 24px 0 rgba(255, 255, 255, 0.16);
@@ -1063,6 +1087,7 @@
 }
 
 @media (max-width: 900px) {
+
   .fest-pillars-section .container,
   .fest-pillars-section .pillars-container,
   .pillars-container {
@@ -1149,11 +1174,13 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
+
   .pillar-events-snippet {
     height: auto;
     min-height: 250px;
     max-height: none;
   }
+
   .snippet-list li {
     white-space: normal;
   }
@@ -1596,13 +1623,11 @@
   border-radius: 16px !important;
   border: none !important;
   outline: none !important;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.94) 0%,
-    rgba(255, 255, 255, 0.94) 50%,
-    rgba(10, 15, 30, 0.94) 50%,
-    rgba(10, 15, 30, 0.94) 100%
-  ) !important;
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0.94) 0%,
+      rgba(255, 255, 255, 0.94) 50%,
+      rgba(10, 15, 30, 0.94) 50%,
+      rgba(10, 15, 30, 0.94) 100%) !important;
   box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.35) !important;
   -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
   backdrop-filter: blur(24px) saturate(190%) !important;
@@ -1614,13 +1639,11 @@
 .liquid-glass-card.final-cta-card:hover {
   transform: none !important;
   box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.35) !important;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.94) 0%,
-    rgba(255, 255, 255, 0.94) 50%,
-    rgba(10, 15, 30, 0.94) 50%,
-    rgba(10, 15, 30, 0.94) 100%
-  ) !important;
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0.94) 0%,
+      rgba(255, 255, 255, 0.94) 50%,
+      rgba(10, 15, 30, 0.94) 50%,
+      rgba(10, 15, 30, 0.94) 100%) !important;
 }
 
 @media (max-width: 991px) {
@@ -1629,6 +1652,7 @@
     padding: 2.2rem 1.4rem !important;
     box-shadow: none !important;
   }
+
   .liquid-glass-card.final-cta-card:hover {
     background: transparent !important;
     box-shadow: none !important;
@@ -1675,24 +1699,38 @@
   width: fit-content;
 
   /* Animated 7 VIBGYOR Continuous Rainbow Flow */
-  background-image: linear-gradient(
-    90deg,
-    #8b00ff 0%,    /* V - Violet */
-    #4b0082 7.1%,  /* I - Indigo */
-    #0066ff 14.3%, /* B - Blue */
-    #00c853 21.4%, /* G - Green */
-    #ffd600 28.6%, /* Y - Yellow */
-    #ff6d00 35.7%, /* O - Orange */
-    #ff1744 42.8%, /* R - Red */
-    #8b00ff 50%,   /* V - Violet loop */
-    #4b0082 57.1%, /* I - Indigo */
-    #0066ff 64.3%, /* B - Blue */
-    #00c853 71.4%, /* G - Green */
-    #ffd600 78.6%, /* Y - Yellow */
-    #ff6d00 85.7%, /* O - Orange */
-    #ff1744 92.8%, /* R - Red */
-    #8b00ff 100%   /* V - Violet end */
-  ) !important;
+  background-image: linear-gradient(90deg,
+      #8b00ff 0%,
+      /* V - Violet */
+      #4b0082 7.1%,
+      /* I - Indigo */
+      #0066ff 14.3%,
+      /* B - Blue */
+      #00c853 21.4%,
+      /* G - Green */
+      #ffd600 28.6%,
+      /* Y - Yellow */
+      #ff6d00 35.7%,
+      /* O - Orange */
+      #ff1744 42.8%,
+      /* R - Red */
+      #8b00ff 50%,
+      /* V - Violet loop */
+      #4b0082 57.1%,
+      /* I - Indigo */
+      #0066ff 64.3%,
+      /* B - Blue */
+      #00c853 71.4%,
+      /* G - Green */
+      #ffd600 78.6%,
+      /* Y - Yellow */
+      #ff6d00 85.7%,
+      /* O - Orange */
+      #ff1744 92.8%,
+      /* R - Red */
+      #8b00ff 100%
+      /* V - Violet end */
+    ) !important;
   background-size: 200% 100% !important;
   background-repeat: repeat-x !important;
   -webkit-background-clip: text !important;

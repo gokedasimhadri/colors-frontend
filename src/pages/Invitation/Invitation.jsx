@@ -46,15 +46,41 @@ export default function Invitation() {
 
             {/* ── Center Column: Official Joint Invitation Message ── */}
             <div className="invitation-center-col">
-              <SplitColorText
-                as="p"
-                className="invitation-joint-paragraph"
-                screenSync={true}
-                leftColor="#1e293b"
-                rightColor="#f8fafc"
-              >
-                It gives us immense pleasure and pride to cordially invite talented students, scholars, and dynamic youth delegates from across the nation to Colours {year}, the premier national youth festival of Aditya University. Taking place from January 7 to 9, 2027, at our Surampalem campus, this vibrant arena celebrates creative brilliance, cultural artistry, and athletic mastery across Culturals, Sports, Creo, and Fete with a ₹10,00,000 cash prize pool. We warmly look forward to welcoming you to three unforgettable days of excellence, camaraderie, and celebration.
-              </SplitColorText>
+              <div className="invitation-message-content">
+                <SplitColorText
+                  as="p"
+                  className="invitation-joint-paragraph"
+                  screenSync={true}
+                  leftColor="#1e293b"
+                  rightColor="#f8fafc"
+                >
+                  We are delighted to announce <strong>COLOURS</strong> – Youth Festival, our annual cultural and creative extravaganza, scheduled to take place on 7th, 8th & 9th January, 2027 at Aditya University, Surampalem.
+                </SplitColorText>
+
+                <SplitColorText
+                  as="p"
+                  className="invitation-joint-paragraph"
+                  screenSync={true}
+                  leftColor="#1e293b"
+                  rightColor="#f8fafc"
+                >
+                  We expect 50,000 young aspirants from various institutes to showcase their skills to foster meaningful connections. COLOURS – Youth Festival will feature a spectrum of exciting activities including – Culturals, Sports, Creo and Fete – exclusive shopping experience where students can shop and hop. It is an excellent opportunity to interact with peers, demonstrate talents and gain enriching experiences.
+                </SplitColorText>
+
+                <SplitColorText
+                  as="p"
+                  className="invitation-joint-paragraph"
+                  screenSync={true}
+                  leftColor="#1e293b"
+                  rightColor="#f8fafc"
+                >
+                  We cordially invite students across the country to participate and make this event even more special.
+                </SplitColorText>
+
+                <p className="invitation-joint-paragraph invitation-tagline">
+                  Colours where dreams burst into colours, and every moment is a celebration of youth.
+                </p>
+              </div>
             </div>
 
             {/* ── Right Column: Pro-Chancellor Photo & Details ── */}

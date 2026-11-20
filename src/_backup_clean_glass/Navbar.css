@@ -219,7 +219,7 @@
   filter: saturate(140%) brightness(1.06) !important;
 }
 
-.navbar-theme-btn:hover .theme-glass-btn-blast {
+.navbar-theme-btn:not(.active):hover .theme-glass-btn-blast {
   opacity: 1 !important;
   transform: translate(50%, 50%) scale(1) !important;
 }
@@ -227,10 +227,28 @@
 /* Content Container (Keeps text above the blast) */
 .navbar-theme-btn .theme-glass-btn-content {
   position: relative !important;
-  z-index: 2 !important;
+  z-index: 10 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+}
+
+.navbar-theme-btn .theme-glass-btn-blast {
+  z-index: 0 !important;
+}
+
+/* Active Nav Route: Completely disable blast effect */
+.navbar-links li.active .theme-glass-btn-blast,
+.navbar-theme-btn.active .theme-glass-btn-blast,
+.navbar-theme-btn.active:hover .theme-glass-btn-blast,
+.navbar-links li.active:hover .theme-glass-btn-blast,
+.navbar-links li.active:focus .theme-glass-btn-blast,
+.navbar-theme-btn.active:focus .theme-glass-btn-blast {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translate(50%, 50%) scale(0) !important;
 }
 
 .navbar-theme-btn .split-color-text {
