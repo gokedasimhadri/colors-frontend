@@ -64,21 +64,24 @@
   width: 92% !important;
   max-width: 460px !important;
   margin: 0 auto !important;
-  background: rgba(255, 255, 255, 0.85) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
   border-radius: 24px !important;
-  backdrop-filter: blur(32px) saturate(200%) brightness(1.05) !important;
-  -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.05) !important;
-  box-shadow:
-    0 30px 80px -15px rgba(0, 0, 0, 0.25),
-    0 0 0 1px rgba(255, 255, 255, 0.6),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.95),
-    inset 0 -1.5px 2px rgba(0, 0, 0, 0.04) !important;
-  color: #0f172a !important;
+  backdrop-filter: blur(28px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.28) !important;
+  color: #000000 !important;
   overflow: hidden !important;
   isolation: isolate;
   padding: 0 !important;
   transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s ease !important;
+}
+
+/* Reduced bevel: Disable thick specular chamfer and inner bevel lip on auth liquid modal */
+.fest-modal-card.fest-auth-liquid-modal::before,
+.fest-modal-card.fest-auth-liquid-modal::after {
+  display: none !important;
+  content: none !important;
 }
 
 .fest-modal-card.fest-auth-liquid-modal.auth-mode-login {
@@ -93,8 +96,7 @@
   max-width: 580px !important;
 }
 
-/* Optical glass with 3D specular chamfers */
-.fest-modal-card.fest-auth-liquid-modal::before,
+/* Optical glass with 3D specular chamfers (kept for generic liquid-glass-card) */
 .fest-modal-card.liquid-glass-card::before {
   content: '';
   position: absolute;
@@ -102,9 +104,9 @@
   border-radius: 24px !important;
   padding: 1.5px !important;
   background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.95) 0%,
-      rgba(255, 255, 255, 0.35) 40%,
-      rgba(190, 147, 55, 0.3) 75%,
+      rgba(255, 255, 255, 0.75) 0%,
+      rgba(255, 255, 255, 0.25) 40%,
+      rgba(255, 255, 255, 0.05) 75%,
       rgba(255, 255, 255, 0.2) 100%) !important;
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -114,8 +116,7 @@
   z-index: 3;
 }
 
-/* Inner Bevel Refraction Lip for Glass Thickness */
-.fest-modal-card.fest-auth-liquid-modal::after,
+/* Inner Bevel Refraction Lip for Glass Thickness (kept for generic liquid-glass-card) */
 .fest-modal-card.liquid-glass-card::after {
   content: '';
   position: absolute;
@@ -342,24 +343,31 @@
 }
 
 .fest-event-liquid-modal .mui-outlined-input {
-  background: rgba(255, 255, 255, 0.92) !important;
-  border: 1.5px solid rgba(15, 23, 42, 0.15) !important;
+  background: rgba(255, 255, 255, 0.28) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
   color: #0f172a !important;
-  border-radius: 12px !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
+  border-radius: 14px !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.6),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.03),
+    0 4px 16px rgba(0, 0, 0, 0.04) !important;
 }
 
 .fest-event-liquid-modal .mui-outlined-input:hover:not(:disabled):not(:focus) {
-  background: #ffffff !important;
-  border-color: rgba(190, 147, 55, 0.5) !important;
+  background: rgba(255, 255, 255, 0.38) !important;
+  border-color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.75),
+    0 6px 20px rgba(0, 0, 0, 0.06) !important;
 }
 
 .fest-event-liquid-modal .mui-form-field.is-focused .mui-outlined-input,
 .fest-event-liquid-modal .mui-outlined-input:focus {
-  background: #ffffff !important;
+  background: rgba(255, 255, 255, 0.48) !important;
   border-color: #be9337 !important;
-  box-shadow: 0 0 0 3px rgba(190, 147, 55, 0.2) !important;
+  box-shadow: 0 0 0 3px rgba(190, 147, 55, 0.25), inset 0 1px 2.5px rgba(255, 255, 255, 0.85) !important;
 }
 
 .fest-event-liquid-modal .mui-outlined-input input,
@@ -369,7 +377,7 @@
 }
 
 .fest-event-liquid-modal .mui-floating-label {
-  color: #be9337 !important;
+  color: #b48528 !important;
   font-weight: 700 !important;
   letter-spacing: 0.04em !important;
   text-transform: uppercase !important;
@@ -377,7 +385,13 @@
 }
 
 .fest-event-liquid-modal .mui-form-field.is-floating .mui-floating-label {
-  background: transparent !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(14px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
+  border-radius: 8px !important;
+  padding: 2px 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), inset 0 1px 1.5px rgba(255, 255, 255, 0.8) !important;
 }
 
 .fest-event-liquid-modal .mui-select option {
@@ -533,7 +547,8 @@
   font-weight: 900;
   text-align: center;
   margin: 0 auto;
-  color: #0f172a !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
 }
 
 .fest-auth-liquid-modal .fest-modal-close-btn {
@@ -639,32 +654,31 @@
   justify-content: center !important;
 }
 
-.fest-auth-themetab .theme-tab-container {
+.fest-auth-themetab .theme-tab-container,
+.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-container {
   width: 100% !important;
   max-width: 100% !important;
-  height: 46px !important;
-  justify-content: center !important;
-}
-
-.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-container {
-  background: rgba(255, 255, 255, 0.3) !important;
-  border: 1px solid rgba(255, 255, 255, 0.45) !important;
-  box-shadow:
-    inset 0 1px 2px rgba(255, 255, 255, 0.7),
-    0 4px 16px rgba(0, 0, 0, 0.06) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-}
-
-.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-active-indicator {
-  background: rgba(255, 255, 255, 0.88) !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12), inset 0 1px 1px #ffffff !important;
+  height: 44px !important;
+  padding: 3px !important;
+  box-sizing: border-box !important;
+  border-radius: 9999px !important;
+  background: rgba(15, 23, 42, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+  overflow: hidden !important;
+  position: relative !important;
 }
 
 .fest-auth-themetab .theme-tab-desktop-list {
   display: flex !important;
   width: 100% !important;
-  gap: 4px !important;
+  height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  box-sizing: border-box !important;
+  position: relative !important;
 }
 
 .fest-auth-themetab .theme-tab-mobile-stepper {
@@ -672,35 +686,107 @@
 }
 
 .fest-auth-themetab .theme-tab-item {
-  flex: 1 !important;
+  flex: 1 1 50% !important;
+  width: 50% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  padding: 0 16px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
   justify-content: center !important;
   text-align: center !important;
-  padding: 7px 16px !important;
-  font-size: 0.84rem !important;
+  border-radius: 9999px !important;
+  box-sizing: border-box !important;
+  color: #000000 !important;
+  font-size: 0.92rem !important;
   font-weight: 700 !important;
   white-space: nowrap !important;
+  border: none !important;
+  outline: none !important;
+  position: relative !important;
+  z-index: 2 !important;
+  background: transparent !important;
 }
 
-/* Clean ThemeTab styling on fest-auth-themetab with SplitColorText */
-.fest-auth-themetab .theme-tab-item .theme-tab-label {
+.fest-auth-themetab .theme-tab-item.active {
+  color: #000000 !important;
   font-weight: 800 !important;
-  font-size: 0.95rem !important;
-  letter-spacing: 0.02em !important;
+}
+
+.fest-auth-themetab .theme-tab-label,
+.fest-auth-themetab .auth-tab-text,
+.fest-auth-themetab .theme-tab-item span {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  mix-blend-mode: normal !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
 }
 
-.fest-auth-themetab .fest-auth-tab-split-label {
-  display: inline-block !important;
-  font-weight: 800 !important;
-  font-size: 0.95rem !important;
-  letter-spacing: 0.03em !important;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45)) !important;
+/* Active tab slider indicator & active tab fallback */
+.fest-auth-themetab .theme-tab-slider-indicator {
+  position: absolute !important;
+  border-radius: 9999px !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  box-sizing: border-box !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), width 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-.fest-auth-themetab .theme-tab-item.active .fest-auth-tab-split-label {
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35)) !important;
+.fest-auth-themetab .theme-tab-list:not(:has(.theme-tab-slider-indicator)) .theme-tab-item.active {
+  background: rgba(255, 255, 255, 0.45) !important;
+  border-radius: 9999px !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+/* Perfect rounded rainbow border for both slider indicator and fallback active item */
+.fest-auth-themetab .theme-tab-slider-indicator::before,
+.fest-auth-themetab .theme-tab-item.active::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: 9999px !important;
+  padding: 2px !important;
+  box-sizing: border-box !important;
+  background: conic-gradient(
+    from var(--rainbow-angle, 0deg),
+    #8b00ff 0deg,
+    #4b0082 51.4deg,
+    #0066ff 102.8deg,
+    #00c853 154.3deg,
+    #ffd600 205.7deg,
+    #ff6d00 257.1deg,
+    #ff1744 308.6deg,
+    #8b00ff 360deg
+  ) !important;
+  animation: vibgyorConicRotate 3s linear infinite !important;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+  -webkit-mask-composite: xor !important;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
+  mask-composite: exclude !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+.fest-auth-themetab .theme-tab-list:has(.theme-tab-slider-indicator) .theme-tab-item.active::before {
+  display: none !important;
 }
 
 .fest-modal-tabs {
@@ -1085,77 +1171,118 @@
   margin-bottom: 6px;
 }
 
+.fest-auth-liquid-modal .mui-form-field {
+  position: relative !important;
+  width: 100% !important;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.fest-auth-liquid-modal .mui-input-container {
+  position: relative !important;
+  width: 100% !important;
+}
+
 .fest-auth-liquid-modal .mui-outlined-input {
   width: 100%;
   height: 52px;
-  background: rgba(255, 255, 255, 0.94) !important;
-  border: 1.5px solid rgba(203, 213, 225, 0.9) !important;
+  background: rgba(255, 255, 255, 0.28) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
   border-radius: 14px !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
   box-shadow:
-    inset 0 1px 2px rgba(15, 23, 42, 0.04),
-    0 2px 6px rgba(0, 0, 0, 0.03) !important;
-  color: #0f172a !important;
+    inset 0 1px 2px rgba(255, 255, 255, 0.6),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.03),
+    0 4px 16px rgba(0, 0, 0, 0.04) !important;
+  color: #000000 !important;
   font-size: 0.96rem !important;
   font-weight: 600 !important;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .fest-auth-liquid-modal .mui-outlined-input:hover:not(:disabled):not(:focus) {
-  background: #ffffff !important;
-  border-color: rgba(190, 147, 55, 0.5) !important;
+  background: rgba(255, 255, 255, 0.38) !important;
+  border-color: rgba(255, 255, 255, 0.75) !important;
   box-shadow:
-    inset 0 1px 2px rgba(15, 23, 42, 0.04),
-    0 4px 12px rgba(190, 147, 55, 0.12) !important;
+    inset 0 1px 2px rgba(255, 255, 255, 0.75),
+    0 6px 20px rgba(0, 0, 0, 0.06) !important;
 }
 
 .fest-auth-liquid-modal .mui-form-field.is-focused .mui-outlined-input,
 .fest-auth-liquid-modal .mui-outlined-input:focus {
-  background: #ffffff !important;
+  background: rgba(255, 255, 255, 0.48) !important;
   border-color: #be9337 !important;
   box-shadow:
     0 0 0 3px rgba(190, 147, 55, 0.25),
-    inset 0 1px 2px rgba(255, 255, 255, 0.8),
-    0 4px 16px rgba(190, 147, 55, 0.15) !important;
+    inset 0 1px 2.5px rgba(255, 255, 255, 0.85),
+    0 8px 24px rgba(190, 147, 55, 0.12) !important;
+}
+
+.fest-auth-liquid-modal .mui-outlined-input input,
+.fest-auth-liquid-modal .mui-outlined-input select,
+.fest-auth-liquid-modal .mui-outlined-input textarea {
+  color: #000000 !important;
+  background: transparent !important;
+  font-weight: 600 !important;
 }
 
 .fest-auth-liquid-modal .mui-floating-label {
-  color: #64748b !important;
+  color: rgba(15, 23, 42, 0.65) !important;
   font-size: 0.92rem;
   font-weight: 600;
   background: transparent !important;
   padding: 0 6px;
   border-radius: 4px;
+  border: none !important;
+  box-shadow: none !important;
+  pointer-events: none;
 }
 
 .fest-auth-liquid-modal .mui-form-field.is-floating .mui-floating-label {
   top: 0;
   transform: translateY(-50%) scale(0.85);
-  background: #ffffff !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  color: #be9337 !important;
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(14px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(180%) !important;
+  color: #b48528 !important;
   font-weight: 700;
-  border-radius: 6px;
-  border: 1px solid rgba(226, 232, 240, 0.9) !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 8px;
+  padding: 2px 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.8) !important;
 }
 
 .fest-auth-liquid-modal .mui-form-field.is-focused.is-floating .mui-floating-label {
   color: #be9337 !important;
-  border-color: rgba(190, 147, 55, 0.4) !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-color: #be9337 !important;
+  box-shadow:
+    0 2px 10px rgba(190, 147, 55, 0.25),
+    inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
 }
 
 .fest-auth-liquid-modal .mui-outlined-input::placeholder {
-  color: #94a3b8 !important;
+  color: rgba(15, 23, 42, 0.4) !important;
+  font-weight: 500 !important;
 }
 
 .fest-auth-liquid-modal .mui-password-toggle {
-  color: #64748b !important;
+  color: rgba(15, 23, 42, 0.55) !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 .fest-auth-liquid-modal .mui-password-toggle:hover {
+  color: #000000 !important;
+}
+
+.fest-auth-liquid-modal .mui-select option {
+  background: #ffffff !important;
   color: #0f172a !important;
 }
 
@@ -1166,28 +1293,6 @@
   align-items: center;
   width: 100%;
   padding: 0.5rem 1.85rem 0.25rem;
-}
-
-.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-container {
-  background: rgba(15, 23, 42, 0.06) !important;
-  border: 1px solid rgba(15, 23, 42, 0.12) !important;
-  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06) !important;
-  height: 44px !important;
-}
-
-.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-item {
-  color: #475569 !important;
-  font-weight: 600 !important;
-  font-size: 0.92rem !important;
-}
-
-.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-item.active {
-  color: #0f172a !important;
-  font-weight: 800 !important;
-}
-
-.fest-auth-liquid-modal .fest-auth-themetab .theme-tab-label {
-  color: inherit !important;
 }
 
 /* Ticket Confirmation on Liquid Glass */
@@ -1473,31 +1578,50 @@
   box-sizing: border-box !important;
 }
 
+.fest-auth-liquid-modal .fest-modal-footer .smooth-transition-container,
+.fest-auth-liquid-modal .fest-modal-footer .smooth-transition-content {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
 /* Liquid Glass ThemeButton in Modal Footer */
 .fest-auth-liquid-modal .fest-modal-footer .theme-glass-btn,
 .fest-auth-liquid-modal .fest-btn-submit-theme {
   min-width: 170px !important;
   height: 48px !important;
-  background: rgba(255, 255, 255, 0.18) !important;
-  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  background: rgba(255, 255, 255, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.65) !important;
   backdrop-filter: blur(16px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
   box-shadow:
-    0 8px 24px -4px rgba(0, 0, 0, 0.25),
-    inset 0 1px 1.5px rgba(255, 255, 255, 0.5) !important;
+    0 8px 24px -4px rgba(0, 0, 0, 0.15),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.7) !important;
   padding: 0.65rem 1.8rem !important;
   border-radius: 12px !important;
   cursor: pointer;
+  margin-left: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   transition: all 0.25s ease !important;
+}
+
+.fest-auth-liquid-modal .fest-btn-submit-theme span,
+.fest-auth-liquid-modal .fest-btn-submit-theme * {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  font-weight: 800 !important;
 }
 
 .fest-auth-liquid-modal .fest-modal-footer .theme-glass-btn:hover,
 .fest-auth-liquid-modal .fest-btn-submit-theme:hover {
-  background: rgba(255, 255, 255, 0.28) !important;
-  border-color: rgba(255, 255, 255, 0.65) !important;
+  background: rgba(255, 255, 255, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
   box-shadow:
-    0 12px 28px -4px rgba(0, 0, 0, 0.35),
-    inset 0 1px 1.5px rgba(255, 255, 255, 0.75) !important;
+    0 12px 28px -4px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.9) !important;
   transform: translateY(-2px) !important;
 }
 
@@ -1750,11 +1874,28 @@
 
   .fest-auth-liquid-modal .fest-auth-themetab .theme-tab-container {
     height: 42px !important;
+    padding: 3px !important;
+  }
+
+  .fest-auth-liquid-modal .fest-auth-themetab .theme-tab-desktop-list {
+    display: flex !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .fest-auth-liquid-modal .fest-auth-themetab .theme-tab-mobile-stepper {
+    display: none !important;
   }
 
   .fest-auth-liquid-modal .fest-auth-themetab .theme-tab-item {
-    padding: 5px 8px !important;
+    padding: 0 8px !important;
     font-size: 0.82rem !important;
+    height: 100% !important;
+    flex: 1 1 50% !important;
+    width: 50% !important;
   }
 
   .fest-auth-liquid-modal .fest-modal-body {
@@ -1772,10 +1913,15 @@
   }
 
   .fest-auth-liquid-modal .btn-fest-primary,
-  .fest-auth-liquid-modal .fest-btn-primary,
-  .fest-auth-liquid-modal .theme-glass-btn {
+  .fest-auth-liquid-modal .fest-btn-primary {
     width: 100% !important;
     justify-content: center !important;
+  }
+
+  .fest-auth-liquid-modal .fest-modal-footer .fest-btn-submit-theme {
+    width: auto !important;
+    margin-left: auto !important;
+    align-self: flex-end !important;
   }
 }
 

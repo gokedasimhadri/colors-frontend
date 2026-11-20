@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { LiquidGlass } from '../ThemeComponents/LiquidGlass';
 import ThemeButton from '../ThemeComponents/ThemeButton';
 import ThemeTab from '../ThemeComponents/ThemeTabDesign/ThemeTab';
-import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
 import SmoothTransition from '../ThemeComponents/Animation/SmoothTransition';
 import { MuiTextField, MuiSelectField } from './MuiTextField';
 import {
@@ -40,8 +39,8 @@ export default function StudentAuthModal({
 
   const authTabs = useMemo(
     () => [
-      { id: 'register', label: 'Register' },
-      { id: 'login', label: 'Login' }
+      { id: 'register', label: <span className="auth-tab-text">Register</span> },
+      { id: 'login', label: <span className="auth-tab-text">Login</span> }
     ],
     []
   );
@@ -322,8 +321,8 @@ export default function StudentAuthModal({
               }}
               size="md"
               showSearch={false}
-              leftColor="#0f172a"
-              rightColor="#0f172a"
+              leftColor="#000000"
+              rightColor="#000000"
               screenSync={false}
               className="fest-auth-themetab"
               ariaLabel="Student Portal Mode"
@@ -458,16 +457,16 @@ export default function StudentAuthModal({
                 )}
               </div>
 
-              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', marginTop: '1.25rem' }}>
+              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', marginTop: '1.25rem' }}>
                 <ThemeButton type="button" className="btn-fest-secondary" onClick={handlePrint} borderRadius={10}>
-                  <SplitColorText leftColor="#334155" rightColor="#64748b">
+                  <span style={{ color: '#000000', fontWeight: 700 }}>
                     🖨️ Print Slip
-                  </SplitColorText>
+                  </span>
                 </ThemeButton>
                 <ThemeButton type="button" onClick={onClose} borderRadius={12} height={44} showBlast={true}>
-                  <SplitColorText leftColor="#ffffff" rightColor="#000000">
+                  <span style={{ color: '#000000', fontWeight: 700 }}>
                     Done & Explore More Events
-                  </SplitColorText>
+                  </span>
                 </ThemeButton>
               </div>
             </div>
@@ -668,8 +667,14 @@ export default function StudentAuthModal({
 
         {/* Footer (hidden on confirmation view) */}
         {!confirmedRecord && (
-          <div className="fest-modal-footer">
-            <SmoothTransition transitionKey={mode} variant="fade" duration={220} animateHeight={false} style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
+          <div className="fest-modal-footer" style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+            <SmoothTransition
+              transitionKey={mode}
+              variant="fade"
+              duration={220}
+              animateHeight={false}
+              style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}
+            >
               {mode === 'register' ? (
                 <ThemeButton
                   type="submit"
@@ -679,8 +684,9 @@ export default function StudentAuthModal({
                   height={48}
                   showBlast={true}
                   className="fest-btn-submit-theme"
+                  style={{ marginLeft: 'auto' }}
                 >
-                  <span style={{ color: '#0f172a', fontWeight: 700 }}>
+                  <span style={{ color: '#000000', fontWeight: 800 }}>
                     {loading
                       ? 'Processing Registration...'
                       : studentStatus?.alreadyRegisteredForEvent
@@ -697,8 +703,9 @@ export default function StudentAuthModal({
                   height={48}
                   showBlast={true}
                   className="fest-btn-submit-theme"
+                  style={{ marginLeft: 'auto' }}
                 >
-                  <span style={{ color: '#0f172a', fontWeight: 700 }}>
+                  <span style={{ color: '#000000', fontWeight: 800 }}>
                     {loading ? 'Signing In...' : 'Sign In & Continue'}
                   </span>
                 </ThemeButton>

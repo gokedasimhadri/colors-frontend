@@ -492,26 +492,26 @@
 
 /* ── Profile Layout (Details Card) ── */
 .profile-panel-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  max-width: 900px;
-  margin: 0 auto;
-  gap: 2rem;
-  align-items: start;
+  display: block;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
 }
 
 @media (max-width: 980px) {
   .profile-panel-grid {
-    grid-template-columns: 1fr;
+    max-width: 100% !important;
   }
 }
 
 .profile-card {
+  width: 100% !important;
   background: #ffffff;
   border: none;
   border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 8px 26px rgba(15, 23, 42, 0.05);
+  box-sizing: border-box;
 }
 
 .card-header-row {
@@ -703,202 +703,509 @@
   flex-direction: column;
 }
 
-.fest-pass-modal-card {
+/* ==========================================================================
+   OFFICIAL PARTICIPANT CREDENTIAL PASS (FESTIVAL PASS DESIGN)
+   ========================================================================== */
+.fest-pass-modal-wrapper {
   width: 100%;
-  max-width: 440px;
+  max-width: 740px;
   margin: auto;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.35) !important;
+  box-sizing: border-box;
   animation: slipCardPop 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.fest-pass-modal-card::before,
-.fest-pass-modal-card::after {
-  display: none !important;
-  content: none !important;
+.fest-credential-ticket {
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(15, 23, 42, 0.28);
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
-.fest-pass-card::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(11, 82, 153, 0.06) 0%, transparent 60%);
-  pointer-events: none;
-}
-
-.pass-top-header {
+/* 1. Header Banner */
+.credential-top-banner {
+  background: linear-gradient(135deg, #13143c 0%, #1e1b4b 50%, #2e287a 100%);
+  border-bottom: 2.5px solid #eab308;
+  padding: 0.85rem 1.4rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px dashed #bfdbfe;
-  padding-bottom: 1rem;
-  margin-bottom: 1.5rem;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  gap: 1rem;
+  box-sizing: border-box;
 }
 
-.pass-brand-lockup {
+.cred-brand-left {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  flex-shrink: 0;
 }
 
-.pass-aditya-logo {
-  height: 32px;
-  max-width: 100px;
+.cred-aditya-logo {
+  height: 38px;
+  width: auto;
   object-fit: contain;
   display: block;
 }
 
-.pass-vr-line {
-  display: inline-block;
-  width: 1.5px;
-  height: 28px;
-  background: #cbd5e1;
-  border-radius: 1px;
-  flex-shrink: 0;
-}
-
-.pass-brand-text {
+.cred-fest-center {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  line-height: 1.1;
-}
-
-.pass-brand-title {
-  font-family: var(--font-heading);
-  font-size: 0.92rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  color: #0b5299;
-  text-transform: uppercase;
-  line-height: 1.1;
-}
-
-.pass-brand-year {
-  font-family: var(--font-heading);
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  color: #be9337;
-  line-height: 1.1;
-}
-
-.pass-fest-badge {
-  font-size: 1.15rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  background: linear-gradient(90deg, #0b5299, #1e40af);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.pass-chip-status {
-  background: #ecfdf5;
-  border: 1px solid #6ee7b7;
-  color: #047857;
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 50px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.pass-body {
-  display: flex;
-  gap: 1.25rem;
   align-items: center;
-  margin-bottom: 1.5rem;
+  text-align: center;
+  gap: 3px;
 }
 
-.pass-photo-frame {
-  width: 80px;
-  height: 96px;
-  border-radius: 12px;
-  border: 2px solid #bfdbfe;
-  overflow: hidden;
-  background: #f8fafc;
+.cred-star-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(234, 179, 8, 0.15);
+  border: 1.5px solid #facc15;
+  border-radius: 9999px;
+  padding: 3px 14px;
+}
+
+.cred-star {
+  color: #facc15;
+  font-size: 0.75rem;
+}
+
+.cred-pill-title {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: #fde047;
+}
+
+.cred-official-subtitle {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #e2e8f0;
+  text-transform: uppercase;
+}
+
+.cred-team-id-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 10px;
+  padding: 4px 10px;
   flex-shrink: 0;
 }
 
-.pass-photo-frame img {
+.cred-team-id-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.cred-team-id-value {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #fbbf24;
+  letter-spacing: 0.04em;
+}
+
+/* 2. Main Content Body */
+.credential-body-wrap {
+  display: flex;
+  gap: 1.75rem;
+  padding: 1.5rem 1.6rem 1rem;
+  box-sizing: border-box;
+}
+
+/* Left Column */
+.credential-left-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 140px;
+  flex-shrink: 0;
+}
+
+.credential-photo-frame {
+  width: 130px;
+  height: 140px;
+  border-radius: 16px;
+  border: 2px solid #93c5fd;
+  background: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.cred-avatar-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.pass-photo-frame .hero-avatar-fallback {
+.cred-avatar-fallback {
   width: 100%;
   height: 100%;
-  border-radius: 12px;
-  border: none;
-}
-
-.pass-meta {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  align-items: center;
+  justify-content: center;
+  color: #2563eb;
+  background: #dbeafe;
 }
 
-.pass-name {
-  font-size: 1.25rem;
+.credential-role-pill {
+  width: 100%;
+  background: #047857;
+  color: #ffffff;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 0.7rem;
   font-weight: 800;
-  color: #000000 !important;
-  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: center;
+  margin-top: 0.75rem;
+  box-sizing: border-box;
 }
 
-.pass-roll {
-  font-family: monospace;
-  font-size: 0.85rem;
-  color: #000000 !important;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-}
-
-.pass-college {
-  font-size: 0.78rem;
-  color: #000000 !important;
-  margin-top: 0.2rem;
-}
-
-.pass-barcode-box {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+.credential-verified-card {
+  width: 100%;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
   border-radius: 10px;
-  padding: 10px 14px;
+  padding: 6px 8px;
+  margin-top: 0.65rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  color: #0f172a;
-  margin-bottom: 1.25rem;
+  gap: 3px;
+  box-sizing: border-box;
 }
 
-.pass-barcode-lines {
-  height: 28px;
-  width: 100%;
-  background: repeating-linear-gradient(90deg,
-      #0f172a 0px,
-      #0f172a 2px,
-      transparent 2px,
-      transparent 5px,
-      #0f172a 5px,
-      #0f172a 9px,
-      transparent 9px,
-      transparent 11px);
-}
-
-.pass-barcode-text {
-  font-family: monospace;
-  font-size: 0.75rem;
+.cred-verified-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
   font-weight: 800;
-  letter-spacing: 0.15em;
-  margin-top: 4px;
+  color: #065f46;
+  letter-spacing: 0.03em;
+}
+
+.cred-shield-icon {
+  color: #059669;
+}
+
+.cred-status-dot-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #059669;
+  letter-spacing: 0.02em;
+}
+
+.cred-green-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+/* Right Column */
+.credential-right-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cred-event-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.cred-date-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 3.5px 10px;
+  margin-top: 0.45rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #92400e;
+  width: fit-content;
+}
+
+.cred-date-icon {
+  color: #b45309;
+}
+
+.cred-details-2x2-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1rem;
+}
+
+.cred-info-cell {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-sizing: border-box;
+}
+
+.cred-icon-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cred-icon-bubble.blue {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.cred-icon-bubble.dark {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.cred-icon-bubble.amber {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.cred-icon-bubble.purple {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+
+.cred-cell-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cred-cell-label {
+  font-size: 0.62rem;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+
+.cred-cell-value {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cred-cell-value.font-mono {
+  font-family: var(--font-mono, monospace);
+  letter-spacing: 0.05em;
+}
+
+/* Venue Bar */
+.cred-venue-bar {
+  background: #fffbeb;
+  border: 1px solid #fef08a;
+  border-radius: 8px;
+  padding: 7px 12px;
+  margin-top: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.cred-venue-icon {
+  color: #b45309;
+  flex-shrink: 0;
+}
+
+.cred-venue-text {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #92400e;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+/* 3. Tear Line & Barcode Section */
+.credential-stub-tear-line {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-top: 0.85rem;
+  height: 20px;
+}
+
+.ticket-tear-dashed {
+  width: 100%;
+  border-top: 2px dashed #cbd5e1;
+}
+
+.ticket-notch {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(13, 35, 59, 0.4);
+}
+
+.ticket-notch.left {
+  left: -10px;
+}
+
+.ticket-notch.right {
+  right: -10px;
+}
+
+.credential-barcode-section {
+  padding: 0.6rem 1.6rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  box-sizing: border-box;
+}
+
+.cred-barcode-svg {
+  width: 100%;
+  height: 52px;
+  display: block;
+}
+
+.cred-barcode-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.15rem;
+  gap: 0.5rem;
+}
+
+.cred-entry-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cred-code-spacing {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.3em;
+  text-align: center;
+}
+
+.cred-id-notice {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 680px) {
+  .credential-top-banner {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+  .cred-brand-left, .cred-fest-center, .cred-team-id-badge {
+    align-items: center;
+    text-align: center;
+  }
+  .credential-body-wrap {
+    flex-direction: column;
+    align-items: center;
+    padding: 1.25rem 1rem 0.75rem;
+    gap: 1.25rem;
+  }
+  .credential-left-col {
+    width: 100%;
+  }
+  .cred-details-2x2-grid {
+    grid-template-columns: 1fr;
+  }
+  .cred-barcode-footer-row {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.35rem;
+  }
+}
+
+/* Print styles for exact official festival pass printing */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #fest-credential-printable,
+  #fest-credential-printable * {
+    visibility: visible;
+  }
+  #fest-credential-printable {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .receipt-modal-backdrop {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+  }
+  .slip-actions {
+    display: none !important;
+  }
 }
 
 .btn-print-pass {

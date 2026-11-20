@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import ThemeButton from '../ThemeComponents/ThemeButton';
 import SplitColorText from '../ThemeComponents/SplitColor/SplitColorText';
 
@@ -58,8 +58,9 @@ export default function NavbarMenu({
   rightColor = '#ffffff',
   ...restThemeButtonProps
 }) {
-  const containerClass = isMobile 
-    ? `navbar-menu-mobile ${className}`.trim() 
+  const location = useLocation();
+  const containerClass = isMobile
+    ? `navbar-menu-mobile ${className}`.trim()
     : `navbar-links ${className}`.trim();
 
   const containerStyle = {
@@ -70,6 +71,13 @@ export default function NavbarMenu({
   return (
     <ul className={containerClass} style={containerStyle}>
       {items.map((item) => {
+        // Explicitly determine active state from current location
+        const isItemActive = item.path
+          ? (item.path === '/'
+              ? location.pathname === '/'
+              : location.pathname === item.path || location.pathname.startsWith(item.path + '/'))
+          : false;
+
         // Individual item props merged with component-level ThemeButton props
         const itemThemeProps = {
           showBlast: item.showBlast !== undefined ? item.showBlast : showBlast,
@@ -85,7 +93,7 @@ export default function NavbarMenu({
             ...buttonStyle,
             ...(item.style || {}),
           },
-          className: `navbar-theme-btn ${buttonClassName} ${item.className || ''}`.trim(),
+          className: `navbar-theme-btn ${buttonClassName} ${item.className || ''} ${isItemActive ? 'active' : ''}`.trim(),
         };
 
         const handleClick = (e) => {
@@ -100,7 +108,7 @@ export default function NavbarMenu({
         const isClickable = Boolean(item.href || item.path);
 
         return (
-          <li key={item.label} className="navbar-menu-item">
+          <li key={item.label} className={`navbar-menu-item${isItemActive ? ' active' : ''}`}>
             {!isClickable ? (
               <ThemeButton
                 as="div"

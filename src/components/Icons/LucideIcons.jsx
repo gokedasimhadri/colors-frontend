@@ -456,6 +456,14 @@ export const Volume2 = createIcon('Volume2', (
   </>
 ));
 
+export const Layers = createIcon('Layers', (
+  <>
+    <polygon points="12 2 2 7 12 12 22 7 12 2" />
+    <polyline points="2 17 12 22 22 17" />
+    <polyline points="2 12 12 17 22 12" />
+  </>
+));
+
 export const Play = createIcon('Play', (
   <>
     <polygon points="6 3 20 12 6 21 6 3" />
@@ -486,6 +494,7 @@ export default {
   Palette,
   Volume2,
   Play,
+  Layers,
   Eye,
   EyeOff,
   LayoutDashboard,

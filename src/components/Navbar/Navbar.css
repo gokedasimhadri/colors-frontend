@@ -284,50 +284,52 @@ a.navbar-theme-btn[target="_blank"]::before,
   line-height: var(--lh-snug);
 }
 
-/* Active Nav Route: Flowing VIBGYOR Rainbow Border around the item, clean crisp SplitColorText */
+/* Active Nav Route: VIBGYOR border on <li> wrapper — avoids overflow:hidden clipping */
+.navbar-links li.active {
+  position: relative;
+  border-radius: 9999px;
+}
+
+.navbar-links li.active::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 9999px;
+  padding: 2px;
+  box-sizing: border-box;
+  background: conic-gradient(from var(--rainbow-angle, 0deg),
+    #8b00ff 0deg,
+    #4b0082 51.4deg,
+    #0066ff 102.8deg,
+    #00c853 154.3deg,
+    #ffd600 205.7deg,
+    #ff6d00 257.1deg,
+    #ff1744 308.6deg,
+    #8b00ff 360deg);
+  animation: vibgyorConicRotate 3s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Active Nav Route: Flowing VIBGYOR Rainbow Border — border-box technique (no pseudo-element masks needed) */
 .navbar-theme-btn.active {
   position: relative !important;
-  background: rgba(255, 255, 255, 0.08) !important;
+  overflow: hidden !important;
   border-radius: 9999px !important;
+  border: none !important;
+  background: rgba(255, 255, 255, 0.10) !important;
   backdrop-filter: blur(10px) !important;
   -webkit-backdrop-filter: blur(10px) !important;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+  z-index: 1;
 }
 
 .navbar-theme-btn.active::before {
-  content: '' !important;
-  display: block !important;
-  position: absolute !important;
-  inset: 0 !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  border-radius: 9999px !important;
-  border-top-left-radius: 9999px !important;
-  border-top-right-radius: 9999px !important;
-  border-bottom-left-radius: 9999px !important;
-  border-bottom-right-radius: 9999px !important;
-  padding: 1.8px !important;
-  box-sizing: border-box !important;
-  background: conic-gradient(from var(--rainbow-angle, 0deg),
-      #8b00ff 0deg,
-      #4b0082 51.4deg,
-      #0066ff 102.8deg,
-      #00c853 154.3deg,
-      #ffd600 205.7deg,
-      #ff6d00 257.1deg,
-      #ff1744 308.6deg,
-      #8b00ff 360deg) !important;
-  animation: vibgyorConicRotate 3s linear infinite !important;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
-  -webkit-mask-composite: xor !important;
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0) !important;
-  mask-composite: exclude !important;
-  pointer-events: none !important;
-  z-index: 1 !important;
+  display: none !important;
 }
 
 .navbar-theme-btn.active .split-color-text {

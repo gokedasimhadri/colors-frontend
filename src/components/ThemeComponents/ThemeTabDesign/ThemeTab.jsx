@@ -110,12 +110,25 @@ export default function ThemeTab({
 
     updateSlider();
     const frameId = requestAnimationFrame(updateSlider);
-    const timeoutId = setTimeout(updateSlider, 50);
+    const t1 = setTimeout(updateSlider, 50);
+    const t2 = setTimeout(updateSlider, 150);
+    const t3 = setTimeout(updateSlider, 350);
+
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined' && listRef.current) {
+      ro = new ResizeObserver(() => {
+        updateSlider();
+      });
+      ro.observe(listRef.current);
+    }
 
     window.addEventListener('resize', updateSlider);
     return () => {
       cancelAnimationFrame(frameId);
-      clearTimeout(timeoutId);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      if (ro) ro.disconnect();
       window.removeEventListener('resize', updateSlider);
     };
   }, [currentActive, normalizedTabs, isSearchOpen]);

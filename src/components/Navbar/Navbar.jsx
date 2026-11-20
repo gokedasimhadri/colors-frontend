@@ -13,7 +13,16 @@ import LiquidGlass from '../ThemeComponents/LiquidGlass/LiquidGlass';
 import NavbarMenu from './NavbarMenu';
 import './Navbar.css';
 
-const navItems = [
+const desktopNavItems = [
+  { label: 'Invitation', path: '/invitation' },
+  { label: 'Team', path: '/teams' },
+  { label: 'Events', path: '/events' },
+  { label: 'Schedule', href: '/Schedule_of_Events.pdf' },
+  { label: 'Sponsors', path: '/sponsors' },
+  { label: 'Contact', path: '/contact' },
+];
+
+const mobileNavItems = [
   { label: 'Events', path: '/events' },
   { label: 'Team', path: '/teams' },
   { label: 'Invitation', path: '/invitation' },
@@ -225,7 +234,7 @@ export default function Navbar() {
           <UniversityLogo />
 
           {/* Desktop Nav Links */}
-          <NavbarMenu key={location.pathname} items={navItems} />
+          <NavbarMenu items={desktopNavItems} />
 
           {/* Login/Dashboard CTA */}
           <div className="navbar-right-cluster">
@@ -455,7 +464,7 @@ export default function Navbar() {
 
         {/* Mobile Navigation Links */}
         <NavbarMenu
-          items={navItems}
+          items={mobileNavItems}
           isMobile
           onItemClick={closeMenu}
         />

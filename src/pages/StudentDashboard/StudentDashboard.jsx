@@ -47,7 +47,10 @@ import {
   UserPlus,
   Crown,
   ChevronDown,
-  Download
+  Download,
+  ShieldCheck,
+  MapPin,
+  Layers
 } from 'lucide-react';
 import StudentAuthModal from '../../components/RegistrationModals/StudentAuthModal';
 import ManageTeamModal from '../../components/RegistrationModals/ManageTeamModal';
@@ -891,7 +894,9 @@ export default function StudentDashboard() {
         eventTitle: item.eventTitle || matched?.eventName || matched?.title || 'Colours 2027 Event',
         category: item.category || matched?.category || matched?.categoryName || '',
         subCategory: item.subCategory || matched?.subCategory || matched?.subcategoryName || '',
-        participationType: item.participationType || matched?.participationType || ''
+        participationType: item.participationType || matched?.participationType || '',
+        venue: item.venue || item.eventVenue || matched?.venue || (matched?.venueObj ? `${matched.venueObj.name || ''} ${matched.venueObj.roomNo ? `- Room: ${matched.venueObj.roomNo}` : ''}`.trim() : '') || 'RAMANUJAN BHAVAN - SEMINAR HALL - Room: 201',
+        eventDate: item.eventDate || item.date || matched?.eventDate || matched?.date || '07 JAN - 09 JAN 2027'
       };
     });
   }, [paymentsList, registrationsList, catalogEvents]);
@@ -1683,16 +1688,31 @@ export default function StudentDashboard() {
                                         <button
                                           type="button"
                                           className="btn-dash-table-pass"
-                                          onClick={() => setSelectedPass({
-                                            name: pName,
-                                            roll: rollNo,
-                                            college: pCollege,
-                                            otherCollege: pOtherCollege,
-                                            department: dept,
-                                            year: yr,
-                                            role: roleTitle,
-                                            eventTitle: title
-                                          })}
+                                          onClick={() => {
+                                            const hash = Math.abs((rollNo + title).split('').reduce((acc, c) => ((acc << 5) - acc) + c.charCodeAt(0), 0));
+                                            const passNumericCode = String(hash % 900000 + 100000);
+                                            const passCodeFormatted = `CLR - 2k27 - ${passNumericCode}`;
+                                            const cleanTeamId = payment.teamId || regId || payRef || `CLR27-COLORS-${passNumericCode}`;
+
+                                            setSelectedPass({
+                                              name: pName,
+                                              roll: rollNo,
+                                              college: pCollege,
+                                              otherCollege: pOtherCollege,
+                                              department: dept,
+                                              year: yr,
+                                              role: roleTitle,
+                                              isLeader: isLeader,
+                                              eventTitle: title,
+                                              eventDate: payment.eventDate || payment.date || '07 JAN - 09 JAN 2027',
+                                              venue: payment.venue || payment.eventVenue || 'RAMANUJAN BHAVAN - SEMINAR HALL - Room: 201',
+                                              teamId: cleanTeamId,
+                                              registrationNumber: regId,
+                                              paymentReference: payRef,
+                                              passCodeFormatted: passCodeFormatted,
+                                              status: payment.status || 'PAID & CONFIRMED'
+                                            });
+                                          }}
                                           title="View Pass"
                                         >
                                           <CreditCard size={13} />
@@ -1859,75 +1879,266 @@ export default function StudentDashboard() {
           document.body
         )}
 
-        {/* ── Digital Fest Delegate Pass Modal ── */}
+        {/* ── Digital Fest Delegate Pass Modal (Official Participant Credential Ticket) ── */}
         {selectedPass && createPortal(
           <div
             className="receipt-modal-backdrop"
             onClick={() => setSelectedPass(null)}
           >
             <div
-              className="fest-pass-card fest-pass-modal-card"
+              className="fest-pass-modal-wrapper"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="pass-top-header">
-                <div className="pass-brand-lockup">
-                  <img
-                    src="/ADITYA%20LOGO2.png"
-                    alt="Aditya Group of Institutions"
-                    className="pass-aditya-logo"
-                  />
-                  <span className="pass-vr-line" />
-                  <div className="pass-brand-text">
-                    <span className="pass-brand-title">COLOURS</span>
-                    <span className="pass-brand-year">2027</span>
-                  </div>
-                </div>
-                <span className="pass-chip-status">OFFICIAL DELEGATE</span>
-              </div>
-
-              <div className="pass-body">
-                <div className="pass-photo-frame">
-                  {selectedPass.roll && selectedPass.roll !== '—' ? (
+              <div className="fest-credential-ticket" id="fest-credential-printable">
+                {/* 1. Header Banner */}
+                <div className="credential-top-banner">
+                  <div className="cred-brand-left">
                     <img
-                      src={`https://info.aec.edu.in/adityacentral/studentphotos/${selectedPass.roll.toUpperCase()}.jpg`}
-                      alt={selectedPass.name}
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none';
-                        const fallback = e.currentTarget.parentElement?.querySelector('.pass-fallback-avatar');
-                        if (fallback) fallback.style.display = 'flex';
-                      }}
+                      src="/aus-logo.svg"
+                      alt="Aditya University"
+                      className="cred-aditya-logo"
                     />
-                  ) : null}
-                  <div
-                    className="hero-avatar-fallback pass-fallback-avatar"
-                    style={{
-                      fontSize: '1.75rem',
-                      backgroundColor: '#0b5299',
-                      display: selectedPass.roll && selectedPass.roll !== '—' ? 'none' : 'flex'
-                    }}
-                  >
-                    {selectedPass.name && selectedPass.name !== '—' ? selectedPass.name.charAt(0).toUpperCase() : 'S'}
+                  </div>
+
+                  <div className="cred-fest-center">
+                    <div className="cred-star-pill">
+                      <span className="cred-star">★</span>
+                      <span className="cred-pill-title">COLORS 2027</span>
+                      <span className="cred-star">★</span>
+                    </div>
+                    <span className="cred-official-subtitle">OFFICIAL PARTICIPANT CREDENTIAL</span>
+                  </div>
+
+                  <div className="cred-team-id-badge">
+                    <span className="cred-team-id-label">TEAM ID</span>
+                    <span className="cred-team-id-value">{selectedPass.teamId}</span>
                   </div>
                 </div>
-                <div className="pass-meta">
-                  <span className="pass-name">{selectedPass.name}</span>
-                  <span className="pass-roll">{selectedPass.roll}</span>
-                  <span className="pass-college">
-                    {selectedPass.college === 'Other Institution' && selectedPass.otherCollege
-                      ? selectedPass.otherCollege
-                      : (selectedPass.college || 'Aditya University')}
-                  </span>
+
+                {/* 2. Main Content Card */}
+                <div className="credential-body-wrap">
+                  {/* Left Column: Photo & Verified Badges */}
+                  <div className="credential-left-col">
+                    <div className="credential-photo-frame">
+                      {selectedPass.roll && selectedPass.roll !== '—' ? (
+                        <img
+                          src={`https://info.aec.edu.in/adityacentral/studentphotos/${selectedPass.roll.toUpperCase()}.jpg`}
+                          alt={selectedPass.name}
+                          className="cred-avatar-photo"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            const fallback = e.currentTarget.parentElement?.querySelector('.cred-avatar-fallback');
+                            if (fallback) fallback.style.display = 'flex';
+                          }}
+                        />
+                      ) : null}
+                      <div
+                        className="cred-avatar-fallback"
+                        style={{ display: selectedPass.roll && selectedPass.roll !== '—' ? 'none' : 'flex' }}
+                      >
+                        <User size={54} strokeWidth={1.6} />
+                      </div>
+                    </div>
+
+                    <div className="credential-role-pill">
+                      {selectedPass.isLeader ? 'LEAD PARTICIPANT' : (selectedPass.role || 'PARTICIPANT')}
+                    </div>
+
+                    <div className="credential-verified-card">
+                      <div className="cred-verified-row">
+                        <ShieldCheck size={14} className="cred-shield-icon" />
+                        <span>VERIFIED PASS</span>
+                      </div>
+                      <div className="cred-status-dot-row">
+                        <span className="cred-green-dot" />
+                        <span>{selectedPass.status?.toUpperCase().includes('PAID') ? 'PAID & CONFIRMED' : (selectedPass.status || 'CONFIRMED')}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Event & Details Grid */}
+                  <div className="credential-right-col">
+                    <h3 className="cred-event-title">{selectedPass.eventTitle}</h3>
+
+                    <div className="cred-date-pill">
+                      <Calendar size={13} className="cred-date-icon" />
+                      <span>Event Date: {selectedPass.eventDate}</span>
+                    </div>
+
+                    <div className="cred-details-2x2-grid">
+                      {/* 1. Participant Name */}
+                      <div className="cred-info-cell">
+                        <div className="cred-icon-bubble blue">
+                          <User size={15} />
+                        </div>
+                        <div className="cred-cell-text">
+                          <span className="cred-cell-label">PARTICIPANT NAME</span>
+                          <span className="cred-cell-value">{selectedPass.name}</span>
+                        </div>
+                      </div>
+
+                      {/* 2. Roll Number */}
+                      <div className="cred-info-cell">
+                        <div className="cred-icon-bubble dark">
+                          <ShieldCheck size={15} />
+                        </div>
+                        <div className="cred-cell-text">
+                          <span className="cred-cell-label">ROLL NUMBER</span>
+                          <span className="cred-cell-value font-mono">{selectedPass.roll}</span>
+                        </div>
+                      </div>
+
+                      {/* 3. Institution */}
+                      <div className="cred-info-cell">
+                        <div className="cred-icon-bubble amber">
+                          <GraduationCap size={15} />
+                        </div>
+                        <div className="cred-cell-text">
+                          <span className="cred-cell-label">INSTITUTION</span>
+                          <span className="cred-cell-value" title={selectedPass.college}>
+                            {selectedPass.college === 'Other Institution' && selectedPass.otherCollege
+                              ? selectedPass.otherCollege
+                              : normalizeCollege(selectedPass.college)}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* 4. Branch & Dept */}
+                      <div className="cred-info-cell">
+                        <div className="cred-icon-bubble purple">
+                          <Layers size={15} />
+                        </div>
+                        <div className="cred-cell-text">
+                          <span className="cred-cell-label">BRANCH & DEPT</span>
+                          <span className="cred-cell-value">
+                            {selectedPass.department || 'GENERAL'} • {selectedPass.year || '3rd Year'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Venue Bar */}
+                    <div className="cred-venue-bar">
+                      <MapPin size={15} className="cred-venue-icon" />
+                      <span className="cred-venue-text">
+                        VENUE: {selectedPass.venue}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Tear Line & Barcode Section */}
+                <div className="credential-stub-tear-line">
+                  <div className="ticket-notch left" />
+                  <div className="ticket-tear-dashed" />
+                  <div className="ticket-notch right" />
+                </div>
+
+                <div className="credential-barcode-section">
+                  <svg className="cred-barcode-svg" viewBox="0 0 540 54" preserveAspectRatio="none">
+                    <rect x="0" y="0" width="540" height="54" fill="#ffffff" />
+                    <g fill="#0f172a">
+                      <rect x="10" y="0" width="3" height="54" />
+                      <rect x="15" y="0" width="2" height="54" />
+                      <rect x="20" y="0" width="5" height="54" />
+                      <rect x="28" y="0" width="2" height="54" />
+                      <rect x="33" y="0" width="4" height="54" />
+                      <rect x="40" y="0" width="1" height="54" />
+                      <rect x="44" y="0" width="5" height="54" />
+                      <rect x="52" y="0" width="3" height="54" />
+                      <rect x="58" y="0" width="2" height="54" />
+                      <rect x="63" y="0" width="6" height="54" />
+                      <rect x="72" y="0" width="2" height="54" />
+                      <rect x="77" y="0" width="4" height="54" />
+                      <rect x="84" y="0" width="2" height="54" />
+                      <rect x="89" y="0" width="5" height="54" />
+                      <rect x="97" y="0" width="3" height="54" />
+                      <rect x="103" y="0" width="2" height="54" />
+                      <rect x="108" y="0" width="6" height="54" />
+                      <rect x="117" y="0" width="2" height="54" />
+                      <rect x="122" y="0" width="4" height="54" />
+                      <rect x="129" y="0" width="3" height="54" />
+                      <rect x="135" y="0" width="5" height="54" />
+                      <rect x="143" y="0" width="2" height="54" />
+                      <rect x="148" y="0" width="4" height="54" />
+                      <rect x="155" y="0" width="1" height="54" />
+                      <rect x="159" y="0" width="6" height="54" />
+                      <rect x="168" y="0" width="3" height="54" />
+                      <rect x="174" y="0" width="2" height="54" />
+                      <rect x="179" y="0" width="5" height="54" />
+                      <rect x="187" y="0" width="2" height="54" />
+                      <rect x="192" y="0" width="4" height="54" />
+                      <rect x="199" y="0" width="3" height="54" />
+                      <rect x="205" y="0" width="5" height="54" />
+                      <rect x="213" y="0" width="2" height="54" />
+                      <rect x="218" y="0" width="6" height="54" />
+                      <rect x="227" y="0" width="2" height="54" />
+                      <rect x="232" y="0" width="4" height="54" />
+                      <rect x="239" y="0" width="3" height="54" />
+                      <rect x="245" y="0" width="5" height="54" />
+                      <rect x="253" y="0" width="2" height="54" />
+                      <rect x="258" y="0" width="4" height="54" />
+                      <rect x="265" y="0" width="1" height="54" />
+                      <rect x="269" y="0" width="5" height="54" />
+                      <rect x="277" y="0" width="3" height="54" />
+                      <rect x="283" y="0" width="2" height="54" />
+                      <rect x="288" y="0" width="6" height="54" />
+                      <rect x="297" y="0" width="2" height="54" />
+                      <rect x="302" y="0" width="4" height="54" />
+                      <rect x="309" y="0" width="2" height="54" />
+                      <rect x="314" y="0" width="5" height="54" />
+                      <rect x="322" y="0" width="3" height="54" />
+                      <rect x="328" y="0" width="2" height="54" />
+                      <rect x="333" y="0" width="6" height="54" />
+                      <rect x="342" y="0" width="2" height="54" />
+                      <rect x="347" y="0" width="4" height="54" />
+                      <rect x="354" y="0" width="3" height="54" />
+                      <rect x="360" y="0" width="5" height="54" />
+                      <rect x="368" y="0" width="2" height="54" />
+                      <rect x="373" y="0" width="4" height="54" />
+                      <rect x="380" y="0" width="1" height="54" />
+                      <rect x="384" y="0" width="6" height="54" />
+                      <rect x="393" y="0" width="3" height="54" />
+                      <rect x="399" y="0" width="2" height="54" />
+                      <rect x="404" y="0" width="5" height="54" />
+                      <rect x="412" y="0" width="2" height="54" />
+                      <rect x="417" y="0" width="4" height="54" />
+                      <rect x="424" y="0" width="3" height="54" />
+                      <rect x="430" y="0" width="5" height="54" />
+                      <rect x="438" y="0" width="2" height="54" />
+                      <rect x="443" y="0" width="6" height="54" />
+                      <rect x="452" y="0" width="2" height="54" />
+                      <rect x="457" y="0" width="4" height="54" />
+                      <rect x="464" y="0" width="3" height="54" />
+                      <rect x="470" y="0" width="5" height="54" />
+                      <rect x="478" y="0" width="2" height="54" />
+                      <rect x="483" y="0" width="5" height="54" />
+                      <rect x="491" y="0" width="3" height="54" />
+                      <rect x="497" y="0" width="2" height="54" />
+                      <rect x="502" y="0" width="6" height="54" />
+                      <rect x="511" y="0" width="2" height="54" />
+                      <rect x="516" y="0" width="4" height="54" />
+                      <rect x="523" y="0" width="3" height="54" />
+                      <rect x="529" y="0" width="2" height="54" />
+                    </g>
+                  </svg>
+
+                  <div className="cred-barcode-footer-row">
+                    <span className="cred-entry-tag">
+                      <Ticket size={13} /> ENTRY PASS
+                    </span>
+                    <span className="cred-code-spacing">
+                      {selectedPass.passCodeFormatted}
+                    </span>
+                    <span className="cred-id-notice">
+                      NON-TRANSFERABLE • CARRY ID
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <div className="pass-barcode-box">
-                <div className="pass-barcode-lines" />
-                <span className="pass-barcode-text">
-                  CLR27-{selectedPass.roll && selectedPass.roll !== '—' ? selectedPass.roll : 'DELEGATE'}
-                </span>
-              </div>
-
-              <div className="slip-actions" style={{ marginTop: '1.25rem' }}>
+              {/* Modal Actions */}
+              <div className="slip-actions" style={{ marginTop: '1.25rem', width: '100%' }}>
                 <ThemeButton
                   type="button"
                   className="btn-dash-primary"
