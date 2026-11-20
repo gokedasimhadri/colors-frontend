@@ -344,7 +344,7 @@ export default function Sponsors() {
                 form and our Sponsorship Directorate will promptly share the official pitch deck.
               </p>
               <div className="sponsor-direct-contact">
-                <p><strong>Marketing Dean:</strong> Dr. R. Srinivas Rao</p>
+                <p><strong>Marketing Dean:</strong> Dr. R Srinivas Rao</p>
                 <p><strong>Phone:</strong> +91 94901 23456</p>
                 <p><strong>Email:</strong> sponsorship@adityauniversity.in</p>
               </div>

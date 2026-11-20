@@ -18,7 +18,7 @@ const EVENT_DATE = EVENT_START_DATE;
 const FEST_PILLARS = [
   {
     name: 'Culturals',
-    coordinator: 'Dr. N. Ram Babu',
+    coordinator: 'Dr. N Ram Babu',
     phone: '8473917384',
     color: '#e11d48',
     icon: '🎭',
@@ -33,7 +33,7 @@ const FEST_PILLARS = [
   },
   {
     name: 'Sports',
-    coordinator: 'Dr. N. Ravi',
+    coordinator: 'Dr. N Ravi',
     phone: '9912393905',
     color: '#0284c7',
     icon: '🏆',
@@ -48,7 +48,7 @@ const FEST_PILLARS = [
   },
   {
     name: 'Creo',
-    coordinator: 'Dr. B. Srinivas',
+    coordinator: 'Dr. B Srinivas',
     phone: '9866732745',
     color: '#d97706',
     icon: '🎨',
@@ -63,7 +63,7 @@ const FEST_PILLARS = [
   },
   {
     name: 'Fete',
-    coordinator: 'Mr. J. D. Venkatesh',
+    coordinator: 'Mr. J D Venkatesh',
     phone: '7036266661',
     color: '#059669',
     icon: '🎪',
@@ -254,11 +254,11 @@ function Home() {
                 <div className="invitation-photo-frame">
                   <img
                     src="/invitation/chancellor-sesha-reddy.webp"
-                    alt="Dr. N. Sesha Reddy – Chancellor, Aditya University"
+                    alt="Dr. N Sesha Reddy – Chancellor, Aditya University"
                     className="invitation-dignitary-img"
                   />
                 </div>
-                <h3 className="invitation-dignitary-name">Dr. N. Sesha Reddy</h3>
+                <h3 className="invitation-dignitary-name">Dr. N Sesha Reddy</h3>
                 <span className="invitation-dignitary-role">Chancellor</span>
                 <span className="invitation-dignitary-inst">Aditya University</span>
               </div>
@@ -279,11 +279,11 @@ function Home() {
                 <div className="invitation-photo-frame">
                   <img
                     src="/invitation/pro-chancellor-satish-reddy.webp"
-                    alt="Dr. N. Satish Reddy – Pro-Chancellor, Aditya University"
+                    alt="Dr. N Satish Reddy – Pro-Chancellor, Aditya University"
                     className="invitation-dignitary-img"
                   />
                 </div>
-                <h3 className="invitation-dignitary-name">Dr. N. Satish Reddy</h3>
+                <h3 className="invitation-dignitary-name">Dr. N Satish Reddy</h3>
                 <span className="invitation-dignitary-role">Pro-Chancellor</span>
                 <span className="invitation-dignitary-inst">Aditya University</span>
               </div>

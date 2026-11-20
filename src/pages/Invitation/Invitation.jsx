@@ -35,11 +35,11 @@ export default function Invitation() {
               <div className="invitation-photo-frame">
                 <img
                   src="/invitation/chancellor-sesha-reddy.webp"
-                  alt="Dr. N. Sesha Reddy – Chancellor, Aditya University"
+                  alt="Dr. N Sesha Reddy – Chancellor, Aditya University"
                   className="invitation-dignitary-img"
                 />
               </div>
-              <h3 className="invitation-dignitary-name">Dr. N. Sesha Reddy</h3>
+              <h3 className="invitation-dignitary-name">Dr. N Sesha Reddy</h3>
               <span className="invitation-dignitary-role">Chancellor</span>
               <span className="invitation-dignitary-inst">Aditya University</span>
             </div>
@@ -62,11 +62,11 @@ export default function Invitation() {
               <div className="invitation-photo-frame">
                 <img
                   src="/invitation/pro-chancellor-satish-reddy.webp"
-                  alt="Dr. N. Satish Reddy – Pro-Chancellor, Aditya University"
+                  alt="Dr. N Satish Reddy – Pro-Chancellor, Aditya University"
                   className="invitation-dignitary-img"
                 />
               </div>
-              <h3 className="invitation-dignitary-name">Dr. N. Satish Reddy</h3>
+              <h3 className="invitation-dignitary-name">Dr. N Satish Reddy</h3>
               <span className="invitation-dignitary-role">Pro-Chancellor</span>
               <span className="invitation-dignitary-inst">Aditya University</span>
             </div>

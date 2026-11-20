@@ -254,19 +254,19 @@ export const CATEGORY_ORDER = ['CULTURALS', 'SPORTS', 'CREO'];
 // Official Festival Coordinators as announced on poster
 export const OFFICIAL_POSTER_COORDINATORS = {
   'CULTURALS': {
-    name: 'Mr. P. Raju',
+    name: 'Mr. P Raju',
     designation: 'Culturals Chair',
     phone: '8374245400',
     email: 'raju.p@adityauniversity.in'
   },
   'SPORTS': {
-    name: 'Dr. N. Ravi',
+    name: 'Dr. N Ravi',
     designation: 'Sports Chair',
     phone: '9912393905',
     email: 'ravi.n@adityauniversity.in'
   },
   'CREO': {
-    name: 'Dr. B. Srinivas',
+    name: 'Dr. B Srinivas',
     designation: 'Creo Chair',
     phone: '9866732745',
     email: 'srinivas.b@adityauniversity.in'
@@ -1187,7 +1187,7 @@ export async function fetchFacultyCoordinators(category, arg2, arg3, arg4) {
     const catUpper = (category || '').toUpperCase();
     if (catUpper.includes('CULTUR') || catUpper === 'CULTURALS') {
       return [{
-        cordinatorName: 'Mr. P. Raju',
+        cordinatorName: 'Mr. P Raju',
         cordinatorDesignation: 'Culturals Fest Incharge',
         cordinatorPhone: '8374245400',
         cordinatorEmail: 'raju.p@adityauniversity.in'
@@ -1195,7 +1195,7 @@ export async function fetchFacultyCoordinators(category, arg2, arg3, arg4) {
     }
     if (catUpper.includes('SPORT') || catUpper === 'SPORTS') {
       return [{
-        cordinatorName: 'Dr. N. Ravi',
+        cordinatorName: 'Dr. N Ravi',
         cordinatorDesignation: 'Sports Fest Incharge',
         cordinatorPhone: '9912393905',
         cordinatorEmail: 'ravi.n@adityauniversity.in'
@@ -1203,7 +1203,7 @@ export async function fetchFacultyCoordinators(category, arg2, arg3, arg4) {
     }
     if (catUpper.includes('CREO')) {
       return [{
-        cordinatorName: 'Dr. B. Srinivas',
+        cordinatorName: 'Dr. B Srinivas',
         cordinatorDesignation: 'Creo Fest Incharge',
         cordinatorPhone: '9866732745',
         cordinatorEmail: 'srinivas.b@adityauniversity.in'
@@ -1212,19 +1212,19 @@ export async function fetchFacultyCoordinators(category, arg2, arg3, arg4) {
 
     return [
       {
-        cordinatorName: 'Mr. P. Raju',
+        cordinatorName: 'Mr. P Raju',
         cordinatorDesignation: 'Culturals Chair',
         cordinatorPhone: '8374245400',
         cordinatorEmail: 'raju.p@adityauniversity.in'
       },
       {
-        cordinatorName: 'Dr. N. Ravi',
+        cordinatorName: 'Dr. N Ravi',
         cordinatorDesignation: 'Sports Chair',
         cordinatorPhone: '9912393905',
         cordinatorEmail: 'ravi.n@adityauniversity.in'
       },
       {
-        cordinatorName: 'Dr. B. Srinivas',
+        cordinatorName: 'Dr. B Srinivas',
         cordinatorDesignation: 'Creo Chair',
         cordinatorPhone: '9866732745',
         cordinatorEmail: 'srinivas.b@adityauniversity.in'
